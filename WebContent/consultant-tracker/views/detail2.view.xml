@@ -1,0 +1,33 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:semantic="sap.m.semantic"  controllerName="consultant-tracker.controllers.detail2">
+	<semantic:DetailPage id="page"  title="Consultant View" busy="{detailView>/busy}" busyIndicatorDelay="{detailView>/delay}">
+		<semantic:content>
+			<ObjectHeader id="objectHeader" title="{selModel>/Consultant_Name} {selModel>/Consultant_Surname}"/>
+			<IconTabBar id="iconTabBar" class="sapUiResponsiveContentPadding">
+				<items>
+					<IconTabFilter id="iconTabBarFilter1" icon="sap-icon://detail-view" tooltip="{i18n>detailIconTabBarInfo}" text="Inforamtion">
+						<content>
+							<f:SimpleForm title="Consultant Details">
+								<f:content>
+									<Label text="Name"/>
+									<Text text="{selModel>/Consultant_Name}" />
+									<Label text="Surname"/>
+									<Text text="{selModel>/Consultant_Surname}" />
+									<Label text="Email"/>
+									<Text text="{selModel>/Consultant_email}" />
+									<Label text="Cell Number"/>
+									<Text text="{selModel>/Consultant_Cell}" />
+									
+								</f:content>
+							</f:SimpleForm>
+							 
+						</content>
+					</IconTabFilter>
+				</items>
+			</IconTabBar>
+		</semantic:content>
+		
+		<semantic:customFooterContent>
+	    <Button  id="__button0" text="Remove Consultant" icon="sap-icon://delete" press="confirmDeleteConsultant"/>
+	</semantic:customFooterContent>
+	</semantic:DetailPage>
+</mvc:View>

@@ -1,0 +1,49 @@
+<core:FragmentDefinition 
+	xmlns="sap.m" 
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:core="sap.ui.core"
+	xmlns:semantic="sap.m.semantic">
+	
+	<Dialog >
+	
+		<content>
+			<f:SimpleForm id="SimpleFormChange354"
+			editable="true"
+			layout="ResponsiveGridLayout"
+			title="Add Project Details"
+			labelSpanXL="3"
+			labelSpanL="3"
+			labelSpanM="3"
+			labelSpanS="12"
+			adjustLabelSpan="false"
+			emptySpanXL="4"
+			emptySpanL="4"
+			emptySpanM="4"
+			emptySpanS="0"
+			columnsXL="1"
+			columnsL="1"
+			columnsM="1"
+			singleContainerFullSize="false" >
+			<f:content>
+				<Label text="Name" />
+				<Input id="p_Name" />
+				<Label text="Description" />
+				<Input id="p_Description" />
+				<Label text="Deadline" />
+				<Input id="p_Deadline" />
+				<Label text="OnSite" />
+				<CheckBox id="p_OnSite"/>
+					
+			</f:content>
+		</f:SimpleForm>
+		</content>
+		<beginButton>
+			<Button text="Submit" press="onSubmitProject" />
+		</beginButton>
+		<endButton>
+			<Button text="Close" press="onClose" />
+		</endButton>
+	</Dialog>
+	
+</core:FragmentDefinition>

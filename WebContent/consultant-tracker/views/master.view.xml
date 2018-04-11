@@ -1,0 +1,36 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="consultant-tracker.controllers.master"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:semantic="sap.m.semantic">
+	<semantic:MasterPage id="page" title="{masterView>/title}"  >
+		<semantic:subHeader></semantic:subHeader>
+		<semantic:content>
+			<SegmentedButton selectedButton="null" id="__button0" width="100%">
+				<buttons>
+					<Button text="Projects" width="50%" id="__button9" press="goToProjects"/>
+					<Button text="Consultants" width="50%" id="__button8" press="goToConsultants"/>
+				</buttons>
+			</SegmentedButton>
+			<Bar id="headerBar">
+				<contentMiddle>
+					<SearchField id="searchField" showRefreshButton="{= !${device>/support/touch} }" tooltip="{i18n>masterSearchTooltip}" width="100%"
+						search="PR_Search" liveChange="PR_Search"></SearchField>
+				</contentMiddle>
+			</Bar>
+			<!-- <PullToRefresh id="pullToRefresh" visible="{device>/support/touch}" refresh="onRefresh"/> -->
+			<!-- For client side filtering add this to the items attribute: parameters: {operationMode: 'Client'}}" -->
+			
+			<List id="orders" mode="SingleSelectMaster" selectionChange="onSelect" >
+				<!-- items="{/Consultants}"  
+				mode="SingleSelectMaster"
+				selectionChange="onSelect">
+			<items>
+				<StandardListItem title="{Consultant_Name}" 
+					type="Active"
+					press="onSelect"/>
+			</items> -->
+		</List>
+		</semantic:content>
+			<semantic:customFooterContent>
+			<Button  id="__button2" text="Add" icon="sap-icon://sys-add" press="addProjectOrConsultant"/>
+			</semantic:customFooterContent>
+	</semantic:MasterPage>
+</mvc:View>

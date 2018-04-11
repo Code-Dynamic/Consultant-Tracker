@@ -1,0 +1,48 @@
+<core:FragmentDefinition 
+	xmlns="sap.m" 
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:core="sap.ui.core"
+	xmlns:semantic="sap.m.semantic">
+	
+	<Dialog >
+	
+		<content>
+			<f:SimpleForm id="SimpleFormChange301"
+			editable="true"
+			layout="ResponsiveGridLayout"
+			title="Add Consultant"
+			labelSpanXL="3"
+			labelSpanL="3"
+			labelSpanM="3"
+			labelSpanS="12"
+			adjustLabelSpan="false"
+			emptySpanXL="4"
+			emptySpanL="4"
+			emptySpanM="4"
+			emptySpanS="0"
+			columnsXL="1"
+			columnsL="1"
+			columnsM="1"
+			singleContainerFullSize="false" >
+			<f:content>
+				<Label id="label" text="Pick a Conultant to add to this project" />
+				<Select id="idSelected"
+					forceSelection="false"
+					
+					items="{consultants>/Consultants}">
+					<core:Item key="{consultants>Consultant_ID}" text="{consultants>Consultant_Name} {consultants>Consultant_Surname}" />
+				</Select>
+						
+			</f:content>
+		</f:SimpleForm>
+		</content>
+		<beginButton>
+			<Button text="Add" press="addMember" />
+		</beginButton>
+		<endButton>
+			<Button text="Close" press="onCancel" />
+		</endButton>
+	</Dialog>
+	
+</core:FragmentDefinition>

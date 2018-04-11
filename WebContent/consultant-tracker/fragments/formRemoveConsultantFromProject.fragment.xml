@@ -1,0 +1,48 @@
+<core:FragmentDefinition 
+	xmlns="sap.m" 
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:core="sap.ui.core"
+	xmlns:semantic="sap.m.semantic">
+	
+	<Dialog >
+	
+		<content>
+			<f:SimpleForm id="SimpleFormChange301"
+			editable="true"
+			layout="ResponsiveGridLayout"
+			title="Add Consultant"
+			labelSpanXL="3"
+			labelSpanL="3"
+			labelSpanM="3"
+			labelSpanS="12"
+			adjustLabelSpan="false"
+			emptySpanXL="4"
+			emptySpanL="4"
+			emptySpanM="4"
+			emptySpanS="0"
+			columnsXL="1"
+			columnsL="1"
+			columnsM="1"
+			singleContainerFullSize="false" >
+			<f:content>
+				<Label id="label" text="Pick a Conultant to remove from this project" />
+				<Select id="idRemoveCon"
+					forceSelection="false"
+					
+					items="{groupMember>/Consultants}">
+					<core:Item key="{groupMembers>Assignment_ID}" text="{groupMember>Consultant_Name} {groupMember>Consultant_Surname}" />
+				</Select>
+						
+			</f:content>
+		</f:SimpleForm>
+		</content>
+		<beginButton>
+			<Button text="Remove" press="onRemove" />
+		</beginButton>
+		<endButton>
+			<Button text="Close" press="onCancel" />
+		</endButton>
+	</Dialog>
+	
+</core:FragmentDefinition>

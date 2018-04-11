@@ -1,0 +1,60 @@
+<mvc:View xmlns:core="sap.ui.core"  xmlns:f="sap.ui.layout.form" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:html="http://www.w3.org/1999/xhtml"  xmlns:semantic="sap.m.semantic" controllerName="consultant-tracker.controllers.detail">
+		<semantic:DetailPage id="page"  showNavButton="{device>/system/phone}" title="Project View" busy="{detailView>/busy}" busyIndicatorDelay="{detailView>/delay}">
+		<semantic:content>
+			<ObjectHeader id="objectHeader" title="{selModel>/Project_Name}"/>
+			<IconTabBar id="iconTabBar" class="sapUiResponsiveContentPadding">
+				<items>
+					<IconTabFilter id="iconTabBarFilter1" icon="sap-icon://detail-view" tooltip="{i18n>detailIconTabBarInfo}" text="Project Data">
+						<content>
+						   <f:SimpleForm title="Project Details">
+								<f:content>
+									<Label text="Name"/>
+									<Text text="{selModel>/Project_Name}"/>
+									<Label text="Description"/>
+									<Text text="{selModel>/Project_DEscription}"/>
+									<Label text="Deadline"/>
+									<Text text="{selModel>/Project_Deadline}"/>
+									<Label text="OnSite"/>
+									<Text text="{selModel>/Project_OnSite}"/>
+								</f:content>
+							</f:SimpleForm>
+						</content>
+					</IconTabFilter>
+					<IconTabFilter id="iconTabBarFilter2" icon="sap-icon://group" tooltip="{i18n>detailIconTabBarAttachments}" text="Members">
+						<content>															
+							<List id="members"  	
+								  mode="SingleSelectMaster"
+								  
+								  items="{groupMember>/Consultants}"
+								  headerText="Members">
+							 <items>
+								<StandardListItem title="{groupMember>Consultant_Name} {groupMember>Consultant_Surname}" 
+									type="Active"
+									press="onSelectionChange"/>
+							 </items>
+							 <headerToolbar>
+								<Toolbar>
+									<Title text="Members" level="H2" />
+									<ToolbarSpacer />
+									<Button
+										icon="sap-icon://delete"
+										text="Remove Consultant"
+										press="onDeleteConsultantFromProject" />
+									<Button
+										icon="sap-icon://add"
+										text="Add Consultant"
+										press="addConsultantToProject" />
+								</Toolbar>
+							</headerToolbar>
+						   </List>
+						</content>
+					</IconTabFilter>
+				</items>
+			</IconTabBar>
+		</semantic:content>
+		
+		<semantic:customFooterContent>
+	    <Button  id="__button0" text="Remove Project" icon="sap-icon://delete"  press="confirmDeleteProject"/>
+	</semantic:customFooterContent>
+	</semantic:DetailPage>
+</mvc:View>
