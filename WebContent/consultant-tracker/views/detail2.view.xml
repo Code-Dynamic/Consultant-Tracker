@@ -4,7 +4,7 @@
 			<ObjectHeader id="objectHeader" title="{selModel>/Consultant_Name} {selModel>/Consultant_Surname}"/>
 			<IconTabBar id="iconTabBar" class="sapUiResponsiveContentPadding">
 				<items>
-					<IconTabFilter id="iconTabBarFilter1" icon="sap-icon://detail-view" tooltip="{i18n>detailIconTabBarInfo}" text="Inforamtion">
+					<IconTabFilter id="iconTabBarFilter1" icon="sap-icon://detail-view" tooltip="{i18n>detailIconTabBarInfo}" text="Information">
 						<content>
 							<f:SimpleForm title="Consultant Details">
 								<f:content>
