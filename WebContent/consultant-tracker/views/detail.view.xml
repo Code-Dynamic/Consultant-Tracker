@@ -1,12 +1,12 @@
 <mvc:View xmlns:core="sap.ui.core"  xmlns:f="sap.ui.layout.form" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:html="http://www.w3.org/1999/xhtml"  xmlns:semantic="sap.m.semantic" controllerName="consultant-tracker.controllers.detail">
-		<semantic:DetailPage id="page"  showNavButton="{device>/system/phone}" title="Project View" busy="{detailView>/busy}" busyIndicatorDelay="{detailView>/delay}">
+		<semantic:DetailPage id="page"  showNavButton="{device>/system/phone}" title="Project Information" busy="{detailView>/busy}" busyIndicatorDelay="{detailView>/delay}">
 		<semantic:content>
 			<ObjectHeader id="objectHeader" title="{selModel>/Project_Name}"/>
-			<IconTabBar id="iconTabBar" class="sapUiResponsiveContentPadding">
+			<IconTabBar id="iconTabBar" class="sapUiResponsiveContentPadding" expandable="false">
 				<items>
-					<IconTabFilter id="iconTabBarFilter1" icon="sap-icon://detail-view" tooltip="{i18n>detailIconTabBarInfo}" text="Project Data">
+					<IconTabFilter id="iconTabBarFilter1" icon="sap-icon://detail-view" tooltip="{i18n>detailIconTabBarInfo}" text="Project Data" >
 						<content>
-						   <f:SimpleForm title="Project Details">
+						   <f:SimpleForm title="Project Details" width="100%">
 								<f:content>
 									<Label text="Name"/>
 									<Text text="{selModel>/Project_Name}"/>
@@ -30,6 +30,7 @@
 							 <items>
 								<StandardListItem title="{groupMember>Consultant_Name} {groupMember>Consultant_Surname}" 
 									type="Active"
+									class="listItems"
 									press="onSelectionChange"/>
 							 </items>
 							 <headerToolbar>

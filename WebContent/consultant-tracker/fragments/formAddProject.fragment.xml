@@ -5,13 +5,13 @@
 	xmlns:core="sap.ui.core"
 	xmlns:semantic="sap.m.semantic">
 	
-	<Dialog >
+	<Dialog title="Add Project Details">
 	
 		<content>
 			<f:SimpleForm id="SimpleFormChange354"
 			editable="true"
 			layout="ResponsiveGridLayout"
-			title="Add Project Details"
+			
 			labelSpanXL="3"
 			labelSpanL="3"
 			labelSpanM="3"
@@ -25,14 +25,14 @@
 			columnsL="1"
 			columnsM="1"
 			singleContainerFullSize="false" >
-			<f:content>
-				<Label text="Name" />
-				<Input id="p_Name" />
-				<Label text="Description" />
-				<Input id="p_Description" />
-				<Label text="Deadline" />
-				<Input id="p_Deadline" />
-				<Label text="OnSite" />
+					<f:content>
+				<Label text="Name"/>
+				<Input id="p_Name"/>
+				<Label text="Description"/>
+				<TextArea id="p_Description"/>
+				<Label text="Deadline"/>
+				<DatePicker valueFormat="yyyy-MM-dd" displayFormat="long" width="100%" id="p_Deadline"/>
+				<Label text="OnSite"/>
 				<CheckBox id="p_OnSite"/>
 					
 			</f:content>

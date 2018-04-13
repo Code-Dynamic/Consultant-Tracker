@@ -95,11 +95,11 @@
   </context-param>
   <context-param>
     <param-name>dbPassword</param-name>
-    <param-value>Nokia123MS</param-value>
+    <param-value>root</param-value>
   </context-param>
   <context-param>
     <param-name>dbURL</param-name>
-    <param-value>jdbc:mysql://localhost:8090/testingdb</param-value>
+    <param-value>jdbc:mysql://localhost:3306/testingdb</param-value>
   </context-param>
 
 
