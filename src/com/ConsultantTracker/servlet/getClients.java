@@ -48,7 +48,7 @@ public class getClients extends HttpServlet {
 				while(rs.next()) {
 					if(!ObjToReturn.equals(""))
 						ObjToReturn +=";";
-				 ObjToReturn +=rs.getString("Client_Name")+','+rs.getString("Client_EMail")+','+rs.getString("Client_PhoneNum")+','+rs.getString("Client_Address") ;
+				 ObjToReturn +=rs.getString("Client_Name")+','+rs.getString("Client_EMail")+','+rs.getString("Client_PhoneNum")+','+rs.getString("Client_Address")+','+rs.getString("Client_ID") ;
 			
 				}
 				PrintWriter out = response.getWriter();
