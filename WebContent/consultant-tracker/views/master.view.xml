@@ -1,13 +1,13 @@
 <mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="consultant-tracker.controllers.master"
 	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:semantic="sap.m.semantic">
-	<semantic:MasterPage id="page" title="{masterView>/title}"  >
+	<semantic:MasterPage id="page"  >
 		<semantic:subHeader></semantic:subHeader>
 		<semantic:content>
 			<SegmentedButton selectedButton="null" id="__button0" width="100%">
-				<buttons>
-					<Button text="Projects" width="50%" id="__button9" press="goToProjects"/>
-					<Button text="Consultants" width="50%" id="__button8" press="goToConsultants"/>
-				</buttons>
+				
+					<Button class="headerButton" text="Projects" width="50%" id="__button9" press="goToProjects"/>
+					<Button class="headerButton" text="Consultants" width="50%" id="__button8" press="goToConsultants"/>
+				
 			</SegmentedButton>
 			<Bar id="headerBar">
 				<contentMiddle>
@@ -30,7 +30,7 @@
 		</List>
 		</semantic:content>
 			<semantic:customFooterContent>
-			<Button  id="__button2" text="Add" icon="sap-icon://sys-add" press="addProjectOrConsultant"/>
+			<Button  id="__button2" text="Add" icon="sap-icon://add" press="addProjectOrConsultant"/>
 			</semantic:customFooterContent>
 	</semantic:MasterPage>
 </mvc:View>

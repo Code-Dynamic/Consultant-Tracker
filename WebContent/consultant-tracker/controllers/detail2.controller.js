@@ -37,11 +37,92 @@ sap.ui.controller("consultant-tracker.controllers.detail2", {
 		  $.post('RemoveConsultant', { consultant: consultantID},function(responseText) {  
 		      	// var array = responseText.split(';');
 		      	  //console.log(responseText);
+			  this.goToConsultants();
 		        });
 
-		
+		  
 		//close model
 		this._Dialog.destroy();
+	},
+	refreshData : function(oEvt){
+		
+			
+	
+		
+		
+		 
+         //return all consultants
+         $.post('getProjectConsultants',function(responseText){
+				console.log("servlet getProjectConsultants responded");
+				console.log(responseText);
+				arrConsultants = {Consultants:[]};
+				var array = responseText.split(';');
+				array.forEach(createConsultant);
+				
+				var oModel = new sap.ui.model.json.JSONModel();
+				oModel.setData(JSON.parse(JSON.stringify(arrConsultants)));
+				console.log(JSON.parse(JSON.stringify(arrConsultants)));
+				sap.ui.getCore().setModel(oModel);
+				//app.to("detail2Page");	
+				
+			});
+			
+			function createConsultant(stringVal){
+				var array = stringVal.split(',');
+				var Consultant = {
+				 Consultant_ID: array[0],
+				 Consultant_Name : array[1],
+				 Consultant_Surname : array[2],
+				 Consultant_email : array[3],
+				 Consultant_Cell : array[4],
+				 Consultant_Admin : array[5]
+				};
+				arrConsultants.Consultants.push((Consultant));
+//		    		console.log(arrProjects);
+		    		
+			}
+		
+	
+	},
+	goToConsultants : function(oEvt){
+		btnConsultantSelected = true;
+			
+		//var item = this.getView().byId("orders").getMetadata("selectionChange"); //data("items","{/Consultants}");
+		
+		
+		 
+         //return all consultants
+         $.post('getProjectConsultants',function(responseText){
+				console.log("servlet getProjectConsultants responded");
+				console.log(responseText);
+				arrConsultants = {Consultants:[]};
+				var array = responseText.split(';');
+				array.forEach(createConsultant);
+				
+				var oModel = new sap.ui.model.json.JSONModel();
+				oModel.setData(JSON.parse(JSON.stringify(arrConsultants)));
+				console.log(JSON.parse(JSON.stringify(arrConsultants)));
+				sap.ui.getCore().setModel(oModel);
+				app.to("detail2Page");	
+				
+			});
+			
+			function createConsultant(stringVal){
+				var array = stringVal.split(',');
+				var Consultant = {
+				 Consultant_ID: array[0],
+				 Consultant_Name : array[1],
+				 Consultant_Surname : array[2],
+				 Consultant_email : array[3],
+				 Consultant_Cell : array[4],
+				 Consultant_Admin : array[5]
+				};
+				arrConsultants.Consultants.push((Consultant));
+//		    		console.log(arrProjects);
+		    		
+			}
+		
+	
 	},
 /**
 * Called when the View has been rendered (so its HTML is part of the document). Post-rendering manipulations of the HTML could be done here.

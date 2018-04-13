@@ -40,6 +40,8 @@ sap.ui.controller("consultant-tracker.controllers.detail", {
 			    	  console.log(responseText);
 			      });
 				
+				this.refreshData();
+				
 				//close model
 				this._Dialog.destroy();
 				
@@ -54,22 +56,22 @@ sap.ui.controller("consultant-tracker.controllers.detail", {
 //					console.log(responseText);
 //				});
 				console.log("Assignment_ID" + _projectID);
-				
+				this.refreshData();
 			},
 			addMember: function(){
 				//code to add consultant
-				console.log("Adding member");
+				//console.log("Adding member");
 				
 				var Client_ID = sap.ui.getCore().byId("idSelected").getSelectedKey();
 				var _projectID = sap.ui.getCore().getModel("selModel").getProperty("/Project_ID");
-				console.log(Client_ID);
+				//console.log(Client_ID);
 				$.post('AssignConsultants', { project:_projectID ,consultant: Client_ID},function(responseText) {  
 					// var array = responseText.split(';');
 					console.log(responseText);
 				});
 				
-				console.log(" Finished Adding member")
-				
+				//console.log(" Finished Adding member")
+				this.refreshData();
 				//close model
 				this._Dialog.destroy();
 			},
@@ -127,6 +129,54 @@ sap.ui.controller("consultant-tracker.controllers.detail", {
 			onCancel : function() {
 		                this._Dialog.destroy();
 		    },
+		    
+		    refreshData : function(oEvt){
+				var oModel = new sap.ui.model.json.JSONModel();
+				var arrProjects = {Projects:[]};
+				var arrConsultants = {Consultants:[]};
+				
+				
+				$.post('getProjects',function(responseText){
+//					console.log("servlet responded");
+					arrProjects = {Projects:[]};
+					var array = responseText.split(';');
+					array.forEach(createProjectObj);
+							
+					oModel.setData(JSON.parse(JSON.stringify(arrProjects)));
+					console.log(JSON.parse(JSON.stringify(arrProjects)));
+					sap.ui.getCore().setModel(oModel);
+					//app.to("detailPage");
+				});
+					
+				function createProjectObj(stringVal){
+					var array = stringVal.split(',');
+					var location;
+					
+					if(array[4]=="0"){
+						location = "No";
+					}else{
+						location = "Yes";
+					}
+					var projectObj = {
+					 Project_ID: array[5],
+				     Project_Name : array[0],
+				     Project_DEscription : array[1],
+				     Client_ID : array[2],
+				     Project_Deadline : array[3],
+				     Project_OnSite : location
+					};
+			    	arrProjects.Projects.push((projectObj));
+//			    		console.log(arrProjects);
+			    		
+				}
+				
+				
+
+				
+//				oModel.setData();
+//				sap.ui.getCore().setModel(oModel);
+//				app.to("detailPage");	
+			},
 /**
 * Called when the View has been rendered (so its HTML is part of the document). Post-rendering manipulations of the HTML could be done here.
 * This hook is the same one that SAPUI5 controls get after being rendered.

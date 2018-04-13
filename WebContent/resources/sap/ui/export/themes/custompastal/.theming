@@ -1,0 +1,37 @@
+{
+	"mVersionDependency": {
+		"UI5.sap/ui/export.sap_belize": "1.54.3",
+		"UI5.sap/ui/export": "1.54.3",
+		"UI5": "1.54.3"
+	},
+	"sEntity": "Theme",
+	"sId": "custompastal",
+	"sLabel": "Custom Pastal",
+	"oExtends": "UI5.sap/ui/export.sap_belize",
+	"aBundled": [
+		"custompastal--Contrast"
+	],
+	"sTextDirections": "LTR",
+	"sType": "STANDARD",
+	"sThemability": "PUBLIC",
+	"mCssScopes": {
+		"library": {
+			"sEmbeddingMethod": "APPEND",
+			"aScopes": [
+				{
+					"sLabel": "Contrast",
+					"sSelector": "sapContrast",
+					"sThemeIdSuffix": "Contrast",
+					"sThemability": "PUBLIC",
+					"aThemabilityFilter": [
+						"Color"
+					],
+					"rExcludeSelector": "\\.sapContrastPlus\\W",
+					"sEmbeddedFile": "custompastal--Contrast.library",
+					"sEmbeddedCompareFile": "library"
+				}
+			],
+			"sBaseFile": "library"
+		}
+	}
+}
