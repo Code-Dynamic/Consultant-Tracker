@@ -1,0 +1,40 @@
+.listItems {
+    border-radius: 5px !important;
+    margin: 5px !important;
+    padding: 20px !important;
+    background-color: #e6e0d6 !important;
+}
+
+form#masterPage--searchField-F {
+    border-radius: 50px;
+}
+
+.headerButton {
+  border-radius: 5px !important;
+}
+
+.headerButton:active{
+    background:olive;
+}
+
+div#detailPage--iconTabBar-content {
+    border-bottom: none;
+}
+
+div#detail2Page--iconTabBar-content {
+	border-bottom: none;
+}
+div#detailPage--iconTabBarFilter1-text {
+    color:  white;
+    text-shadow: none;
+}
+
+div#detail2Page--iconTabBarFilter1-text {
+	 color:  white;
+    text-shadow: none;
+}
+
+div#detailPage--iconTabBarFilter2-text {
+    color:  white;
+    text-shadow: none;
+}

@@ -11,37 +11,37 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 		
 	},
 	onSearch: function(evt){
-		 // create model filter
-
-		  var filters = [];
-
-		  var query = evt.getParameter("query");
-
-		  if (query && query.length > 0) {
-
-		  var filter = new sap.ui.model.Filter("Search_Parameter", sap.ui.model.FilterOperator.Contains, query);
-
-		  filters.push(filter);
-
-		  }
-
-		  // update list binding
-
-		  var list = this.getView().byId("orders");
-
-		  var binding = list.getBinding("items");
-
-		  binding.filter(filters);
+//		 // create model filter
+//
+//		  var filters = [];
+//
+//		  var query = evt.getParameter("query");
+//
+//		  if (query && query.length > 0) {
+//
+//		  var filter = new sap.ui.model.Filter("Search_Parameter", sap.ui.model.FilterOperator.Contains, query);
+//
+//		  filters.push(filter);
+//
+//		  }
+//
+//		  // update list binding
+//
+//		  var list = this.getView().byId("orders");
+//
+//		  var binding = list.getBinding("items");
+//
+//		  binding.filter(filters);
 	},
 	PR_Search: function(oEvent) {
-        var tpmla = oEvent.getParameter("newValue");
-        var filters = new Array();
-        var oFilter = new sap.ui.model.Filter("PoNumber", sap.ui.model.FilterOperator.Contains, tpmla);
-        filters.push(oFilter);
-
-        //get list created in view
-        this.oList = sap.ui.getCore().byId("orders");
-        this.oList.getBinding("items").filter(filters);
+//        var tpmla = oEvent.getParameter("newValue");
+//        var filters = new Array();
+//        var oFilter = new sap.ui.model.Filter("PoNumber", sap.ui.model.FilterOperator.Contains, tpmla);
+//        filters.push(oFilter);
+//
+//        //get list created in view
+//        this.oList = sap.ui.getCore().byId("orders");
+//        this.oList.getBinding("items").filter(filters);
     },
 
 	goToProjects : function(oEvt){
@@ -55,7 +55,7 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 		             title: "{Project_Name}",
 		             press: "onSelect"
 		         
-		           })
+		           }).addStyleClass("listItems")
 		       );
 				
 
@@ -119,7 +119,7 @@ sap.ui.controller("consultant-tracker.controllers.master", {
              title: "{Consultant_Name}",
              press: "onSelect"
          
-           })
+           }).addStyleClass("listItems")
        );
          //return all consultants
          $.post('getProjectConsultants',function(responseText){
@@ -302,7 +302,7 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 		             title: "{Project_Name}",
 		             press: "onSelect"
 		         
-		           })
+		           }).addStyleClass("listItems")
 		       );
 				
 
@@ -392,11 +392,12 @@ sap.ui.controller("consultant-tracker.controllers.master", {
     	
     	$.post('CreateProject', { Name: _Name ,ClientID: 2,Desc: _Description, Deadl: _Deadline ,OnSite:  _OnSite},function(responseText) {  
     		var array = responseText.split(';');
-    		console.log(array);
+    		//console.log(array);
     	});
+		
+    	this.goToProjects();
     	
-    	  
-    	console.log(oProject);
+    	//console.log(oProject);
     	
     	//close model
 		this._Dialog.destroy();
@@ -427,11 +428,11 @@ sap.ui.controller("consultant-tracker.controllers.master", {
     		// var array = responseText.split(';');
     		console.log(responseText);
     	});
-    	    
+    	this.goToConsultants();
     	//close model
 		this._Dialog.destroy();
     },
-
+    
 	/**
 	 * Called when the Controller is destroyed. Use this one to free resources and finalize activities.
 	 * @memberOf splitapp.master
