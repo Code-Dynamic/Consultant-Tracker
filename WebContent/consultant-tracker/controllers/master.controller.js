@@ -11,37 +11,37 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 		
 	},
 	onSearch: function(evt){
-		 // create model filter
-
-		  var filters = [];
-
-		  var query = evt.getParameter("query");
-
-		  if (query && query.length > 0) {
-
-		  var filter = new sap.ui.model.Filter("Search_Parameter", sap.ui.model.FilterOperator.Contains, query);
-
-		  filters.push(filter);
-
-		  }
-
-		  // update list binding
-
-		  var list = this.getView().byId("orders");
-
-		  var binding = list.getBinding("items");
-
-		  binding.filter(filters);
+//		 // create model filter
+//
+//		  var filters = [];
+//
+//		  var query = evt.getParameter("query");
+//
+//		  if (query && query.length > 0) {
+//
+//		  var filter = new sap.ui.model.Filter("Search_Parameter", sap.ui.model.FilterOperator.Contains, query);
+//
+//		  filters.push(filter);
+//
+//		  }
+//
+//		  // update list binding
+//
+//		  var list = this.getView().byId("orders");
+//
+//		  var binding = list.getBinding("items");
+//
+//		  binding.filter(filters);
 	},
 	PR_Search: function(oEvent) {
-        var tpmla = oEvent.getParameter("newValue");
-        var filters = new Array();
-        var oFilter = new sap.ui.model.Filter("PoNumber", sap.ui.model.FilterOperator.Contains, tpmla);
-        filters.push(oFilter);
-
-        //get list created in view
-        this.oList = sap.ui.getCore().byId("orders");
-        this.oList.getBinding("items").filter(filters);
+//        var tpmla = oEvent.getParameter("newValue");
+//        var filters = new Array();
+//        var oFilter = new sap.ui.model.Filter("PoNumber", sap.ui.model.FilterOperator.Contains, tpmla);
+//        filters.push(oFilter);
+//
+//        //get list created in view
+//        this.oList = sap.ui.getCore().byId("orders");
+//        this.oList.getBinding("items").filter(filters);
     },
 
 	goToProjects : function(oEvt){

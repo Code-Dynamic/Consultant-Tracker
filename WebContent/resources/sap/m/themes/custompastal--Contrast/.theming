@@ -1,0 +1,15 @@
+{
+	"mVersionDependency": {
+		"UI5.sap/m.sap_belize_plus": "1.54.3",
+		"UI5.sap/m": "1.54.3",
+		"UI5": "1.54.3"
+	},
+	"sEntity": "Theme",
+	"sId": "custompastal--Contrast",
+	"oExtends": "UI5.sap/m.sap_belize_plus",
+	"aBundled": [
+		"custompastal"
+	],
+	"sType": "ABSTRACT",
+	"sThemability": "PRIVATE"
+}
