@@ -1,27 +1,41 @@
-<!DOCTYPE html>
-
+<!DOCTYPE HTML>
 <html>
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta http-equiv='Content-Type' content='text/html;charset=UTF-8'/>
+		<link rel="stylesheet" type="text/css" href="consultant-tracker/css/style.css"/>
 
-    <head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <meta charset="utf-8">
+		<script src="resources/sap-ui-core.js"
+				id="sap-ui-bootstrap"
+				data-sap-ui-libs="sap.m, sap.ui.commons"
+				data-sap-ui-xx-bindingSyntax="complex"
+				data-sap-ui-theme="custompastal">
+		</script>
+		<!-- add sap.ui.table,sap.ui.ux3 and/or other libraries to 'data-sap-ui-libs' if required -->
 
-        <title>Employee List OData</title>
-<script>
-console.log("Hi");
-$.get('/JPATest/emplist.svc/',function(responseText) {  
-	 // var array = responseText.split(';');
-	  console.log(responseText);
-  });
-</script>
-    </head>
+		<script>
+		sap.ui.localResources("consultant-tracker");
+		
+		
+		//Define splitapp
+		var app = new sap.m.SplitApp("consultant-tracker",{mode:sap.m.SplitAppMode.ShowHideMode});
+		//Define Master page
+		var master = sap.ui.view({id:"masterPage", viewName:"consultant-tracker.views.master", type:sap.ui.core.mvc.ViewType.XML});
+		//Define Detail page
+		var detail = sap.ui.view({id:"detailPage", viewName:"consultant-tracker.views.detail", type:sap.ui.core.mvc.ViewType.XML});
+		var detail2 = sap.ui.view({id:"detail2Page", viewName:"consultant-tracker.views.detail2", type:sap.ui.core.mvc.ViewType.XML});
+		//Add master and detail to content
+		app.addMasterPage(master);
+		app.addDetailPage(detail);
+		app.addDetailPage(detail2);
+		
+		
+		//Place App in content
+		app.placeAt("content");
+		</script>
 
-    <body>
-
-        <h1>Employee List OData</h1><br><br>
-
-        <div id="resp"></div>
-
-    </body>
-
+	</head>
+	<body class="sapUiBody" role="application">
+		<div id="content"></div>
+	</body>
 </html>
