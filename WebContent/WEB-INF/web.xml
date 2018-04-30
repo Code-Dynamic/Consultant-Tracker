@@ -1,106 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
-							http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-		version="2.5"
-		xmlns="http://java.sun.com/xml/ns/javaee">
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
 
-	<display-name>Consultant-Tracker</display-name>
+  <display-name>emplist-web</display-name>
 
-	<!-- ============================================================== -->
-	<!-- UI5 resource servlet used to handle application resources      -->
-	<!-- ============================================================== -->
+  <welcome-file-list>
 
-	<servlet>
-		<display-name>ResourceServlet</display-name>
-		<servlet-name>ResourceServlet</servlet-name>
-		<servlet-class>com.sap.ui5.resource.ResourceServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>ResourceServlet</servlet-name>
-		<url-pattern>/resources/*</url-pattern>
-	</servlet-mapping>
-	<!-- BEGIN: test-resources -->
-	<!-- test-resources mapping has to be switched off for productive use on a Java server! -->
-	<servlet-mapping>
-		<servlet-name>ResourceServlet</servlet-name>
-		<url-pattern>/test-resources/*</url-pattern>
-	</servlet-mapping>
-	<!-- END: test-resources -->
-	<!-- BEGIN: DEV MODE -->
-	<!-- DEV MODE switched off by default and can be switched on during development -->
-	<!-- but has to be switched off for productive use on a Java server! -->
-	<context-param>
-		<param-name>com.sap.ui5.resource.DEV_MODE</param-name>
-		<param-value>false</param-value>
-	</context-param>
-	<!-- END: DEV MODE -->
+    <welcome-file>index.html</welcome-file>
 
+  </welcome-file-list>
 
-	<!-- ============================================================== -->
-	<!-- Cache Control Filter to prevent caching of any resource        -->
-	<!-- ============================================================== -->
-
-	<filter>
-		<display-name>CacheControlFilter</display-name>
-		<filter-name>CacheControlFilter</filter-name>
-		<filter-class>com.sap.ui5.resource.CacheControlFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>CacheControlFilter</filter-name>
-		<url-pattern>*.html</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>CacheControlFilter</filter-name>
-		<url-pattern>*.js</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>CacheControlFilter</filter-name>
-		<url-pattern>*.xml</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>CacheControlFilter</filter-name>
-		<url-pattern>*.json</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>CacheControlFilter</filter-name>
-		<url-pattern>*.css</url-pattern>
-	</filter-mapping>
-
-
-	<!-- ============================================================== -->
-	<!-- UI5 proxy servlet                                              -->
-	<!-- ============================================================== -->
-
-	<servlet>
-		<servlet-name>SimpleProxyServlet</servlet-name>
-		<servlet-class>com.sap.ui5.proxy.SimpleProxyServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>SimpleProxyServlet</servlet-name>
-		<url-pattern>/proxy/*</url-pattern>
-	</servlet-mapping>
-
-
-	<!-- ============================================================== -->
-	<!-- Welcome file list                                              -->
-	<!-- ============================================================== -->
-
-	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-	</welcome-file-list>
-	<context-param>
-    <param-name>dbUser</param-name>
-    <param-value>root</param-value>
-  </context-param>
-  <context-param>
-    <param-name>dbPassword</param-name>
-    <param-value>root</param-value>
-  </context-param>
-  <context-param>
-    <param-name>dbURL</param-name>
-    <param-value>jdbc:mysql://localhost:3306/testingdb</param-value>
-  </context-param>
-
+  <servlet>
+    <servlet-name>ODataServlet</servlet-name>
+    <servlet-class>org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet</servlet-class>
+    <init-param>
+      <param-name>javax.ws.rs.Application</param-name>
+      <param-value>org.apache.olingo.odata2.core.rest.app.ODataApplication</param-value>
+    </init-param>
+    <init-param>
+      <param-name>org.apache.olingo.odata2.service.factory</param-name>
+      <param-value>main.EmployeeListServiceFactory</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  
+  <filter>
+    <filter-name>CorsFilter</filter-name>
+    <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
+    <init-param>
+      <param-name>cors.allowed.methods</param-name>
+      <param-value>GET,POST,HEAD,OPTIONS,PUT,DELETE,MERGE</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cors.allowed.headers</param-name>
+      <param-value></param-value>
+    </init-param>
+  </filter>
+  
+    <filter-mapping>
+    <filter-name>CorsFilter</filter-name>
+    <url-pattern>/media-upload</url-pattern>
+  </filter-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>ODataServlet</servlet-name>
+    <url-pattern>/emplist.svc/*</url-pattern>
+  </servlet-mapping>
+  
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>ODataServlet</web-resource-name>
+      <url-pattern>/emplist.svc/*</url-pattern>
+      <http-method>DELETE</http-method>
+      <http-method>PUT</http-method>
+      <http-method>GET</http-method>
+      <http-method>POST</http-method>
+    </web-resource-collection>
+    <user-data-constraint>
+      <transport-guarantee>NONE</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
 
 </web-app>
