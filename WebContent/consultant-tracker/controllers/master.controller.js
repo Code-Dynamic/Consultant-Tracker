@@ -46,11 +46,11 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 
 	goToProjects : function(oEvt){
 		btnConsultantSelected = false;
-
+		
 		//var item = this.getView().byId("orders").data("items","{/Projects}");
 		 var list = this.getView().byId("orders");
 		         
-		         list.bindItems("/Projects",
+		         list.bindItems("/results",
 		           new sap.m.StandardListItem({
 		             title: "{Project_Name}",
 		             press: "onSelect"
@@ -60,44 +60,28 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 				
 
 		var oModel = new sap.ui.model.json.JSONModel();
+		var oDataProjects =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
 		var arrProjects = {Projects:[]};
 		var arrConsultants = {Consultants:[]};
+		oDataProjects.read(
+				"/Projects?$expand=ClientDetails",{success: function(oCreatedEn){ GotProjects(oCreatedEn) }, error: function(){console.log("Error");}}		
+		);
 		
-		
-		$.post('getProjects',function(responseText){
+//		$.post('getProjects',function(responseText){
 //			console.log("servlet responded");
-			arrProjects = {Projects:[]};
-			var array = responseText.split(';');
-			array.forEach(createProjectObj);
+		function GotProjects(oCreatedEn){
+//			arrProjects = {Projects:[]};
+//			var array = responseText.split(';');
+			//array.forEach(createProjectObj);
 					
-			oModel.setData(JSON.parse(JSON.stringify(arrProjects)));
-			console.log(JSON.parse(JSON.stringify(arrProjects)));
+			oModel.setData(oCreatedEn);
+			console.log(oCreatedEn);
 			sap.ui.getCore().setModel(oModel);
 			app.to("detailPage");
-		});
-			
-		function createProjectObj(stringVal){
-			var array = stringVal.split(',');
-			var location;
-			
-			if(array[4]=="0"){
-				location = "No";
-			}else{
-				location = "Yes";
-			}
-			var projectObj = {
-			 Project_ID: array[5],
-		     Project_Name : array[0],
-		     Project_DEscription : array[1],
-		     Client_ID : array[2],
-		     Project_Deadline : array[3],
-		     Project_OnSite : location
-			};
-	    	arrProjects.Projects.push((projectObj));
-//	    		console.log(arrProjects);
-	    		
 		}
-		
+//		});
+			
+	
 		
 
 		
@@ -110,11 +94,13 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 		btnConsultantSelected = true;
 			
 		//var item = this.getView().byId("orders").getMetadata("selectionChange"); //data("items","{/Consultants}");
-		
-		
+		var oDataConsultants =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
+		oDataConsultants.read(
+				"/Consultants",{success: function(oCreatedEn){ GotConsultants(oCreatedEn) }, error: function(){console.log("Error");}}		
+		);
 		 var list = this.getView().byId("orders");
          
-         list.bindItems("/Consultants",
+         list.bindItems("/results",
            new sap.m.StandardListItem({
              title: "{Consultant_Name}",
              press: "onSelect"
@@ -122,20 +108,21 @@ sap.ui.controller("consultant-tracker.controllers.master", {
            }).addStyleClass("listItems")
        );
          //return all consultants
-         $.post('getProjectConsultants',function(responseText){
-				console.log("servlet getProjectConsultants responded");
-				console.log(responseText);
-				arrConsultants = {Consultants:[]};
-				var array = responseText.split(';');
-				array.forEach(createConsultant);
+//         $.post('getProjectConsultants',function(responseText){
+         function  GotConsultants(oCreatedEn) {
+//				console.log("servlet getProjectConsultants responded");
+//				console.log(responseText);
+//				arrConsultants = {Consultants:[]};
+//				var array = responseText.split(';');
+//				array.forEach(createConsultant);
 				
 				var oModel = new sap.ui.model.json.JSONModel();
-				oModel.setData(JSON.parse(JSON.stringify(arrConsultants)));
-				console.log(JSON.parse(JSON.stringify(arrConsultants)));
+				oModel.setData(oCreatedEn);
+//				console.log(JSON.parse(JSON.stringify(arrConsultants)));
 				sap.ui.getCore().setModel(oModel);
 				app.to("detail2Page");	
-				
-			});
+         }
+//			});
 			
 			function createConsultant(stringVal){
 				var array = stringVal.split(',');
@@ -171,8 +158,11 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 		if(btnConsultantSelected){
 
 			var sOrderId = oEvent.getSource().getSelectedItem().getBindingContext().getProperty("Consultant_ID");
-			var oData = sap.ui.getCore().getModel().getProperty("/Consultants");
-
+			var oData = sap.ui.getCore().getModel().getProperty("/results");
+//			var oDataConsultants =  new sap.ui.model.odata.ODataModel('http://localhost:8080/OdataSap/emplist.svc/'); 
+//			oDataConsultants.read(
+//					"/Consultants?$filter=Consultant_ID%20eq%20"+sOrderId,{success: function(oCreatedEn){ GotConsultants(oCreatedEn) }, error: function(){console.log("Error");}}		
+//			);
 
 			function getCountryByCode(Consultant_ID) {
 				return oData.filter(
@@ -191,26 +181,32 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 
 		}else{
 
-
+			var oDataProjects =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
 			//get selected project id
 			var sOrderId = oEvent.getSource().getSelectedItem().getBindingContext().getProperty("Project_ID");
 			//get model
-			var oData = sap.ui.getCore().getModel().getProperty("/Projects");
+			var oData = sap.ui.getCore().getModel().getProperty("/results");
+			
+			oDataProjects.read(
+					"/Assignments?$expand=ConsultantDetails,ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{success: function(oCreatedEn){ GotMembers(oCreatedEn) }, error: function(){console.log("Error");}}		
+					);
 			//get the specific project selected data 
-			$.post('getProjectConsultants',{ projectID: sOrderId},function(responseText){
-				console.log("servlet getProjectConsultants responded");
+//			$.post('getProjectConsultants',{ projectID: sOrderId},function(responseText){
+//				console.log("servlet getProjectConsultants responded");
 				//console.log(responseText);
-				arrConsultants = {Consultants:[]};
-				var array = responseText.split(';');
-				array.forEach(createConsultant);
+//				arrConsultants = {Consultants:[]};
+//				var array = responseText.split(';');
+//				array.forEach(createConsultant);
 
+			function GotMembers(Members){
 				var oModel = new sap.ui.model.json.JSONModel();
-				oModel.setData(JSON.parse(JSON.stringify(arrConsultants)));
+				oModel.setData(Members);
 				//console.log(JSON.parse(JSON.stringify(arrConsultants)));
 				sap.ui.getCore().setModel(oModel,"groupMember");
 				app.to("detailPage");
+			}
 
-			});
+//			});
 
 			function createConsultant(stringVal){
 				var array = stringVal.split(',');

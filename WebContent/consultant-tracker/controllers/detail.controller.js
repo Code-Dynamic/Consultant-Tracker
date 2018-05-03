@@ -136,17 +136,17 @@ sap.ui.controller("consultant-tracker.controllers.detail", {
 				var arrConsultants = {Consultants:[]};
 				
 				
-				$.post('getProjects',function(responseText){
-//					console.log("servlet responded");
-					arrProjects = {Projects:[]};
-					var array = responseText.split(';');
-					array.forEach(createProjectObj);
-							
-					oModel.setData(JSON.parse(JSON.stringify(arrProjects)));
-					console.log(JSON.parse(JSON.stringify(arrProjects)));
-					sap.ui.getCore().setModel(oModel);
-					//app.to("detailPage");
-				});
+//				$.post('getProjects',function(responseText){
+////					console.log("servlet responded");
+//					arrProjects = {Projects:[]};
+//					var array = responseText.split(';');
+//					array.forEach(createProjectObj);
+//							
+//					oModel.setData(JSON.parse(JSON.stringify(arrProjects)));
+//					console.log(JSON.parse(JSON.stringify(arrProjects)));
+//					sap.ui.getCore().setModel(oModel);
+//					//app.to("detailPage");
+//				});
 					
 				function createProjectObj(stringVal){
 					var array = stringVal.split(',');

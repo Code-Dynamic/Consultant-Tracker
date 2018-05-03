@@ -11,7 +11,7 @@
 									<Label text="Name"/>
 									<Text text="{selModel>/Project_Name}"/>
 									<Label text="Description"/>
-									<Text text="{selModel>/Project_DEscription}"/>
+									<Text text="{selModel>/Project_Description}"/>
 									<Label text="Deadline"/>
 									<Text text="{selModel>/Project_Deadline}"/>
 									<Label text="OnSite"/>
@@ -25,10 +25,10 @@
 							<List id="members"  	
 								  mode="SingleSelectMaster"
 								  
-								  items="{groupMember>/Consultants}"
+								  items="{groupMember>/results}"
 								  headerText="Members">
 							 <items>
-								<StandardListItem title="{groupMember>Consultant_Name} {groupMember>Consultant_Surname}" 
+								<StandardListItem title="{groupMember>ConsultantDetails/Consultant_Name} {groupMember>ConsultantDetails/Consultant_Surname}" 
 									type="Active"
 									class="listItems"
 									press="onSelectionChange"/>
