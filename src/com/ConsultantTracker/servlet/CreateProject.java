@@ -46,6 +46,7 @@ public class CreateProject extends HttpServlet {
 		String Proj_Desc = request.getParameter("Desc");
 		String Proj_Deadl = request.getParameter("Deadl");
 		String Proj_OnSite = request.getParameter("OnSite");
+		int on_Site = Integer.parseInt(Proj_OnSite);
 		
 		Connection con = (Connection) getServletContext().getAttribute("DBConnection"); //establish database connection
 		PreparedStatement ps = null;
@@ -58,13 +59,13 @@ public class CreateProject extends HttpServlet {
 			ps.setString(2, ClientID);
 			ps.setString(3, Proj_Desc);
 			ps.setString(4, Proj_Deadl);
-			ps.setString(5, Proj_OnSite);
+			ps.setInt(5, on_Site);
 			System.out.println(ps.toString());
 			ps.executeUpdate();				// execute sql query
 			
 			ps.close();
 		
-			ps = con.prepareStatement("select * from projects");
+			ps = con.prepareStatement("select * from project");
 			rs = ps.executeQuery();				// execute sql query
 			if(rs != null){
 				String ObjToReturn="";

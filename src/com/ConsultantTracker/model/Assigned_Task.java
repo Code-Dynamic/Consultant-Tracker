@@ -27,6 +27,22 @@ public class Assigned_Task implements Serializable {
 	private Date last_Update;
 	@Temporal(TemporalType.DATE)
 	private Date Date_Assigned;
+	public Date getDate_Assigned() {
+		return Date_Assigned;
+	}
+
+	public void setDate_Assigned(Date date_Assigned) {
+		Date_Assigned = date_Assigned;
+	}
+
+	public Date getDue_Date() {
+		return Due_Date;
+	}
+
+	public void setDue_Date(Date due_Date) {
+		Due_Date = due_Date;
+	}
+
 	@Temporal(TemporalType.DATE)
 	private Date Due_Date;
 	

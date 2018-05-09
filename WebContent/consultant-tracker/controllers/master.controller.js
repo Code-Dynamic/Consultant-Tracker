@@ -374,9 +374,9 @@ sap.ui.controller("consultant-tracker.controllers.master", {
     	var b_OnSite = sap.ui.getCore().byId("p_OnSite").getSelected();;
     	var _OnSite;
     	if(b_OnSite){
-    		_OnSite = true;
+    		_OnSite = 1;
     	}else{
-    		_OnSite = false;
+    		_OnSite = 0;
     	}
 //    	var oModel2 =  new sap.ui.model.odata.v2.ODataModel('http://localhost:8080/OdataSap/emplist.svc/'); 
     	oProject.Project_Name = _Name;
