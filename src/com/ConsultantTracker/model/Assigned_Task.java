@@ -25,6 +25,10 @@ public class Assigned_Task implements Serializable {
 	private double hours_Worked;
 	@Temporal(TemporalType.DATE)
 	private Date last_Update;
+	@Temporal(TemporalType.DATE)
+	private Date Date_Assigned;
+	@Temporal(TemporalType.DATE)
+	private Date Due_Date;
 	
 	public Assigned_Task() {
 		
