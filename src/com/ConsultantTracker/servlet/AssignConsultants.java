@@ -41,14 +41,14 @@ public class AssignConsultants extends HttpServlet {
 		
 		try {
 		
-			statement = connection.prepareStatement("INSERT INTO assignment(Project_ID, Consultant_ID) VALUES(?,?)");
+			statement = connection.prepareStatement("INSERT INTO assignment(PROJECT_PROJECT_ID, CONSULTANT_CONSULTANT_ID) VALUES(?,?)");
 			statement.setString(1, projectID);
 			statement.setString(2, consultantID);
 			statement.executeUpdate();	// execute sql query
 			statement.close();
 			
 			//see if it was inserted into the database
-			statement = connection.prepareStatement("SELECT * FROM assignment WHERE Project_ID = ? and Consultant_ID = ?");
+			statement = connection.prepareStatement("SELECT * FROM assignment WHERE PROJECT_PROJECT_ID = ? and CONSULTANT_CONSULTANT_ID = ?");
 			statement.setString(1, projectID);
 			statement.setString(2, consultantID);
 			set = statement.executeQuery();
@@ -56,7 +56,7 @@ public class AssignConsultants extends HttpServlet {
 			String ObjToReturn = "Done";
 			if(set != null) {
 				while(set.next())
-					ObjToReturn=set.getString("Assignment_ID") + ", " + set.getString("Project_ID") + ", " + set.getString("Consultant_ID");
+					ObjToReturn=set.getString("ASSIGNMENT_ID") + ", " + set.getString("PROJECT_PROJECT_ID") + ", " + set.getString("CONSULTANT_CONSULTANT_ID");
 					//PrintWriter out = response.getWriter();
 			}
 			else

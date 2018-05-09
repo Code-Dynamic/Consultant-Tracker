@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  * 
  * returns string in the form 'Project_Name','Project_Description','Client_Name','Project_Deadline,'Project_OnSite'
  */
+//Replaced with Odata Service
 @WebServlet("/getProjectConsultants")
 public class getProjectConsultants extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -45,11 +46,11 @@ public class getProjectConsultants extends HttpServlet {
 			String proj_ID = request.getParameter("projectID");
 			try {
 				if(proj_ID != null) {
-					ps = con.prepareStatement("select * from assignment join consultants on assignment.Consultant_ID=consultants.Consultant_ID where assignment.Project_ID=?");				
+					ps = con.prepareStatement("select * from assignment join consultant on assignment.CONSULTANT_CONSULTANT_ID=consultants.CONSULTANT_ID where assignment.PROJECT_PROJECT_ID=?");				
 					ps.setString(1, proj_ID);
 				}
 				else
-					ps = con.prepareStatement("Select * from Consultants");
+					ps = con.prepareStatement("Select * from Consultant");
 					rs = ps.executeQuery();
 				if(rs != null){
 					
@@ -60,11 +61,11 @@ public class getProjectConsultants extends HttpServlet {
 					while(rs.next()) {
 						if(!ObjToReturn.equals(""))
 							ObjToReturn +=";";
-					 ObjToReturn +=rs.getString("Consultant_ID") +','+rs.getString("Consultant_Name")+','+
-							 rs.getString("Consultant_Surname")+','+rs.getString("Consultant_email")+','+
-							 rs.getString("Consultant_Cell")+','+rs.getString("Consultant_Admin");
+					 ObjToReturn +=rs.getString("CONSULTANT_ID") +','+rs.getString("CONSULTANT_NAME")+','+
+							 rs.getString("CONSULTANT_SURNAME")+','+rs.getString("CONSULTANT_EMAIL")+','+
+							 rs.getString("CONSULTANT_CELL")+','+rs.getString("CONSULTANT_ADMIN");
 					 if(proj_ID != null)
-						 ObjToReturn +=','+rs.getString("Assignment_ID");
+						 ObjToReturn +=','+rs.getString("ASSIGNMENT_ID");
 				
 					}
 					//PrintWriter out = response.getWriter();

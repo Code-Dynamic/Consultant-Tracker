@@ -3,11 +3,16 @@ package com.ConsultantTracker.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -38,9 +43,32 @@ public class Project implements Serializable {
 
 	private boolean project_OnSite;
 
-	private Client client;
+	@OneToOne
+	@JoinColumn(name = "CLIENT_ID")
+	private Client Client_ID;
+	
+	
+//	@JoinColumn(name = "CLIENT_CLIENT_ID")
+//	private int CLIENT_CLIENT_ID ;
+//	public int getCLIENT_CLIENT_ID() {
+//		return CLIENT_CLIENT_ID;
+//	}
+//
+//	public void setCLIENT_CLIENT_ID(int cLIENT_CLIENT_ID) {
+//		CLIENT_CLIENT_ID = cLIENT_CLIENT_ID;
+//	}
+
+
 
 	public Project() {
+	}
+
+	public Client getClient_ID() {
+		return Client_ID;
+	}
+
+	public void setClient_ID(Client cLIENT_ID) {
+		Client_ID = cLIENT_ID;
 	}
 
 	public int getProject_ID() {
@@ -93,12 +121,5 @@ public class Project implements Serializable {
 
 	
 
-	public Client getClient() {
-		return this.client;
-	}
-
-	public void setClient(Client client) {
-		this.client = client;
-	}
 
 }
