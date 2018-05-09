@@ -30,7 +30,7 @@ public class Assigned_Task implements Serializable {
 	public Date getDate_Assigned() {
 		return Date_Assigned;
 	}
-
+//random comment
 	public void setDate_Assigned(Date date_Assigned) {
 		Date_Assigned = date_Assigned;
 	}
