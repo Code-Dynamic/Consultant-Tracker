@@ -27,6 +27,9 @@ public class Assigned_Task implements Serializable {
 	private Date last_Update;
 	@Temporal(TemporalType.DATE)
 	private Date Date_Assigned;
+	@Temporal(TemporalType.DATE)
+	private Date Due_Date;
+	
 	public Date getDate_Assigned() {
 		return Date_Assigned;
 	}
@@ -44,8 +47,7 @@ public class Assigned_Task implements Serializable {
 		Due_Date = due_Date;
 	}
 
-	@Temporal(TemporalType.DATE)
-	private Date Due_Date;
+	
 	
 	public Assigned_Task() {
 		

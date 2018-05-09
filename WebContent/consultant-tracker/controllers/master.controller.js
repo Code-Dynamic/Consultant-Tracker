@@ -433,7 +433,7 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 //    		// var array = responseText.split(';');
 //    		console.log(responseText);
 //    	});
-    	var oDataProjects =   new sap.ui.model.odata.v2.ODataModel('http://localhost:8080/OdataSap/emplist.svc/'); 
+    	var oDataProjects =   new sap.ui.model.odata.v2.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
     	var x=	oDataProjects.createEntry('/Consultants',{
 			properties:{
 				//Client_Details:{},
