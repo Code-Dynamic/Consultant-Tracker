@@ -15,6 +15,7 @@
 		<class>com.ConsultantTracker.model.Task</class>
 		<class>com.ConsultantTracker.model.Assigned_Task</class>
 		<class>com.ConsultantTracker.model.Feedback</class>
+		<class>com.ConsultantTracker.model.Attachment</class>
 		<properties>
 			<property name="eclipselink.ddl-generation" value="create-tables" />
 			<property name="eclipselink.cache.shared.default" value="false" />
