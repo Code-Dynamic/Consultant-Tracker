@@ -20,7 +20,7 @@ public class Test1{
 
 		//add request header
 		con.setRequestProperty("User-Agent", USER_AGENT);
-		
+	
 		int responseCode = con.getResponseCode();
 		System.out.println("\nSending 'GET' request to URL : " + url);
 		System.out.println("Response Code : " + responseCode);
