@@ -35,7 +35,7 @@ public class createTask extends HttpServlet {
 		PreparedStatement ps = null;
 		try {
 			
-			ps = con.prepareStatement("INSERT INTO task (taskID, description, due_date, name, project_project_id) VALUES (?, ?, ?, ?)");
+			ps = con.prepareStatement("INSERT INTO task (description, due_date, name, project_project_id) VALUES (?, ?, ?, ?)");
 			ps.setString(1, description);
 			ps.setString(2, dueDate);
 			ps.setString(3, name);
