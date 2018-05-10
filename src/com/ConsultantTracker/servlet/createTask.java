@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class createTask
  */
+@WebServlet("/createTask")
 public class createTask extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     /**
