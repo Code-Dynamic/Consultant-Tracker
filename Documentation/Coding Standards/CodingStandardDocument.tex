@@ -3,6 +3,8 @@
 \usepackage{helvet}
 \renewcommand{\familydefault}{\sfdefault}
 \renewcommand{\baselinestretch}{1.5} 
+\usepackage{graphicx}
+\graphicspath{ {images/} }
 \begin{document}
 
 \begin{titlepage} % Suppresses headers and footers on the title page
@@ -52,21 +54,31 @@
 \newpage
 \tableofcontents
 \newpage
-\pagenumbering{arabic}
+%\pagenumbering{arabic}
+\section{Github Repository}
+\subsection{Folders} 
+Folder naming uses \underline{UpperCamelCase} \\
+\includegraphics{Github}
+\subsection{Files} 
+File naming uses \underline{UpperCamelCase} \\
+\includegraphics{fileNaming}
+
 \section{Overview}
 The following coding conventions pertain to how code is written and structured for the Consultant Tracking project. The standards are developed to be followed regardless of programming language used.
 
 \section{File Names}
-The preferred file naming style is \underline{UpperCamelCase}
-
+The preferred file naming style is \underline{UpperCamelCase} \\ \\
+\includegraphics{Files}
 \section{Formatting}
 \subsection{Line Length} 
 	- The maximum number of characters in a line should be 80.\\
 	- Control structure conditions may exceed 80 characters, if they are simple to read and understand.\\
 	- Statements containing queries that are clear may exceed 80 character:\\
-	Example:\\ \textit{ connection.prepareStatement("DELETE FROM consultants WHERE ConsultantId =?");}  \\
+	Example:\\ 
+	\includegraphics{Statement}  \\
 	- Lines containing method/class names or variable declarations may exceed 80 characters.\\
-	Example:\\ \textit{protected void doGet(HttpServletRequest request, HttpServletResponse response)}
+	Example:\\ 
+	\includegraphics{LongMethodName}
 \subsection{Line Wrapping}
 	Conditions should not be wrapped in multiple lines, it is recommended to split the conditions.\\
 	Do not use multiple statements on a single line if the length is going to exceed 80 characters.\\
@@ -95,10 +107,13 @@ Comments should not be long and overcomplicated.
 Variable names are nouns and should provide a clear meaning of what the object is.
 \subsection{Classes, Methods and Interface Declarations}
 Class names are written in \underline{UpperCamelCase}.\\
-Test classes are named starting with the name of the class they are testing, and ending with Test. For example, DecodeTest.\\\\
-Method and variables names are written in \underline{lowerCamelCase}.\\
-Method names are verbs or verb phase for example \underline{createProject or load}.
+Start Setter methods by \underline{set}, followed by Variable to set.\\
+Start Getter methods by \underline{get}, followed by variable to get\\
 
+\includegraphics{MethodNames}
+
+Class names uses \underline{UpperCamelCase}\\
+\includegraphics{ClassName}
 \section{Statements}
 \subsection{Simple Statements}
 Each line should contain at most one statement.
