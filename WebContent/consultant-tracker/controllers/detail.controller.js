@@ -67,6 +67,7 @@ sap.ui.controller("consultant-tracker.controllers.detail", {
 				//console.log(Client_ID);
 				$.post('AssignConsultants', { project:_projectID ,consultant: Client_ID},function(responseText) {  
 					// var array = responseText.split(';');
+					console.log("Returned from assign consultants");
 					console.log(responseText);
 				});
 				
@@ -131,22 +132,66 @@ sap.ui.controller("consultant-tracker.controllers.detail", {
 		    },
 		    
 		    refreshData : function(oEvt){
-				var oModel = new sap.ui.model.json.JSONModel();
+		    	//Begin Refresh PRojects
+		    	var oModel = new sap.ui.model.json.JSONModel();
+				var oDataProjects =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
 				var arrProjects = {Projects:[]};
 				var arrConsultants = {Consultants:[]};
-				
+				oDataProjects.read(
+						"/Projects?$expand=ClientDetails&$filter=Project_Deleted%20eq%20false",{success: function(oCreatedEn){ GotProjects(oCreatedEn) }, error: function(){console.log("Error");}}		
+				);
 				
 //				$.post('getProjects',function(responseText){
-////					console.log("servlet responded");
+//					console.log("servlet responded");
+				function GotProjects(oCreatedEn){
 //					arrProjects = {Projects:[]};
 //					var array = responseText.split(';');
-//					array.forEach(createProjectObj);
-//							
-//					oModel.setData(JSON.parse(JSON.stringify(arrProjects)));
-//					console.log(JSON.parse(JSON.stringify(arrProjects)));
-//					sap.ui.getCore().setModel(oModel);
-//					//app.to("detailPage");
-//				});
+					//array.forEach(createProjectObj);
+							
+					oModel.setData(oCreatedEn);
+					console.log(oCreatedEn);
+					sap.ui.getCore().setModel(oModel);
+					app.to("detailPage");
+				}
+		    	//End Refresh PRojects
+
+		    	//BEgin refresh get members
+		    	var oDataProjects =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
+				//get selected project id
+				var sOrderId = sap.ui.getCore().getModel("selModel").getProperty("/Project_ID");
+				//get model
+				var oData = sap.ui.getCore().getModel().getProperty("/results");
+				
+				oDataProjects.read(
+						"/Assignments?$expand=ConsultantDetails,ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ GotMembers(oCreatedEn) }, error: function(){console.log("Error");}}		
+						);
+		    	function GotMembers(Members){
+					console.log(Members);
+					var oModel = new sap.ui.model.json.JSONModel();
+					oModel.setData(Members);
+					//console.log(JSON.parse(JSON.stringify(arrConsultants)));
+					sap.ui.getCore().setModel(oModel,"groupMember");
+					app.to("detailPage");
+				}
+		    	//END refresh get members
+		    	
+		    	//Begin Refresh Members
+		    	var attachModel = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+				attachModel.read(
+						"/Tasks?$expand=ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
+						);
+				
+				function gotTasks(tasks){
+					console.log(tasks);
+					var oModel = new sap.ui.model.json.JSONModel();
+					oModel.setData(tasks);
+					
+					sap.ui.getCore().setModel(oModel,"tasks");
+					app.to("detailPage");
+				}
+		    	//END Refresh Members
+
+
 					
 				function createProjectObj(stringVal){
 					var array = stringVal.split(',');
@@ -196,8 +241,14 @@ sap.ui.controller("consultant-tracker.controllers.detail", {
 					//Get feed back 
 					var taskID = sap.ui.getCore().getModel("tasks").getProperty("/");
 					
-					console.log("TaskID");
-					console.log(taskID);
+//					var model = sap.ui.getCore().getModel("tasks");
+//					  console.log(model);
+//					   
+//					  var path = oEvent.getSource().getBindingContext().getPath();
+//					  var obj = model.getProperty(path);
+					 console.log(oItem);
+//					console.log("TaskID");
+//					console.log(taskID);
 					var attachModel = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
 					attachModel.read(
 							"/Feedbacks?$expand=TaskDetails&$filter=TaskDetails/Task_ID%20eq%201",{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
@@ -216,8 +267,64 @@ sap.ui.controller("consultant-tracker.controllers.detail", {
 					 this._Dialog.open();
 				}
 			},
+			onPost: function (oEvent) {
+				var sValue = oEvent.getParameter("value");
+				var sOrderId = sap.ui.getCore().getModel("selModel").getProperty("/Project_ID");
+				var id = sap.ui.getCore().getModel("taskID").getProperty("/id");
+				console.log("task ID");
+//				console.log(id);
+				$.post("CreateFeedback", {msg:sValue,consultant:1,project:sOrderId,task:id},function(responseText) {  
+			      	// var array = responseText.split(';');
+			      	  //console.log(responseText);
+				  this.goToConsultants();
+			        });
+				
+			},
 			onAddTask: function(){
 				 this._Dialog = sap.ui.xmlfragment("consultant-tracker.fragments.addTask", this);
+				 this._Dialog.open();
+			},
+			onSelectionChange: function(oEvent) {
+		          var oSelectedItem = oEvent.getParameter("listItem");
+		          var oModel = oSelectedItem.getBindingContext("tasks").getObject();
+		          //console.log(oModel.Task_ID);
+		          var taskID = {id:0};
+		          taskID.id = oModel.Task_ID;
+		          var TaskIDModel = new sap.ui.model.json.JSONModel();
+		          TaskIDModel.setData(taskID);
+		          sap.ui.getCore().setModel(TaskIDModel,"taskID");
+		          var attachModel = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+					attachModel.read(
+							"/Feedbacks?$expand=TaskDetails&$filter=TaskDetails/Task_ID%20eq%20"+oModel.Task_ID,{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
+							);
+					
+					function gotTasks(tasks){
+						console.log(tasks);
+						var oModel = new sap.ui.model.json.JSONModel();
+						oModel.setData(tasks);
+						
+						sap.ui.getCore().setModel(oModel,"feedback");
+						app.to("detailPage");
+					}
+		        },
+			getFeedback: function(oEvent){
+				 //console.log("Oevent");
+//				var myE = oEvent;
+//				var myE2 = oEvent.getSource().getParent();
+//				var myE3 = oEvent.getSource().getParent().getParent();
+//				console.log(myE);
+//				console.log(myE2);
+//				console.log(myE3);
+				 //console.log(oEvent.getSource().getParent().getParent());
+//				//Get feed back 
+//				 var oSelectedItem = oEvent.getSource().getParent().getParent().getParameter("listItem");
+//		         var oModel = oSelectedItem.getBindingContext("tasks").getObject();
+//		         console.log(oModel.Task_ID);
+		         
+				
+				
+				
+				 this._Dialog = sap.ui.xmlfragment("consultant-tracker.fragments.feedback", this);
 				 this._Dialog.open();
 			},
 			onFeedback : function(){
@@ -285,6 +392,7 @@ sap.ui.controller("consultant-tracker.controllers.detail", {
 				    	
 				    	//close model
 						this._Dialog.destroy();
+						this.refreshData();
 					
 					},
 					//End of code for Task

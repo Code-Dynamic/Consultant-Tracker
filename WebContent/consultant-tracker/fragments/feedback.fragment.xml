@@ -20,7 +20,7 @@
 	</List>
  <FeedInput
 		post="onPost"
-		
+			showIcon="false"
 		class="sapUiSmallMarginTopBottom" />
 	
  <endButton>

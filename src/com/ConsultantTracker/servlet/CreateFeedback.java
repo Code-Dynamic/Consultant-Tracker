@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.sql.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class CreateFeedback
  */
-
+@WebServlet("/CreateFeedback")
 public class CreateFeedback extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -34,13 +36,16 @@ public class CreateFeedback extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String date = request.getParameter("date");	//set project Name from request
+		//String date = request.getParameter("date");	//set project Name from request
 		String msg = request.getParameter("msg");
 		int Consultant = Integer.parseInt(request.getParameter("consultant"));
 		int Project = Integer.parseInt(request.getParameter("project"));
 		int Task = Integer.parseInt(request.getParameter("task"));
 
+		LocalDate d = LocalDate.now();
+		java.sql.Date mydate = java.sql.Date.valueOf(d);
 		
+		String date = d.toString();
 		Connection con = (Connection) getServletContext().getAttribute("DBConnection"); //establish database connection
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -48,7 +53,7 @@ public class CreateFeedback extends HttpServlet {
 			ps = con.prepareStatement("INSERT INTO feedback (DATE,MESSAGE,CONSULTANT_CONSULTANT_ID," + 
 					"PROJECT_PROJECT_ID,TASK_TASK_ID) VALUES (?,?,?,?,?);");		//create prepared sql statement	
 			
-			ps.setString(1, date);
+			ps.setDate(1, mydate);
 			ps.setString(2, msg);
 			ps.setInt(3, Consultant);
 			ps.setInt(4, Project);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mvc:View xmlns:core="sap.ui.core" xmlns:la="sap.ui.layout"
-	xmlns:u="sap.ui.unified" xmlns:f="sap.ui.layout.form" xmlns:mvc="sap.ui.core.mvc"
+	xmlns:u="sap.ui.unified" xmlns:f="sap.ui.layout.form" xmlns:mvc="sap.ui.core.mvc" 
 	xmlns="sap.m" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:semantic="sap.m.semantic"
 	controllerName="consultant-tracker.controllers.detail">
 	<semantic:DetailPage id="page" showNavButton="{device&gt;/system/phone}"
@@ -54,7 +54,7 @@
 					<IconTabFilter id="iconTabBarFilter3" icon="sap-icon://activities"
 						tooltip="{i18n&gt;detailIconTabBarAttachments}" text="Tasks">
 
-						<Table id="idProgressTable" growing="true" inset="false" items="{tasks>/results}">
+						<Table mode="SingleSelectMaster" selectionChange="onSelectionChange" id="idProgressTable" growing="true" inset="false" items="{tasks>/results}">
 							<headerToolbar>
 								<OverflowToolbar id="otbSubheader">
 									<Title text="Tasks" level="H2" />
@@ -74,10 +74,13 @@
 								<Column minScreenWidth="Tablet" demandPopin="true">
 									<Text text="Progress" />
 								</Column>
-								<Column width="10%" minScreenWidth="Tablet" demandPopin="true">
+								<Column  width="80px" minScreenWidth="Tablet" demandPopin="true">
 									<Text text="{}" />
 								</Column>
-								<Column width="10%" minScreenWidth="Tablet" demandPopin="true">
+								<Column width="150px" minScreenWidth="Tablet" demandPopin="true">
+									<Text text="{}" />
+								</Column>
+								<Column width="50px" minScreenWidth="Tablet" demandPopin="true">
 									<Text text="{}" />
 								</Column>
 							</columns>
@@ -90,7 +93,7 @@
 										<ProgressIndicator class="sapUiSmallMarginBottom"
 											percentValue="30" displayValue="30%" showValue="true" state="None" />
 
-										<MenuButton text="More" buttonMode="Split"
+										<!--  <MenuButton text="More" buttonMode="Split"
 											useDefaultActionOnly="true">
 											<menu>
 												<Menu itemSelected="onMenuAction">
@@ -104,8 +107,13 @@
 
 										</MenuButton>
 
-										<Button type="Reject" icon="sap-icon://delete" press="onPress" />
-
+										<Button type="Reject" icon="sap-icon://delete" press="onPress" /> -->
+										<Link  text="Feedback" press="getFeedback" /> 
+										<Link text="Manage Consultant" press="handleLinkPress" />
+										<!--<Link text="Delete" press="handleLinkPress" /> -->
+										<Button type="Reject" icon="sap-icon://delete" press="getFeedback" />
+										
+										
 									</cells>
 								</ColumnListItem>
 							</items>

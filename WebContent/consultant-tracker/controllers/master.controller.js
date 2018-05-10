@@ -8,7 +8,7 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 	 * @memberOf splitapp.master
 	 */
 	onInit: function() {
-		
+		 
 	},
 	onSearch: function(evt){
 //		 // create model filter
@@ -92,21 +92,22 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 
 	goToConsultants : function(oEvt){
 		btnConsultantSelected = true;
-			
+		console.log("goToConsultants");
 		//var item = this.getView().byId("orders").getMetadata("selectionChange"); //data("items","{/Consultants}");
-		var oDataConsultants =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
-		oDataConsultants.read(
-				"/Consultants",{success: function(oCreatedEn){ GotConsultants(oCreatedEn) }, error: function(){console.log("Error");}}		
-		);
+		
+		
 		 var list = this.getView().byId("orders");
          
          list.bindItems("/results",
-           new sap.m.StandardListItem({
-             title: "{Consultant_Name}",
-             press: "onSelect"
-         
+        		 new sap.m.StandardListItem({
+        			 title: "{Consultant_Name}",
+        			 press: "onSelect"
            }).addStyleClass("listItems")
        );
+        var oDataConsultants =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
+ 		oDataConsultants.read(
+ 				"/Consultants",{success: function(oCreatedEn){ GotConsultants(oCreatedEn) }, error: function(){console.log("Error");}}		
+ 		);
          //return all consultants
 //         $.post('getProjectConsultants',function(responseText){
          function  GotConsultants(oCreatedEn) {
@@ -234,7 +235,8 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 
 			var found = getCountryByCode(sOrderId);
 			var oSelModel = new sap.ui.model.json.JSONModel(found[0]);			
-			sap.ui.getCore().setModel(oSelModel,"selModel");	
+			sap.ui.getCore().setModel(oSelModel,"selModel");
+			
 //Start Code to display Attachments
 			var attachModel = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
 			console.log("Project Id= "+sOrderId);
@@ -283,6 +285,7 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 	 * @memberOf splitapp.master
 	 */
 	onAfterRendering: function() {
+		
 		btnConsultantSelected = false;
 
 		//var item = this.getView().byId("orders").data("items","{/Projects}");
@@ -333,7 +336,7 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 //	    		console.log(arrProjects);
 	    		
 		}
-		
+	 	this.goToProjects();
 		
 		
 	},
@@ -428,6 +431,7 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 //    		// var array = responseText.split(';');
 //    		console.log(responseText);
 //    	});
+    	var t = this;
     	var oDataProjects =   new sap.ui.model.odata.v2.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
     	var x=	oDataProjects.createEntry('/Consultants',{
 			properties:{
@@ -437,11 +441,14 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 				Consultant_Name: _Name,
 				Consultant_Surname: _Surname,
 				Consultant_email:_email},
-			created:function(){ console.log(("posting Project (created)- It Worked!!")); console.log("submitting cahnges");console.log(oDataProjects.oData);oDataProjects.submitChanges();},
+				async:false,
+			created:function(){ console.log(("posting Project (created)- It Worked!!")); console.log("submitting cahnges");console.log(oDataProjects.oData);oDataProjects.submitChanges({async:false});t.goToConsultants();},
 			sucesss: function(){ console.log(("posting Project(sucess) It Worked!!")); }
 			, error:function(){console.log("Error in posting Project");}
     	});
+    	
     	this.goToConsultants();
+    
     	//close model
 		this._Dialog.destroy();
     },
