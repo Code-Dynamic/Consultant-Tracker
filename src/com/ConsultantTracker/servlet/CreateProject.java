@@ -46,7 +46,7 @@ public class CreateProject extends HttpServlet {
 		String Proj_Desc = request.getParameter("Desc");
 		String Proj_Deadl = request.getParameter("Deadl");
 		String Proj_OnSite = request.getParameter("OnSite");
-		int on_Site = Integer.parseInt(Proj_OnSite);
+		int on_Site = Integer.parseInt(request.getParameter("OnSite"));
 		
 		Connection con = (Connection) getServletContext().getAttribute("DBConnection"); //establish database connection
 		PreparedStatement ps = null;
