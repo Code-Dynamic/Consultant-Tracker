@@ -143,39 +143,35 @@
         <antcall target="build"/>
     </target>
     <target name = "compile">
-    		<javac includeantruntime="false" srcdir="./testing" destdir="testing-out"/>
-    		</target>
+    	<javac includeantruntime="false" srcdir="./testing" destdir="testing-out"/>
+    </target>
 
-    		<target name="test1" depends="compile">
-    			<echo>Test Case 1 executing... </echo>
-    			<java classname="Test1">
-    				<classpath path = "testing-out"/>
-    			</java>
-    			<echo>Test Case 1 finished... </echo>
-    		</target>
-
-    		<target name="test2" depends="compile">
-    			<echo>Test Case 2 executing... </echo>
-    			<java classname="Test2">
-    				<classpath path = "testing-out"/>
-    			</java>
-    			<echo>Test Case 2 finished... </echo>
-    		</target>
-
-    		<target name="test3" depends="compile">
-    			<echo>Test Case 3 executing... </echo>
-    			<java classname="Test3">
-    				<classpath path = "testing-out"/>
-    			</java>
-    			<echo>Test Case 3 finished... </echo>
-    		</target>
-
-    		<target name="test4" depends="compile">
-    			<echo>Test Case 4 executing... </echo>
-    			<java classname="Test4">
-    				<classpath path = "testing-out"/>
-    			</java>
-    			<echo>Test Case 4 finished... </echo>
-    		</target>
-              	
+    <target name="test1" depends="compile">
+    	<echo>Test Case 1 executing... </echo>
+    		<java classname="Test1">
+    			<classpath path = "testing-out"/>
+    		</java>
+    	<echo>Test Case 1 finished... </echo>
+    </target>
+    <target name="test2" depends="compile">
+    	<echo>Test Case 2 executing... </echo>
+    		<java classname="Test2">
+    			<classpath path = "testing-out"/>
+    		</java>
+    	<echo>Test Case 2 finished... </echo>
+    </target>
+    <target name="test3" depends="compile">
+    	<echo>Test Case 3 executing... </echo>
+    		<java classname="Test3">
+    			<classpath path = "testing-out"/>
+    		</java>
+    	<echo>Test Case 3 finished... </echo>
+    </target>
+    <target name="test4" depends="compile">
+    	<echo>Test Case 4 executing... </echo>
+    		<java classname="Test4">
+    			<classpath path = "testing-out"/>
+    		</java>
+    	<echo>Test Case 4 finished... </echo>
+    </target>              	
 </project>
