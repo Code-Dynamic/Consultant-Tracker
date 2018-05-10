@@ -7,7 +7,8 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 public class Test1{
-	public static void main(String[] args) {
+	
+	public static void main(String[] args) throws Exception {
 		/*System.out.println("==> Creating Dummy Project...");
 		try{
 			TimeUnit.SECONDS.sleep(1);
@@ -15,7 +16,8 @@ public class Test1{
 			System.out.println("...");
 		}
 		System.out.println("==> Dummy Project Created...");	*/
-		HttpURLConnectionExample http = new HttpURLConnectionExample();
+		String USER_AGENT = "Mozilla/5.0";
+		Test1 http = new Test1();
 		String url = "http://localhost:8080/Consultant-Tracker/emplist.svc/Clients?$format=json";
 		
 		URL obj = new URL(url);
