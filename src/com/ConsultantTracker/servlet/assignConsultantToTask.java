@@ -57,7 +57,7 @@ public class assignConsultantToTask extends HttpServlet {
 			ps.setInt(6, consultantID);
 			ps.setInt(7, taskID);
 			ps.executeUpdate();
-			//**sends success message back if user is stored successfully 
+			//sends success message back if user is stored successfully 
 			String ObjToReturn = "Assigned task succesfully!" ;
 			response.setContentType("text/plain");
 			response.getWriter().write(ObjToReturn);
