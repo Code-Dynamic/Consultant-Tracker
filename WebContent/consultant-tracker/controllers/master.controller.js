@@ -270,6 +270,18 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 			}
 			
 			//End code display task
+			//start code for progress
+		
+			$.post('getProjectProgress',{Project_Id:sOrderId},function(responseText){
+				var progress = {percVal:0,displayVal:0};
+				progress.percVal = parseFloat(responseText);
+				progress.displayVal = responseText;
+		          var progressModel = new sap.ui.model.json.JSONModel();
+		          progressModel.setData(progress);
+		          sap.ui.getCore().setModel(progressModel,"progress");
+				
+			});
+			//end code for progress
 
 		}
 

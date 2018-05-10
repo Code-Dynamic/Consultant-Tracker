@@ -1,97 +1,87 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mvc:View xmlns:core="sap.ui.core" xmlns:la="sap.ui.layout"
-	xmlns:u="sap.ui.unified" xmlns:f="sap.ui.layout.form" xmlns:mvc="sap.ui.core.mvc" 
-	xmlns="sap.m" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:semantic="sap.m.semantic"
-	controllerName="consultant-tracker.controllers.detail">
-	<semantic:DetailPage id="page" showNavButton="{device&gt;/system/phone}"
-		title="Project Information" busy="{detailView&gt;/busy}"
-		busyIndicatorDelay="{detailView&gt;/delay}">
+<mvc:View xmlns:core="sap.ui.core" xmlns:la="sap.ui.layout" xmlns:u="sap.ui.unified" xmlns:f="sap.ui.layout.form" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:semantic="sap.m.semantic" controllerName="consultant-tracker.controllers.detail">
+	<semantic:DetailPage id="page" showNavButton="{device>/system/phone}" title="Project Information" busy="{detailView>/busy}" busyIndicatorDelay="{detailView>/delay}">
 		<semantic:content>
-			<ObjectHeader id="objectHeader" title="{selModel&gt;/Project_Name}" />
-			<IconTabBar id="iconTabBar" class="sapUiResponsiveContentPadding"
-				expandable="false">
+			
+<ObjectHeader id="objectHeader" title="{selModel>/Project_Name}">
+			    <statuses>
+			       <ProgressIndicator id="projectProgressId" class="sapUiSmallMarginBottom" percentValue="{progress>/percVal}" displayValue="{progress>/displayVal}%" showValue="true" state="None"/>
+
+			    </statuses>
+			</ObjectHeader>
+			
+			<IconTabBar id="iconTabBar" class="sapUiResponsiveContentPadding" expandable="false">
 				<items>
-					<IconTabFilter id="iconTabBarFilter1" icon="sap-icon://detail-view"
-						tooltip="{i18n&gt;detailIconTabBarInfo}" text="Project Data">
+					<IconTabFilter id="iconTabBarFilter1" icon="sap-icon://detail-view" tooltip="{i18n>detailIconTabBarInfo}" text="Project Data">
 						<content>
 							<f:SimpleForm title="Project Details" width="100%">
 								<f:content>
-									<Label text="Name" />
-									<Text text="{selModel&gt;/Project_Name}" />
-									<Label text="Description" />
-									<Text text="{selModel&gt;/Project_Description}" />
-									<Label text="Deadline" />
-									<Text text="{selModel&gt;/Project_Deadline}" />
-									<Label text="OnSite" />
-									<Text text="{selModel&gt;/Project_OnSite}" />
+									<Label text="Name"/>
+									<Text text="{selModel>/Project_Name}"/>
+									<Label text="Description"/>
+									<Text text="{selModel>/Project_Description}"/>
+									<Label text="Deadline"/>
+									<Text text="{selModel>/Project_Deadline}"/>
+									<Label text="OnSite"/>
+									<Text text="{selModel>/Project_OnSite}"/>
 								</f:content>
 							</f:SimpleForm>
 						</content>
 					</IconTabFilter>
-					<IconTabFilter id="iconTabBarFilter2" icon="sap-icon://group"
-						tooltip="{i18n&gt;detailIconTabBarAttachments}" text="Members">
+					<IconTabFilter id="iconTabBarFilter2" icon="sap-icon://group" tooltip="{i18n>detailIconTabBarAttachments}" text="Members">
 						<content>
-							<List id="members" mode="SingleSelectMaster" items="{groupMember&gt;/results}"
-								headerText="Members">
+							<List id="members" mode="SingleSelectMaster" items="{groupMember>/results}" headerText="Members">
 								<items>
-									<StandardListItem
-										title="{groupMember&gt;ConsultantDetails/Consultant_Name} {groupMember&gt;ConsultantDetails/Consultant_Surname}"
-										type="Active" class="listItems" press="onSelectionChange" />
+									<StandardListItem title="{groupMember>ConsultantDetails/Consultant_Name} {groupMember&gt;ConsultantDetails/Consultant_Surname}" type="Active" class="listItems" press="onSelectionChange"/>
 								</items>
 								<headerToolbar>
 									<Toolbar>
-										<Title text="Members" level="H2" />
-										<ToolbarSpacer />
-										<Button icon="sap-icon://delete" text="Remove Consultant"
-											press="onDeleteConsultantFromProject" />
-										<Button icon="sap-icon://add" text="Add Consultant"
-											press="addConsultantToProject" />
+										<Title text="Members" level="H2"/>
+										<ToolbarSpacer/>
+										<Button icon="sap-icon://delete" text="Remove Consultant" press="onDeleteConsultantFromProject"/>
+										<Button icon="sap-icon://add" text="Add Consultant" press="addConsultantToProject"/>
 									</Toolbar>
 								</headerToolbar>
 							</List>
 						</content>
 					</IconTabFilter>
-					<IconTabFilter id="iconTabBarFilter3" icon="sap-icon://activities"
-						tooltip="{i18n&gt;detailIconTabBarAttachments}" text="Tasks">
+					<IconTabFilter id="iconTabBarFilter3" icon="sap-icon://activities" tooltip="{i18n>detailIconTabBarAttachments}" text="Tasks">
 
 						<Table mode="SingleSelectMaster" selectionChange="onSelectionChange" id="idProgressTable" growing="true" inset="false" items="{tasks>/results}">
 							<headerToolbar>
 								<OverflowToolbar id="otbSubheader">
-									<Title text="Tasks" level="H2" />
-									<ToolbarSpacer />
-									<Button id="AddTask" text="Add Task" type="Transparent"
-										press="onAddTask" />
+									<Title text="Tasks" level="H2"/>
+									<ToolbarSpacer/>
+									<Button id="AddTask" text="Add Task" type="Transparent" press="onAddTask"/>
 
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
 								<Column width="12em">
-									<Text text="Task Name" />
+									<Text text="Task Name"/>
 								</Column>
 								<Column minScreenWidth="Tablet" demandPopin="true">
-									<Text text="Deadline" />
+									<Text text="Deadline"/>
 								</Column>
 								<Column minScreenWidth="Tablet" demandPopin="true">
-									<Text text="Progress" />
+									<Text text="Progress"/>
 								</Column>
-								<Column  width="80px" minScreenWidth="Tablet" demandPopin="true">
-									<Text text="{}" />
+								<Column width="80px" minScreenWidth="Tablet" demandPopin="true">
+									<Text text="{}"/>
 								</Column>
 								<Column width="150px" minScreenWidth="Tablet" demandPopin="true">
-									<Text text="{}" />
+									<Text text="{}"/>
 								</Column>
 								<Column width="50px" minScreenWidth="Tablet" demandPopin="true">
-									<Text text="{}" />
+									<Text text="{}"/>
 								</Column>
 							</columns>
 
 							<items>
 								<ColumnListItem>
 									<cells>
-										<ObjectIdentifier text="{tasks>Name}" />
-										<Text text="{tasks>Due_Date}" />
-										<ProgressIndicator class="sapUiSmallMarginBottom"
-											percentValue="30" displayValue="30%" showValue="true" state="None" />
+										<ObjectIdentifier text="{tasks>Name}"/>
+										<Text text="{tasks>Due_Date}"/>
+										<ProgressIndicator class="sapUiSmallMarginBottom" percentValue="30" displayValue="30%" showValue="true" state="None"/>
 
 										<!--  <MenuButton text="More" buttonMode="Split"
 											useDefaultActionOnly="true">
@@ -108,10 +98,10 @@
 										</MenuButton>
 
 										<Button type="Reject" icon="sap-icon://delete" press="onPress" /> -->
-										<Link  text="Feedback" press="getFeedback" /> 
-										<Link text="Manage Consultant" press="handleLinkPress" />
+										<Link text="Feedback" press="getFeedback"/> 
+										<Link text="Manage Consultant" press="openManageConFrag"/>
 										<!--<Link text="Delete" press="handleLinkPress" /> -->
-										<Button type="Reject" icon="sap-icon://delete" press="getFeedback" />
+										<Button type="Reject" icon="sap-icon://delete" press="deleteTask"/>
 										
 										
 									</cells>
@@ -120,50 +110,41 @@
 						</Table>
 
 					</IconTabFilter>
-					<IconTabFilter id="iconTabBarFilter4" icon="sap-icon://attachment"
-						tooltip="{i18n&gt;detailIconTabBarInfo}" text="Attachments">
+					<IconTabFilter id="iconTabBarFilter4" icon="sap-icon://attachment" tooltip="{i18n>detailIconTabBarInfo}" text="Attachments">
 						<content>
 							<la:VerticalLayout>
-								<u:FileUploader id="fileUploader" name="myFileUpload"
-
-									tooltip="Upload your file to the local server" uploadComplete=""
-									change="handleValueChange" typeMissmatch="handleTypeMissmatch"
-									style="Emphasized" fileType="txt,jpg" placeholder="Choose a file for Upload...">
+								<u:FileUploader id="fileUploader" name="myFileUpload" uploadUrl="AddFolder" tooltip="Upload your file to the local server" uploadComplete="" change="handleValueChange" typeMissmatch="handleTypeMissmatch" style="Emphasized" fileType="txt,jpg" placeholder="Choose a file for Upload...">
 									<u:parameters>
-										<u:FileUploaderParameter name="param1"
-											value="Foo" />
-										<u:FileUploaderParameter name="param2"
-											value="bar" />
+										<u:FileUploaderParameter name="param1" value="Foo"/>
+										<u:FileUploaderParameter name="param2" value="bar"/>
 									</u:parameters>
 									<u:headerParameters>
-										<u:FileUploaderParameter name="headerParam1"
-											value="Foo" />
-										<u:FileUploaderParameter name="headerParam2"
-											value="bar" />
+										<u:FileUploaderParameter name="headerParam1" value="Foo"/>
+										<u:FileUploaderParameter name="headerParam2" value="bar"/>
 									</u:headerParameters>
 								</u:FileUploader>
-								<Button text="Upload File" press="handleUploadPress" />
+								<Button text="Upload File" press="handleUploadPress"/>
 							</la:VerticalLayout>
 
 							<Table id="idTable" items="{attachment>/results}">
 								<items>
 									<ColumnListItem>
 										<cells>
-											<Text text="{attachment>Attachment_Name}" />
-											<Text text="{attachment>Attachment_Upload_Date}" />
-											<Text text="{attachment>Attachment_Size} B" />
+											<Text text="{attachment>Attachment_Name}"/>
+											<Text text="{attachment>Attachment_Upload_Date}"/>
+											<Text text="{attachment>Attachment_Size} B"/>
 										</cells> 
 									</ColumnListItem>
 								</items>
 								<columns>
 									<Column>
-										<Text text="File Name" />
+										<Text text="File Name"/>
 									</Column>
 									<Column>
-										<Text text="Date Uploaded" />
+										<Text text="Date Uploaded"/>
 									</Column>
 									<Column>
-										<Text text="Size" />
+										<Text text="Size"/>
 									</Column>
 									
 								</columns>
@@ -176,8 +157,7 @@
 		</semantic:content>
 
 		<semantic:customFooterContent>
-			<Button id="__button0" text="Remove Project" icon="sap-icon://delete"
-				press="confirmDeleteProject" />
+			<Button id="__button0" text="Remove Project" icon="sap-icon://delete" press="confirmDeleteProject"/>
 		</semantic:customFooterContent>
 	</semantic:DetailPage>
 </mvc:View>

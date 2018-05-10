@@ -273,11 +273,12 @@ sap.ui.controller("consultant-tracker.controllers.detail", {
 				var id = sap.ui.getCore().getModel("taskID").getProperty("/id");
 				console.log("task ID");
 //				console.log(id);
-				$.post("CreateFeedback", {msg:sValue,consultant:1,project:sOrderId,task:id},function(responseText) {  
+				$.post("CreateFeedback", {msg:sValue,consultant:2,project:sOrderId,task:id},function(responseText) {  
 			      	// var array = responseText.split(';');
 			      	  //console.log(responseText);
-				  this.goToConsultants();
+				  
 			        });
+				
 				
 			},
 			onAddTask: function(){
@@ -356,24 +357,28 @@ sap.ui.controller("consultant-tracker.controllers.detail", {
 					// Create a File Reader object
 					
 				    },
-				    handleUploadPress: function(oEvent) {
+					handleUploadPress: function(oEvent) {
 						var oFileUploader = this.byId("fileUploader");
-						if (!oFileUploader.getValue()) {
-							MessageToast.show("Choose a file first");
-							return;
-						}
-						var fU = this.getView().byId("fileUploader");
-						var domRef = fU.getFocusDomRef();
-						var file = domRef.files[0];
-						
-						//upload to database
-						$.post('AddFolder', { 
-							fileName: file
-						},function(responseText) {  
-							console.log("Response");
-					    	  console.log(responseText);
-					      });
+						oFileUploader.upload();
 					},
+//				    handleUploadPress: function(oEvent) {
+//						var oFileUploader = this.byId("fileUploader");
+//						if (!oFileUploader.getValue()) {
+//							MessageToast.show("Choose a file first");
+//							return;
+//						}
+//						var fU = this.getView().byId("fileUploader");
+//						var domRef = fU.getFocusDomRef();
+//						var file = domRef.files[0];
+//						
+//						//upload to database
+//						$.post('AddFolder', { 
+//							fileName: file
+//						},function(responseText) {  
+//							console.log("Response");
+//					    	  console.log(responseText);
+//					      });
+//					},
 					//End of Code for Attachment tab 
 					//Start of code for Task
 					onSubmitTask: function(){
@@ -395,15 +400,41 @@ sap.ui.controller("consultant-tracker.controllers.detail", {
 						this.refreshData();
 					
 					},
+					deleteTask: function(){
+						var id = sap.ui.getCore().getModel("taskID").getProperty("/id");
+						
+						$.post('removeAssignedTask',{taskID:id},function(responseText){
+				    		  
+								console.log("Removed task!");
+							});
+					},
+					openManageConFrag: function(){
+						 this._Dialog = sap.ui.xmlfragment("consultant-tracker.fragments.feedback", this);
+						 this._Dialog.open();
+					},
 					//End of code for Task
 /**
 * Called when the View has been rendered (so its HTML is part of the document). Post-rendering manipulations of the HTML could be done here.
 * This hook is the same one that SAPUI5 controls get after being rendered.
 * @memberOf splitapp.detail
 */
-//	onAfterRendering: function() {
-//
-//	},
+	onAfterRendering: function() {
+	//	var sOrderId = sap.ui.getCore().getModel("selModel").getProperty("/Project_ID");
+		
+//		var perc = null;
+//		var t=this;
+//		$.post('getProjectProgress',{Project_Id:1},function(responseText){
+//  		  
+//			console.log("Got progress Value");
+//			console.log(responseText);
+//			var progressBar = t.byId("projectProgressId");
+//			progressBar.setDisplayValue(responseText + "%");
+//			var val = responseText;
+//			progressBar.setPercentValue(parseFloat(val));
+//			console.log("test");
+//		});
+		
+	},
 
 /**
 * Called when the Controller is destroyed. Use this one to free resources and finalize activities.

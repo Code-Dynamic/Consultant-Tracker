@@ -4,7 +4,7 @@
  <Dialog 
  title="Feedback"
  >
- 	<List
+ 	<List 
 		showSeparators="Inner"
 		items="{feedback>/results}" >
 		<FeedListItem
