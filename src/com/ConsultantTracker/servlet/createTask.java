@@ -16,20 +16,17 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class createTask extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-      //comment 
     /**
      * @see HttpServlet#HttpServlet()
      */
     public createTask() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int taskID= Integer.parseInt(request.getParameter("taskID"));
 		String description= request.getParameter("description");
 		String dueDate = request.getParameter("dueDate");
 		String name = request.getParameter("name");
@@ -38,12 +35,11 @@ public class createTask extends HttpServlet {
 		PreparedStatement ps = null;
 		try {
 			
-			ps = con.prepareStatement("INSERT INTO task (taskID, description, due_date, name, project_project_id) VALUES (?, ?, ?, ?, ?)");
-			ps.setInt(1, taskID);
-			ps.setString(2, description);
-			ps.setString(3, dueDate);
-			ps.setString(4, name);
-			ps.setInt(5, projectID);
+			ps = con.prepareStatement("INSERT INTO task (taskID, description, due_date, name, project_project_id) VALUES (?, ?, ?, ?)");
+			ps.setString(1, description);
+			ps.setString(2, dueDate);
+			ps.setString(3, name);
+			ps.setInt(4, projectID);
 			ps.executeUpdate();
 			//**sends success message back if user is stored successfully 
 			String ObjToReturn = "Task created succesfully!" ;
@@ -68,7 +64,6 @@ public class createTask extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 
