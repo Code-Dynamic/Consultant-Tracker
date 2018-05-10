@@ -61,6 +61,7 @@ public class assignConsultantToTask extends HttpServlet {
 			String ObjToReturn = "Assigned task succesfully!" ;
 			response.setContentType("text/plain");
 			response.getWriter().write(ObjToReturn);
+			
 
 		} catch (SQLException e) {
 			e.printStackTrace();
