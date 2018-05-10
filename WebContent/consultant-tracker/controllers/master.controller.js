@@ -188,7 +188,7 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 			var oData = sap.ui.getCore().getModel().getProperty("/results");
 			
 			oDataProjects.read(
-					"/Assignments?$expand=ConsultantDetails,ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{success: function(oCreatedEn){ GotMembers(oCreatedEn) }, error: function(){console.log("Error");}}		
+					"/Assignments?$expand=ConsultantDetails,ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ GotMembers(oCreatedEn) }, error: function(){console.log("Error");}}		
 					);
 			//get the specific project selected data 
 //			$.post('getProjectConsultants',{ projectID: sOrderId},function(responseText){
@@ -199,6 +199,7 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 //				array.forEach(createConsultant);
 
 			function GotMembers(Members){
+				console.log(Members);
 				var oModel = new sap.ui.model.json.JSONModel();
 				oModel.setData(Members);
 				//console.log(JSON.parse(JSON.stringify(arrConsultants)));
@@ -234,45 +235,39 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 			var found = getCountryByCode(sOrderId);
 			var oSelModel = new sap.ui.model.json.JSONModel(found[0]);			
 			sap.ui.getCore().setModel(oSelModel,"selModel");	
-
-//			//model for members of project
-
-//			//get array of members of project
-//			var arrayOfMembers = oEvent.getSource().getSelectedItem().getBindingContext().getProperty("Project_Members")
-//			//console.log(sOrderId2[0].Consultant_ID);
-//			//Load data from consultants json then loop array of members id's
-//			var oModel = new sap.ui.model.json.JSONModel();
-//			oModel.loadData("splitapp/model/consultants.json");
-
-//			//array for members
-//			var projectMembers = {
-//			members:[
-
-//			]
-//			};
-
-//			oModel.attachRequestCompleted(function() {				
-//			for(var id in arrayOfMembers){
-//			//console.log(arrayOfMembers[id].Consultant_ID);
-
-//			var consultants = oModel.getProperty("/Consultants");
-//			function getMembers(Consultant_ID) {
-//			return consultants.filter(
-//			function(consultants) {
-//			return consultants.Consultant_ID == Consultant_ID
-//			}
-//			);
-//			}
-
-//			var groupMember = getMembers(arrayOfMembers[id].Consultant_ID);
-//			//console.log(groupMember[0].Consultant_Name);
-//			projectMembers.members.push(groupMember[0]);
-//			}
-
-//			//console.log(projectMembers);
-//			var oGroupMember = new sap.ui.model.json.JSONModel(projectMembers);			
-//			sap.ui.getCore().setModel(oGroupMember,"groupMember");	
-//			});
+//Start Code to display Attachments
+			var attachModel = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+			console.log("Project Id= "+sOrderId);
+			attachModel.read(
+					"/Attachments?$expand=ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ gotAttachments(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
+					);
+			
+			function gotAttachments(attach){
+				console.log(attach);
+				var oModel = new sap.ui.model.json.JSONModel();
+				oModel.setData(attach);
+				//console.log(JSON.parse(JSON.stringify(arrConsultants)));
+				sap.ui.getCore().setModel(oModel,"attachment");
+				app.to("detailPage");
+			}
+			
+//End Code to display Attachments
+			//Start code diplay task
+			var attachModel = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+			attachModel.read(
+					"/Tasks?$expand=ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
+					);
+			
+			function gotTasks(tasks){
+				console.log(tasks);
+				var oModel = new sap.ui.model.json.JSONModel();
+				oModel.setData(tasks);
+				
+				sap.ui.getCore().setModel(oModel,"tasks");
+				app.to("detailPage");
+			}
+			
+			//End code display task
 
 		}
 

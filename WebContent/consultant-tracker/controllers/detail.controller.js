@@ -177,6 +177,117 @@ sap.ui.controller("consultant-tracker.controllers.detail", {
 //				sap.ui.getCore().setModel(oModel);
 //				app.to("detailPage");	
 			},
+			
+			//Code for Task tab
+			onMenuAction: function(oEvent) {
+				var oItem = oEvent.getParameter("item"),
+					sItemPath = "";
+				while (oItem instanceof sap.m.MenuItem) {
+					sItemPath = oItem.getText() + " > " + sItemPath;
+					oItem = oItem.getParent();
+				}
+
+				sItemPath = sItemPath.substr(0, sItemPath.lastIndexOf(" > "));
+
+				sap.m.MessageToast.show("Action triggered on item: " + sItemPath);
+				
+				if(sItemPath == "Feedback"){
+					
+					//Get feed back 
+					var taskID = sap.ui.getCore().getModel("tasks").getProperty("/");
+					
+					console.log("TaskID");
+					console.log(taskID);
+					var attachModel = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+					attachModel.read(
+							"/Feedbacks?$expand=TaskDetails&$filter=TaskDetails/Task_ID%20eq%201",{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
+							);
+					
+					function gotTasks(tasks){
+						console.log(tasks);
+						var oModel = new sap.ui.model.json.JSONModel();
+						oModel.setData(tasks);
+						
+						sap.ui.getCore().setModel(oModel,"feedback");
+						app.to("detailPage");
+					}
+					
+					 this._Dialog = sap.ui.xmlfragment("consultant-tracker.fragments.feedback", this);
+					 this._Dialog.open();
+				}
+			},
+			onAddTask: function(){
+				 this._Dialog = sap.ui.xmlfragment("consultant-tracker.fragments.addTask", this);
+				 this._Dialog.open();
+			},
+			onFeedback : function(){
+				
+			},
+			 onCancle :function(){
+				 this._Dialog.destroy();
+			 },
+			 progress: function(){
+				 sap.m.MessageToast.show("Progress triggered");
+			 },
+			//End of Code for Task tab
+			//Code for Attachment tab 
+				onUpload : function(e) {
+					
+					var fU = this.getView().byId("fileUploader");
+					var domRef = fU.getFocusDomRef();
+					var file = domRef.files[0];
+					
+					//upload to database
+					$.post('AddFolder', { 
+						fileName: file
+					},function(responseText) {  
+						console.log("Response");
+				    	  console.log(responseText);
+				      });
+					
+					
+					// Create a File Reader object
+					
+				    },
+				    handleUploadPress: function(oEvent) {
+						var oFileUploader = this.byId("fileUploader");
+						if (!oFileUploader.getValue()) {
+							MessageToast.show("Choose a file first");
+							return;
+						}
+						var fU = this.getView().byId("fileUploader");
+						var domRef = fU.getFocusDomRef();
+						var file = domRef.files[0];
+						
+						//upload to database
+						$.post('AddFolder', { 
+							fileName: file
+						},function(responseText) {  
+							console.log("Response");
+					    	  console.log(responseText);
+					      });
+					},
+					//End of Code for Attachment tab 
+					//Start of code for Task
+					onSubmitTask: function(){
+						console.log("Start creating task");
+						
+				    	var _Name = sap.ui.getCore().byId("t_Name").getValue();
+				    	var _Description = sap.ui.getCore().byId("t_Description").getValue();
+				    	var _DueDate = sap.ui.getCore().byId("t_Deadline").getValue();
+				    	var _projectID = sap.ui.getCore().getModel("selModel").getProperty("/Project_ID");
+				    	
+				    	  $.post('createTask',{description: _Description,dueDate: _DueDate,name:_Name, projectID: _projectID},function(responseText){
+				    		  console.log("Creating task completed");
+								console.log("Done!");
+							});
+				    	  
+				    	
+				    	//close model
+						this._Dialog.destroy();
+					
+					},
+					//End of code for Task
 /**
 * Called when the View has been rendered (so its HTML is part of the document). Post-rendering manipulations of the HTML could be done here.
 * This hook is the same one that SAPUI5 controls get after being rendered.
