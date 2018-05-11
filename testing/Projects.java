@@ -6,18 +6,18 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
-public class Project{
+public class Projects{
 	
 	public static void main(String[] args) throws Exception {
-		/*System.out.println("==> Creating Dummy Project...");
+		/*System.out.println("==> Creating Dummy Projects...");
 		try{
 			TimeUnit.SECONDS.sleep(1);
 		}catch(InterruptedException e){
 			System.out.println("...");
 		}
-		System.out.println("==> Dummy Project Created...");	*/
+		System.out.println("==> Dummy Projects Created...");	*/
 		String USER_AGENT = "Mozilla/5.0";
-		Project http = new Project();
+		Projects http = new Projects();
 		String url = "http://localhost:8080/Consultant-Tracker/emplist.svc/Projects?$format=json";
 		
 		URL obj = new URL(url);
