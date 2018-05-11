@@ -25,6 +25,7 @@ public class Feedback implements Serializable {
 	
 	@Temporal(TemporalType.DATE)
 	private Date date;
+
 	private Project project;
 	public Project getProject() {
 		return project;
@@ -33,6 +34,7 @@ public class Feedback implements Serializable {
 	public void setProject(Project project) {
 		this.project = project;
 	}
+
 
 	public int getFeedback_ID() {
 		return Feedback_ID;

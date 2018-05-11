@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   <display-name>Consultant-Tracker</display-name>
   <servlet>
@@ -78,6 +79,7 @@
     <param-name>dbURL</param-name>
     <param-value>jdbc:mysql://localhost:8090/testingdb</param-value>
   </context-param>
+
   <servlet>
     <servlet-name>ODataServlet</servlet-name>
     <servlet-class>org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet</servlet-class>
@@ -91,6 +93,7 @@
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
+
   <filter>
     <filter-name>CorsFilter</filter-name>
     <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
@@ -103,14 +106,17 @@
       <param-value></param-value>
     </init-param>
   </filter>
+
   <filter-mapping>
     <filter-name>CorsFilter</filter-name>
     <url-pattern>/media-upload</url-pattern>
   </filter-mapping>
+
   <servlet-mapping>
     <servlet-name>ODataServlet</servlet-name>
     <url-pattern>/emplist.svc/*</url-pattern>
   </servlet-mapping>
+
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>ODataServlet</web-resource-name>
@@ -124,6 +130,7 @@
       <transport-guarantee>NONE</transport-guarantee>
     </user-data-constraint>
   </security-constraint>
+
   <servlet>
     <description></description>
     <display-name>CreateFeedback</display-name>
@@ -134,4 +141,5 @@
     <servlet-name>CreateFeedback</servlet-name>
     <url-pattern>/CreateFeedback</url-pattern>
   </servlet-mapping>
+
 </web-app>

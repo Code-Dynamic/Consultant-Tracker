@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <persistence version="2.1"
 	xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 	<persistence-unit name="JPATest" transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
 		<class>com.ConsultantTracker.model.Assignment</class>
 		<class>com.ConsultantTracker.model.Client</class>
 		<class>com.ConsultantTracker.model.Consultant</class>
@@ -15,6 +17,7 @@
 		<class>com.ConsultantTracker.model.Task</class>
 		<class>com.ConsultantTracker.model.Assigned_Task</class>
 		<class>com.ConsultantTracker.model.Feedback</class>
+
 		<class>com.ConsultantTracker.model.Attachment</class>
 		<properties>
 			<property name="eclipselink.ddl-generation" value="create-tables" />
@@ -31,3 +34,4 @@
 		</properties>
 	</persistence-unit>
 </persistence>
+

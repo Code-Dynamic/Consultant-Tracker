@@ -1,0 +1,3 @@
+... Upload latest data to my repo
+... Call a main java class in build.xml
+... use that java file to test servlets
