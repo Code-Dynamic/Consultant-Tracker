@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="JPATest" transaction-type="RESOURCE_LOCAL">
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		<class>com.ConsultantTracker.model.Assignment</class>
+		<class>com.ConsultantTracker.model.Client</class>
+		<class>com.ConsultantTracker.model.Consultant</class>
+		<class>com.ConsultantTracker.model.Project</class>
+		<class>com.ConsultantTracker.model.Team</class>
+		<class>com.ConsultantTracker.model.User</class>
+		<class>org.persistence.Entity1</class>
+		<class>org.persistence.Entity2</class>
+		<class>com.ConsultantTracker.model.Task</class>
+		<class>com.ConsultantTracker.model.Assigned_Task</class>
+		<class>com.ConsultantTracker.model.Feedback</class>
+		<class>com.ConsultantTracker.model.Attachment</class>
+		<properties>
+			<property name="eclipselink.ddl-generation" value="create-tables" />
+			<property name="eclipselink.cache.shared.default" value="false" />
+			<property name="eclipselink.cache.size.default" value="0" />
+			<property name="eclipselink.cache.type.default" value="None" />
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:8090/testingdb" />
+			<property name="javax.persistence.jdbc.user" value="root" />
+			<property name="javax.persistence.jdbc.password" value="Nokia123MS" />
+			<property name="eclipselink.exclude-eclipselink-orm" value="false" />
+			<property name="eclipselink.jdbc.bind-parameters" value="true" />
+		</properties>
+	</persistence-unit>
+</persistence>
