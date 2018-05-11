@@ -146,31 +146,31 @@
     	<javac includeantruntime="false" srcdir="./testing" destdir="testing-out"/>
     </target>
 
-    <target name="test1" depends="compile">
+    <target name="projectsTest" depends="compile">
     	<echo>Test Case 1 executing... </echo>
-    		<java classname="Test1">
+    		<java classname="Projects">
     			<classpath path = "testing-out"/>
     		</java>
     	<echo>Test Case 1 finished... </echo>
     </target>
 
-    <target name="test2" depends="compile">
+    <target name="consultantsTest" depends="compile">
     	<echo>Test Case 2 executing... </echo>
-    		<java classname="Test2">
+    		<java classname="Consultants">
     			<classpath path = "testing-out"/>
     		</java>
     	<echo>Test Case 2 finished... </echo>
     </target>
-    <target name="test3" depends="compile">
+    <target name="tasksTest" depends="compile">
     	<echo>Test Case 3 executing... </echo>
-    		<java classname="Test3">
+    		<java classname="Tasks">
     			<classpath path = "testing-out"/>
     		</java>
     	<echo>Test Case 3 finished... </echo>
     </target>
-    <target name="test4" depends="compile">
+    <target name="feedbackTest" depends="compile">
     	<echo>Test Case 4 executing... </echo>
-    		<java classname="Test4">
+    		<java classname="Feedback">
     			<classpath path = "testing-out"/>
     		</java>
     	<echo>Test Case 4 finished... </echo>
