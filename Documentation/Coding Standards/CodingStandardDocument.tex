@@ -4,6 +4,7 @@
 \renewcommand{\familydefault}{\sfdefault}
 \renewcommand{\baselinestretch}{1.5} 
 \usepackage{graphicx}
+\usepackage{hyperref}
 \graphicspath{ {images/} }
 \begin{document}
 
@@ -149,4 +150,25 @@ try \{ \\
 \} finally \{
 	\indent statements;\\
 \}
+
+\section{Standards}
+\subsection{Software Verification and Validation}
+\subsection{Inspection}
+The issue of code inspection was addressed by using Eclipse IDE. As the backend is done in Java, Eclipse was chosen as it is the most popular java IDE (White,2014) and it automatically checks common errors. The documentation was written by different members of the team and inspected by our Documentation Leader, Tatenda Mafunga.\\
+\subsection{Walkthrough}
+Manually executes the product using simple test data. Usually the developer who produces the product leads the team to perform the walkthrough. The team checks the product step by step while asking questions. A product walkthrough was carried out to ensure that the any inconsistencies would be ironed out. Stephen Munro, Backend team, led the walkthrough of the backend and the remainder of the team asked questions to clarify any misunderstandings and suggest improvements. Johan van De Waal led the walkthrough of the front-end, which was carried out in a similar fashion.\\
+\subsection{Pair-Programming}
+The integration of the front-end and the backend was carried out applying pair programming principles to ensure that the implementation was of a high quality. The code was done on one laptop with a member from the backend team and the front-end team taking the roles of driver and navigator. The members switched roles as often as they found necessary.
+
+In carrying out the software verification and validation, the following agile principles were followed:   			
+1. Good is good enough
+2. Keep it simple and easy to do
+3. Value working software over comprehensive documentation
+\\
+\subsection{References}
+
+1.	White, O. 2014. IDEs vs. Build Tools: How Eclipse, IntelliJ IDEA \& NetBeans users work with Maven, Ant, SBT \& Gradle. Online Available at:
+\url{https://zeroturnaround.com/rebellabs/ides-vs-build-tools-how-eclipse-intellij-idea-netbeans-users-work-with-maven-ant-sbt-gradle/#disqus_thread}
+Accessed 05/05/18\\
+
 \end{document}
