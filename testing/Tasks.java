@@ -5,6 +5,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
 
 public class Tasks{
 	
@@ -44,6 +47,27 @@ public class Tasks{
 		in.close();
 
 		//print result
-		System.out.println(response.toString());
+		// System.out.println(response.toString());
+		JSONParser parser = new JSONParser();
+        Object obj1 = parser.parse(response.toString());
+		JSONObject obj2 = (JSONObject)obj1;
+		JSONArray array = (JSONArray)((JSONObject)obj2.get("d")).get("results");
+
+		System.out.println();
+        System.out.println("There are "+array.size()+" Tasks read from the database, which include: ");
+		System.out.println();
+		
+		for (int i = 0; i < array.size(); i++) {
+			// System.out.println(array.get(i));
+			JSONObject jobj = (JSONObject)array.get(i);
+
+			System.out.print((i+1)+". Description: "+jobj.get("Description"));
+			System.out.print("| Due_Date: "+jobj.get("Due_Date"));
+			System.out.print("| Task_ID: "+jobj.get("Task_ID"));
+			System.out.println("| Name: "+jobj.get("Name"));
+
+			if(i != array.size()-1)
+				System.out.println();
+		}
 	}
 }

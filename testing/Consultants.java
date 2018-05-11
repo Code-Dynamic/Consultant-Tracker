@@ -5,6 +5,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
 
 public class Consultants{
 	
@@ -44,6 +47,29 @@ public class Consultants{
 		in.close();
 
 		//print result
-		System.out.println(response.toString());
+		// System.out.println(response.toString());
+		JSONParser parser = new JSONParser();
+        Object obj1 = parser.parse(response.toString());
+		JSONObject obj2 = (JSONObject)obj1;
+		JSONArray array = (JSONArray)((JSONObject)obj2.get("d")).get("results");
+
+		System.out.println();
+        System.out.println("There are "+array.size()+" Consultants read from the database, which include: ");
+		System.out.println();
+		
+		for (int i = 0; i < array.size(); i++) {
+			// System.out.println(array.get(i));
+			JSONObject jobj = (JSONObject)array.get(i);
+
+			System.out.print((i+1)+". Consultant_Surname: "+jobj.get("Consultant_Surname"));
+			System.out.print("| Consultant_email: "+jobj.get("Consultant_email"));
+			System.out.print("| Consultant_Admin: "+jobj.get("Consultant_Admin"));
+			System.out.print("| Consultant_Cell: "+jobj.get("Consultant_Cell"));
+			System.out.print("| Consultant_ID: "+jobj.get("Consultant_ID"));
+			System.out.println("| Consultant_Name: "+jobj.get("Consultant_Name"));
+
+			if(i != array.size()-1)
+				System.out.println();
+		}
 	}
 }

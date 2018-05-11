@@ -1,3 +1,6 @@
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
 import java.util.concurrent.TimeUnit;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -44,6 +47,27 @@ public class Feedback{
 		in.close();
 
 		//print result
-		System.out.println(response.toString());
+		// System.out.println(response.toString());
+      	JSONParser parser = new JSONParser();
+        Object obj1 = parser.parse(response.toString());
+		JSONObject obj2 = (JSONObject)obj1;
+		JSONArray array = (JSONArray)((JSONObject)obj2.get("d")).get("results");
+
+		System.out.println();
+        System.out.println("There are "+array.size()+" Feedbacks read from the database, which include: ");
+		System.out.println();
+		
+		for (int i = 0; i < array.size(); i++) {
+			// System.out.println(array.get(i));
+			JSONObject jobj = (JSONObject)array.get(i);
+
+			System.out.print((i+1)+". Feedback_ID: "+jobj.get("Feedback_ID"));
+			System.out.println("| Message: "+jobj.get("Message"));
+
+			if(i != array.size()-1)
+				System.out.println();
+		}
+
+
 	}
 }

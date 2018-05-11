@@ -1,3 +1,6 @@
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
 import java.util.concurrent.TimeUnit;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -44,6 +47,31 @@ public class Projects{
 		in.close();
 
 		//print result
-		System.out.println(response.toString());
+		// System.out.println(response.toString());
+		JSONParser parser = new JSONParser();
+        Object obj1 = parser.parse(response.toString());
+		JSONObject obj2 = (JSONObject)obj1;
+		JSONArray array = (JSONArray)((JSONObject)obj2.get("d")).get("results");
+
+		System.out.println();
+        System.out.println("There are "+array.size()+" Projects read from the database, which include: ");
+		System.out.println();
+		
+		for (int i = 0; i < array.size(); i++) {
+			// System.out.println(array.get(i));
+			JSONObject jobj = (JSONObject)array.get(i);
+
+			System.out.print((i+1)+". Project_OnSite: "+jobj.get("Project_OnSite"));
+			System.out.print("| Project_Description: "+jobj.get("Project_Description"));
+			System.out.print("| Project_Deadline: "+jobj.get("Project_Deadline"));
+			System.out.print("| Project_ID: "+jobj.get("Project_ID"));
+			System.out.print("| Project_Deleted: "+jobj.get("Project_Deleted"));
+			System.out.print("| Client_ID: "+jobj.get("Client_ID"));
+			System.out.println("| Project_Name: "+jobj.get("Project_Name"));
+
+
+			if(i != array.size()-1)
+				System.out.println();
+		}
 	}
 }
