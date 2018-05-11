@@ -42,18 +42,18 @@ public class RemoveConsultant extends HttpServlet {
 		try {
 			
 			//search for consultant in the assignments table 
-			statement = connection.prepareStatement("SELECT * FROM assignment WHERE Consultant_ID = ?");
+			statement = connection.prepareStatement("SELECT * FROM assignment WHERE CONSULTANT_CONSULTANT_ID = ?");
 			statement.setString(1, consultant);
 			set = statement.executeQuery();
-			while(set.next())
+			while(set.next())	
 			{
-				deleteStatement = connection.prepareStatement("DELETE FROM assignment WHERE Assignment_ID = ?");
+				deleteStatement = connection.prepareStatement("DELETE FROM assignment WHERE ASSIGNMENT_ID = ?");
 				deleteStatement.setString(1, set.getString("Assignment_ID"));
 				deleteStatement.executeUpdate();
 				deleteStatement.close();
 			}
 			
-			deleteStatement = connection.prepareStatement("DELETE FROM consultants WHERE Consultant_ID =?");
+			deleteStatement = connection.prepareStatement("DELETE FROM consultant WHERE CONSULTANT_ID =?");
 			deleteStatement.setString(1, consultant);
 			deleteStatement.executeUpdate();
 			deleteStatement.close();

@@ -46,32 +46,33 @@ public class CreateProject extends HttpServlet {
 		String Proj_Desc = request.getParameter("Desc");
 		String Proj_Deadl = request.getParameter("Deadl");
 		String Proj_OnSite = request.getParameter("OnSite");
+		int on_Site = Integer.parseInt(request.getParameter("OnSite"));
 		
 		Connection con = (Connection) getServletContext().getAttribute("DBConnection"); //establish database connection
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			ps = con.prepareStatement("INSERT INTO projects (Project_Name,Client_ID,Project_Description," + 
-					"Project_Deadline,Project_OnSite) VALUES (?,?,?,?,?);");		//create prepared sql statement	
+			ps = con.prepareStatement("INSERT INTO project (PROJECT_NAME,CLIENT_ID,PROJECT_DESCRIPTION," + 
+					"PROJECT_DEADLINE,PROJECT_ONSITE) VALUES (?,?,?,?,?);");		//create prepared sql statement	
 			
 			ps.setString(1, proj_Name);
 			ps.setString(2, ClientID);
 			ps.setString(3, Proj_Desc);
 			ps.setString(4, Proj_Deadl);
-			ps.setString(5, Proj_OnSite);
+			ps.setInt(5, on_Site);
 			System.out.println(ps.toString());
 			ps.executeUpdate();				// execute sql query
 			
 			ps.close();
 		
-			ps = con.prepareStatement("select * from projects");
+			ps = con.prepareStatement("select * from project");
 			rs = ps.executeQuery();				// execute sql query
 			if(rs != null){
 				String ObjToReturn="";
 				while(rs.next()) {				// build return string based on query response
 					if(!ObjToReturn.equals(""))
 						ObjToReturn +=";";
-				 ObjToReturn +=rs.getString("Project_Name")+','+rs.getString("Project_Description")+','+rs.getString("Project_Deadline") ;
+				 ObjToReturn +=rs.getString("PROJECT_NAME")+','+rs.getString("PROJECT_DESCRIPTION")+','+rs.getString("PROJECT_DEADLINE") ;
 			
 				}
 				PrintWriter out = response.getWriter();
@@ -91,7 +92,8 @@ public class CreateProject extends HttpServlet {
 			throw new ServletException("DB Connection problem.");
 		}finally{
 			try {
-				rs.close();
+				if(rs!= null)
+					rs.close();
 				ps.close();
 			} catch (SQLException e) {
 				//logger.error("SQLException in closing PreparedStatement or ResultSet");;

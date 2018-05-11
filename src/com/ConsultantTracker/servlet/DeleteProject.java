@@ -40,12 +40,12 @@ public class DeleteProject extends HttpServlet {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			ps = con.prepareStatement("UPDATE projects SET Project_Deleted='1' WHERE Project_ID=?;");		//create prepared sql statement	
+			ps = con.prepareStatement("UPDATE project SET PROJECT_DELETED='1' WHERE PROJECT_ID=?;");		//create prepared sql statement	
 			ps.setString(1, proj_ID);
 			ps.executeUpdate();				// execute sql query
 			ps.close();
 			
-			ps = con.prepareStatement("select * from projects where project_ID=?");
+			ps = con.prepareStatement("select * from project where PROJECT_ID=?");
 			ps.setString(1, proj_ID);
 			rs = ps.executeQuery();				// execute sql query
 			if(rs != null){
@@ -53,7 +53,7 @@ public class DeleteProject extends HttpServlet {
 				while(rs.next()) {				// build return string based on query response
 					if(!ObjToReturn.equals(""))
 						ObjToReturn +=";";
-				 ObjToReturn +=rs.getString("Project_Name")+','+rs.getString("Project_Description")+','+rs.getString("Project_Deleted") ;
+				 ObjToReturn +=rs.getString("PROJECT_NAME")+','+rs.getString("PROJECT_DESCRIPTION")+','+rs.getString("PROJECT_DELETED") ;
 			
 				}
 				PrintWriter out = response.getWriter();
@@ -73,7 +73,8 @@ public class DeleteProject extends HttpServlet {
 			throw new ServletException("DB Connection problem.");
 		}finally{
 			try {
-				rs.close();
+				if(rs!=null)
+					rs.close();
 				ps.close();
 			} catch (SQLException e) {
 				//logger.error("SQLException in closing PreparedStatement or ResultSet");;

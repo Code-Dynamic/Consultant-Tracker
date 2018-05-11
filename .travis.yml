@@ -1,8 +1,10 @@
+
 language: java
 jdk: oraclejdk8
-
+sudo: false
 script:
-  - ant test1
-  - ant test2
-  - ant test3
-  - ant test4
+  - ant projectsTest
+  - ant consultantsTest
+  - ant tasksTest
+  - ant feedbackTest
+

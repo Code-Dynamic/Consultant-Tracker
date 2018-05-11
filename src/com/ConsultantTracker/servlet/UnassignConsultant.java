@@ -45,7 +45,7 @@ public class UnassignConsultant extends HttpServlet {
 		
 		try {
 		
-			statement = connection.prepareStatement("DELETE FROM assignment WHERE Assignment_ID = ?");
+			statement = connection.prepareStatement("DELETE FROM assignment WHERE ASSIGNMENT_ID = ?");
 			statement.setInt(1, assignmentID);
 			statement.executeUpdate();	// execute sql query
 			statement.close();

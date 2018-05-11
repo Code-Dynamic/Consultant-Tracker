@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- WARNING: Eclipse auto-generated file.
               Any modifications will be overwritten.
@@ -5,79 +6,98 @@
               directory with the processing instruction <?eclipse.ant.import?>
               as the first entry and export the buildfile again. --><project basedir="." default="build" name="Consultant-Tracker">
     <property environment="env"/>
-    <property name="ECLIPSE_HOME" value="../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/"/>
+    <property name="ECLIPSE_HOME" value="../../../3_Third Year/COS 301/Project/301 Eclipse Workspace/.metadata/.plugins/com.sap.core.tools.eclipse.server.version/Java Web"/>
     <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="9"/>
-    <property name="source" value="9"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
     <path id="Web App Libraries.libraryclasspath">
+        <pathelement location="WebContent/WEB-INF/lib/com.google.code.gson-gson-2.2.2.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/com.google.code.gson-gson-2.4.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/commons-codec-commons-codec-1.6.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/commons-codec-commons-codec-1.9.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/commons-fileupload-1.3.3.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/commons-io-2.6.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/cxf-api-2.7.5.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/cxf-rt-bindings-xml-2.7.5.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/cxf-rt-core-2.7.5.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/cxf-rt-frontend-jaxrs-2.7.5.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/cxf-rt-transports-http-2.7.5.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/eclipselink.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/javax.ws.rs-javax.ws.rs-api-2.0-m10.jar"/>
         <pathelement location="WebContent/WEB-INF/lib/mysql-connector-java-5.1.46-bin.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/org.apache.olingo-olingo-odata2-api-2.0.10.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/org.apache.olingo-olingo-odata2-api-annotation-2.0.10.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/org.apache.olingo-olingo-odata2-core-2.0.10.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/org.apache.olingo-olingo-odata2-jpa-processor-api-2.0.10.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/org.apache.olingo-olingo-odata2-jpa-processor-core-2.0.10.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/org.eclipse.persistence-javax.persistence-2.0.5.jar"/>
     </path>
     <path id="EAR Libraries.libraryclasspath"/>
     <path id="SAPUI5 Core Libraries.libraryclasspath">
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ui5.fiori_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ui5.rta_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.gantt.gantt.lib_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ovp.ovp-lib_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.suite.suite-ui-commons_1.52.3.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ui5.core_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ca.ui_1.52.0.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ui5.mobile-ext_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ushell.ushell-lib-testresources_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ui5.commons_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ui5.resource_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ushell.ushell-lib_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ui5.layout_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.uxap.uxap-uilib_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ui5.generic-app_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ui5.vbm_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.apf.apf-lib_1.52.4.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ui5.makit_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ui5.fl_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ui5.tnt_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.collaboration.collaboration-commons_1.52.0.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ui5.comp_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ui5.ux3_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ui5.mobile_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.suite.suite-ui-microchart_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ui5.table_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ui5.richtexteditor_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ca.scfld.md_1.52.0.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ui5.viz_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ui5.themelib_sap_bluecrystal_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ui5.themelib_sap_belize_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ui5.unified_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ui5.ndc_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ui5.fiori_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ui5.rta_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.gantt.gantt.lib_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ovp.ovp-lib_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.suite.suite-ui-commons_1.52.3.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ui5.core_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ca.ui_1.52.0.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ui5.mobile-ext_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ushell.ushell-lib-testresources_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ui5.commons_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ui5.resource_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ushell.ushell-lib_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ui5.layout_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.uxap.uxap-uilib_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ui5.generic-app_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ui5.vbm_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.apf.apf-lib_1.52.4.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ui5.makit_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ui5.fl_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ui5.tnt_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.collaboration.collaboration-commons_1.52.0.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ui5.comp_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ui5.ux3_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ui5.mobile_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.suite.suite-ui-microchart_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ui5.table_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ui5.richtexteditor_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ca.scfld.md_1.52.0.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ui5.viz_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ui5.themelib_sap_bluecrystal_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ui5.themelib_sap_belize_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ui5.unified_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ui5.ndc_1.52.5.jar"/>
     </path>
     <path id="SAPUI5 Server Side Libraries.libraryclasspath">
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ui5.resource_1.52.5.jar"/>
-        <pathelement location="${ECLIPSE_HOME}plugins/com.sap.ui5.utils_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ui5.resource_1.52.5.jar"/>
+        <pathelement location="../../../../Downloads/Compressed/eclipse-jee-oxygen-3-win32-x86_64/eclipse/plugins/com.sap.ui5.utils_1.52.5.jar"/>
     </path>
     <path id="Apache Tomcat v9.0 [Apache Tomcat v9.0].libraryclasspath">
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/annotations-api.jar"/>
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/catalina-ant.jar"/>
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/catalina-ha.jar"/>
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/catalina-storeconfig.jar"/>
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/catalina-tribes.jar"/>
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/catalina.jar"/>
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/ecj-4.6.3.jar"/>
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/el-api.jar"/>
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/jasper-el.jar"/>
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/jasper.jar"/>
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/jaspic-api.jar"/>
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/jsp-api.jar"/>
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/servlet-api.jar"/>
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/tomcat-api.jar"/>
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/tomcat-coyote.jar"/>
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/tomcat-dbcp.jar"/>
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/tomcat-i18n-es.jar"/>
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/tomcat-i18n-fr.jar"/>
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/tomcat-i18n-ja.jar"/>
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/tomcat-jdbc.jar"/>
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/tomcat-jni.jar"/>
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/tomcat-util-scan.jar"/>
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/tomcat-util.jar"/>
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/tomcat-websocket.jar"/>
-        <pathelement location="../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/websocket-api.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/annotations-api.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/catalina-ant.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/catalina-ha.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/catalina-storeconfig.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/catalina-tribes.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/catalina.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/ecj-4.6.3.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/el-api.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/jasper-el.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/jasper.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/jaspic-api.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/jsp-api.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/servlet-api.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/tomcat-api.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/tomcat-coyote.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/tomcat-dbcp.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/tomcat-i18n-es.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/tomcat-i18n-fr.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/tomcat-i18n-ja.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/tomcat-jdbc.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/tomcat-jni.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/tomcat-util-scan.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/tomcat-util.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/tomcat-websocket.jar"/>
+        <pathelement location="../../../../../../Program Files/Apache Software Foundation/Tomcat 9.0/lib/websocket-api.jar"/>
     </path>
     <path id="Consultant-Tracker.classpath">
         <pathelement location="build/classes"/>
@@ -91,6 +111,7 @@
         <mkdir dir="build/classes"/>
         <copy includeemptydirs="false" todir="build/classes">
             <fileset dir="src">
+                <exclude name="**/*.launch"/>
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
@@ -122,41 +143,39 @@
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
     </target>
-
+              	
     <target name = "compile">
-        <javac includeantruntime="false" srcdir="./testing" destdir="testing-out"/>
+    	<javac includeantruntime="false" srcdir="./testing" destdir="testing-out"/>
     </target>
 
-    <target name="test1" depends="compile">
-        <echo>Test Case 1 executing... </echo>
-        <java classname="Test1">
-            <classpath path = "testing-out"/>
-        </java>
-        <echo>Test Case 1 finished... </echo>
+    <target name="projectsTest" depends="compile">
+    	<echo>Test Case 1 executing... </echo>
+    		<java classname="Projects">
+    			<classpath path = "testing-out"/>
+    		</java>
+    	<echo>Test Case 1 finished... </echo>
     </target>
 
-    <target name="test2" depends="compile">
-        <echo>Test Case 2 executing... </echo>
-        <java classname="Test2">
-            <classpath path = "testing-out"/>
-        </java>
-        <echo>Test Case 2 finished... </echo>
+    <target name="consultantsTest" depends="compile">
+    	<echo>Test Case 2 executing... </echo>
+    		<java classname="Consultants">
+    			<classpath path = "testing-out"/>
+    		</java>
+    	<echo>Test Case 2 finished... </echo>
     </target>
-
-    <target name="test3" depends="compile">
-        <echo>Test Case 3 executing... </echo>
-        <java classname="Test3">
-            <classpath path = "testing-out"/>
-        </java>
-        <echo>Test Case 3 finished... </echo>
+    <target name="tasksTest" depends="compile">
+    	<echo>Test Case 3 executing... </echo>
+    		<java classname="Tasks">
+    			<classpath path = "testing-out"/>
+    		</java>
+    	<echo>Test Case 3 finished... </echo>
     </target>
-
-    <target name="test4" depends="compile">
-        <echo>Test Case 4 executing... </echo>
-        <java classname="Test4">
-            <classpath path = "testing-out"/>
-        </java>
-        <echo>Test Case 4 finished... </echo>
-    </target>
-    
+    <target name="feedbackTest" depends="compile">
+    	<echo>Test Case 4 executing... </echo>
+    		<java classname="Feedback">
+    			<classpath path = "testing-out"/>
+    		</java>
+    	<echo>Test Case 4 finished... </echo>
+    </target>              	
 </project>
+

@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  * 
  * returns string in the form 'Project_Name','Project_Description','Client_Name','Project_Deadline,'Project_OnSite'
  */
+//Replaced with Odata Service
 @WebServlet("/getProjects")
 public class getProjects extends HttpServlet {
 	private static final long serialVersionUID = 1L;
