@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -134,7 +135,7 @@ public class AddFolder extends HttpServlet {
 					statement.setString(2, fileItem.getContentType());
 					statement.setDouble(3,((fileItem.getSize())));
 					statement.setString(4, file.getAbsolutePath());
-					statement.setString(5, "2018-02-10");
+					statement.setString(5,LocalDate.now().toString() );
 					statement.setInt(6, 1);
 					System.out.println(statement.toString());
 					statement.executeUpdate();	// execute sql query

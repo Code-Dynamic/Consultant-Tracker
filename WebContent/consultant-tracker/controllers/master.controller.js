@@ -67,27 +67,13 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 				"/Projects?$expand=ClientDetails&$filter=Project_Deleted%20eq%20false",{success: function(oCreatedEn){ GotProjects(oCreatedEn) }, error: function(){console.log("Error");}}		
 		);
 		
-//		$.post('getProjects',function(responseText){
-//			console.log("servlet responded");
+
 		function GotProjects(oCreatedEn){
-//			arrProjects = {Projects:[]};
-//			var array = responseText.split(';');
-			//array.forEach(createProjectObj);
-					
 			oModel.setData(oCreatedEn);
 			console.log(oCreatedEn);
 			sap.ui.getCore().setModel(oModel);
 			app.to("detailPage");
 		}
-//		});
-			
-	
-		
-
-		
-//		oModel.setData();
-//		sap.ui.getCore().setModel(oModel);
-//		app.to("detailPage");	
 	},
 
 	goToConsultants : function(oEvt){
@@ -108,22 +94,13 @@ sap.ui.controller("consultant-tracker.controllers.master", {
  		oDataConsultants.read(
  				"/Consultants",{success: function(oCreatedEn){ GotConsultants(oCreatedEn) }, error: function(){console.log("Error");}}		
  		);
-         //return all consultants
-//         $.post('getProjectConsultants',function(responseText){
+
          function  GotConsultants(oCreatedEn) {
-//				console.log("servlet getProjectConsultants responded");
-//				console.log(responseText);
-//				arrConsultants = {Consultants:[]};
-//				var array = responseText.split(';');
-//				array.forEach(createConsultant);
-				
 				var oModel = new sap.ui.model.json.JSONModel();
 				oModel.setData(oCreatedEn);
-//				console.log(JSON.parse(JSON.stringify(arrConsultants)));
 				sap.ui.getCore().setModel(oModel);
 				app.to("detail2Page");	
          }
-//			});
 			
 			function createConsultant(stringVal){
 				var array = stringVal.split(',');
@@ -135,9 +112,7 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 				 Consultant_Cell : array[4],
 				 Consultant_Admin : array[5]
 				};
-				arrConsultants.Consultants.push((Consultant));
-//		    		console.log(arrProjects);
-		    		
+				arrConsultants.Consultants.push((Consultant));	
 			}
 		
 	
@@ -191,13 +166,6 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 			oDataProjects.read(
 					"/Assignments?$expand=ConsultantDetails,ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ GotMembers(oCreatedEn) }, error: function(){console.log("Error");}}		
 					);
-			//get the specific project selected data 
-//			$.post('getProjectConsultants',{ projectID: sOrderId},function(responseText){
-//				console.log("servlet getProjectConsultants responded");
-				//console.log(responseText);
-//				arrConsultants = {Consultants:[]};
-//				var array = responseText.split(';');
-//				array.forEach(createConsultant);
 
 			function GotMembers(Members){
 				console.log(Members);
@@ -318,10 +286,6 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 		
 		
 		function GotProjects(oCreatedEn){
-//			arrProjects = {Projects:[]};
-//			var array = responseText.split(';');
-			//array.forEach(createProjectObj);
-					
 			oModel.setData(oCreatedEn);
 			console.log(oCreatedEn);
 			sap.ui.getCore().setModel(oModel);
@@ -388,21 +352,71 @@ sap.ui.controller("consultant-tracker.controllers.master", {
     	}else{
     		_OnSite = 0;
     	}
-//    	var oModel2 =  new sap.ui.model.odata.v2.ODataModel('http://localhost:8080/OdataSap/emplist.svc/'); 
+    	var oModel2 =  new sap.ui.model.odata.v2.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+    	
     	oProject.Project_Name = _Name;
     	oProject.Project_Description = _Description;
     	oProject.Project_Deadline = _Deadline;
     	oProject.Project_OnSite = _OnSite;
 //    	var entry = {};
 //		var yourTotal = parseInt(1);
-//		entry.CLIENT_CLIENT_ID=yourTotal;
+//		entry.Client_ID=yourTotal;
 //		entry.Project_Deadline = _Deadline;
 //		entry.Project_Deleted =false;
 //		entry.Project_Description = _Description;
 //		entry.Project_Name = _Name;
 //		entry.Project_OnSite= b_OnSite;
-//		var x =oModel2.create('/Projects',entry, {sucess:function(oCreatedEn){ console.log(("Success")); }, error:function(){console.log("Error");}});
+//		var x =oModel2.create('/Projects',entry, {success :function(oCreatedEn){ console.log(("Success")); }, error:function(){console.log("Error");}});
+
+//    	var d = new Date();
+//  
+//    	var x= oModel2.createEntry('/Projects',{
+//    		//Project properties
+//    		properties:{
+//    			Client_ID:1,
+//    			Project_Deadline: d.toDateString(),
+//    			Project_Deleted:false,
+//    			Project_Description:"Testing the create entry",
+//    			Project_Name:"Test Post",
+//    			Project_OnSite:false},
+//    			
+//    		//call back function definitions
+//			created:function(){
+//				console.log("createEntry worked (created)");
+//				oModel2.read('/Projects',{success:function(data){console.log(data.results);},error:function(){console.log("couldnt read data");}});
+//				oModel2.submitChanges();
+//			},
+//			success :function(){
+//				console.log("createEntry worked (success)");
+//				
+//				var row;
+//				oModel2.read('/Projects',{
+//					//on sucessfully reading model, attempt update by calling update function on the given row (Starts on line 445)
+//					success:function(data){
+//						console.log(data.results);
+//						row=data.results[data.results.length-1];
+//						update(row);},
+//					error:function(){
+//						console.log("couldnt read data");}});
+//			},
 //
+//			error:function(){
+//				console.log("create Entry Error");
+//			}
+//    	});
+//    	
+//    	//function to update a row
+//    	update=function (row){
+//    		console.log("Attempting update");
+//			row.Client_ID=1;
+//			row.Project_Description="This has been updated";
+//			oModel2.update("/Projects("+row.Project_ID+")",row);
+//			//display model data after update
+//			oModel2.read('/Projects',{success:function(data){console.log(data.results);},error:function(){console.log("couldnt read data");}});
+//	//   	oModel2.submitChanges();
+//   	    };
+//   	    
+   	    
 //		console.log(entry);
 //    
     	$.post('CreateProject', { Name: _Name ,ClientID: 2,Desc: _Description, Deadl: _Deadline ,OnSite:  _OnSite},function(responseText) {  
@@ -432,17 +446,6 @@ sap.ui.controller("consultant-tracker.controllers.master", {
     	var _email = sap.ui.getCore().byId("c_email").getValue();
     	var _Cell = sap.ui.getCore().byId("c_Cell").getValue();
     	
-//    	oConsultant.Consultant_Name = _Name;
-//    	oConsultant.Consultant_Surname = _Surname;
-//    	oConsultant.Consultant_email = _email;
-//    	oConsultant.Consultant_Cell = _Cell;
-//    	
-//    	console.log(oConsultant);
-//    	   
-//    	$.post('createConsultant', { name: _Name,surname: _Surname,email: _email, cell: _Cell ,admin: 0},function(responseText) {  
-//    		// var array = responseText.split(';');
-//    		console.log(responseText);
-//    	});
     	var t = this;
     	var oDataProjects =   new sap.ui.model.odata.v2.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
     	var x=	oDataProjects.createEntry('/Consultants',{
@@ -454,8 +457,8 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 				Consultant_Surname: _Surname,
 				Consultant_email:_email},
 				async:false,
-			created:function(){ console.log(("posting Project (created)- It Worked!!")); console.log("submitting cahnges");console.log(oDataProjects.oData);oDataProjects.submitChanges({async:false});t.goToConsultants();},
-			sucesss: function(){ console.log(("posting Project(sucess) It Worked!!")); }
+			created:function(){ console.log(("posting consultant (created)- It Worked!!")); console.log("submitting cahnges");console.log(oDataProjects.oData);oDataProjects.submitChanges({async:false});t.goToConsultants();},
+			sucesss: function(){ console.log(("posting consultant(sucess) It Worked!!")); }
 			, error:function(){console.log("Error in posting Project");}
     	});
     	

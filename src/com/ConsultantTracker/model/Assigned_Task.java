@@ -19,8 +19,13 @@ public class Assigned_Task implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int Assigned_task_ID;
 	
+	@OneToOne
+	@JoinColumn(name = "TASK_TASK_ID")
 	private Task task;
+	@OneToOne 
+	@JoinColumn(name = "CONSULTANT_CONSULTANT_ID")
 	private Consultant consultant;
+	
 	private double assigned_Hours;
 	private double hours_Worked;
 	@Temporal(TemporalType.DATE)

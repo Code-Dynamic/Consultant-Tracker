@@ -6,10 +6,7 @@ sap.ui.controller("consultant-tracker.controllers.detail", {
 * @memberOf splitapp.detail
 */
 	onInit: function() {
-		/*var oView = this.getView();
-
-		// Show the appropriate action buttons
-		oView.byId("__button0").setVisible(false);*/
+		
 	},
 
 /**
@@ -59,8 +56,7 @@ sap.ui.controller("consultant-tracker.controllers.detail", {
 				this.refreshData();
 			},
 			addMember: function(){
-				//code to add consultant
-				//console.log("Adding member");
+				//code to add consultant;
 				
 				var Client_ID = sap.ui.getCore().byId("idSelected").getSelectedKey();
 				var _projectID = sap.ui.getCore().getModel("selModel").getProperty("/Project_ID");
@@ -214,13 +210,7 @@ sap.ui.controller("consultant-tracker.controllers.detail", {
 //			    		console.log(arrProjects);
 			    		
 				}
-				
-				
 
-				
-//				oModel.setData();
-//				sap.ui.getCore().setModel(oModel);
-//				app.to("detailPage");	
 			},
 			
 			//Code for Task tab
