@@ -36,6 +36,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 /**
  * Servlet implementation class AddFolder
  */
+@WebServlet("/AddFolder")
 public class AddFolder extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -93,7 +94,7 @@ public class AddFolder extends HttpServlet {
 		try {
 			List<FileItem> fileItemsList = uploader.parseRequest(request);
 			Iterator<FileItem> fileItemsIterator = fileItemsList.iterator();
-			while(fileItemsIterator.hasNext()){
+			if(fileItemsIterator.hasNext()){
 				FileItem fileItem = fileItemsIterator.next();
 				System.out.println("FieldName="+fileItem.getFieldName());
 				System.out.println("FileName="+fileItem.getName());

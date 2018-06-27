@@ -34,11 +34,11 @@ sap.ui.controller("consultant-tracker.controllers.detail2", {
 	onDelete: function(){
 		var consultantID = sap.ui.getCore().getModel("selModel").getProperty("/Consultant_ID");
 		console.log(consultantID);
-		var t = this;
+		var thisPtr = this;
 		  $.post('RemoveConsultant', { consultant: consultantID},function(responseText) {  
 		      	// var array = responseText.split(';');
 		      	  //console.log(responseText);
-			  t.goToConsultants();
+			  thisPtr.goToConsultants();
 		    });
 
 		  
@@ -87,19 +87,13 @@ sap.ui.controller("consultant-tracker.controllers.detail2", {
 	},
 	goToConsultants : function(oEvt){
 		btnConsultantSelected = true;
-			console.log("Here");
-		//var item = this.getView().byId("orders").getMetadata("selectionChange"); //data("items","{/Consultants}");
 		
 		var consModel = new sap.ui.model.odata.v2.ODataModel("http://localhost:8080/OdataSap/emplist.svc/");
 //		var tasks;
 //		consModel.read("/Assigned_Tasks?$expand=ConsultantDetails,TaskDetails&$filter=Project_Deleted%20eq%20false",{async:false,success:function(data){tasks=data;}});
 //		console.log("Readu worked");
 //		console.log(tasks);
-		consModel.read("/Consultants",{success: setConsult()});
-		
-		setConsult = function(data){
-			console.log("We done it");
-		}
+
          //return all consultants
          $.post('getProjectConsultants',function(responseText){
 				console.log("servlet getProjectConsultants responded");

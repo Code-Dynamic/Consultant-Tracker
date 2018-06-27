@@ -8,7 +8,9 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 	 * @memberOf splitapp.master
 	 */
 	onInit: function() {
-		 
+		this.oModel =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
+		this.oModel.read('/$metadata');
+		
 	},
 	onSearch: function(evt){
 //		 // create model filter
@@ -60,10 +62,9 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 				
 
 		var oModel = new sap.ui.model.json.JSONModel();
-		var oDataProjects =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
 		var arrProjects = {Projects:[]};
 		var arrConsultants = {Consultants:[]};
-		oDataProjects.read(
+		this.oModel.read(
 				"/Projects?$expand=ClientDetails&$filter=Project_Deleted%20eq%20false",{success: function(oCreatedEn){ GotProjects(oCreatedEn) }, error: function(){console.log("Error");}}		
 		);
 		
@@ -90,8 +91,7 @@ sap.ui.controller("consultant-tracker.controllers.master", {
         			 press: "onSelect"
            }).addStyleClass("listItems")
        );
-        var oDataConsultants =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
- 		oDataConsultants.read(
+         this.oModel.read(
  				"/Consultants",{success: function(oCreatedEn){ GotConsultants(oCreatedEn) }, error: function(){console.log("Error");}}		
  		);
 
@@ -157,13 +157,12 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 
 		}else{
 
-			var oDataProjects =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
 			//get selected project id
 			var sOrderId = oEvent.getSource().getSelectedItem().getBindingContext().getProperty("Project_ID");
 			//get model
 			var oData = sap.ui.getCore().getModel().getProperty("/results");
 			
-			oDataProjects.read(
+			this.oModel.read(
 					"/Assignments?$expand=ConsultantDetails,ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ GotMembers(oCreatedEn) }, error: function(){console.log("Error");}}		
 					);
 
@@ -206,9 +205,9 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 			sap.ui.getCore().setModel(oSelModel,"selModel");
 			
 //Start Code to display Attachments
-			var attachModel = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+		
 			console.log("Project Id= "+sOrderId);
-			attachModel.read(
+			this.oModel.read(
 					"/Attachments?$expand=ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ gotAttachments(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
 					);
 			
@@ -223,8 +222,7 @@ sap.ui.controller("consultant-tracker.controllers.master", {
 			
 //End Code to display Attachments
 			//Start code diplay task
-			var attachModel = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
-			attachModel.read(
+			this.oModel.read(
 					"/Tasks?$expand=ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
 					);
 			
@@ -334,17 +332,12 @@ sap.ui.controller("consultant-tracker.controllers.master", {
     },
 	// onSubmit event handler of the fragment
     onSubmitProject : function() {
-    	var oProject = {
-    			Project_Name: "none", 
-    			Project_DEscription: "none",  
-    			Project_Deadline: "none", 
-    			Project_OnSite: "none"
-			};
-    	
+    	var d = new Date();
+    	var oModel2 =  new sap.ui.model.odata.v2.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+
     	var _Name = sap.ui.getCore().byId("p_Name").getValue();
     	var _Description = sap.ui.getCore().byId("p_Description").getValue();
     	var _Deadline = sap.ui.getCore().byId("p_Deadline").getValue();
-    	//var _OnSite = sap.ui.getCore().byId("p_OnSite").getValue();
     	var b_OnSite = sap.ui.getCore().byId("p_OnSite").getSelected();;
     	var _OnSite;
     	if(b_OnSite){
@@ -352,83 +345,13 @@ sap.ui.controller("consultant-tracker.controllers.master", {
     	}else{
     		_OnSite = 0;
     	}
-    	var oModel2 =  new sap.ui.model.odata.v2.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
     	
-    	oProject.Project_Name = _Name;
-    	oProject.Project_Description = _Description;
-    	oProject.Project_Deadline = _Deadline;
-    	oProject.Project_OnSite = _OnSite;
-//    	var entry = {};
-//		var yourTotal = parseInt(1);
-//		entry.Client_ID=yourTotal;
-//		entry.Project_Deadline = _Deadline;
-//		entry.Project_Deleted =false;
-//		entry.Project_Description = _Description;
-//		entry.Project_Name = _Name;
-//		entry.Project_OnSite= b_OnSite;
-//		var x =oModel2.create('/Projects',entry, {success :function(oCreatedEn){ console.log(("Success")); }, error:function(){console.log("Error");}});
-
-//    	var d = new Date();
-//  
-//    	var x= oModel2.createEntry('/Projects',{
-//    		//Project properties
-//    		properties:{
-//    			Client_ID:1,
-//    			Project_Deadline: d.toDateString(),
-//    			Project_Deleted:false,
-//    			Project_Description:"Testing the create entry",
-//    			Project_Name:"Test Post",
-//    			Project_OnSite:false},
-//    			
-//    		//call back function definitions
-//			created:function(){
-//				console.log("createEntry worked (created)");
-//				oModel2.read('/Projects',{success:function(data){console.log(data.results);},error:function(){console.log("couldnt read data");}});
-//				oModel2.submitChanges();
-//			},
-//			success :function(){
-//				console.log("createEntry worked (success)");
-//				
-//				var row;
-//				oModel2.read('/Projects',{
-//					//on sucessfully reading model, attempt update by calling update function on the given row (Starts on line 445)
-//					success:function(data){
-//						console.log(data.results);
-//						row=data.results[data.results.length-1];
-//						update(row);},
-//					error:function(){
-//						console.log("couldnt read data");}});
-//			},
-//
-//			error:function(){
-//				console.log("create Entry Error");
-//			}
-//    	});
-//    	
-//    	//function to update a row
-//    	update=function (row){
-//    		console.log("Attempting update");
-//			row.Client_ID=1;
-//			row.Project_Description="This has been updated";
-//			oModel2.update("/Projects("+row.Project_ID+")",row);
-//			//display model data after update
-//			oModel2.read('/Projects',{success:function(data){console.log(data.results);},error:function(){console.log("couldnt read data");}});
-//	//   	oModel2.submitChanges();
-//   	    };
-//   	    
-   	    
-//		console.log(entry);
-//    
     	$.post('CreateProject', { Name: _Name ,ClientID: 2,Desc: _Description, Deadl: _Deadline ,OnSite:  _OnSite},function(responseText) {  
     		var array = responseText.split(';');
     		console.log(array);
     	});
-		
+	
     	this.goToProjects();
-    	
-    	//console.log(oProject);
-    	
-    	//close model
 		this._Dialog.destroy();
     	
     },
