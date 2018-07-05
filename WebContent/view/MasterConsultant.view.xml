@@ -1,0 +1,32 @@
+<mvc:View	xmlns:core="sap.ui.core" 
+			xmlns:mvc="sap.ui.core.mvc" 
+			xmlns="sap.m" 
+			xmlns:semantic="sap.m.semantic" 
+			xmlns:html="http://www.w3.org/1999/xhtml" 
+			controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.MasterConsultant">
+	<semantic:MasterPage id="MasterConsultant" title="MasterConsultant Page" navButtonPress="onNavBack" showNavButton="true">
+		<semantic:content>
+
+			<List id="listId"
+		items="{/results/}"
+		headerText="Projects">
+		<items>
+			<ObjectListItem
+				title="{ProjectDetails/Project_Name}"
+				type="Active"
+				press="onListItemPress">
+				<firstStatus>
+					<ObjectStatus
+						text="In Progress" />
+				</firstStatus>
+				<attributes>
+					<ObjectAttribute text="Date " />
+				</attributes>
+			</ObjectListItem>
+		</items>
+	</List>
+
+		</semantic:content>
+
+	</semantic:MasterPage>
+</mvc:View>
