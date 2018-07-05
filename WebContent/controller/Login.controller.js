@@ -79,7 +79,6 @@ sap.ui.define([
 									var dataResults = JSON.stringify(data);
 									var array = dataResults.split(',');
 									console.log(data.results);
-//									console.log();
 //									console.log(array[array.length-1].substr(20,1));
 									var oConsultantId = array[array.length-2].substr(17,1);
 									if (array[array.length-1].substr(20,1) == 1)
