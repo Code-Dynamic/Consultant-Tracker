@@ -1,20 +1,20 @@
-<mvc:View xmlns:core="sap.ui.core" 
+ <mvc:View xmlns:core="sap.ui.core" 
 			xmlns:mvc="sap.ui.core.mvc" 
 			xmlns="sap.m" 
 			xmlns:semantic="sap.m.semantic" 
 			xmlns:f="sap.ui.layout.form"
 			xmlns:la="sap.ui.layout"
 			xmlns:u="sap.ui.unified" 
-			controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.DetailProjects" 
+			controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.DetailConsultant" 
 			xmlns:html="http://www.w3.org/1999/xhtml">
 		<semantic:DetailPage id="DetailConsultant" navButtonPress="onNavBack" showNavButton="{device>/system/phone}"
 		title="Consultant Detail" busy="{detailView>/busy}" busyIndicatorDelay="{detailView>/delay}">
 		<semantic:customHeaderContent>
-			<Button press="openFullScreenView" id="cartIcon" text="" icon="sap-icon://cart"/>
+			<Button press="openCalender" id="cartIcon" text="Schedule" icon="sap-icon://accelerated"/>
 		</semantic:customHeaderContent>
 <semantic:content>
 			
-<ObjectHeader id="objectHeader" title="{selModel>/Project_Name}">
+<ObjectHeader id="objectHeader" title="{projectsModel>/Project_Name}">
 			    <statuses>
 			       <ProgressIndicator id="projectProgressId" class="sapUiSmallMarginBottom" percentValue="{progress>/percVal}" displayValue="{progress>/displayVal}%" showValue="true" state="None"/>
 
@@ -25,34 +25,68 @@
 				<items>
 					<IconTabFilter id="iconTabBarFilter1" icon="sap-icon://detail-view" tooltip="{i18n>detailIconTabBarInfo}" text="Project Data">
 						<content>
-							<f:SimpleForm title="Project Details" width="100%">
-								<f:content>
-									<Label text="Name"/>
-									<Text text="{selModel>/Project_Name}"/>
-									<Label text="Description"/>
-									<Text text="{selModel>/Project_Description}"/>
-									<Label text="Deadline"/>
-									<Text text="{selModel>/Project_Deadline}"/>
-									<Label text="OnSite"/>
-									<Text text="{selModel>/Project_OnSite}"/>
-								</f:content>
-							</f:SimpleForm>
-						</content>
-					</IconTabFilter>
+								<ObjectHeader
+		id="oh1"
+		responsive="true"
+		fullScreenOptimized="false"
+		icon="{ProductPicUrl}"
+		iconAlt="{Name}"
+		intro="{projectsModel>/Project_Description}"
+		title="{projectsModel>/Project_Name}"
+		titleActive="true"
+		titlePress="handleTitlePress"
+		number="34%"
+		numberUnit="Completed"
+		showTitleSelector="true"
+		titleSelectorPress="onPress"
+		showMarkers="true"
+		markFlagged="true"
+		markFavorite="true"
+		numberState="Success"
+		backgroundDesign="Translucent">
+		<attributes>
+			<ObjectAttribute
+				title="ProjectID"
+				text="{projectsModel>/Project_ID}"/>
+			<ObjectAttribute
+				title="Due"
+				text="{projectsModel>/Project_Deadline}"/>
+			<ObjectAttribute
+				title="Client Name"
+				text="{projectsModel>/ClientDetails/Client_Name}"/>
+			<ObjectAttribute
+				title="Client Contact"
+				text="{projectsModel>/ClientDetails/Client_PhoneNum}"/>
+			<ObjectAttribute
+				title="Dimension per unit"
+				text="{Width} x {Depth} x {Height} {DimUnit}"/>
+		</attributes>
+		<statuses>
+ 			<ObjectStatus
+				title="Approval"
+				text="Pending"
+				state="Warning"/>
+		</statuses>
+	</ObjectHeader>
+	
+			</content>
+			</IconTabFilter>
+					
+					
 					<IconTabFilter id="iconTabBarFilter2" icon="sap-icon://group" tooltip="{i18n>detailIconTabBarAttachments}" text="Members">
 						<content>
-							<List id="members" mode="SingleSelectMaster" items="{groupMember>/results}" headerText="Members">
+							<List 	id="members" 
+									mode="SingleSelectMaster" 
+									items="{membersModel>/results}" 
+									headerText="Members">
+								
 								<items>
-									<StandardListItem title="{groupMember>ConsultantDetails/Consultant_Name} {groupMember&gt;ConsultantDetails/Consultant_Surname}" type="Active" class="listItems" press="onSelectionChange"/>
+									<StandardListItem 
+											title="{membersModel>/ProjectDetails/Project_ID} Member Name" 
+											type="Active" 
+											class="listItems" 
+											press=""/>
 								</items>
-								<headerToolbar>
-									<Toolbar>
-										<Title text="Members" level="H2"/>
-										<ToolbarSpacer/>
-										<Button icon="sap-icon://delete" text="Remove Consultant" press="onDeleteConsultantFromProject"/>
-										<Button icon="sap-icon://add" text="Add Consultant" press="addConsultantToProject"/>
-									</Toolbar>
-								</headerToolbar>
 							</List>
 						</content>
 					</IconTabFilter>

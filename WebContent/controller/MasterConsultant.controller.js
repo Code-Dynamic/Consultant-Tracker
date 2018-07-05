@@ -17,30 +17,62 @@ sap.ui.define([
 		 * @memberOf consultanttracker.Consultant-Tracker_Prototype-1.view.MasterManager
 		 */
 			onInit: function() {
+//				http://localhost:8080/Consultant-Tracker/emplist.svc/Assigned_Tasks?$expand=ConsultantDetails,TaskDetails,TaskDetails/ProjectDetails&$filter=ConsultantDetails/Consultant_ID%20eq%202
+				//geting id from the URL
+				var oRouter = this.getRouter();
+				oRouter.getRoute("MasterConsultant").attachMatched(this._onRouteMatched, this);
+				
+
+			},
+			_onRouteMatched: function(oEvent){
+				
+				var oArgs = oEvent.getParameter("arguments");
 				
 				//set model for master
 				var oModel = this.getOwnerComponent().getModel("oModel");
-
-				var list = sap.ui.getCore().byId("myList");
-				oModel.read("/Projects", {
-					  success: function(data){
+				var projectsModel = new JSONModel();
+				
+				console.log("ConsultantId: "+oArgs.consultantId);
+				
+				//
+				oModel.read("/Assignments", {
+					urlParameters: {
+			            "$expand" : "ConsultantDetails",
+			            "$expand" : "ProjectDetails"
+			        },
+					filters: [ new sap.ui.model.Filter({
+				          path: "ConsultantDetails/Consultant_ID",
+				          operator: sap.ui.model.FilterOperator.EQ,
+				          value1: oArgs.consultantId
+				     })],
+					success: function(data){
+						
 						 var oData = JSON.stringify(data);
+						 console.log(oData);
+						projectsModel.setData(data);				
 
 					  },
-					  error: function(oError) {
+					 error: function(oError) {
 						  alert("error");
-						 }
+					 	}
 					});
-//				console.log(oData);
-//				var oModel = new JSONModel(JSON.stringify(oData)); 
-//				this.getView().setModel(oModel);
+				
+				this.getView().setModel(projectsModel);
+
 			},
-			
 
 			onListItemPress: function (evt) {
+			
+				var oListId = evt.getSource().getBindingContext().getProperty("ProjectDetails/Project_ID");
+				
+				this.getRouter()
+					.navTo("DetailConsultant", 
+						{listId:oListId});
+//				console.log(sListId);
 				MessageToast.show("Pressed : " + evt.getSource().getTitle());
 			},
-
+			
+	
 		/**
 		 * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered
 		 * (NOT before the first rendering! onInit() is used for that one!).
@@ -67,7 +99,9 @@ sap.ui.define([
 		//
 		//	}
 		goToDetail: function(){
-				this.getRouter().navTo("DetailConsultant");
+				this.getRouter()
+					.navTo("DetailConsultant",
+							{listId:2});
 		}
 
 	});

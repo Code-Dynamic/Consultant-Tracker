@@ -1,5 +1,4 @@
-{
-	"_version": "1.8.0",
+{	"_version": "1.8.0",
 	"sap.app": {
 		"id": "consultanttracker.Consultant-Tracker_Prototype-1",
 		"type": "application",
@@ -16,10 +15,7 @@
 		"dataSources": {
 	  		"oDataModel": {
 				"uri": "http://localhost:8080/Consultant-Tracker/emplist.svc/",
-				"type": "OData",
-				"settings": {
-		  			"odataVersion": "2.0"
-				}
+				"type": "OData"
 	  		}
 		}
 	},
@@ -114,7 +110,7 @@
 					"pattern": "item/{objectPath}",
 					"name": "object",
 					"target": [
-						"masterManger",
+						"masterManager",
 						"detailProject"
 					]
 				},
@@ -148,10 +144,17 @@
 					]
 				},
 				{
+					"pattern": "DetailConsultant/{listId}",
 					"name": "DetailConsultant",
-					"pattern": "DetailConsultant",
 					"target": [
-						"DetailConsultant"
+						"MasterConsultant","DetailConsultant"
+					]
+				},
+				{
+					"name": "Calender",
+					"pattern": "DetailConsultant/{listId}/Calender/{projectId}",
+					"target": [
+						"MasterConsultant","Calender"
 					]
 				}
 			],
@@ -178,12 +181,23 @@
 					"viewLevel": 2,
 					"controlId": "idSplitAppControl",
 					"controlAggregation": "detailPages",
+							"title":{
+							"parts":["ListDetails"]
+							},
 					"parent": "splitview"
 				},
 				"DetailConsultant": {
 					"viewName": "DetailConsultant",
 					"viewId": "DetailConsultant",
 					"viewLevel": 2,
+					"controlId": "idSplitAppControl",
+					"controlAggregation": "detailPages",
+					"parent": "splitview"
+				},
+				"Calender": {
+					"viewName": "Calender",
+					"viewId": "Calender",
+					"viewLevel": 3,
 					"controlId": "idSplitAppControl",
 					"controlAggregation": "detailPages",
 					"parent": "splitview"
@@ -199,10 +213,6 @@
 				},
 				"splitview": {
 					"viewName": "SplitApp"
-				},
-				"globalModel": {
-					"viewName": "globalModel",
-					"viewId": "globalModel"
 				}
 			}
 		}
