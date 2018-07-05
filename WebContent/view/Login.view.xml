@@ -1,0 +1,27 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:semantic="sap.m.semantic" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout" xmlns:form="sap.ui.layout.form" controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.Login">
+	<semantic:FullscreenPage title="" id="LoginView">
+		<l:VerticalLayout id="containerLayout_register" width="100%">
+			<VBox xmlns="sap.m" justifyContent="Center" alignItems="Center" alignContent="SpaceAround" direction="Column">
+				<Text xmlns="sap.m" text="Login to your account!"/>
+				<VBox xmlns="sap.m" justifyContent="Center" alignItems="Center" alignContent="Center" direction="Column" displayInline="true" fitContainer="true">
+					<VBox class="sapUiSmallMargin">
+						<form:SimpleForm id="login_SimpleFormDisplay" editable="false" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false" backgroundDesign="Solid">
+							<form:content>
+								<Label text="UserName/email"/>
+								<Input id="username-email" value=""/>
+								
+								<Label text="Password"/>
+								<Input id="password" value=""/>
+							
+								<Button width="12rem" text="Login" type="Emphasized" press="onLoginClick"/>
+								
+							</form:content>
+						</form:SimpleForm>
+						<Link text="Create Account" id="__link0" press="onCreateAccountClick"/>
+					<items/>
+					</VBox>
+				</VBox>
+			</VBox>
+		</l:VerticalLayout>
+	</semantic:FullscreenPage>
+</mvc:View>
