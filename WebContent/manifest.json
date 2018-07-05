@@ -1,0 +1,210 @@
+{
+	"_version": "1.8.0",
+	"sap.app": {
+		"id": "consultanttracker.Consultant-Tracker_Prototype-1",
+		"type": "application",
+		"i18n": "i18n/i18n.properties",
+		"applicationVersion": {
+			"version": "1.0.0"
+		},
+		"title": "{{appTitle}}",
+		"description": "{{appDescription}}",
+		"sourceTemplate": {
+			"id": "ui5template.basicSAPUI5ApplicationProject",
+			"version": "1.40.12"
+		},
+		"dataSources": {
+	  		"oDataModel": {
+				"uri": "http://localhost:8080/Consultant-Tracker/emplist.svc/",
+				"type": "OData",
+				"settings": {
+		  			"odataVersion": "2.0"
+				}
+	  		}
+		}
+	},
+	"sap.ui": {
+		"technology": "UI5",
+		"icons": {
+			"icon": "",
+			"favIcon": "",
+			"phone": "",
+			"phone@2": "",
+			"tablet": "",
+			"tablet@2": ""
+		},
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		},
+		"supportedThemes": [
+			"sap_hcb",
+			"sap_belize"
+		]
+	},
+	"sap.ui5": {
+		"rootView": {
+			"viewName": "consultanttracker.Consultant-Tracker_Prototype-1.view.App",
+			"type": "XML"
+		},
+		"dependencies": {
+			"minUI5Version": "1.30.0",
+			"libs": {
+				"sap.ui.layout": {},
+				"sap.ui.core": {},
+				"sap.m": {}
+			}
+		},
+		"contentDensities": {
+			"compact": true,
+			"cozy": true
+		},
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "consultanttracker.Consultant-Tracker_Prototype-1.i18n.i18n"
+				}
+			},
+		"oModel": {
+			"preload": true,
+			"dataSource": "oDataModel"
+	  		}
+		},
+		"resources": {
+			"css": [
+				{
+					"uri": "css/style.css"
+				}
+			]
+		},
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"viewPath": "consultanttracker.Consultant-Tracker_Prototype-1.view",
+				"controlId": "idAppControl",
+				"controlAggregation": "pages",
+				"bypassed": {
+					"target": [
+						"login" 
+					]
+				},
+				"async": true
+			},
+			"routes": [
+				{
+					"pattern": "MasterManager/{consultantId}",
+					"name": "masterManager",
+					"target": [
+						"detailProject",
+						"masterManager"
+					]
+				},	
+				{
+					"pattern": "MasterConsultant/{consultantId}",
+					"name": "MasterConsultant",
+					"target": [
+						"DetailConsultant",
+						"MasterConsultant"
+					]
+				},
+				{
+					"pattern": "item/{objectPath}",
+					"name": "object",
+					"target": [
+						"masterManger",
+						"detailProject"
+					]
+				},
+				{
+					"pattern": "item/{objectPath}",
+					"name": "object",
+					"target": [
+						"MasterConsultant",
+						"DetailConsultant"
+					]
+				},
+				{
+					"pattern": "",
+					"name": "login",
+					"target": [
+						"login"
+					]
+				},
+				{
+					"pattern": "register",
+					"name": "register",
+					"target": [
+						"register"
+					]
+				},
+				{
+					"name": "detailProject",
+					"pattern": "detailProject",
+					"target": [
+						"detailProject"
+					]
+				},
+				{
+					"name": "DetailConsultant",
+					"pattern": "DetailConsultant",
+					"target": [
+						"DetailConsultant"
+					]
+				}
+			],
+			"targets": {
+				"masterManager": {
+					"viewName": "MasterManager",
+					"viewLevel": 1,
+					"viewId": "masterManger",
+					"controlAggregation": "masterPages",
+					"controlId": "idSplitAppControl",
+					"parent": "splitview"
+				},
+				"MasterConsultant": {
+					"viewName": "MasterConsultant",
+					"viewLevel": 1,
+					"viewId": "MasterConsultant",
+					"controlAggregation": "masterPages",
+					"controlId": "idSplitAppControl",
+					"parent": "splitview"
+				},
+				"detailProject": {
+					"viewName": "DetailProjects",
+					"viewId": "detailProject",
+					"viewLevel": 2,
+					"controlId": "idSplitAppControl",
+					"controlAggregation": "detailPages",
+					"parent": "splitview"
+				},
+				"DetailConsultant": {
+					"viewName": "DetailConsultant",
+					"viewId": "DetailConsultant",
+					"viewLevel": 2,
+					"controlId": "idSplitAppControl",
+					"controlAggregation": "detailPages",
+					"parent": "splitview"
+				},
+
+				"login": {
+					"viewName": "Login",
+					"viewId": "LoginView"
+				},
+				"register": {
+					"viewName": "Register",
+					"viewId": "RegisterView"
+				},
+				"splitview": {
+					"viewName": "SplitApp"
+				},
+				"globalModel": {
+					"viewName": "globalModel",
+					"viewId": "globalModel"
+				}
+			}
+		}
+	}
+}
