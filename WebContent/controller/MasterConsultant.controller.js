@@ -32,7 +32,7 @@ sap.ui.define([
 				var oModel = this.getOwnerComponent().getModel("oModel");
 				var projectsModel = new JSONModel();
 				
-				console.log("ConsultantId: "+oArgs.consultantId);
+//				console.log("ConsultantId: "+oArgs.consultantId);
 				
 				//
 				oModel.read("/Assignments", {
@@ -48,7 +48,7 @@ sap.ui.define([
 					success: function(data){
 						
 						 var oData = JSON.stringify(data);
-						 console.log(oData);
+
 						projectsModel.setData(data);				
 
 					  },
@@ -57,6 +57,7 @@ sap.ui.define([
 					 	}
 					});
 				
+//				console.log(projectsModel);
 				this.getView().setModel(projectsModel);
 
 			},
@@ -67,7 +68,8 @@ sap.ui.define([
 				
 				this.getRouter()
 					.navTo("DetailConsultant", 
-						{listId:oListId});
+						{listId:oListId,
+						consultantId:2});
 //				console.log(sListId);
 				MessageToast.show("Pressed : " + evt.getSource().getTitle());
 			},

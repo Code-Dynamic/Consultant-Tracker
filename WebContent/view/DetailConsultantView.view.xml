@@ -1,0 +1,107 @@
+ <mvc:View xmlns:core="sap.ui.core" 
+			xmlns:mvc="sap.ui.core.mvc" 
+			xmlns="sap.m" 
+			xmlns:m="sap.m"
+			xmlns:semantic="sap.m.semantic" 
+			xmlns:f="sap.ui.layout.form"
+			xmlns:la="sap.ui.layout"
+			xmlns:u="sap.ui.unified" 
+			controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.DetailConsultantView" 
+			xmlns:html="http://www.w3.org/1999/xhtml">
+		<semantic:DetailPage id="DetailConsultantView" navButtonPress="onNavBack" showNavButton="{device>/system/phone}"
+		title="Consultant Detail" busy="{detailView>/busy}" busyIndicatorDelay="{detailView>/delay}">
+<semantic:content>
+			
+<ObjectHeader id="objectHeader" title="{consultantsModel>/Consultant_Name}"></ObjectHeader>
+			
+			<IconTabBar id="iconTabBar" class="sapUiResponsiveContentPadding" expandable="false">
+				<items>
+					<IconTabFilter id="iconTabBarFilter1" icon="sap-icon://employee-pane" tooltip="{i18n>detailIconTabBarInfo}" text="Employee Details">
+						<content>
+		<ObjectHeader
+		id="oh1"
+		responsive="true"
+		fullScreenOptimized="false"
+		icon="{ProductPicUrl}"
+		iconAlt="{Name}"
+		intro="{projectsModel>/Project_Description}"
+		title="{consultantsModel>/Consultant_Name} {consultantsModel>/Consultant_Surname}"
+		titleActive="true"
+		titlePress="handleTitlePress"
+		number="34%"
+		numberUnit="Completed"
+		showTitleSelector="true"
+		titleSelectorPress="onPress"
+		showMarkers="true"
+		markFlagged="true"
+		markFavorite="true"
+		numberState="Success"
+		backgroundDesign="Translucent">
+		<attributes>
+			<ObjectAttribute
+				title="Emp no."
+				text="{consultantsModel>/Consultant_ID}"/>
+			<ObjectAttribute
+				title="Role"
+				text="SAP Programer"/>
+			<ObjectAttribute
+				title="Name"
+				text="{consultantsModel>/Consultant_Name}"/>
+			<ObjectAttribute
+				title="Contact"
+				text="{consultantsModel>/Consultant_Cell}"/>
+			<ObjectAttribute
+				title="Email"
+				text="{consultantsModel>/Consultant_email}"/>
+		</attributes>
+		<statuses>
+ 			<ObjectStatus
+				title="Approval"
+				text="Pending"
+				state="Warning"/>
+		</statuses>
+	</ObjectHeader>
+	
+			</content>
+			</IconTabFilter>
+					
+					
+					<IconTabFilter id="iconTabBarFilter2" icon="sap-icon://folder"  tooltip="{i18n>detailIconTabBarAttachments}" text="Projects">
+						<content>
+						
+							<List 	id="consultantProjects" 
+									items="{consultantProjectsModel>/results}"
+									noDataText="No projects available">
+								
+								<items>
+										<ObjectListItem											
+											title="Name: {consultantProjectsModel>ProjectDetails/Project_Name}" 
+											type="Active"
+											press= "handleOpenDialog" >
+												<firstStatus>
+												<ObjectStatus />
+												</firstStatus>
+												<attributes>
+												<ObjectAttribute text="Date " icon="sap-icon://task" />
+												</attributes>
+										</ObjectListItem>
+											
+									
+								</items>
+							</List>
+						</content>
+					</IconTabFilter>
+					<IconTabFilter id="iconTabBarFilter3" icon="sap-icon://kpi-corporate-performance" tooltip="List of tasks" text="Stats">
+
+
+					</IconTabFilter>
+					
+				</items>
+			</IconTabBar>
+		</semantic:content>
+
+		<semantic:customFooterContent>
+			<Button id="__button0" text="Remove Project" icon="sap-icon://delete" press="confirmDeleteProject"/>
+		</semantic:customFooterContent>
+	</semantic:DetailPage>
+</mvc:View>

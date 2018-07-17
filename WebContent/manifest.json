@@ -1,4 +1,5 @@
-{	"_version": "1.8.0",
+{
+	"_version": "1.8.0",
 	"sap.app": {
 		"id": "consultanttracker.Consultant-Tracker_Prototype-1",
 		"type": "application",
@@ -91,11 +92,11 @@
 			},
 			"routes": [
 				{
-					"pattern": "MasterManager/{consultantId}",
-					"name": "masterManager",
+					"pattern": "MasterAdmin/{consultantId}",
+					"name": "MasterAdmin",
 					"target": [
-						"detailProject",
-						"masterManager"
+						"DetailAdmin",
+						"MasterAdmin"
 					]
 				},	
 				{
@@ -110,8 +111,8 @@
 					"pattern": "item/{objectPath}",
 					"name": "object",
 					"target": [
-						"masterManager",
-						"detailProject"
+						"MasterAdmin",
+						"DetailAdmin"
 					]
 				},
 				{
@@ -137,17 +138,27 @@
 					]
 				},
 				{
-					"name": "detailProject",
-					"pattern": "detailProject",
+					"pattern": "DetailAdmin/{projectId}",
+					"name": "DetailAdmin",
 					"target": [
-						"detailProject"
+						"MasterAdmin",
+						"DetailAdmin"
 					]
 				},
 				{
-					"pattern": "DetailConsultant/{listId}",
+					"pattern": "DetailConsultant/{listId},:consultantId:",
 					"name": "DetailConsultant",
 					"target": [
-						"MasterConsultant","DetailConsultant"
+						"MasterConsultant",
+						"DetailConsultant"
+					]
+				},
+				{
+					"pattern": "DetailConsultantView/{consultantId}",
+					"name": "DetailConsultantView",
+					"target": [
+						"MasterAdmin",
+						"DetailConsultantView"
 					]
 				},
 				{
@@ -156,13 +167,20 @@
 					"target": [
 						"MasterConsultant","Calender"
 					]
+				},
+				{
+					"name": "OverviewCalender",
+					"pattern": "DetailAdmin/OverviewCalender/{projectId}",
+					"target": [
+						"MasterAdmin","OverviewCalender"
+					]
 				}
 			],
 			"targets": {
-				"masterManager": {
-					"viewName": "MasterManager",
+				"MasterAdmin": {
+					"viewName": "MasterAdmin",
 					"viewLevel": 1,
-					"viewId": "masterManger",
+					"viewId": "MasterAdmin",
 					"controlAggregation": "masterPages",
 					"controlId": "idSplitAppControl",
 					"parent": "splitview"
@@ -175,9 +193,9 @@
 					"controlId": "idSplitAppControl",
 					"parent": "splitview"
 				},
-				"detailProject": {
-					"viewName": "DetailProjects",
-					"viewId": "detailProject",
+				"DetailAdmin": {
+					"viewName": "DetailAdmin",
+					"viewId": "DetailAdmin",
 					"viewLevel": 2,
 					"controlId": "idSplitAppControl",
 					"controlAggregation": "detailPages",
@@ -185,10 +203,19 @@
 							"parts":["ListDetails"]
 							},
 					"parent": "splitview"
+			 
 				},
 				"DetailConsultant": {
 					"viewName": "DetailConsultant",
 					"viewId": "DetailConsultant",
+					"viewLevel": 2,
+					"controlId": "idSplitAppControl",
+					"controlAggregation": "detailPages",
+					"parent": "splitview"
+				},
+				"DetailConsultantView": {
+					"viewName": "DetailConsultantView",
+					"viewId": "DetailConsultantView",
 					"viewLevel": 2,
 					"controlId": "idSplitAppControl",
 					"controlAggregation": "detailPages",
@@ -202,7 +229,14 @@
 					"controlAggregation": "detailPages",
 					"parent": "splitview"
 				},
-
+				"OverviewCalender": {
+					"viewName": "OverviewCalender",
+					"viewId": "OverviewCalender",
+					"viewLevel": 3,
+					"controlId": "idSplitAppControl",
+					"controlAggregation": "detailPages",
+					"parent": "splitview"
+				},
 				"login": {
 					"viewName": "Login",
 					"viewId": "LoginView"

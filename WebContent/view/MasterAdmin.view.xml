@@ -1,0 +1,96 @@
+<mvc:View 
+		xmlns:core="sap.ui.core" 
+		xmlns:mvc="sap.ui.core.mvc" 
+		xmlns="sap.m" 
+		xmlns:m="sap.m"
+		controllerName="consultanttracker/Consultant-Tracker_Prototype-1/controller/MasterAdmin"
+		xmlns:html="http://www.w3.org/1999/xhtml" 
+		xmlns:semantic="sap.m.semantic">
+	<semantic:MasterPage id="MasterAdmin"  >
+		<semantic:subHeader></semantic:subHeader>
+		<semantic:content>
+		<IconTabBar 	id="iconTabBar" 
+						class="sapUiResponsiveContentPadding" 
+						expandable="false"
+						width="100%">
+				<items>
+										
+					<IconTabFilter id="iconTabBarFilter2" 
+								icon="sap-icon://folder" 
+								tooltip="List of all projects" 
+								text="Projects">
+						<content>
+						<List id="projects"
+		items="{projectsModel>/results/}">
+		<items>
+			<ObjectListItem
+				title="{projectsModel>Project_Name}"
+				type="Active"
+				press="onProjectListItemPress">
+				<firstStatus>
+					<ObjectStatus
+						text="In Progress" />
+				</firstStatus>
+				<attributes>
+					<ObjectAttribute text="Date " />
+				</attributes>
+			</ObjectListItem>
+		</items>
+	</List>
+				<OverflowToolbar id="otbFooter">
+				<ToolbarSpacer/>
+				<Button type="Accept" text="Accept">
+					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
+				</Button>
+				<Button type="Reject" icon="sap-icon://add" text="Project" >
+					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
+				</Button>
+
+			</OverflowToolbar>
+						</content>
+					</IconTabFilter>
+					<IconTabSeparator icon="sap-icon://vertical-grip"/>
+					<IconTabSeparator icon="sap-icon://vertical-grip"/>
+
+					<IconTabFilter id="iconTabBarFilter3" 
+									icon="sap-icon://employee" 
+									tooltip="list of all Consultants" 
+									text="Consultants">
+					<content>
+					
+						<List id="consultants"
+		items="{consultantsModel>/results/}">
+		<items>
+			<ObjectListItem
+				title="{consultantsModel>Consultant_Name} {consultantsModel>Consultant_Surname}"
+				type="Active"
+				press="onConsultantListItemPress">
+				<attributes>
+					<ObjectAttribute text="{consultantsModel>Consultant_Cell}" />
+				</attributes>
+			</ObjectListItem>
+		</items>
+	</List>
+					</content>
+			
+			<OverflowToolbar id="otbFooter2">
+				<ToolbarSpacer/>
+				<Button type="Default" text="Accept">
+					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
+				</Button>
+				<Button type="Default" icon="sap-icon://add" text="Consultant" >
+					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
+				</Button>
+
+			</OverflowToolbar>
+					</IconTabFilter>
+					
+				</items>
+			</IconTabBar>
+		
+				
+		</semantic:content>
+
+		
+	</semantic:MasterPage>
+</mvc:View>

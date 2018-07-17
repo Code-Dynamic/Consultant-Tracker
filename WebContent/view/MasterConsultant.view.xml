@@ -4,15 +4,29 @@
 			xmlns:semantic="sap.m.semantic" 
 			xmlns:html="http://www.w3.org/1999/xhtml" 
 			controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.MasterConsultant">
-	<semantic:MasterPage id="MasterConsultant" title="MasterConsultant Page" navButtonPress="onNavBack" showNavButton="true">
+	<semantic:MasterPage id="MasterConsultant">
 		<semantic:content>
 
-			<List id="myList"
-		items="{/results}"
-		headerText="Projects">
+		<IconTabBar 	id="iconTabBar" 
+						class="sapUiResponsiveContentPadding" 
+						expandable="false"
+						width="100%">
+				<items>
+					<IconTabSeparator icon="sap-icon://vertical-grip"/>
+					<IconTabSeparator icon="sap-icon://vertical-grip"/>
+					<IconTabSeparator icon="sap-icon://vertical-grip"/>
+										
+					<IconTabFilter id="iconTabBarFilter2" 
+								icon="sap-icon://folder" 
+								tooltip="List of all projects" 
+								text="Projects">
+						<content>				
+						
+<List id="listId"
+		items="{/results/}">
 		<items>
 			<ObjectListItem
-				title="{Project_Name}"
+				title="{ProjectDetails/Project_Name}"
 				type="Active"
 				press="onListItemPress">
 				<firstStatus>
@@ -25,6 +39,19 @@
 			</ObjectListItem>
 		</items>
 	</List>
+						
+
+			</content>
+					</IconTabFilter>
+					<IconTabSeparator icon="sap-icon://vertical-grip"/>
+					<IconTabSeparator icon="sap-icon://vertical-grip"/>
+					<IconTabSeparator icon="sap-icon://vertical-grip"/>
+					
+				</items>
+			</IconTabBar>
+
+
 		</semantic:content>
+
 	</semantic:MasterPage>
 </mvc:View>

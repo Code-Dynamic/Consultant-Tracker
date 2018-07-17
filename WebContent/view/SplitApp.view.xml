@@ -17,7 +17,7 @@
 				<OverflowToolbarLayoutData priority="NeverOverflow" minWidth="16px"/>
 			</layoutData>
 		</ToolbarSpacer>
-		<MenuButton text="UserName" type="Transparent" id ="userNameDisplay">
+		<MenuButton text="UserName" type="Transparent">
 			<layoutData>
 				<OverflowToolbarLayoutData priority="NeverOverflow"/>
 			</layoutData>

@@ -76,13 +76,11 @@ sap.ui.define([
 //							 /Consultants?$select=Consultant_Admin&$filter=Consultant_email eq \'"+ email + "\'"
 							oModel2.read("/Consultants?$select=Consultant_ID, Consultant_Admin&$filter=Consultant_email eq \'"+ email + "\'",{
 								success: function(data, response){
-									var dataResults = JSON.stringify(data);
-									var array = dataResults.split(',');
-									console.log(data.results);
+//									console.log(data.results[0]);
 //									console.log(array[array.length-1].substr(20,1));
-									var oConsultantId = array[array.length-2].substr(17,1);
-									if (array[array.length-1].substr(20,1) == 1)
-										thisPtr.getRouter().navTo("masterManager", {consultantId: oConsultantId});
+									var oConsultantId = data.results[0].Consultant_ID;
+									if (data.results[0].Consultant_Admin == 1)
+										thisPtr.getRouter().navTo("MasterAdmin", {consultantId: oConsultantId});
 									else
 										thisPtr.getRouter().navTo("MasterConsultant", {consultantId: oConsultantId});
 								}
