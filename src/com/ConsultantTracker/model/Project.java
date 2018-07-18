@@ -47,6 +47,7 @@ public class Project implements Serializable {
 
 	private boolean project_OnSite;
 
+	private boolean project_Completed;
 
 	@OneToOne
 	@JoinColumn(name = "CLIENT_ID")
@@ -125,6 +126,12 @@ public class Project implements Serializable {
 	public void setProject_OnSite(boolean project_OnSite) {
 		this.project_OnSite = project_OnSite;
 	}
+	public boolean getProject_Completed() {
+		return this.project_Completed;
+	}
 
+	public void setProject_Completed(boolean project_Completed) {
+		this.project_Completed = project_Completed;
+	}	
 
 }

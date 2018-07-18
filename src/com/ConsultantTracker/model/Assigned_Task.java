@@ -17,55 +17,49 @@ public class Assigned_Task implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int Assigned_task_ID;
+	private int assigned_Task_ID;
 	
-	@OneToOne
-	@JoinColumn(name = "TASK_TASK_ID")
 	private Task task;
-	@OneToOne 
-	@JoinColumn(name = "CONSULTANT_CONSULTANT_ID")
 	private Consultant consultant;
-	
 	private double assigned_Hours;
 	private double hours_Worked;
 	@Temporal(TemporalType.DATE)
 	private Date last_Update;
 
 	@Temporal(TemporalType.DATE)
-	private Date Date_Assigned;
+	private Date date_Assigned;
 	@Temporal(TemporalType.DATE)
-	private Date Due_Date;
+	private Date due_Date;
 	
 	public Date getDate_Assigned() {
-		return Date_Assigned;
+		return date_Assigned;
 	}
+	
+	private boolean task_Completed;
 //random comment
 	
 	public void setDate_Assigned(Date date_Assigned) {
-		Date_Assigned = date_Assigned;
+		this.date_Assigned = date_Assigned;
 	}
 
 	public Date getDue_Date() {
-		return Due_Date;
+		return due_Date;
 	}
 
 	public void setDue_Date(Date due_Date) {
-		Due_Date = due_Date;
+		this.due_Date = due_Date;
 	}
-
-	
-
 	
 	public Assigned_Task() {
 		
 	}
 
-	public int getAssigned_task_ID() {
-		return Assigned_task_ID;
+	public int getAssigned_Task_ID() {
+		return assigned_Task_ID;
 	}
 
 	public void setAssigned_task_ID(int assigned_task_ID) {
-		Assigned_task_ID = assigned_task_ID;
+		assigned_Task_ID = assigned_task_ID;
 	}
 
 	public Task getTask() {
@@ -108,6 +102,14 @@ public class Assigned_Task implements Serializable {
 		this.last_Update = last_Update;
 	}
 
+	public boolean getTask_Completed() {
+		return this.task_Completed;
+	}
+
+	public void setTask_Completed(boolean taskCompleted) {
+		this.task_Completed = taskCompleted;
+	}
+	
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
