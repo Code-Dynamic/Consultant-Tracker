@@ -47,13 +47,14 @@ public class CreateProject extends HttpServlet {
 		String Proj_Deadl = request.getParameter("Deadl");
 		String Proj_StartDate = request.getParameter("StartDate");
 		int on_Site = Integer.parseInt(request.getParameter("OnSite"));
+		int projectCreator=Integer.parseInt(request.getParameter("Project_Creator"));
 		
 		Connection con = (Connection) getServletContext().getAttribute("DBConnection"); //establish database connection
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
 			ps = con.prepareStatement("INSERT INTO project (PROJECT_NAME,CLIENT_ID,PROJECT_DESCRIPTION," + 
-					"PROJECT_DEADLINE,PROJECT_STARTDATE,PROJECT_ONSITE,PROJECT_COMPLETED) VALUES (?,?,?,?,?,?,?);");		//create prepared sql statement	
+					"PROJECT_DEADLINE,PROJECT_STARTDATE,PROJECT_ONSITE,PROJECT_COMPLETED,PROJECT_CREATOR) VALUES (?,?,?,?,?,?,?,?);");		//create prepared sql statement	
 			
 			ps.setString(1, proj_Name);
 			ps.setString(2, ClientID);
@@ -62,6 +63,7 @@ public class CreateProject extends HttpServlet {
 			ps.setString(5, Proj_StartDate);
 			ps.setInt(6, on_Site);
 			ps.setInt(7,0);
+			ps.setInt(8,projectCreator);
 			ps.executeUpdate();				// execute sql query
 			System.out.println("startDate: "+ Proj_StartDate);
 			ps.close();

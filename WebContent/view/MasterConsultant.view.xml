@@ -41,7 +41,7 @@
 	</List>
 		<OverflowToolbar id="otbFooter">
 				<ToolbarSpacer/>
-				 <Button  id="rateTeamBtn" text="Rate Members" icon="sap-icon://favorite" press="onRateTeam" enabled="{ratingsBtnConfig>/enabled}" visible="{ratingsBtnConfig>/visible}"/>
+				 <Button  id="rateTeamBtn" text="Rate Members" icon="sap-icon://favorite" press="onClick" enabled="{ratingsBtnConfig>/enabled}" visible="{ratingsBtnConfig>/visible}"/>
 				 <Button  id="requestUserTimesBtn" text="Times" icon="sap-icon://time-entry-request" press="onRequestUserTimes"/>
 		</OverflowToolbar>								
 

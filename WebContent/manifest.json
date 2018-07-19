@@ -174,7 +174,14 @@
 					"target": [
 						"MasterAdmin","OverviewCalender"
 					]
-				}
+				},
+				{
+                    "name": "Feedback",
+                    "pattern": "feedback",
+                    "target": [
+                        "MasterFeedback","DetailFeedback"
+                    ]
+                }
 			],
 			"targets": {
 				"MasterAdmin": {
@@ -247,7 +254,28 @@
 				},
 				"splitview": {
 					"viewName": "SplitApp"
-				}
+				},
+				"MasterFeedback": {
+                    "viewName": "MasterFeedback",
+                    "viewLevel": 1,
+                    "viewId": "masterFeedback",
+                    "controlAggregation": "masterPages",
+                    "controlId": "idSplitAppControl",
+                    "parent": "splitview"
+                },
+                "DetailFeedback": {
+                    "viewName": "DetailFeedback",
+                    "viewId": "detailFeedback",
+                    "viewLevel": 2,
+                    "controlId": "idSplitAppControl",
+                    "controlAggregation": "detailPages",
+                            "title":{
+                            "parts":["ListDetails"]
+                            },
+                    "parent": "splitview"
+            
+                }
+				
 			}
 		}
 	}

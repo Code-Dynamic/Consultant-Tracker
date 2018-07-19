@@ -57,7 +57,6 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	/*	MessageToast.show("Pressed : " + evt.getSource().getTitle());*/
 		//TODO Ngoni: consult Mamba, save project ID in model instead of using global
 		PROJECT_ID = projectID;
-		var consultantID = this.getConsultantID();		
 		//console.log("Project ID: "+ projectID);
 		//RATINGS CODE
 		//TODO Ngoni: check with Mamba hw to get odata model address
@@ -66,7 +65,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		var thisObj = this;
 		//console.log(projectCompleted);
 		attachModel.read(
-				"/Ratings_Entrys?$expand=ProjectDetails,ConsultantDetails&$filter=ProjectDetails/Project_ID%20eq%20"+projectID+"%20and%20ConsultantDetails/Consultant_ID%20eq%20"+consultantID,{async:false,success: function(oCreatedEn){ ratingsBtnConfig(oCreatedEn) }, error: function(e){console.log(e);}}		
+				"/Ratings_Entrys?$expand=ProjectDetails,ConsultantDetails&$filter=ProjectDetails/Project_ID%20eq%20"+projectID+"%20and%20ConsultantDetails/Consultant_ID%20eq%20"+this.getConsultantID(),{async:false,success: function(oCreatedEn){ ratingsBtnConfig(oCreatedEn) }, error: function(e){console.log(e);}}		
 				);					
 		function ratingsBtnConfig(oResults){
 			var ratingsBtnConfigModel;
@@ -209,10 +208,13 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	goToProjects : function(oEvt){
 		var projectsModel = new sap.ui.model.json.JSONModel();
 		var oModel = this.getOwnerComponent().getModel("oModel");
+
+		console.log("consultant ID:  " + this.getConsultantID());
+		console.log("/Projects?$filter=Project_Creator%20eq%20"+this.getConsultantID()+" and Project_Deleted%20eq%20false");
 		
 		//read projects
 		oModel.read(
-				"/Projects?$filter=Project_Deleted%20eq%20false",{
+				"/Projects?$filter=Project_Creator%20eq%20"+this.getConsultantID()+" and Project_Deleted%20eq%20false",{
 					success: function(data){ 
 						projectsModel.setData(data);
 //						console.log(data);
@@ -310,8 +312,6 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 				sap.ui.getCore().setModel(oModel,"groupMember");
 				app.to("detailPage");
 			}
-
-//			});
 
 			function createConsultant(stringVal){
 				var array = stringVal.split(',');
@@ -420,7 +420,8 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
     			Project_DEscription: "none",  
     			Project_Deadline: "none",
     			Project_StartDate: "none", 
-    			Project_OnSite: "none"
+    			Project_OnSite: "none",
+    			Project_Creator:"none"
 			};
     	
     	var _Name = sap.ui.getCore().byId("p_Name").getValue();
@@ -435,7 +436,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
     	}else{
     		_OnSite = 0;
     	}
-//    	var oModel2 =  new sap.ui.model.odata.v2.ODataModel('http://localhost:8080/OdataSap/emplist.svc/'); 
+//    	var oModel2 =  new sap.ui.model.odata.v2.ODataModel('http://localhost:8080/OdataSap/emplist.svc/');
     	oProject.Project_Name = _Name;
     	oProject.Project_Description = _Description;
     	oProject.Project_Deadline = _Deadline;
@@ -453,7 +454,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 //
 	//console.log("startdate"+_StartDate);
 //    
-    	$.post('CreateProject', { Name: _Name ,ClientID: 2,Desc: _Description, Deadl: _Deadline ,StartDate: _StartDate,OnSite:  _OnSite},function(responseText) {  
+    	$.post('CreateProject', { Name: _Name ,ClientID: 2,Desc: _Description, Deadl: _Deadline ,StartDate: _StartDate,OnSite:  _OnSite, Project_Creator: this.getConsultantID()},function(responseText) {  
     		var array = responseText.split(';');
     		//console.log(array);
     	});
