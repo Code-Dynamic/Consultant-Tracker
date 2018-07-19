@@ -45,7 +45,7 @@
 				<Button  id="requestUserTimesBtn" text="Times" icon="sap-icon://time-entry-request" press="onRequestUserTimes">
 					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
 				</Button>
-				<Button type="Reject" icon="sap-icon://add" text="Project" >
+				<Button icon="sap-icon://add" text="Project" press="addProject" >
 					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
 				</Button>
 
@@ -78,10 +78,7 @@
 			
 			<OverflowToolbar id="otbFooter2">
 				<ToolbarSpacer/>
-				<Button type="Default" text="Accept">
-					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
-				</Button>
-				<Button type="Default" icon="sap-icon://add" text="Consultant" >
+				<Button type="Default" icon="sap-icon://add" text="Consultant" press="addConsultant">
 					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
 				</Button>
 

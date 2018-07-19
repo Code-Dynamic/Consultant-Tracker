@@ -94,11 +94,8 @@
 							</List>
 						</content>
 					</IconTabFilter>
-					<IconTabFilter id="iconTabBarFilter3" icon="sap-icon://kpi-corporate-performance" tooltip="List of tasks" text="Stats">
 
-
-					</IconTabFilter>
-<IconTabFilter id="iconTabBarFilter4" icon="sap-icon://line-chart-time-axis" tooltip="Utilization" text="Utilization" design="sap.m.IconTabFilterDesign.Vertical">
+					<IconTabFilter id="iconTabBarFilter3" icon="sap-icon://line-chart-time-axis" tooltip="Utilization" text="Utilization" design="sap.m.IconTabFilterDesign.Vertical">
 						<content>	
 									<OverflowToolbar>
 										<Title text="Utilization" level="H2"/>
@@ -146,7 +143,7 @@
 						</content>		
 					</IconTabFilter>				
 						
-					<IconTabFilter id="iconTabBarFilter5" icon="sap-icon://favorite" tooltip="{i18n>detailIconTabBarAttachments}" text="Rating">
+					<IconTabFilter id="iconTabBarFilter4" icon="sap-icon://favorite" tooltip="{i18n>detailIconTabBarAttachments}" text="Rating">
 
 						<Table mode="SingleSelectMaster" selectionChange=""  growing="true" inset="false" items="{ratings>/results}">
 							<headerToolbar>

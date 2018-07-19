@@ -45,7 +45,7 @@ public class CreateProject extends HttpServlet {
 		String ClientID = request.getParameter("ClientID");
 		String Proj_Desc = request.getParameter("Desc");
 		String Proj_Deadl = request.getParameter("Deadl");
-		String Proj_OnSite = request.getParameter("OnSite");
+		String Proj_StartDate = request.getParameter("StartDate");
 		int on_Site = Integer.parseInt(request.getParameter("OnSite"));
 		
 		Connection con = (Connection) getServletContext().getAttribute("DBConnection"); //establish database connection
@@ -53,16 +53,17 @@ public class CreateProject extends HttpServlet {
 		ResultSet rs = null;
 		try {
 			ps = con.prepareStatement("INSERT INTO project (PROJECT_NAME,CLIENT_ID,PROJECT_DESCRIPTION," + 
-					"PROJECT_DEADLINE,PROJECT_ONSITE,PROJECT_COMPLETED) VALUES (?,?,?,?,?,?);");		//create prepared sql statement	
+					"PROJECT_DEADLINE,PROJECT_STARTDATE,PROJECT_ONSITE,PROJECT_COMPLETED) VALUES (?,?,?,?,?,?,?);");		//create prepared sql statement	
 			
 			ps.setString(1, proj_Name);
 			ps.setString(2, ClientID);
 			ps.setString(3, Proj_Desc);
 			ps.setString(4, Proj_Deadl);
-			ps.setInt(5, on_Site);
-			ps.setInt(6,0);
+			ps.setString(5, Proj_StartDate);
+			ps.setInt(6, on_Site);
+			ps.setInt(7,0);
 			ps.executeUpdate();				// execute sql query
-			
+			System.out.println("startDate: "+ Proj_StartDate);
 			ps.close();
 		
 			ps = con.prepareStatement("select * from project");
@@ -72,7 +73,7 @@ public class CreateProject extends HttpServlet {
 				while(rs.next()) {				// build return string based on query response
 					if(!ObjToReturn.equals(""))
 						ObjToReturn +=";";
-				 ObjToReturn +=rs.getString("PROJECT_NAME")+','+rs.getString("PROJECT_DESCRIPTION")+','+rs.getString("PROJECT_DEADLINE") ;
+				 ObjToReturn +=rs.getString("PROJECT_NAME")+','+rs.getString("PROJECT_DESCRIPTION")+','+rs.getString("PROJECT_DEADLINE")+','+rs.getString("PROJECT_STARTDATE");
 			
 				}
 				PrintWriter out = response.getWriter();

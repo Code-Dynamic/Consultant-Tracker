@@ -56,7 +56,7 @@ public class getProjects extends HttpServlet {
 					while(rs.next()) {
 						if(!ObjToReturn.equals(""))
 							ObjToReturn +=";";
-					 ObjToReturn +=rs.getString("Project_Name")+','+rs.getString("Project_Description")+','+rs.getString("Client_Name")+','+rs.getString("Project_Deadline")+','+rs.getString("Project_OnSite")+','+rs.getString("Project_ID");
+					 ObjToReturn +=rs.getString("Project_Name")+','+rs.getString("Project_Description")+','+rs.getString("Client_Name")+','+rs.getString("Project_Deadline")+','+rs.getString("Project_StartDate")+','+rs.getString("Project_OnSite")+','+rs.getString("Project_ID");
 				
 					}
 					//PrintWriter out = response.getWriter();

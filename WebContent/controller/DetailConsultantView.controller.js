@@ -61,7 +61,7 @@ sap.ui.define([
 //								alert(results);
 						  },
 						  error: function(oError) {
-							  alert("error");
+							  console.log("Consultants error: "+ oError.message);
 							 }
 						});
 					//set the project detail model
@@ -93,7 +93,7 @@ sap.ui.define([
 
 						  },
 						 error: function(oError) {
-							  alert("error");
+							 console.log("Assignments Model: "+ oError.message);
 						 	}
 						});
 
@@ -162,9 +162,7 @@ sap.ui.define([
 						oModel.setData(oData);
 						//console.log(JSON.parse(JSON.stringify(arrConsultants)));
 						thisObj.getView().setModel(oModel,"ratings");
-					}	     
-			     
-			     
+					}	       
 			},
 			onUtilizationMonthChange: function(oEvent){
 				var c_ID = this.byId("utilizationMonthSelect").getName();

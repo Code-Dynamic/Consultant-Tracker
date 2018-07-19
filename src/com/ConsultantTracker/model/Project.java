@@ -49,6 +49,9 @@ public class Project implements Serializable {
 
 	private boolean project_Completed;
 
+	@Temporal(TemporalType.DATE)
+	private Date project_StartDate;
+
 	@OneToOne
 	@JoinColumn(name = "CLIENT_ID")
 	private Client Client_ID;
@@ -63,7 +66,6 @@ public class Project implements Serializable {
 //	public void setCLIENT_CLIENT_ID(int cLIENT_CLIENT_ID) {
 //		CLIENT_CLIENT_ID = cLIENT_CLIENT_ID;
 //	}
-
 
 
 
@@ -87,13 +89,21 @@ public class Project implements Serializable {
 		this.project_ID = project_ID;
 	}
 
+	public Date getProject_StartDate() {
+		return this.project_StartDate;
+	}
+
+	public void setProject_StartDate(Date project_StartDate) {
+		this.project_StartDate = project_StartDate;
+	}
+	
 	public Date getProject_Deadline() {
 		return this.project_Deadline;
 	}
 
 	public void setProject_Deadline(Date project_Deadline) {
 		this.project_Deadline = project_Deadline;
-	}
+	}	
 
 	public boolean getProject_Deleted() {
 		return this.project_Deleted;

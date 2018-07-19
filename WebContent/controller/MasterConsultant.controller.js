@@ -8,11 +8,11 @@ sap.ui.define([
 	
 ], function(BaseController,MessageToast,JSONModel,jQuery,Controller) {
 	"use strict";
-	//TODO Ngoni change code to prevent use of globals
 	var PROJECT_ID;
 	var RatingIndicatorArr;
 	var RatingResults;
-	var RatingsErrTxt;
+	var RatingsErrTxt;	
+	var ConsultantID;
 	
 	return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.MasterConsultant", {
 
@@ -23,25 +23,33 @@ sap.ui.define([
 		 */
 			onInit: function() {
 //				http://localhost:8080/Consultant-Tracker/emplist.svc/Assigned_Tasks?$expand=ConsultantDetails,TaskDetails,TaskDetails/ProjectDetails&$filter=ConsultantDetails/Consultant_ID%20eq%202
-				//geting id from the URL
-				var oRouter = this.getRouter();
-				oRouter.getRoute("MasterConsultant").attachMatched(this._onRouteMatched, this);
+				//getting id from the URL
+				//console.log("function called");
+				//this.printOnPage();
+				if(sessionStorage){
+					if (sessionStorage.getItem("ConsultantID") !== null) {
+						this.onReloadPageSetup();
+						}
+					else{
+						var oRouter = this.getRouter();
+						oRouter.getRoute("MasterConsultant").attachMatched(this._onRouteMatched, this);
+					}
+				}else{
+					var oRouter = this.getRouter();
+					oRouter.getRoute("MasterConsultant").attachMatched(this._onRouteMatched, this);
+				}	
 				
-
+				//console.log(oRouter);
+				//TODO Ngoni discuss with Mamba:_onRouteMatched f() not called when reloading
 			},
 			_onRouteMatched: function(oEvent){
-				
+				console.log("route matched");
 				var oArgs = oEvent.getParameter("arguments");
 				
 				//set model for master
 				var oModel = this.getOwnerComponent().getModel("oModel");
 				var projectsModel = new JSONModel();
-				
-				if(sessionStorage){
-					sessionStorage.ConsultantID = oArgs.consultantId;;
-				}else{
-					ConsultantID = oArgs.consultantId;
-				}
+				var consultantID = this.setConsultantID(oArgs.consultantId);
 				//
 				oModel.read("/Assignments", {
 					urlParameters: {
@@ -51,7 +59,7 @@ sap.ui.define([
 					filters: [ new sap.ui.model.Filter({
 				          path: "ConsultantDetails/Consultant_ID",
 				          operator: sap.ui.model.FilterOperator.EQ,
-				          value1: oArgs.consultantId
+				          value1: consultantID
 				     })],
 					success: function(data){
 						
@@ -69,9 +77,52 @@ sap.ui.define([
 				this.getView().setModel(projectsModel);
 
 			},
+			onReloadPageSetup: function(){	
+				//set model for master
+				var oModel = this.getOwnerComponent().getModel("oModel");
+				var projectsModel = new JSONModel();
+				var consultantID = this.getConsultantID();
+				//
+				oModel.read("/Assignments", {
+					urlParameters: {
+			            "$expand" : "ConsultantDetails",
+			            "$expand" : "ProjectDetails"
+			        },
+					filters: [ new sap.ui.model.Filter({
+				          path: "ConsultantDetails/Consultant_ID",
+				          operator: sap.ui.model.FilterOperator.EQ,
+				          value1: consultantID
+				     })],
+					success: function(data){
+						
+						 var oData = JSON.stringify(data);
 
+						projectsModel.setData(data);				
+
+					  },
+					 error: function(oError) {
+						  alert("error");
+					 	}
+					});
+				
+//				console.log(projectsModel);
+				this.getView().setModel(projectsModel);				
+			},
+			setConsultantID: function(idFromRoute){
+				if(sessionStorage){
+					if (sessionStorage.getItem("ConsultantID") !== null) {
+						return sessionStorage.ConsultantID;
+						}
+					else{
+						sessionStorage.ConsultantID = idFromRoute;
+						return idFromRoute;
+					}
+				}else{
+					ConsultantID = idFromRoute;
+					return idFromRoute;
+				}				
+			},
 			onListItemPress: function (evt) {
-				//console.log("called");
 			
 				var projectID = evt.getSource().getBindingContext().getProperty("ProjectDetails/Project_ID");
 				//TODO Ngoni: consult Mamba, save project ID in model instead of using global
@@ -119,223 +170,6 @@ sap.ui.define([
 					thisObj.getView().setModel(ratingsBtnConfigModel,"ratingsBtnConfig");
 					
 				}
-			},		    
-			onRequestUserTimes : function(){
-				var consultantID = this.getConsultantID();		
-		    	this._Dialog = this.byId("timesDialog");
-		    	var dialog = this._Dialog;
-		    	dialog.setEscapeHandler(this.onDialogPressEscape);
-		    	var masterDomObj = this;
-		    	var taskCompleted = false;
- 		    	$.post('CheckDailyTimesEntered', { Consultant_ID:consultantID},function(timesEnteredBool) {
-		    		if(parseInt(timesEnteredBool)){
-		    			timesEnteredAlready();
-		    		}else{
-		    			setupUserTimes();
-		    		}
- 		    	});				      
-		    	function timesEnteredAlready(){
-		    		masterDomObj.byId("submitUserTimesBtn").setEnabled(false);
-		    		var dateStr = getDateStr();
-		        	var timesEnteredTxt = new sap.m.Text({
-		        		renderWhitespace:true,
-		        		text:"You have already entered times for "+dateStr,
-		        	});		        	 
-		        	dialog.addContent(timesEnteredTxt);			        	    		
-		    	}
- 		    	function setupUserTimes(){
- 		    		masterDomObj.byId("submitUserTimesBtn").setEnabled(true);
- 			    	var oModel =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
- 			    	var query = "/Assigned_Tasks?$expand=TaskDetails,ConsultantDetails&$filter=ConsultantDetails/Consultant_ID%20eq%20"+consultantID+"%20and%20Task_Completed%20eq%20"+taskCompleted;
- 			    	
- 				     oModel.read(query,{success: function(oData){ addInputs(oData) 
- 				 					}, error: function(){console.log("Error");}}		
- 				 	 );
- 				 	 var totalHoursText;
-
- 				         //return all consultants
- 				         function  addInputs(oResults) {	        	 
- 				        	 var input ="";
- 			        		 var vBox = new sap.m.VBox({
- 			        			 });
- 			        		 var hBox;
- 			        		 var description;
- 				        	 for(var i = 0; i < oResults.results.length; i++){
- 				        		 hBox = new sap.m.FlexBox({
- 				        			 alignItems: sap.m.FlexAlignItems.Center
- 				        			 });			        		 
- 				        		 input = new sap.m.Input({
- 				        			 description: " ",
- 				        			 fieldWidth: "80%",
- 				        			 maxLength: 3,
- 				        			 type: "Number",
- 				        			 placeholder: "0.0"
- 				        		 }); 
- 				        		 input.attachLiveChange(function(oEvent){
- 				        			 onLiveChangeTimesInput(this,oEvent);
- 				        		 })
- 				        		 description = new sap.m.Text({
- 				        			 renderWhitespace: true,
- 				        			 text:oResults.results[i].TaskDetails.Name
- 				        		 });			        		 
- 				        		 hBox.addItem(input);
- 				        		 hBox.addItem(description);
- 				        		 vBox.addItem(hBox);	
- 				        	 }
- 			        		 input = new sap.m.Input({
- 			        			 description: " ",
- 			        			 fieldWidth: "80%",
- 			        			 maxLength: 3,
- 			        			 type: "Number",
- 			        			 placeholder: "0.0"
- 			        		 });
- 			        		 input.attachLiveChange(function(oEvent){
- 			        			 onLiveChangeTimesInput(this,oEvent);
- 			        		 })
- 			        		 description = new sap.m.Text({
- 				        			 renderWhitespace: true,
- 				        			 text:"General"
- 				        		 });
- 			        		 hBox = new sap.m.HBox({
- 				        			 alignItems:sap.m.FlexAlignItems.Center
- 				        	});	
- 			        		hBox.addItem(input);
- 				        	hBox.addItem(description);
- 				        	vBox.addItem(hBox);
- 			        		var dateStr = getDateStr();
- 			        		totalHoursText = new sap.m.Text({
- 			        			 renderWhitespace:true,
- 			        			 text:" 0.0 Total Hours for "+dateStr,
- 			        		 });
- 			        		vBox.addItem(totalHoursText);			        	 
- 			        		dialog.addContent(vBox);			        	 
- 			        		 
- 				        }
- 				         // checks if numbers entered in each input field are valid and also updates total
- 				         function onLiveChangeTimesInput(inputObj,oEvent){
- 						        var newValue = oEvent.getParameter("newValue");
- 					            var maxNumberOfHoursPerDay = 10;
- 					            if(newValue > maxNumberOfHoursPerDay || newValue < 0){
- 					                inputObj.setValueState(sap.ui.core.ValueState.Error);
- 							        var dateStr = getDateStr();
- 					                totalHoursText.setText("-- :     Total Hours for "+dateStr);
- 					            }
- 					            else{
- 					            	inputObj.setValueState(sap.ui.core.ValueState.Success);
- 							        var pnlDom = dialog.getDomRef();
- 							        var total = 0;
- 							        var inputVal = 0;
- 							        $(pnlDom).find('input').each(function(index, elem){
- 							        	inputVal = Number($(elem)[0].value);
- 							            if( isNumeric(inputVal))
- 							            	total+= inputVal;
- 							        });
- 							        var dateStr = getDateStr();
- 							        totalHoursText.setText(total + " :     Total Hours for " +dateStr);
- 					            }
- 				         }
-
- 				         //checks if value is numeric
- 				         function isNumeric(n) {
- 				        	  return !isNaN(parseFloat(n)) && isFinite(n);
- 				        	}				    		
- 		    	}
-		         
-		         function getDateStr(){
-		        	 var today = new Date();
-		        	 var dd = today.getDate();
-		        	 var mm = masterDomObj.getMonthStr(today.getMonth());
-		        	 var year = today.getFullYear();
-
-		        	 if(dd<10) {
-		        	     dd = '0'+dd
-		        	 } 
-		        	 return dd +" "+ mm + " " + year;		        	 
-		         }
-			         
-			     this._Dialog.open();
-				 
-		    },
-		    onSubmitTimes: function(){
-				var consultantID;
-				if(sessionStorage){
-					consultantID = sessionStorage.ConsultantID;
-				}else{
-					consultantID = ConsultantID;
-				}	
-				//query for tasks that are not yet completed
-		    	var taskCompleted = false;
-		    	var query = "/Assigned_Tasks?$expand=TaskDetails,ConsultantDetails&$filter=ConsultantDetails/Consultant_ID%20eq%20"+consultantID+"%20and Task_Completed%20eq%20"+taskCompleted;
-
-			     var oModel =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
-			     oModel.read(query,{success: function(oData){ submitTimes(oData) 
-			 					}, error: function(error){console.log("Error: "+ error);}}		
-			 	 );		    	
-		    
-			 	 var pnlDom = this._Dialog.getDomRef();
-			 	 var inputArr = [];
-			 	 var totalTasks = 0;
-			 	 var num;
-			     $(pnlDom).find('input').each(function(index, elem){
-			    	 	num = Number($(elem)[0].value);
-			            inputArr.push(num);  
-			            totalTasks += num;
-			        });
-			     var general = inputArr.pop();
-			     totalTasks -= general;
-			 	 function submitTimes(oResults){
-			 		 //TODO Ngoni, improve function, make more efficient by sending through 1 post request with all the data
-		        	 for(var i = 0; (i < oResults.results.length && i < (inputArr.length -1)); i++){
-		        		 if(inputArr[i] > 0){
-			        		 var time = Number(oResults.results[i].Hours_Worked) + inputArr[i];
-				 		    	$.post('EnterTaskTimes', { Assigned_Task_ID:oResults.results[i].Assigned_Task_ID, Hours_Worked:time},function(responseText) {  
-						    		//console.log(responseText);
-					    	});			 
-		        		 }
-		        	 }
-		 		    	$.post('EnterDailyTimes', { Consultant_ID:consultantID, general:general, totalTasks:totalTasks},function(responseText) {
-		 		    		MessageToast.show(responseText);
-			    	});				        	 
-		        	 
-			 	 }  	
-		        this.onDialogClose();		    	
-		    },
-		    onDialogClose: function(){
-		        this._Dialog.removeAllContent();
-		    	this._Dialog.close();
-		    },
-			getMonthStr: function(num){
-				var month = new Array();
-				month[0] = "January";
-				month[1] = "February";
-				month[2] = "March";
-				month[3] = "April";
-				month[4] = "May";
-				month[5] = "June";
-				month[6] = "July";
-				month[7] = "August";
-				month[8] = "September";
-				month[9] = "October";
-				month[10] = "November";
-				month[11] = "December";
-				return month[num];		
-			},
-			onDialogPressEscape: function(e){
-				//TODO study promises and close dialog when escape key is pressed
-/*				console.log(this._Dialog);
-				this.byId("timesDialog").close();
-				e.resolve().then(function(){
-					console.log("thenable");
-					this.onDialogClose();
-				});*/
-				
-			},
-			getConsultantID: function(){
-				if(sessionStorage){
-					return sessionStorage.ConsultantID;
-				}else{
-					return ConsultantID;
-				}						
 			},
 			onRateTeam: function(){
 		    	this._ratingsDialog = this.byId("ratingsDialog");
