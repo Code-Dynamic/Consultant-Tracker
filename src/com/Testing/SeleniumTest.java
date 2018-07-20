@@ -1,5 +1,7 @@
 package com.Testing;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -32,7 +34,7 @@ public class SeleniumTest {
 		Thread.sleep(200);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---LoginView--password-inner"))).sendKeys("zzz");
 		Thread.sleep(200);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__button0"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---LoginView--loginButton"))).click();
 		Thread.sleep(200);
 		
 		
@@ -48,7 +50,7 @@ public class SeleniumTest {
 		Thread.sleep(200);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---LoginView--password-inner"))).sendKeys("zzz");
 		Thread.sleep(200);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__button0"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---LoginView--loginButton"))).click();
 		Thread.sleep(200);
 		
 		
@@ -64,7 +66,7 @@ public class SeleniumTest {
 		Thread.sleep(200);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---LoginView--password-inner"))).sendKeys("huli");
 		Thread.sleep(200);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__button0"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---LoginView--loginButton"))).click();
 		Thread.sleep(200);
 		
 		
@@ -80,31 +82,74 @@ public class SeleniumTest {
 		Thread.sleep(200);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---LoginView--password-inner"))).sendKeys("huli");
 		Thread.sleep(200);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__button0"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---LoginView--loginButton"))).click();
 		Thread.sleep(200);
 		
 		
 		// Project Test Cases
-		// Project Test Case 1
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--iconTabBarFilter3"))).click();
-		driver.findElement(By.id("__component0---MasterAdmin--iconTabBarFilter2")).click();
+		// Project Test Case 1: Create Project
+		js.executeScript("alert('Project Test Case 1: Creating Project')");
+		Thread.sleep(1000);
+		driver.switchTo().alert().dismiss();
+		
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--iconTabBarFilter2"))).click();
+//		driver.findElement(By.id("__component0---MasterAdmin--iconTabBarFilter2")).click();
 		Thread.sleep(1000);
 		
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__button9"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--addProjectButton"))).click();
 		Thread.sleep(500);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("p_Name-inner"))).sendKeys("Selenium Testing Project");
 		Thread.sleep(500);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("p_Description-inner"))).sendKeys("Selenium Testing Project is a dummy project");
 		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("p_StartDate-inner"))).sendKeys("20 July 2018");
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("p_StartDate-inner"))).sendKeys("2018-07-20");
 		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("p_Deadline-inner"))).sendKeys("30 July 2018");
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("p_Deadline-inner"))).sendKeys("2018-07-30");
 		Thread.sleep(500);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("p_OnSite-CbBg"))).click();
 		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__button14"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("submitProjectButton"))).click();
+		
+		Thread.sleep(1000);
+		driver.navigate().refresh();
+		
+		// User Test Cases
+		// User Test Case 1: Time
+		js.executeScript("alert('Test Case 2: Time Entering')");
+		Thread.sleep(1000);
+		driver.switchTo().alert().dismiss();
+		
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--requestUserTimesBtn"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("tpGeneral-inner"))).sendKeys("08:00");
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--submitUserTimesBtn"))).click();
+		
+		// User Test Case 2: Ratings
+		js.executeScript("alert('Test Case 2: Ratings')");
+		Thread.sleep(1000);
+		driver.switchTo().alert().dismiss();
+//		driver.findElement(By.id("__item2-__component0---MasterAdmin--projectsList-1")).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__item2-__component0---MasterAdmin--projectsList-1"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--rateTeamBtn"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--submitRatesButton"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--closeRatesButton"))).click();
+		
+		
+		
+		// Consultant Test Cases
+		// Consultant Test Case 1: Utilization Dates
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--iconTabBarFilter3"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__item3-__component0---MasterAdmin--consultants-0"))).click();
+		
+		
+		/*List<WebElement> allElements = driver.findElements(By.xpath("//div[@id='__component0---MasterAdmin--projectsList-listUl']/ul")); 
+		System.out.println(allElements.size());*/
+		/*List<WebElement> optionCount = driver.findElements(By.xpath("//select/option"));
+		System.out.println(optionCount.size());*/
+		/*js.executeScript("alert('Project Test Case 1: Creating Project')");
+		Thread.sleep(1000);
+		driver.switchTo().alert().dismiss();*/
 //		driver.findElement(By.id("p_Name")).sendKeys("Name");
-//		wait.until(ExpectedConditions.elementToBeClickable(By.id("p_Name"))).sendKeys("Name");
+//		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--rateTeamBtn"))).click();
 		/*driver.findElement(By.id("__component0---LoginView--username-email-inner")).sendKeys("zzz@blah.co.za");
 		Thread.sleep(1000);
 		driver.findElement(By.id("__component0---LoginView--password-inner")).sendKeys("zzz");

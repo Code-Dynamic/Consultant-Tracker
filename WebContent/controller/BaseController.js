@@ -52,6 +52,7 @@ sap.ui.define([
  				         //return all consultants
  				         function  addInputs(oResults) {	        	 
  				        	 var timePicker ="";
+ 				        	 var timePickerId = "tp";
  				        	 var input ="";
  			        		 var vBox = new sap.m.VBox({
  			        			 });
@@ -67,7 +68,8 @@ sap.ui.define([
  				        			 value:"00:00",
  				       				 valueFormat:"hh:mm",
  				       				 displayFormat:"HH:mm",
- 				       				 minutesStep: 15
+ 				       				 minutesStep: 15,
+ 				       				 id:timePickerId+i
  				       				 
  				        		 }); 
  				        		timePicker.attachChange(function(oEvent){
@@ -87,8 +89,8 @@ sap.ui.define([
  				        		value:"00:00",
  				       			valueFormat:"hh:mm",
  				       			displayFormat:"HH:mm",
- 				       			minutesStep: 15
- 				       				 
+ 				       			minutesStep: 15,
+ 				       			id:timePickerId+"General"
  				        	}); 
 					        timePicker.attachChange(function(oEvent){
 	 				        		onLiveChangeTimesInput(this,oEvent);

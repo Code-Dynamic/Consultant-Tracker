@@ -41,10 +41,10 @@
 		</f:SimpleForm>
 		</content>
 		<beginButton>
-			<Button text="Submit" press="onSubmitProject" />
+			<Button text="Submit" press="onSubmitProject" id="submitProjectButton"/>
 		</beginButton>
 		<endButton>
-			<Button text="Close" press="onClose" />
+			<Button text="Close" press="onClose" id="closeProjectModalButton"/>
 		</endButton>
 	</Dialog>
 	

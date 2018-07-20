@@ -105,10 +105,10 @@
 	<Dialog title="Rate Team Members" id="ratingsDialog">
 
 		<beginButton>
-			<Button text="Submit" press="onSubmitRates" />
+			<Button text="Submit" press="onSubmitRates" id="submitRatesButton"/>
 		</beginButton>
 		<endButton>
-			<Button text="Close" press="onRatingsDialogClose" />
+			<Button text="Close" press="onRatingsDialogClose" id="closeRatesButton"/>
 		</endButton>
 	</Dialog>	 	 
 	
