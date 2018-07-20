@@ -1,0 +1,163 @@
+ <mvc:View xmlns:core="sap.ui.core" 
+			xmlns:mvc="sap.ui.core.mvc" 
+			xmlns="sap.m" 
+			xmlns:semantic="sap.m.semantic" 
+			xmlns:f="sap.ui.layout.form"
+			xmlns:la="sap.ui.layout"
+			xmlns:u="sap.ui.unified" 
+			controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.DetailConsultant" 
+			xmlns:html="http://www.w3.org/1999/xhtml">
+		<semantic:DetailPage id="DetailConsultant" navButtonPress="onNavBack" showNavButton="{device>/system/phone}"
+		title="Project Details" busy="{detailView>/busy}" busyIndicatorDelay="{detailView>/delay}">
+		<semantic:customHeaderContent>
+			<Button press="openCalender" id="cartIcon" text="Schedule" icon="sap-icon://accelerated"/>
+		</semantic:customHeaderContent>
+<semantic:content>
+			
+		<ObjectHeader
+		id="oh1"
+		responsive="true"
+		fullScreenOptimized="false"
+		icon="{ProductPicUrl}"
+		iconAlt="{Name}"
+		intro="{projectsModel>/Project_Description}"
+		title="{projectsModel>/Project_Name}"
+		number="34%"
+		numberUnit="Completed"
+		numberState="Success"
+		backgroundDesign="Transparent">
+		<attributes>
+			<ObjectAttribute
+				title="ProjectID"
+				text="{projectsModel>/Project_ID}"/>
+			<ObjectAttribute
+				title="Due"
+				text="{projectsModel>/Project_Deadline}"/>
+			<ObjectAttribute
+				title="Client Name"
+				text="{projectsModel>/ClientDetails/Client_Name}"/>
+			<ObjectAttribute
+				title="Client Contact"
+				text="{projectsModel>/ClientDetails/Client_PhoneNum}"/>
+			<ObjectAttribute
+				title="Dimension per unit"
+				text="{Width} x {Depth} x {Height} {DimUnit}"/>
+		</attributes>
+		<statuses>
+ 			<ObjectStatus
+				title="Approval"
+				text="Pending"
+				state="Warning"/>
+		</statuses>
+	</ObjectHeader>
+			
+			<IconTabBar id="iconTabBar" class="sapUiResponsiveContentPadding" expandable="false">
+				<items>
+					<IconTabFilter id="iconTabBarFilter1" icon="sap-icon://group" tooltip="{i18n>detailIconTabBarAttachments}" text="Members">
+						<content>
+						
+							<List 	id="members" 
+									items="{membersModel>/results}">
+								
+								<items>
+										<ObjectListItem											
+											title="Name: {membersModel>ConsultantDetails/Consultant_Name}" 
+											type="Active"
+											press= "handleMemberRatingDialog" >
+												<firstStatus>
+												<ObjectStatus />
+												</firstStatus>
+												<attributes>
+												<ObjectAttribute text="Role: {tasksModel>TaskDetails/Due_Date}" icon="sap-icon://task" />
+												</attributes>
+										</ObjectListItem>
+											
+									
+								</items>
+							</List>
+						</content>
+					</IconTabFilter>
+					<IconTabFilter id="iconTabBarFilter2" icon="sap-icon://activities" tooltip="List of tasks" text="Tasks">
+
+		<Table id="idProductsTable"
+		inset="false"
+		items="{tasksModel>/results}">
+		<headerToolbar>
+			<Toolbar>
+				<content>
+					<Title text="Available Tasks" level="H2"/>
+					<ToolbarSpacer />
+					<Button icon="sap-icon://time-entry-request" text="Time" press="handleTimeEntry"/>
+				</content>
+			</Toolbar>
+		</headerToolbar>
+		<columns>
+			<Column
+				width="12em">
+				<Text text="Name"/>
+			</Column>
+			<Column
+				minScreenWidth="Tablet"
+				demandPopin="true">
+				<Text text="Due Date" />
+			</Column>
+			<Column
+				minScreenWidth="Desktop"
+				demandPopin="true"
+				hAlign="End">
+				<Text text="Progress" />
+			</Column>
+			<Column
+				minScreenWidth="Desktop"
+				demandPopin="true"
+				hAlign="Center">
+				<Text text="Status" />
+			</Column>
+			<Column
+				minScreenWidth="Desktop"
+				demandPopin="true"
+				hAlign="Center">
+				<Text text="Time" />
+			</Column>
+			<Column
+				minScreenWidth="Desktop"
+				demandPopin="true"
+				hAlign="Center">
+				<Text text="Feedback" />
+			</Column>
+		</columns>
+		<items>
+			<ColumnListItem>
+				<cells>
+					<ObjectIdentifier
+						title="{tasksModel>TaskDetails/Name}"/>
+					<Text
+						text="{tasksModel>TaskDetails/Due_Date}" />
+					<Text
+						text="10%" />
+					<Text
+						text="Inprogress" />
+					<Button icon="sap-icon://time-entry-request" press="handleTimeEntry"/>
+					<Button icon="sap-icon://notification-2" press="handleTimeEntry"/>
+					
+
+				</cells>
+			</ColumnListItem>
+		</items>
+	</Table>
+
+					</IconTabFilter>
+							<IconTabFilter id="iconTabBarFilter4" icon="sap-icon://kpi-corporate-performance" tooltip="List of tasks" text="Stats">
+
+
+					</IconTabFilter>
+					
+				</items>
+			</IconTabBar>
+		</semantic:content>
+
+<!-- 		<semantic:customFooterContent>
+			<Button id="__button0" text="Remove Project" icon="sap-icon://delete" press="confirmDeleteProject"/>
+		</semantic:customFooterContent> -->
+	</semantic:DetailPage>
+</mvc:View>

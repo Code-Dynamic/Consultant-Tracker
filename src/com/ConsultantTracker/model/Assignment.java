@@ -23,7 +23,7 @@ public class Assignment implements Serializable {
 
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="primaryKeyGenerator")
 	private int assignment_ID;
 
 	private Consultant consultant;

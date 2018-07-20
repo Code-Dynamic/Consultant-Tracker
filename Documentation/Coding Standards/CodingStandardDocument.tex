@@ -151,6 +151,37 @@ try \{ \\
 	\indent statements;\\
 \}
 
+\section{SAPUI5 Standards}
+\subsection{Routing and navigation}
+Navigation is implemented using manifest based routing.
+\subsection{Developing views in application}
+Use xml views in the project. Using different views will lead into problems while writing down the navigation logics.  
+\subsection{Naming conventions}
+	\subsubsection{Lists}
+		Use camelCase:\\
+		\indent listItem (Correct)\\
+		\indent Listitem (Wrong)
+	\subsubsection{Controller Names}
+		Use camelCase:\\
+		\indent	detailPageController (Correct)\\
+		\indent	detail\_page\_controller (Wrong)
+	\subsubsection{Parameter Names}
+		Names should be descriptive and have maening. The name should give indication to the 		purpose of the paramater.\\
+		\indent consultantId (Correct)\\
+		\indent valueParameter (Wrong)
+
+
+\subsubsection{Class Name}
+		The naming should be first letter capital followed by camel casing for the remaining words.\\
+		 \indent DetailConsultant, MasterConsultant  (Correct)\\
+		\indent detail\_ consultant, detail-consultant, detailconsultant (Wrong)\\
+		
+\subsection{Comments}
+		Comments should not rephrase the code, but tell the reader what is in the code. Describe why your code does what it does.  Line comments are preffered. Use block comments if more than 4 lines.
+
+
+		
+
 \section{Standards}
 \subsection{Software Verification and Validation}
 \subsection{Inspection}

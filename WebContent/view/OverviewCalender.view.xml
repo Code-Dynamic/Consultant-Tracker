@@ -1,0 +1,49 @@
+<mvc:View	xmlns:core="sap.ui.core" 
+			xmlns:mvc="sap.ui.core.mvc" 
+			xmlns="sap.m" 
+			xmlns:unified="sap.ui.unified"
+			xmlns:semantic="sap.m.semantic" 
+			xmlns:html="http://www.w3.org/1999/xhtml" 
+			controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.OverviewCalender">
+	<semantic:MasterPage id="OverviewCalender" title="Overview" navButtonPress="onNavBack" showNavButton="true">
+		<semantic:customHeaderContent>
+			<ToolbarSpacer/>
+				<Button id="addButton" icon="sap-icon://add" press="handleAddTaskDialog" tooltip="Add"/>
+		</semantic:customHeaderContent>
+		<semantic:content>
+	<VBox class="sapUiSmallMargin">
+		<PlanningCalendar
+			id="PC1"
+			rows="{/results}"
+			startDate="{Date_Assigned}"
+			appointmentsVisualization="Filled"
+			appointmentSelect="handleAppointmentSelect"
+			showEmptyIntervalHeaders="false"
+			showWeekNumbers="true">
+			<rows>
+				<PlanningCalendarRow
+					icon="sap-icon://employee"
+					title="{ConsultantDetails/Consultant_Name}"
+					enableAppointmentsDragAndDrop="true"
+						appointmentDrop="handleAppointmentDrop">
+					
+							<appointments>
+						<unified:CalendarAppointment
+							startDate="{Date_Assigned}"
+							endDate="{Due_Date}"
+							icon="{pic}"
+							title="Desc: {TaskDetails/Description}"
+							text="Assigned Hours: {Assigned_Hours}"
+							type="{type}"
+							tentative="{tentative}">
+						</unified:CalendarAppointment>
+					</appointments>
+				</PlanningCalendarRow>
+			</rows>
+		</PlanningCalendar>
+		
+	</VBox>
+		</semantic:content>
+
+	</semantic:MasterPage>
+</mvc:View>
