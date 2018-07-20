@@ -6,7 +6,7 @@
 			xmlns="sap.m" 
 			xmlns:html="http://www.w3.org/1999/xhtml" 
 			xmlns:semantic="sap.m.semantic" 
-			controllerName="consultanttracker/Consultant-Tracker_Prototype-1/controller/DetailAdmin">
+			controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.DetailAdmin">
 	<semantic:DetailPage id="DetailAdmin" 
 						showNavButton="{device>/system/phone}" 
 						title="Project Information" 
@@ -122,8 +122,8 @@
 														<Toolbar>
 															<Title text="Available" level="H2"/>
 															<ToolbarSpacer/>
-															<Button icon="sap-icon://delete" text="Task" press="onDeleteConsultantFromProject"/>
-															<Button icon="sap-icon://add" text="Task" press="handleAddTaskDialog"/>
+															<Button icon="sap-icon://delete" text="Task" press="onDeleteConsultantFromProject" id="removeTask"/>
+															<Button icon="sap-icon://add" text="Task" press="handleAddTaskDialog" id="addTask"/>
 														</Toolbar>
 													</headerToolbar>
 						</List>
@@ -178,10 +178,10 @@
 		</semantic:content>
 
 		<semantic:customFooterContent>
-				<Button icon="sap-icon://add" text="Project" press="addProject" >
+				<Button icon="sap-icon://add" text="Project" press="addProject" id="addProjectButton">
 					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
 				</Button>			
-			<Button id="__button0" text="Remove Project" icon="sap-icon://delete" press="confirmDeleteProject"/>
+			<Button id="removeProjectButton" text="Remove Project" icon="sap-icon://delete" press="confirmDeleteProject"/>
 		</semantic:customFooterContent>
 	</semantic:DetailPage>
 </mvc:View>

@@ -3,7 +3,7 @@ xmlns:mvc="sap.ui.core.mvc"
 xmlns="sap.m"
 xmlns:tnt="sap.tnt"
 displayBlock="true"
-controllerName="consultanttracker/Consultant-Tracker_Prototype-1/controller/SplitApp"
+controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.SplitApp"
 >
     
     <Page showHeader="false" enableScrolling="true">

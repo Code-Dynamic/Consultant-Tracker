@@ -13,7 +13,7 @@
 								<Label text="Password"/>
 								<Input id="password" value="" type ="Password"/>
 							
-								<Button width="12rem" text="Login" type="Emphasized" press="onLoginClick"/>
+								<Button width="12rem" text="Login" type="Emphasized" press="onLoginClick" id="loginButton"/>
 								
 							</form:content>
 						</form:SimpleForm>

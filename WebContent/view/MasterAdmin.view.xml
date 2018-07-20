@@ -3,7 +3,7 @@
 		xmlns:mvc="sap.ui.core.mvc" 
 		xmlns="sap.m" 
 		xmlns:m="sap.m"
-		controllerName="consultanttracker/Consultant-Tracker_Prototype-1/controller/MasterAdmin"
+		controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.MasterAdmin"
 		xmlns:html="http://www.w3.org/1999/xhtml" 
 		xmlns:semantic="sap.m.semantic">
 	<semantic:MasterPage id="MasterAdmin"  >
@@ -21,6 +21,12 @@
 								text="Projects"
 								press="goToProjects">
 						<content>
+						<Bar id="headerBar">
+				<contentMiddle>
+					<SearchField id="searchField" showRefreshButton="{= !${device>/support/touch} }" tooltip="{i18n>masterSearchTooltip}" width="100%"
+						search="PR_Search_Project" liveChange="PR_Search_Project"></SearchField>
+				</contentMiddle>
+			</Bar>
 						<List id="projectsList"
 							items="{projectsModel>/results/}">
 							<items>
@@ -49,7 +55,12 @@
 									tooltip="list of all Consultants" 
 									text="Consultants">
 					<content>
-					
+					<Bar id="headerBar2">
+				<contentMiddle>
+					<SearchField id="searchField2" showRefreshButton="{= !${device>/support/touch} }" tooltip="{i18n>masterSearchTooltip}" width="100%"
+						search="PR_Search_Project" liveChange="PR_Search_Project"></SearchField>
+				</contentMiddle>
+			</Bar>
 						<List id="consultants"
 							items="{consultantsModel>/results/}">
 							<items>

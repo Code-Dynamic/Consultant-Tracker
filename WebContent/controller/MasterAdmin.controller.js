@@ -42,6 +42,54 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		}
 		
 	},
+	PR_Search_Project: function(oEvent) {
+//      var tpmla = oEvent.getParameter("newValue");
+//      var filters = new Array();
+//      var oFilter = new sap.ui.model.Filter("PoNumber", sap.ui.model.FilterOperator.Contains, tpmla);
+//      filters.push(oFilter);
+//
+//      //get list created in view
+//      this.oList = sap.ui.getCore().byId("orders");5
+//      this.oList.getBinding("items").filter(filters);
+
+		//		btnConsultantSelected = false;
+		
+		//var item = this.getView().byId("orders").data("items","{/Projects}");
+
+      var searchString = this.getView().byId("searchField").getValue();
+      console.log("Search String "+ searchString);
+			var list = this.getView().byId("orders");
+		         
+		         list.bindItems("/results",
+		           new sap.m.StandardListItem({
+		             title: "{Project_Name}",
+		             press: "onSelect"
+		         
+		           }).addStyleClass("listItems")
+		       );
+				
+		         var oModel = new sap.ui.model.json.JSONModel();
+		         var oDataProjects =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
+		         var arrProjects = {Projects:[]};
+		         var arrConsultants = {Consultants:[]};
+		         oDataProjects.read(
+					"/Projects?$filter=substringof('"+searchString+"', Project_Name) eq true and Project_Deleted eq false",{success: function(oCreatedEn){ GotProjects(oCreatedEn) }, error: function(){console.log("Error");}}
+			     );
+		
+			//		$.post('getProjects',function(responseText){
+			//			console.log("servlet responded");
+			function GotProjects(oCreatedEn){
+				//			arrProjects = {Projects:[]};
+				//			var array = responseText.split(';');
+				//array.forEach(createProjectObj);
+					
+				oModel.setData(oCreatedEn);
+				console.log(oCreatedEn);
+				sap.ui.getCore().setModel(oModel);
+				app.to("DetailAdmin");
+			}
+		// console.log("Search Input: "+searchString);
+  },
 	onProjectListItemPress: function(evt){
 		var sPath = evt.getSource().getBindingContext("projectsModel").getPath();
 		var oData = this.getView().getModel("projectsModel").getProperty(sPath);

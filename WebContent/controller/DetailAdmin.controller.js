@@ -109,7 +109,7 @@ sap.ui.define([
 				this.getView().setModel(tasksDetailModel,"tasksModel");
 	},
 	handleAddTaskDialog: function () {
-		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.AddTask", this);
+		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.addTask", this);
 
 		this._oDialog.setModel(this.getView().getModel("projectsModel"),"addTaskModel");
 		// toggle compact style
@@ -470,7 +470,7 @@ sap.ui.define([
 				
 			},
 			onAddTask: function(){
-				 this._Dialog = sap.ui.xmlfragment("consultant-tracker.fragments.addTask", this);
+				 this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.addTask", this);
 				 this._Dialog.open();
 			},
 			onSelectionChange: function(oEvent) {
