@@ -50,12 +50,7 @@
 								<ObjectAttribute
 									title="Client Name"
 									text="{projectsModel>/ClientDetails/Client_Name}"/>
-								<ObjectAttribute
-									title="Client Contact"
-									text="{projectsModel>/ClientDetails/Client_PhoneNum}"/>
-								<ObjectAttribute
-									title="Dimension per unit"
-									text="{Width} x {Depth} x {Height} {DimUnit}"/>
+					
 							</attributes>
 							<statuses>
 					 			<ObjectStatus
@@ -66,72 +61,118 @@
 						</ObjectHeader>			
 			<IconTabBar id="iconTabBar" class="sapUiResponsiveContentPadding" expandable="false">
 				<items>
-					<IconTabFilter id="iconTabBarFilter1" icon="sap-icon://group" tooltip="list of tasks" text="Members">
+				<IconTabFilter id="iconTabBarFilter2" icon="sap-icon://group" tooltip="list of tasks" text="Members">
 						<content>
-						
-							<List 	id="members" 
-									items="{membersModel>/results}" 
-									headerText="Team Members">
-								
-								<items>
-										<ObjectListItem											
-											title="{membersModel>ConsultantDetails/Consultant_Name} {membersModel>ConsultantDetails/Consultant_Surname}" 
-											type="Active"
-											press= "handleOpenDialog" >
-												<firstStatus>
-												<ObjectStatus />
-												</firstStatus>
-												<attributes>
-												<ObjectAttribute text="Role: {tasksModel>TaskDetails/Due_Date}" icon="sap-icon://task" />
-												</attributes>
-										</ObjectListItem>
+							<Table id="teamMemberTable"
+		inset="false"
+		items="{membersModel>/results}">
+		<headerToolbar>
+			<Toolbar>
+				<content>
+					<Title text="Available Members" level="H2"/>
+					<ToolbarSpacer />
+						<Button icon="sap-icon://delete" text="Team members" press="onDeleteConsultantFromProject"/>
+						<Button icon="sap-icon://add" text="Team member" press="addConsultantToProject"/>
 									
-								</items>
-								
-								<headerToolbar>
-									<Toolbar>
-										<Title text="Members" level="H2"/>
-										<ToolbarSpacer/>
-										<Button icon="sap-icon://delete" text="Team members" press="onDeleteConsultantFromProject"/>
-										<Button icon="sap-icon://add" text="Team member" press="addConsultantToProject"/>
-									</Toolbar>
-								</headerToolbar>
-							</List>
+				</content>
+			</Toolbar>
+		</headerToolbar>
+		<columns>
+			<Column
+				width="12em">
+				<Text text="Name"/>
+			</Column>
+			<Column
+				minScreenWidth="Tablet"
+				demandPopin="true">
+				<Text text="Email" />
+			</Column>
+
+			<Column
+				minScreenWidth="Desktop"
+				demandPopin="true"
+				hAlign="Center">
+				<Text text="Role" />
+			</Column>
+				</columns>
+		<items>
+			<ColumnListItem>
+				<cells>
+					<Text
+						text="{membersModel>ConsultantDetails/Consultant_Name}" />
+					<Text
+						text="{membersModel>ConsultantDetails/Consultant_email}" />
+					<Text
+						text="Programmer" />
+					
+
+				</cells>
+			</ColumnListItem>
+		</items>
+	</Table>
 						</content>
 					</IconTabFilter>
-					<IconTabFilter id="iconTabBarFilter2" icon="sap-icon://activities" tooltip="{i18n>detailIconTabBarAttachments}" text="Tasks">
-						<List
-							items="{tasksModel>/results}">
-							<items>
-								<ObjectListItem
-										title="{tasksModel>TaskDetails/Name}"
-										type="Active"
-										press="onListItemPress">
-									<firstStatus>
-										<ObjectStatus
-											text="Status: Completed"
-											state="Completed" />
-									</firstStatus>
-									<attributes>
-										<ObjectAttribute text="Due: {tasksModel>TaskDetails/Due_Date}" />
-									</attributes>
-								</ObjectListItem>
-							</items>
-							
-													<headerToolbar>
-														<Toolbar>
-															<Title text="Available" level="H2"/>
+					<IconTabFilter id="iconTabBarFilter3" icon="sap-icon://activities" tooltip="{i18n>detailIconTabBarAttachments}" text="Tasks">
+
+		<Table id="idProductsTable"
+		inset="false"
+		items="{tasksModel>/results}">
+		<headerToolbar>
+			<Toolbar>
+				<content>
+					<Title text="Available Tasks" level="H2"/>
+					<ToolbarSpacer />
 															<ToolbarSpacer/>
-															<Button icon="sap-icon://delete" text="Task" press="onDeleteConsultantFromProject" id="removeTask"/>
-															<Button icon="sap-icon://add" text="Task" press="handleAddTaskDialog" id="addTask"/>
-														</Toolbar>
-													</headerToolbar>
-						</List>
+							<Button icon="sap-icon://delete" text="Task" press="onDeleteConsultantFromProject"/>
+							<Button icon="sap-icon://add" text="Task" press="onAddTask"/>
+
+				</content>
+			</Toolbar>
+		</headerToolbar>
+		<columns>
+			<Column
+				width="12em">
+				<Text text="Name"/>
+			</Column>
+			<Column
+				minScreenWidth="Tablet"
+				demandPopin="true">
+				<Text text="Due Date" />
+			</Column>
+			<Column
+				minScreenWidth="Desktop"
+				demandPopin="true"
+				hAlign="End">
+				<Text text="Progress" />
+			</Column>
+			<Column
+				minScreenWidth="Desktop"
+				demandPopin="true"
+				hAlign="Center">
+				<Text text="Feedback" />
+			</Column>
+		</columns>
+		<items>
+			<ColumnListItem>
+				<cells>
+					<ObjectIdentifier
+						title="{tasksModel>TaskDetails/Name}"/>
+					<Text
+						text="{tasksModel>TaskDetails/Due_Date}" />
+					<Text
+						text="10%" />
+					
+
+				</cells>
+			</ColumnListItem>
+		</items>
+	</Table>
+
 
 					</IconTabFilter>
 					
 					
-					<IconTabFilter id="iconTabBarFilter3" icon="sap-icon://attachment" tooltip="{i18n>detailIconTabBarInfo}" text="Attachments">
+					<IconTabFilter id="iconTabBarFilter4" icon="sap-icon://attachment" tooltip="{i18n>detailIconTabBarInfo}" text="Attachments">
 						<content>
 							<la:VerticalLayout>
 								<u:FileUploader id="fileUploader" name="myFileUpload" uploadUrl="AddFolder" tooltip="Upload your file to the local server" uploadComplete="" change="handleValueChange" typeMissmatch="handleTypeMissmatch" style="Emphasized" fileType="txt,jpg" placeholder="Choose a file for Upload...">
@@ -182,6 +223,7 @@
 					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
 				</Button>			
 			<Button id="removeProjectButton" text="Remove Project" icon="sap-icon://delete" press="confirmDeleteProject"/>
+					<Button press="openProjectsOverviewCalender" id="cartIcon1" text="viewAll" icon="sap-icon://accelerated"/>
 		</semantic:customFooterContent>
 	</semantic:DetailPage>
 </mvc:View>

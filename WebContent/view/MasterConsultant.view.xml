@@ -15,9 +15,7 @@
 						expandable="false"
 						width="100%">
 				<items>
-					<IconTabSeparator icon="sap-icon://vertical-grip"/>
-					<IconTabSeparator icon="sap-icon://vertical-grip"/>
-					<IconTabSeparator icon="sap-icon://vertical-grip"/>
+			
 										
 					<IconTabFilter id="iconTabBarFilter2" 
 								icon="sap-icon://folder" 
@@ -47,8 +45,16 @@
 					</IconTabFilter>
 					<IconTabSeparator icon="sap-icon://vertical-grip"/>
 					<IconTabSeparator icon="sap-icon://vertical-grip"/>
-					<IconTabSeparator icon="sap-icon://vertical-grip"/>
+				<IconTabFilter id="iconTabBarFilter3" 
+								icon="sap-icon://post" 
+								tooltip="List of all projects" 
+								text="Feedback">
+							<content>				
 					
+
+							</content>
+					</IconTabFilter>
+
 				</items>		
 			</IconTabBar>
 

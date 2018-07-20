@@ -150,6 +150,10 @@ sap.ui.define([
 					{projectId: oProjectId});
 
 	},
+	openProjectsOverviewCalender: function(oEvent){
+		this.getRouter()
+		.navTo("ProjectsOverviewCalender");
+	},
 	addProject: function(){
 		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddProject",this);
 		this._oDialog.open();		
@@ -314,9 +318,68 @@ sap.ui.define([
 				this._Dialog.open();
 
 		},
+		addConsultantToProject: function(){
+//			this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddConsultanttoProject",this);
+//			this._Dialog.open();
+			
+//			this._oDialog2 = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddConsultanttoProject", this);
+//
+//			this._oDialog2.setModel(this.getView().getModel("consultants"),"consultants");
+//			// toggle compact style
+//			jQuery.sap.syncStyleClass("sapUiSizeCompact", this.getView(), this._oDialog2);
+//			this._oDialog2.open();
+			
+			this._Dialog2 = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddConsultanttoProject",this);
+			this._Dialog2.open();
+			//getConsultants
+			//return all consultants
+//	         $.post('getProjectConsultants',function(responseText){
+//					console.log("servlet getProjectConsultants responded");
+//					console.log(responseText);
+//					arrConsultants = {Consultants:[]};
+//					var array = responseText.split(';');
+//					array.forEach(createConsultant);
+//					
+//					var oModel = new sap.ui.model.json.JSONModel();
+//					oModel.setData(JSON.parse(JSON.stringify(arrConsultants)));
+//					console.log(JSON.parse(JSON.stringify(arrConsultants)));
+//					sap.ui.getCore().setModel(oModel,"consultants");
+//						
+//					
+//				});
+//				
+//				function createConsultant(stringVal){
+//					var array = stringVal.split(',');
+//					var Consultant = {
+//					 Consultant_ID: array[0],
+//					 Consultant_Name : array[1],
+//					 Consultant_Surname : array[2],
+//					 Consultant_email : array[3],
+//					 Consultant_Cell : array[4],
+//					 Consultant_Admin : array[5]
+//					};
+//					arrConsultants.Consultants.push((Consultant));
+////			    		console.log(arrProjects);
+//			    		
+//				}
+			
+			
+		},
+		onDeleteConsultantFromProject: function(){
+			this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formRemoveConsultantFromProject",this);
+			this._Dialog.open();
+						
+		},
 			// onClose event handler of the fragment
 			onCancel : function() {
+						if(this._Dialog)
 		                this._Dialog.destroy();
+		                
+		                if(this._Dialog2)
+		                this._Dialog2.destroy();
+		                
+		                if(this._Dialog3)
+		                	this._Dialog3.destroy();
 		    },
 		    
 		    refreshData : function(oEvt){
@@ -470,8 +533,8 @@ sap.ui.define([
 				
 			},
 			onAddTask: function(){
-				 this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.addTask", this);
-				 this._Dialog.open();
+				 this._Dialog3 = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.addTask", this);
+				 this._Dialog3.open();
 			},
 			onSelectionChange: function(oEvent) {
 		          var oSelectedItem = oEvent.getParameter("listItem");
@@ -519,9 +582,7 @@ sap.ui.define([
 			onFeedback : function(){
 				
 			},
-			 onCancle :function(){
-				 this._Dialog.destroy();
-			 },
+	
 			 progress: function(){
 				 sap.m.MessageToast.show("Progress triggered");
 			 },

@@ -181,7 +181,14 @@
                     "target": [
                         "MasterFeedback","DetailFeedback"
                     ]
-                }
+                },
+                			{
+					"name": "ProjectsOverviewCalender",
+					"pattern": "ProjectsOverviewCalender",
+					"target": [
+						"MasterAdmin","ProjectsOverviewCalender"
+					]
+				}
 			],
 			"targets": {
 				"MasterAdmin": {
@@ -190,6 +197,14 @@
 					"viewId": "MasterAdmin",
 					"controlAggregation": "masterPages",
 					"controlId": "idSplitAppControl",
+					"parent": "splitview"
+				},
+				"ProjectsOverviewCalender": {
+					"viewName": "ProjectsOverviewCalender",
+					"viewId": "ProjectsOverviewCalender",
+					"viewLevel": 2,
+					"controlId": "idSplitAppControl",
+					"controlAggregation": "detailPages",
 					"parent": "splitview"
 				},
 				"MasterConsultant": {
