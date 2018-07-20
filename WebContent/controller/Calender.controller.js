@@ -17,7 +17,7 @@ sap.ui.define([
 		 * @memberOf consultanttracker.Consultant-Tracker_Prototype-1.view.MasterManager
 		 */
 			onInit: function() {
-				
+				//fn
 //				
 				//getting id from the URL
 				var oRouter = this.getRouter();
