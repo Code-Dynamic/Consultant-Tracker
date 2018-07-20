@@ -12,15 +12,9 @@
 			controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.DetailConsultantView" 
 			xmlns:html="http://www.w3.org/1999/xhtml">
 		<semantic:DetailPage id="DetailConsultantView" navButtonPress="onNavBack" showNavButton="{device>/system/phone}"
-		title="Consultant Detail" busy="{detailView>/busy}" busyIndicatorDelay="{detailView>/delay}">
+		title="Consultant Details" busy="{detailView>/busy}" busyIndicatorDelay="{detailView>/delay}">
 <semantic:content>
 			
-<ObjectHeader id="objectHeader" title="{consultantsModel>/Consultant_Name}"></ObjectHeader>
-			
-			<IconTabBar id="iconTabBar" class="sapUiResponsiveContentPadding" expandable="false">
-				<items>
-					<IconTabFilter id="iconTabBarFilter1" icon="sap-icon://employee-pane" tooltip="{i18n>detailIconTabBarInfo}" text="Employee Details">
-						<content>
 		<ObjectHeader
 		id="oh1"
 		responsive="true"
@@ -29,24 +23,20 @@
 		iconAlt="{Name}"
 		intro="{projectsModel>/Project_Description}"
 		title="{consultantsModel>/Consultant_Name} {consultantsModel>/Consultant_Surname}"
-		titleActive="true"
-		titlePress="handleTitlePress"
-		number="34%"
-		numberUnit="Completed"
-		showTitleSelector="true"
+		showTitleSelector="false"
 		titleSelectorPress="onPress"
-		showMarkers="true"
-		markFlagged="true"
-		markFavorite="true"
+		showMarkers="false"
+		markFlagged="false"
+		markFavorite="false"
 		numberState="Success"
-		backgroundDesign="Translucent">
+		backgroundDesign="Transparent">
 		<attributes>
 			<ObjectAttribute
-				title="Emp no."
-				text="{consultantsModel>/Consultant_ID}"/>
+				title="Utilization"
+				text="{utilization>/prevMonthUtilization} % ({utilization>/prevMonth})"/>
 			<ObjectAttribute
-				title="Role"
-				text="SAP Programer"/>
+				title="Rating"
+				text="{ratings>/avgRating}"/>
 			<ObjectAttribute
 				title="Name"
 				text="{consultantsModel>/Consultant_Name}"/>
@@ -64,12 +54,10 @@
 				state="Warning"/>
 		</statuses>
 	</ObjectHeader>
-	
-			</content>
-			</IconTabFilter>
-					
-					
-					<IconTabFilter id="iconTabBarFilter2" icon="sap-icon://folder"  tooltip="{i18n>detailIconTabBarAttachments}" text="Projects">
+			
+			<IconTabBar id="iconTabBar" class="sapUiResponsiveContentPadding" expandable="false">
+				<items>
+					<IconTabFilter id="iconTabBarFilter1" icon="sap-icon://folder"  tooltip="{i18n>detailIconTabBarAttachments}" text="Projects">
 						<content>
 						
 							<List 	id="consultantProjects" 
@@ -95,7 +83,7 @@
 						</content>
 					</IconTabFilter>
 
-					<IconTabFilter id="iconTabBarFilter3" icon="sap-icon://line-chart-time-axis" tooltip="Utilization" text="Utilization" design="sap.m.IconTabFilterDesign.Vertical">
+					<IconTabFilter id="iconTabBarFilter2" icon="sap-icon://line-chart-time-axis" tooltip="Utilization" text="Utilization" design="sap.m.IconTabFilterDesign.Vertical">
 						<content>	
 									<OverflowToolbar>
 										<Title text="Utilization" level="H2"/>
@@ -143,7 +131,7 @@
 						</content>		
 					</IconTabFilter>				
 						
-					<IconTabFilter id="iconTabBarFilter4" icon="sap-icon://favorite" tooltip="{i18n>detailIconTabBarAttachments}" text="Rating">
+					<IconTabFilter id="iconTabBarFilter3" icon="sap-icon://favorite" tooltip="{i18n>detailIconTabBarAttachments}" text="Rating">
 
 						<Table mode="SingleSelectMaster" selectionChange=""  growing="true" inset="false" items="{ratings>/results}">
 							<headerToolbar>
@@ -181,8 +169,11 @@
 			</IconTabBar>
 		</semantic:content>
 
-		<semantic:customFooterContent>
-			<Button id="__button0" text="Remove Project" icon="sap-icon://delete" press="confirmDeleteProject"/>
+		<semantic:customFooterContent>			
+				<Button type="Default" icon="sap-icon://add" text="Consultant" press="addConsultant">
+					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
+				</Button>			
 		</semantic:customFooterContent>
 	</semantic:DetailPage>
+
 </mvc:View>

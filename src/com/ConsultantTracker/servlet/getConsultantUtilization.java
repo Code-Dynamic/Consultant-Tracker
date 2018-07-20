@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.text.DecimalFormat;
 
 
 /**
@@ -68,20 +71,52 @@ public class getConsultantUtilization extends HttpServlet {
 			//System.out.println("d1: "+format(date1));
 			//System.out.println("d2: "+format(date2));
 		}
-		java.sql.Date sqlDate1 = new java.sql.Date(date1.getTimeInMillis());
-		java.sql.Date sqlDate2 = new java.sql.Date(date2.getTimeInMillis());
-		//build 2 dates, beginning of month and end. Query between extremes.
+
+		//returns value for previous month based on current date, not what user has requested
+		Date date = new Date();
+		LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		int currentMonth = localDate.getMonthValue();	
+		int currentYear = localDate.getYear();
+		
+		Boolean prevMonth = false;
+		String returnObj = getUtilizationFromDB(date1, date2, month, prevMonth,Consultant_ID);
+		GregorianCalendar prevMonthBegin;
+		GregorianCalendar prevMonthEnd;
+		if(currentMonth == 1) {
+			//System.out.println("all selected");
+			prevMonthBegin = new GregorianCalendar(currentYear -1, 11, firstDayOfMonth,0,0);
+			prevMonthEnd = new GregorianCalendar(currentYear -1, 12, firstDayOfMonth,0,0);
+		}
+		else {
+			prevMonthBegin = new GregorianCalendar(currentYear, currentMonth - 2, firstDayOfMonth,0,0);
+			prevMonthEnd = new GregorianCalendar(currentYear, currentMonth - 1, firstDayOfMonth,0,0);
+		}		
+		prevMonth =  true;
+		returnObj += getUtilizationFromDB(prevMonthBegin,prevMonthEnd,currentMonth - 1, prevMonth, Consultant_ID);
 		//COMPLETE rating system and utilization. Do fancy pie charts
+		PrintWriter out = response.getWriter();
+		
+		response.setContentType("text/plain");
+		out.write(returnObj);	// return response		
+
+	}
+	
+	//assumes that consultants don't work on Saturdays
+	private String getUtilizationFromDB(GregorianCalendar startDate, GregorianCalendar endDate ,int month, Boolean prevMonth, String Consultant_ID) throws ServletException, IOException{
+		java.sql.Date sqlDate1 = new java.sql.Date(startDate.getTimeInMillis());
+		java.sql.Date sqlDate2 = new java.sql.Date(endDate.getTimeInMillis());		
+		
 		Connection con = (Connection) getServletContext().getAttribute("DBConnection"); //establish database connection
 		PreparedStatement ps = null;
 		ResultSet rs = null;
+		
 		try {
 				ps = con.prepareStatement(" SELECT * FROM daily_times WHERE CONSULTANT_CONSULTANT_ID = ? AND DATE BETWEEN ? AND ?");				
 				ps.setString(1, Consultant_ID);
 				ps.setDate(2, sqlDate1);
 				ps.setDate(3, sqlDate2);
 				rs = ps.executeQuery();
-				int workingDaysWithHols = getWorkingDaysInMonth(date1.getTimeInMillis(),date2.getTimeInMillis());
+				int workingDaysWithHols = getWorkingDaysInMonth(startDate.getTimeInMillis(),endDate.getTimeInMillis());
 				int workingDays = removeHolidays(month, workingDaysWithHols);
 				  //System.out.println("workDays: "+ workingDays);
 				int hoursPerDay = 8;
@@ -100,18 +135,30 @@ public class getConsultantUtilization extends HttpServlet {
 				}
 				//System.out.println("numResults: "+numResults);
 				double unnaccountedHours = expectedHours - generalTime - assignedTaskTime;
-				String returnObj = Double.toString(assignedTaskTime) + "," + Double.toString(generalTime) + "," + Double.toString(unnaccountedHours);
-				response.setContentType("text/plain");
-				response.getWriter().write(returnObj);
+				if(prevMonth) {
+					Double utilizationPerc = (assignedTaskTime/(expectedHours)) * 100;
+			        String numberAsString; 
+			        if(assignedTaskTime == 0.0) {
+			        	numberAsString = "0";
+			        }else {
+				        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+			        	numberAsString = decimalFormat.format(utilizationPerc);
+			        }
+			        return ","+numberAsString;
+				}else {
+					String valuesStr = Double.toString(assignedTaskTime) + "," + Double.toString(generalTime) + "," + Double.toString(unnaccountedHours);
+					return valuesStr;					
+				}
 			}else{
-				String returnObj = Double.toString(0.0) + "," + Double.toString(0.0) + "," + Double.toString(expectedHours);
-				response.setContentType("text/plain");
-				response.getWriter().write(returnObj);				
+				if(prevMonth) {
+					return "0";
+				}else {
+					String valuesStr = Double.toString(0.0) + "," + Double.toString(0.0) + "," + Double.toString(expectedHours);
+					return valuesStr;					
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			//logger.error("Database connection problem");
-			 response.getWriter().println("Connection Failed");
 			throw new ServletException("DB Connection problem.");
 		}finally{
 			try {
@@ -123,7 +170,7 @@ public class getConsultantUtilization extends HttpServlet {
 				//logger.error("SQLException in closing PreparedStatement or ResultSet");;
 			}
 		}
-	}
+	}	
 		
 	//assumes that consultants don't work on Saturdays
 	private int getWorkingDaysInMonth(long startDate, long endDate){
@@ -197,12 +244,5 @@ public class getConsultantUtilization extends HttpServlet {
 		return workingDaysWithHols - holsArr[month];
 		
 	}		
-	
-/*	private String format(GregorianCalendar calendar){
-	    SimpleDateFormat fmt = new SimpleDateFormat("dd-MMM-yyyy");
-	    fmt.setCalendar(calendar);
-	    String dateFormatted = fmt.format(calendar.getTime());
-	    return dateFormatted;
-	}	*/
 	
 }

@@ -18,38 +18,27 @@
 					<IconTabFilter id="iconTabBarFilter2" 
 								icon="sap-icon://folder" 
 								tooltip="List of all projects" 
-								text="Projects">
+								text="Projects"
+								press="goToProjects">
 						<content>
-						<List id="projects"
-		items="{projectsModel>/results/}">
-		<items>
-			<ObjectListItem
-				title="{projectsModel>Project_Name}"
-				type="Active"
-				press="onProjectListItemPress">
-				<firstStatus>
-					<ObjectStatus
-						text="In Progress" />
-				</firstStatus>
-				<attributes>
-					<ObjectAttribute text="Date " />
-				</attributes>
-			</ObjectListItem>
-		</items>
-	</List>
-				<OverflowToolbar id="otbFooter">
-				<ToolbarSpacer/>
-				 <Button  id="rateTeamBtn" text="Rate" icon="sap-icon://favorite" press="onRateTeam" enabled="{ratingsBtnConfig>/enabled}" visible="{ratingsBtnConfig>/visible}">
-				 	<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
-				 </Button>
-				<Button  id="requestUserTimesBtn" text="Times" icon="sap-icon://time-entry-request" press="onRequestUserTimes">
-					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
-				</Button>
-				<Button icon="sap-icon://add" text="Project" press="addProject" >
-					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
-				</Button>
-
-			</OverflowToolbar>
+						<List id="projectsList"
+							items="{projectsModel>/results/}">
+							<items>
+								<ObjectListItem
+									title="{projectsModel>Project_Name}"
+									type="Active"
+									press="onProjectListItemPress"
+									number = "{projectsModel>Project_ID}">
+									<firstStatus>
+										<ObjectStatus
+											text="In Progress" />
+									</firstStatus>
+									<attributes>
+										<ObjectAttribute text="Date " />
+									</attributes>
+								</ObjectListItem>
+							</items>
+						</List>
 						</content>
 					</IconTabFilter>
 					<IconTabSeparator icon="sap-icon://vertical-grip"/>
@@ -62,39 +51,38 @@
 					<content>
 					
 						<List id="consultants"
-		items="{consultantsModel>/results/}">
-		<items>
-			<ObjectListItem
-				title="{consultantsModel>Consultant_Name} {consultantsModel>Consultant_Surname}"
-				type="Active"
-				press="onConsultantListItemPress">
-				<attributes>
-					<ObjectAttribute text="{consultantsModel>Consultant_Cell}" />
-				</attributes>
-			</ObjectListItem>
-		</items>
-	</List>
+							items="{consultantsModel>/results/}">
+							<items>
+								<ObjectListItem
+									title="{consultantsModel>Consultant_Name} {consultantsModel>Consultant_Surname}"
+									type="Active"
+									press="onConsultantListItemPress">
+									<attributes>
+										<ObjectAttribute text="{consultantsModel>Consultant_Cell}" />
+									</attributes>
+								</ObjectListItem>
+							</items>
+						</List>
 					</content>
-			
-			<OverflowToolbar id="otbFooter2">
-				<ToolbarSpacer/>
-				<Button type="Default" icon="sap-icon://add" text="Consultant" press="addConsultant">
-					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
-				</Button>
-
-			</OverflowToolbar>
 					</IconTabFilter>
 					
 				</items>
 			</IconTabBar>	
 				
 		</semantic:content>
-		
+		<semantic:customFooterContent>
+ 				 <Button  id="rateTeamBtn" text="Rate Members" icon="sap-icon://favorite" press="onRateTeam" enabled="{ratingsBtnConfig>/enabled}" visible="{ratingsBtnConfig>/visible}">
+				 	<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
+				 </Button>
+				<Button  id="requestUserTimesBtn" text="Times" icon="sap-icon://time-entry-request" press="onRequestUserTimes">
+					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
+				</Button>		
+		</semantic:customFooterContent>
 	</semantic:MasterPage>
-<!-- TODO Ngoni, use fragments instead -->
-<!-- 	Dialog for user to add times			 -->
- 	<Dialog title="Task Times" id="timesDialog">
-
+ <!-- TODO Ngoni, use fragments instead -->
+ 	<!--Dialog for user to add times	 -->		
+ 	
+ 	 <Dialog title="Task Times" id="timesDialog">
 		<beginButton>
 			<Button id="submitUserTimesBtn" text="Submit" press="onSubmitTimes" />
 		</beginButton>
@@ -102,7 +90,7 @@
 			<Button text="Close" press="onDialogClose" />
 		</endButton>
 	</Dialog>	
-<!-- 	Dialog for user to add times			 -->					
+<!-- 	Dialog for user to add times	 -->							
 	<Dialog title="Rate Team Members" id="ratingsDialog">
 
 		<beginButton>
@@ -111,6 +99,6 @@
 		<endButton>
 			<Button text="Close" press="onRatingsDialogClose" />
 		</endButton>
-	</Dialog>		
+	</Dialog>	 	 
 	
 </mvc:View>

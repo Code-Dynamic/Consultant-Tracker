@@ -2,8 +2,8 @@
 xmlns:mvc="sap.ui.core.mvc" 
 xmlns="sap.m"
 xmlns:tnt="sap.tnt"
-displayBlock="true" 
-controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.SplitApp"
+displayBlock="true"
+controllerName="consultanttracker/Consultant-Tracker_Prototype-1/controller/SplitApp"
 >
     
     <Page showHeader="false" enableScrolling="true">
@@ -23,7 +23,7 @@ controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.Spli
                 <OverflowToolbarLayoutData priority="NeverOverflow" minWidth="16px"/>
             </layoutData>
         </ToolbarSpacer>
-        <MenuButton id="userName" text="UserName" type="Transparent">
+        <MenuButton id="splitAppMenuButton" text="UserName" type="Transparent">
             <layoutData>
                 <OverflowToolbarLayoutData priority="NeverOverflow"/>
             </layoutData>

@@ -183,7 +183,7 @@ sap.ui.define([
 				
 				//get model of DetailConsultant controller
 				var oModel = this.getView().getModel("projectsModel");
-				console.log(oModel);
+				//console.log(oModel);
 				//get Project_ID to pass to the calender view
 				var oListId = oModel.oData.Project_ID;
 				this.getRouter()

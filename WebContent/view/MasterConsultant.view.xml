@@ -1,8 +1,11 @@
 <mvc:View	xmlns:core="sap.ui.core" 
+			xmlns:la="sap.ui.layout" 
+			xmlns:u="sap.ui.unified" 
+			xmlns:f="sap.ui.layout.form" 
 			xmlns:mvc="sap.ui.core.mvc" 
 			xmlns="sap.m" 
-			xmlns:semantic="sap.m.semantic" 
 			xmlns:html="http://www.w3.org/1999/xhtml" 
+			xmlns:semantic="sap.m.semantic" 
 			controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.MasterConsultant">
 	<semantic:MasterPage id="MasterConsultant">
 		<semantic:content>
@@ -23,10 +26,10 @@
 						<content>				
 						
 <List id="listId"
-		items="{/results/}">
+		items="{assignmentsModel>/results/}">
 		<items>
 			<ObjectListItem
-				title="{ProjectDetails/Project_Name}"
+				title="{assignmentsModel>ProjectDetails/Project_Name}"
 				type="Active"
 				press="onListItemPress">
 				<firstStatus>
@@ -38,12 +41,7 @@
 				</attributes>
 			</ObjectListItem>
 		</items>
-	</List>
-		<OverflowToolbar id="otbFooter">
-				<ToolbarSpacer/>
-				 <Button  id="rateTeamBtn" text="Rate Members" icon="sap-icon://favorite" press="onClick" enabled="{ratingsBtnConfig>/enabled}" visible="{ratingsBtnConfig>/visible}"/>
-				 <Button  id="requestUserTimesBtn" text="Times" icon="sap-icon://time-entry-request" press="onRequestUserTimes"/>
-		</OverflowToolbar>								
+	</List>							
 
 			</content>
 					</IconTabFilter>
@@ -56,7 +54,10 @@
 
 
 		</semantic:content>
-				
+ 		<semantic:customFooterContent>
+				 <Button  id="rateTeamBtn" text="Rate Members" icon="sap-icon://favorite" press="onRateTeam" enabled="{ratingsBtnConfig>/enabled}" visible="{ratingsBtnConfig>/visible}"/>
+				 <Button  id="requestUserTimesBtn" text="Times" icon="sap-icon://time-entry-request" press="onRequestUserTimes"/>
+		</semantic:customFooterContent>		
 	</semantic:MasterPage>
 <!-- TODO Ngoni, use fragments instead -->
 <!-- 	Dialog for user to add times			 -->

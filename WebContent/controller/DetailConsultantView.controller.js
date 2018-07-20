@@ -4,8 +4,8 @@ sap.ui.define([
 		'sap/ui/core/mvc/Controller',
 		'jquery.sap.global',
 		'sap/ui/core/Fragment',
-
-	], function(BaseController,JSONModel,Controller,jQuery,Fragment) {
+		"sap/m/MessageToast"
+	], function(BaseController,JSONModel,Controller,jQuery,Fragment,MessageToast) {
 	"use strict";
 
 	return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.DetailConsultantView", {
@@ -126,9 +126,15 @@ sap.ui.define([
 				return month[num];		
 			},
 			getUtilization: function(c_ID, monthVal, yearVal, thisObj){
+					var date = new Date();
+					var year = date.getFullYear();
+					var monthNum = date.getMonth();
+					if(monthNum == 0){
+						monthNum = 11;
+					}
+					var prevMonth = this.getMonthStr(monthNum -1);				
 			    	$.post('getConsultantUtilization', { Consultant_ID:c_ID ,month:monthVal, year:yearVal},function(responseText) {  
 			    		var hoursArr = responseText.split(',');
-			    		//console.log(hoursArr);
 			  		  var oModel = new sap.ui.model.json.JSONModel({
 						  utilization: [{
 						    "category": "Assigned Tasks",
@@ -139,7 +145,8 @@ sap.ui.define([
 						}, {
 						    "category": "Unnaccounted",
 						    "hours": parseInt(hoursArr[2])
-						}]
+						}],"prevMonthUtilization": parseInt(hoursArr[3]),
+						"prevMonth": prevMonth
 						});
 			  		thisObj.getView().setModel(oModel,"utilization");	
 				});			
@@ -154,15 +161,29 @@ sap.ui.define([
 			 	 );		
 			     
 			    	function setRatingsModel(oData){
-						//console.log(oData);
 						var oModel = new sap.ui.model.json.JSONModel();
-						for(var i = 0; i < oData.results.length; i++){
+						var totalRating = 0;
+						var resultsLen = oData.results.length;
+						var numRatingsWithVotes = 0;
+						for(var i = 0; i < resultsLen; i++){
 							oData.results[i].Rating = parseFloat(oData.results[i].Rating);
+							//only add rating if there are some votes
+							if(oData.results[i].Rating > 0){
+								totalRating += oData.results[i].Rating;
+								numRatingsWithVotes++;
+							}
 						}
+						var avgRating = 0;
+						if(resultsLen > 0)
+							avgRating = totalRating /numRatingsWithVotes;
+						if(numRatingsWithVotes == 1)
+							oData.avgRating = avgRating + "% ("+numRatingsWithVotes+ " Project)";
+						else
+							oData.avgRating = avgRating + "% ("+numRatingsWithVotes+ " Projects)";
 						oModel.setData(oData);
-						//console.log(JSON.parse(JSON.stringify(arrConsultants)));
 						thisObj.getView().setModel(oModel,"ratings");
-					}	       
+					}	    
+			    	
 			},
 			onUtilizationMonthChange: function(oEvent){
 				var c_ID = this.byId("utilizationMonthSelect").getName();
@@ -201,7 +222,53 @@ sap.ui.define([
 				if (this._oQuickView) {
 					this._oQuickView.destroy();
 				}
+			},	addConsultant: function(){
+				 this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddConsultant",this);
+				 this._Dialog.open();
+			
+		},   
+	    onSubmitConsultant : function() {
+	    	var thisDomObj = this;
+	    	var oConsultant = {
+					 Consultant_Name : "none",
+					 Consultant_Surname : "none",
+					 Consultant_email : "none",
+					 Consultant_Cell : "none"				
+				};
+	    	
+	    	var _Name = sap.ui.getCore().byId("c_Name").getValue();
+	    	var _Surname = sap.ui.getCore().byId("c_Surname").getValue();
+	    	var _email = sap.ui.getCore().byId("c_email").getValue();
+	    	var _Cell = sap.ui.getCore().byId("c_Cell").getValue();
+	    	var t = this;
+	    	var oDataProjects =   new sap.ui.model.odata.v2.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
+	    	var x=	oDataProjects.createEntry('/Consultants',{
+				properties:{
+					//Client_Details:{},
+					Consultant_Admin:0,
+					Consultant_Cell: _Cell,
+					Consultant_Name: _Name,
+					Consultant_Surname: _Surname,
+					Consultant_email:_email},
+					async:false,
+				created:function(){
+					MessageToast.show("Consultant Created Succesfully");
+					thisDomObj.goToConsultants();
+					oDataProjects.submitChanges({async:false});
+					},
+				sucesss: function(){ console.log(("posting Project(sucess) It Worked!!")); }
+				, error:function(){console.log("Error in posting Project");}
+	    	});
+	    	
+	    	//close model
+			this.onClose();
+	    },
+		onClose: function () {
+			if (this._Dialog) {
+				this._Dialog.destroy();
 			}
+		}
+	    
 	});
 
 });

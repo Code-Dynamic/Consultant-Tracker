@@ -43,46 +43,26 @@ sap.ui.define([
 				//TODO Ngoni discuss with Mamba:_onRouteMatched f() not called when reloading
 			},
 			_onRouteMatched: function(oEvent){
-				console.log("route matched");
+				//console.log("route matched");
 				var oArgs = oEvent.getParameter("arguments");
-				
-				//set model for master
-				var oModel = this.getOwnerComponent().getModel("oModel");
-				var projectsModel = new JSONModel();
 				var consultantID = this.setConsultantID(oArgs.consultantId);
-				//
-				oModel.read("/Assignments", {
-					urlParameters: {
-			            "$expand" : "ConsultantDetails",
-			            "$expand" : "ProjectDetails"
-			        },
-					filters: [ new sap.ui.model.Filter({
-				          path: "ConsultantDetails/Consultant_ID",
-				          operator: sap.ui.model.FilterOperator.EQ,
-				          value1: consultantID
-				     })],
-					success: function(data){
-						
-						 var oData = JSON.stringify(data);
-
-						projectsModel.setData(data);				
-
-					  },
-					 error: function(oError) {
-						  alert("error");
-					 	}
-					});
-				
-//				console.log(projectsModel);
-				this.getView().setModel(projectsModel);
-
+				this.setAssignmentsModel(consultantID);
 			},
 			onReloadPageSetup: function(){	
+				var consultantID = this.getConsultantID();
+				this.setAssignmentsModel(consultantID);
+			},
+			selectFirstProject: function(){
+				var oData = this.getView().getModel("assignmentsModel").getProperty("/results/0");
+				var projectID = oData.ProjectDetails.Project_ID;				
+				var projectCompleted = oData.ProjectDetails.Project_Completed;
+				this.selectProjectById(projectID,projectCompleted);				
+			},
+			setAssignmentsModel : function(consultantID){
+				var thisObj = this;
 				//set model for master
 				var oModel = this.getOwnerComponent().getModel("oModel");
-				var projectsModel = new JSONModel();
-				var consultantID = this.getConsultantID();
-				//
+				var assignmentsModel = new JSONModel();
 				oModel.read("/Assignments", {
 					urlParameters: {
 			            "$expand" : "ConsultantDetails",
@@ -94,19 +74,18 @@ sap.ui.define([
 				          value1: consultantID
 				     })],
 					success: function(data){
-						
 						 var oData = JSON.stringify(data);
-
-						projectsModel.setData(data);				
-
+						 assignmentsModel.setData(data);
+						 //console.log(data);
+						 if(data.results.length > 0)
+							 thisObj.selectFirstProject();
 					  },
 					 error: function(oError) {
 						  alert("error");
 					 	}
 					});
 				
-//				console.log(projectsModel);
-				this.getView().setModel(projectsModel);				
+				this.getView().setModel(assignmentsModel,"assignmentsModel");					
 			},
 			setConsultantID: function(idFromRoute){
 				if(sessionStorage){
@@ -123,8 +102,17 @@ sap.ui.define([
 				}				
 			},
 			onListItemPress: function (evt) {
-			
-				var projectID = evt.getSource().getBindingContext().getProperty("ProjectDetails/Project_ID");
+				/*/results/0*/
+				var sPath = evt.getSource().getBindingContext("assignmentsModel").getPath();
+				//console.log(sPath);
+				var oData = this.getView().getModel("assignmentsModel").getProperty(sPath);
+
+				var projectID = oData.ProjectDetails.Project_ID;				
+				var projectCompleted = oData.ProjectDetails.Project_Completed;
+				this.selectProjectById(projectID,projectCompleted);
+
+			},
+			selectProjectById : function (projectID,projectCompleted){
 				//TODO Ngoni: consult Mamba, save project ID in model instead of using global
 				PROJECT_ID = projectID;
 				var consultantID = this.getConsultantID();
@@ -132,12 +120,12 @@ sap.ui.define([
 					.navTo("DetailConsultant", 
 						{listId:projectID,
 						consultantId:consultantID});
-				MessageToast.show("Pressed : " + evt.getSource().getTitle());
-				
+				//MessageToast.show("Pressed : " + evt.getSource().getTitle());
+				//console.log("project completed: "+this.getView().getModel().getProperty("Project_ID"));
+				//console.log("project completed: "+this.getView().getModel("projectsModel").getPath());
 				//RATINGS CODE
 				//TODO Ngoni: check with Mamba hw to get odata model address
 				var attachModel = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
-				var projectCompleted = evt.getSource().getBindingContext().getProperty("ProjectDetails/Project_Completed");
 				var thisObj = this;
 				//console.log(projectCompleted);
 				attachModel.read(
@@ -169,7 +157,7 @@ sap.ui.define([
 					}
 					thisObj.getView().setModel(ratingsBtnConfigModel,"ratingsBtnConfig");
 					
-				}
+				}				
 			},
 			onRateTeam: function(){
 		    	this._ratingsDialog = this.byId("ratingsDialog");
@@ -251,9 +239,7 @@ sap.ui.define([
 		    	this._ratingsDialog.close();
 		    },
 			
-		    onClick: function(){
-                this.getRouter().navTo("Feedback");
-        },
+	
 		/**
 		 * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered
 		 * (NOT before the first rendering! onInit() is used for that one!).

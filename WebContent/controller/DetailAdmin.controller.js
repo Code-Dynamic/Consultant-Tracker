@@ -4,8 +4,8 @@ sap.ui.define([
 		'sap/ui/core/mvc/Controller',
 		'jquery.sap.global',
 		'sap/ui/core/Fragment',
-
-	], function(BaseController,JSONModel,Controller,jQuery,Fragment) {
+		"sap/m/MessageToast"
+	], function(BaseController,JSONModel,Controller,jQuery,Fragment,MessageToast) {
 	"use strict";
 
 	return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.DetailAdmin", {
@@ -108,15 +108,7 @@ sap.ui.define([
 //				console.log(projectsModel);
 				this.getView().setModel(tasksDetailModel,"tasksModel");
 	},
-
 	handleAddTaskDialog: function () {
-		
-		//create model to holde data from dialog
-//		 var oModel = new JSONModel({
-//             name: ""
-//         });
-//         this.getView().setModel(oModel, "json");
-		
 		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.AddTask", this);
 
 		this._oDialog.setModel(this.getView().getModel("projectsModel"),"addTaskModel");
@@ -124,10 +116,7 @@ sap.ui.define([
 		jQuery.sap.syncStyleClass("sapUiSizeCompact", this.getView(), this._oDialog);
 		this._oDialog.open();
 	},
-	
 	onSubmit: function(evt){
-		
-		
 		var name = sap.ui.getCore().byId("name").getValue();
 		
 		var taskDescription = sap.ui.getCore().byId("taskDescription").getValue();
@@ -135,8 +124,6 @@ sap.ui.define([
 		var dueDate = sap.ui.getCore().byId("dueDate").getValue();
 		var taskId=7;
 		var projectId=1;
-//		console.log(name + ":" + taskDescription + ":" + startDate + ":" + dueDate);
-		
 		var oEntry ={};
 		oEntry.Description = taskDescription;
 		oEntry.Due_Date = dueDate;
@@ -147,41 +134,12 @@ sap.ui.define([
 		var oProjectId = oId.oData.Project_ID;
 		oEntry.Project_ID =oProjectId;
 		
-		//getting new task id
-//		var taskId = this.getView().getModel("tasksModel");
-//		console.log(taskId);
-//		var oTaskId = taskId.mEventRegistry.messageChange.length;
-//		oEntry.Task_ID =oTaskId+1;
-//		console.log(oTaskId);
-		
-		
-		
-		//creating new entry
-//		var oModel = this.getOwnerComponent().getModel("oModel");
-		
-//		oModel.update('/Tasks(1)', oEntry, null, function(){
-//	 		alert("Create successful");
-//	 	},function(){
-//			alert("Create failed");});
-		
-//		  oModel.create("/Tasks", oEntry, {
-//			    method: "POST",
-//			    success: function(data) {
-//			     alert("success");
-//			    },
-//			    error: function(e) {
-//			     alert("error");
-//			     console.log(e);
-//			    }
-//		  });
-		
 		if (this._oDialog) {
 			this._oDialog.destroy();
 		}
 		
 	},
 	openOverviewCalender: function(evt){
-		
 		//get model of DetailConsultant controller
 		var oModel = this.getView().getModel("projectsModel");
 		
@@ -192,11 +150,56 @@ sap.ui.define([
 					{projectId: oProjectId});
 
 	},
+	addProject: function(){
+		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddProject",this);
+		this._oDialog.open();		
+	},
 	onClose: function () {
 		if (this._oDialog) {
 			this._oDialog.destroy();
 		}
 	},
+	// onSubmit event handler of the fragment
+    onSubmitProject : function() {
+    	var oProject = {
+    			Project_Name: "none", 
+    			Project_DEscription: "none",  
+    			Project_Deadline: "none",
+    			Project_StartDate: "none", 
+    			Project_OnSite: "none",
+    			Project_Creator:"none"
+			};
+    	
+    	var _Name = sap.ui.getCore().byId("p_Name").getValue();
+    	var _Description = sap.ui.getCore().byId("p_Description").getValue();
+    	var _Deadline = sap.ui.getCore().byId("p_Deadline").getValue();
+    	var _StartDate = sap.ui.getCore().byId("p_StartDate").getValue();
+    	//var _OnSite = sap.ui.getCore().byId("p_OnSite").getValue();
+    	var b_OnSite = sap.ui.getCore().byId("p_OnSite").getSelected();;
+    	var _OnSite;
+    	if(b_OnSite){
+    		_OnSite = 1;
+    	}else{
+    		_OnSite = 0;
+    	}
+//    	var oModel2 =  new sap.ui.model.odata.v2.ODataModel('http://localhost:8080/OdataSap/emplist.svc/'); 
+    	oProject.Project_Name = _Name;
+    	oProject.Project_Description = _Description;
+    	oProject.Project_Deadline = _Deadline;
+    	oProject.Project_StartDate = _StartDate;
+    	oProject.Project_OnSite = _OnSite;    
+    	$.post('CreateProject', { Name: _Name ,ClientID: 2,Desc: _Description, Deadl: _Deadline ,StartDate: _StartDate,OnSite:  _OnSite, Project_Creator: this.getConsultantID()},function(responseText) {  
+    		//var array = responseText.split(';');
+    		MessageToast.show("Project Created Succesfully");
+    		
+    	});
+		
+    	this.goToProjects();
+    	
+    	//close model
+		this.onClose();
+    	
+    },
 /**
 * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered
 * (NOT before the first rendering! onInit() is used for that one!).
@@ -598,6 +601,28 @@ sap.ui.define([
 						 this._Dialog.open();
 					},
 					//End of code for Task
+					goToProjects : function(oEvt){
+						var projectsModel = new sap.ui.model.json.JSONModel();
+						var oModel = this.getOwnerComponent().getModel("oModel");
+						
+						//read projects
+						oModel.read(
+								"/Projects?$filter=Project_Deleted%20eq%20false",{
+									success: function(data){ 
+										projectsModel.setData(data);
+//										console.log(data);
+										},
+										
+									error: function(){
+										console.log("Error");}
+										}		
+						);
+						
+						sap.ui.getCore().setModel(projectsModel,"projectsModel");
+					
+					},/*,    onClose : function() {
+		                this._Dialog.destroy();
+				    },	*/				
 /**
 * Called when the View has been rendered (so its HTML is part of the document). Post-rendering manipulations of the HTML could be done here.
 * This hook is the same one that SAPUI5 controls get after being rendered.

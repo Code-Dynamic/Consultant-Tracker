@@ -14,17 +14,6 @@
 		</semantic:customHeaderContent>
 <semantic:content>
 			
-<ObjectHeader id="objectHeader" title="{projectsModel>/Project_Name}">
-			    <statuses>
-			       <ProgressIndicator id="projectProgressId" class="sapUiSmallMarginBottom" percentValue="{progress>/percVal}" displayValue="{progress>/displayVal}%" showValue="true" state="None"/>
-
-			    </statuses>
-			</ObjectHeader>
-			
-			<IconTabBar id="iconTabBar" class="sapUiResponsiveContentPadding" expandable="false">
-				<items>
-					<IconTabFilter id="iconTabBarFilter1" icon="sap-icon://detail-view" tooltip="{i18n>detailIconTabBarInfo}" text="Project Data">
-						<content>
 		<ObjectHeader
 		id="oh1"
 		responsive="true"
@@ -33,17 +22,10 @@
 		iconAlt="{Name}"
 		intro="{projectsModel>/Project_Description}"
 		title="{projectsModel>/Project_Name}"
-		titleActive="true"
-		titlePress="handleTitlePress"
 		number="34%"
 		numberUnit="Completed"
-		showTitleSelector="true"
-		titleSelectorPress="onPress"
-		showMarkers="true"
-		markFlagged="true"
-		markFavorite="true"
 		numberState="Success"
-		backgroundDesign="Translucent">
+		backgroundDesign="Transparent">
 		<attributes>
 			<ObjectAttribute
 				title="ProjectID"
@@ -68,12 +50,10 @@
 				state="Warning"/>
 		</statuses>
 	</ObjectHeader>
-	
-			</content>
-			</IconTabFilter>
-					
-					
-					<IconTabFilter id="iconTabBarFilter2" icon="sap-icon://group" tooltip="{i18n>detailIconTabBarAttachments}" text="Members">
+			
+			<IconTabBar id="iconTabBar" class="sapUiResponsiveContentPadding" expandable="false">
+				<items>
+					<IconTabFilter id="iconTabBarFilter1" icon="sap-icon://group" tooltip="{i18n>detailIconTabBarAttachments}" text="Members">
 						<content>
 						
 							<List 	id="members" 
@@ -97,7 +77,7 @@
 							</List>
 						</content>
 					</IconTabFilter>
-					<IconTabFilter id="iconTabBarFilter3" icon="sap-icon://activities" tooltip="List of tasks" text="Tasks">
+					<IconTabFilter id="iconTabBarFilter2" icon="sap-icon://activities" tooltip="List of tasks" text="Tasks">
 
 		<Table id="idProductsTable"
 		inset="false"
@@ -176,8 +156,8 @@
 			</IconTabBar>
 		</semantic:content>
 
-		<semantic:customFooterContent>
+<!-- 		<semantic:customFooterContent>
 			<Button id="__button0" text="Remove Project" icon="sap-icon://delete" press="confirmDeleteProject"/>
-		</semantic:customFooterContent>
+		</semantic:customFooterContent> -->
 	</semantic:DetailPage>
 </mvc:View>
