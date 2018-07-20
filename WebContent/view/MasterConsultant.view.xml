@@ -1,18 +1,34 @@
 <mvc:View	xmlns:core="sap.ui.core" 
+			xmlns:la="sap.ui.layout" 
+			xmlns:u="sap.ui.unified" 
+			xmlns:f="sap.ui.layout.form" 
 			xmlns:mvc="sap.ui.core.mvc" 
 			xmlns="sap.m" 
-			xmlns:semantic="sap.m.semantic" 
 			xmlns:html="http://www.w3.org/1999/xhtml" 
+			xmlns:semantic="sap.m.semantic" 
 			controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.MasterConsultant">
-	<semantic:MasterPage id="MasterConsultant" title="MasterConsultant Page" navButtonPress="onNavBack" showNavButton="true">
+	<semantic:MasterPage id="MasterConsultant">
 		<semantic:content>
 
-			<List id="listId"
-		items="{/results/}"
-		headerText="Projects">
+		<IconTabBar 	id="iconTabBar" 
+						class="sapUiResponsiveContentPadding" 
+						expandable="false"
+						width="100%">
+				<items>
+			
+										
+					<IconTabFilter id="iconTabBarFilter2" 
+								icon="sap-icon://folder" 
+								tooltip="List of all projects" 
+								text="Projects">
+						<content>				
+						
+<List id="listId"
+		items="{assignmentsModel>/results/}">
 		<items>
 			<ObjectListItem
-				title="{ProjectDetails/Project_Name}"
+				title="{assignmentsModel>ProjectDetails/Project_Name}"
+
 				type="Active"
 				press="onListItemPress">
 				<firstStatus>
@@ -24,9 +40,53 @@
 				</attributes>
 			</ObjectListItem>
 		</items>
-	</List>
+
+	</List>							
+
+			</content>
+					</IconTabFilter>
+					<IconTabSeparator icon="sap-icon://vertical-grip"/>
+					<IconTabSeparator icon="sap-icon://vertical-grip"/>
+				<IconTabFilter id="iconTabBarFilter3" 
+								icon="sap-icon://post" 
+								tooltip="List of all projects" 
+								text="Feedback">
+							<content>				
+					
+
+							</content>
+					</IconTabFilter>
+
+				</items>		
+			</IconTabBar>
+
 
 		</semantic:content>
-
+ 		<semantic:customFooterContent>
+				 <Button  id="rateTeamBtn" text="Rate Members" icon="sap-icon://favorite" press="onRateTeam" enabled="{ratingsBtnConfig>/enabled}" visible="{ratingsBtnConfig>/visible}"/>
+				 <Button  id="requestUserTimesBtn" text="Times" icon="sap-icon://time-entry-request" press="onRequestUserTimes"/>
+		</semantic:customFooterContent>		
 	</semantic:MasterPage>
+<!-- TODO Ngoni, use fragments instead -->
+<!-- 	Dialog for user to add times			 -->
+ 	<Dialog title="Task Times" id="timesDialog">
+
+		<beginButton>
+			<Button id="submitUserTimesBtn" text="Submit" press="onSubmitTimes" />
+		</beginButton>
+		<endButton>
+			<Button text="Close" press="onDialogClose" />
+		</endButton>
+	</Dialog>	
+<!-- 	Dialog for user to add times			 -->					
+	<Dialog title="Rate Team Members" id="ratingsDialog">
+
+		<beginButton>
+			<Button text="Submit" press="onSubmitRates" />
+		</beginButton>
+		<endButton>
+			<Button text="Close" press="onRatingsDialogClose" />
+		</endButton>
+	</Dialog>	
+	
 </mvc:View>

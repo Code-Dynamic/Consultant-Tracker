@@ -15,7 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 
 import javax.persistence.OneToOne;
-
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -33,7 +33,8 @@ public class Project implements Serializable {
 
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="primaryKeyGenerator")
+	@SequenceGenerator(name="primaryKeyGenerator", initialValue = 1, sequenceName = "PR_KEY_GEN", allocationSize = 1)
 	private int project_ID;
 
 	@Temporal(TemporalType.DATE)
@@ -48,34 +49,36 @@ public class Project implements Serializable {
 	private boolean project_OnSite;
 
 
+	private boolean project_Completed;
+
+	@Temporal(TemporalType.DATE)
+	private Date project_StartDate;
+
 	@OneToOne
 	@JoinColumn(name = "CLIENT_ID")
-	private Client Client_ID;
+	private Client client_ID;
 	
-	
-//	@JoinColumn(name = "CLIENT_CLIENT_ID")
-//	private int CLIENT_CLIENT_ID ;
-//	public int getCLIENT_CLIENT_ID() {
-//		return CLIENT_CLIENT_ID;
-//	}
-//
-//	public void setCLIENT_CLIENT_ID(int cLIENT_CLIENT_ID) {
-//		CLIENT_CLIENT_ID = cLIENT_CLIENT_ID;
-//	}
-
-
-
+	@OneToOne
+	@JoinColumn(name = "PROJECT_CREATOR")
+	private Consultant project_Creator;
 
 	public Project() {
 	}
-
-
-	public Client getClient_ID() {
-		return Client_ID;
+	
+	public Consultant getProject_Creator() {
+		return project_Creator;
 	}
 
-	public void setClient_ID(Client cLIENT_ID) {
-		Client_ID = cLIENT_ID;
+	public void setProject_Creator(Consultant project_Creator) {
+		this.project_Creator = project_Creator;
+	}
+
+	public Client getClient_ID() {
+		return client_ID;
+	}
+
+	public void setClient_ID(Client client_ID) {
+		this.client_ID = client_ID;
 	}
 
 	public int getProject_ID() {
@@ -86,13 +89,21 @@ public class Project implements Serializable {
 		this.project_ID = project_ID;
 	}
 
+	public Date getProject_StartDate() {
+		return this.project_StartDate;
+	}
+
+	public void setProject_StartDate(Date project_StartDate) {
+		this.project_StartDate = project_StartDate;
+	}
+	
 	public Date getProject_Deadline() {
 		return this.project_Deadline;
 	}
 
 	public void setProject_Deadline(Date project_Deadline) {
 		this.project_Deadline = project_Deadline;
-	}
+	}	
 
 	public boolean getProject_Deleted() {
 		return this.project_Deleted;
@@ -125,6 +136,15 @@ public class Project implements Serializable {
 	public void setProject_OnSite(boolean project_OnSite) {
 		this.project_OnSite = project_OnSite;
 	}
+	public boolean getProject_Completed() {
+		return this.project_Completed;
+	}
 
+	public void setProject_Completed(boolean project_Completed) {
+		this.project_Completed = project_Completed;
+	}	
 
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 }

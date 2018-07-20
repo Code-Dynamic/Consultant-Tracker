@@ -49,14 +49,53 @@ sap.ui.define([
 		onLoginClick: function(){
 				var email = this.getView().byId("username-email").getValue();
 				var password =this.getView().byId("password").getValue();
-
-				//get core model from manifest 
 				var oModel = this.getOwnerComponent().getModel("oModel");
-
-				var oConsultantId = 2;
-				this.getRouter()
-					.navTo("MasterConsultant",
-							{consultantId:oConsultantId});
+			    
+				var oModel2 = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
+				var userDetails = "/Users?$filter=Email eq \'"+ email + "\'&password eq \'" + password + "\'";
+//				var userDetails = "/Users?$filter=Email eq \'steve@blah.co.za\'&password eq \'steve\'";
+				console.log("details: " + userDetails);
+//				alert(filterQuery);
+				var thisPtr = this;
+				oModel2.read( userDetails, {
+						
+//					filters:filters,
+					success: function(data){
+						if (data.length == 0)
+							sap.m.MessageToast.show('Invalid user details. Check username and password', {
+								duration: 5000,
+								autoClose: true
+							 });
+						else{
+							if (data.length == 0)
+								sap.m.MessageToast.show('Logging in, please wait', {
+									duration: 5000,
+									autoClose: true
+								 });
+//							check if the user is an admin or just a consultant
+//							 /Consultants?$select=Consultant_Admin&$filter=Consultant_email eq \'"+ email + "\'"
+							oModel2.read("/Consultants?$select=Consultant_ID, Consultant_Admin&$filter=Consultant_email eq \'"+ email + "\'",{
+								success: function(data, response){
+//									console.log(data.results[0]);
+//									console.log(array[array.length-1].substr(20,1));
+									var oConsultantId = data.results[0].Consultant_ID;
+									if (data.results[0].Consultant_Admin == 1)
+										thisPtr.getRouter().navTo("MasterAdmin", {consultantId: oConsultantId});
+									else
+										thisPtr.getRouter().navTo("MasterConsultant", {consultantId: oConsultantId});
+								}
+							});
+						}
+					  },
+					 error: function(oError) {
+						 sap.m.MessageToast.show(oError, {
+								duration: 10000,
+							 autoClose: false
+						 });
+						 }
+					});
+////				
+//				this.getRouter().navTo("MasterConsultant");
 		}
 
 	});

@@ -4,6 +4,5 @@ sap.ui.define([
 	"use strict";
 
 	return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.App", {
-
 	});
 });

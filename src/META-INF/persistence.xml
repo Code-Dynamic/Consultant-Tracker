@@ -19,6 +19,9 @@
 		<class>com.ConsultantTracker.model.Feedback</class>
 
 		<class>com.ConsultantTracker.model.Attachment</class>
+		<class>com.ConsultantTracker.model.Daily_Times</class>
+		<class>com.ConsultantTracker.model.Ratings</class>
+		<class>com.ConsultantTracker.model.Ratings_Entry</class>
 		<properties>
 			<property name="eclipselink.ddl-generation" value="create-tables" />
 			<property name="eclipselink.cache.shared.default" value="false" />

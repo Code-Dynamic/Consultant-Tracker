@@ -92,11 +92,12 @@
 			},
 			"routes": [
 				{
-					"pattern": "masterManger",
-					"name": "masterManager",
+					"pattern": "MasterAdmin/{consultantId}",
+					"name": "MasterAdmin",
 					"target": [
-						"detailProject",
-						"masterManager"
+						"DetailAdmin",
+						"MasterAdmin"
+
 					]
 				},	
 				{
@@ -111,8 +112,9 @@
 					"pattern": "item/{objectPath}",
 					"name": "object",
 					"target": [
-						"masterManager",
-						"detailProject"
+						"MasterAdmin",
+						"DetailAdmin"
+
 					]
 				},
 				{
@@ -138,17 +140,28 @@
 					]
 				},
 				{
-					"pattern": "detailProject",
-					"name": "detailProject",
+					"pattern": "DetailAdmin/{projectId}",
+					"name": "DetailAdmin",
 					"target": [
-						"detailProject"
+						"MasterAdmin",
+						"DetailAdmin"
 					]
 				},
 				{
-					"pattern": "DetailConsultant/{listId}",
+					"pattern": "DetailConsultant/{listId},:consultantId:",
 					"name": "DetailConsultant",
 					"target": [
-						"MasterConsultant","DetailConsultant"
+						"MasterConsultant",
+						"DetailConsultant"
+					]
+				},
+				{
+					"pattern": "DetailConsultantView/{consultantId}",
+					"name": "DetailConsultantView",
+					"target": [
+						"MasterAdmin",
+						"DetailConsultantView"
+
 					]
 				},
 				{
@@ -157,17 +170,48 @@
 					"target": [
 						"MasterConsultant","Calender"
 					]
+				},
+				{
+					"name": "OverviewCalender",
+					"pattern": "DetailAdmin/OverviewCalender/{projectId}",
+					"target": [
+						"MasterAdmin","OverviewCalender"
+					]
+				},
+				{
+                    "name": "Feedback",
+                    "pattern": "feedback",
+                    "target": [
+                        "MasterFeedback","DetailFeedback"
+                    ]
+                },
+                			{
+					"name": "ProjectsOverviewCalender",
+					"pattern": "ProjectsOverviewCalender",
+					"target": [
+						"MasterAdmin","ProjectsOverviewCalender"
+					]
 				}
 			],
 			"targets": {
-				"masterManager": {
-					"viewName": "MasterManager",
+				"MasterAdmin": {
+					"viewName": "MasterAdmin",
 					"viewLevel": 1,
-					"viewId": "masterManager",
+					"viewId": "MasterAdmin",
+
 					"controlAggregation": "masterPages",
 					"controlId": "idSplitAppControl",
 					"parent": "splitview"
 				},
+				"ProjectsOverviewCalender": {
+					"viewName": "ProjectsOverviewCalender",
+					"viewId": "ProjectsOverviewCalender",
+					"viewLevel": 2,
+					"controlId": "idSplitAppControl",
+					"controlAggregation": "detailPages",
+					"parent": "splitview"
+				},
+
 				"MasterConsultant": {
 					"viewName": "MasterConsultant",
 					"viewLevel": 1,
@@ -176,9 +220,10 @@
 					"controlId": "idSplitAppControl",
 					"parent": "splitview"
 				},
-				"detailProject": {
-					"viewName": "DetailProjects",
-					"viewId": "detailProject",
+				"DetailAdmin": {
+					"viewName": "DetailAdmin",
+					"viewId": "DetailAdmin",
+
 					"viewLevel": 2,
 					"controlId": "idSplitAppControl",
 					"controlAggregation": "detailPages",
@@ -196,9 +241,26 @@
 					"controlAggregation": "detailPages",
 					"parent": "splitview"
 				},
+				"DetailConsultantView": {
+					"viewName": "DetailConsultantView",
+					"viewId": "DetailConsultantView",
+					"viewLevel": 2,
+					"controlId": "idSplitAppControl",
+					"controlAggregation": "detailPages",
+					"parent": "splitview"
+				},
+
 				"Calender": {
 					"viewName": "Calender",
 					"viewId": "Calender",
+					"viewLevel": 3,
+					"controlId": "idSplitAppControl",
+					"controlAggregation": "detailPages",
+					"parent": "splitview"
+				},
+				"OverviewCalender": {
+					"viewName": "OverviewCalender",
+					"viewId": "OverviewCalender",
 					"viewLevel": 3,
 					"controlId": "idSplitAppControl",
 					"controlAggregation": "detailPages",
@@ -215,7 +277,27 @@
 				},
 				"splitview": {
 					"viewName": "SplitApp"
-				}
+				},
+				"MasterFeedback": {
+                    "viewName": "MasterFeedback",
+                    "viewLevel": 1,
+                    "viewId": "masterFeedback",
+                    "controlAggregation": "masterPages",
+                    "controlId": "idSplitAppControl",
+                    "parent": "splitview"
+                },
+                "DetailFeedback": {
+                    "viewName": "DetailFeedback",
+                    "viewId": "detailFeedback",
+                    "viewLevel": 2,
+                    "controlId": "idSplitAppControl",
+                    "controlAggregation": "detailPages",
+                            "title":{
+                            "parts":["ListDetails"]
+                            },
+                    "parent": "splitview"
+            
+                }
 			}
 		}
 	}

@@ -28,9 +28,24 @@ sap.ui.define([
 		 * This hook is the same one that SAPUI5 controls get after being rendered.
 		 * @memberOf consultanttracker.Consultant-Tracker_Prototype-1.view.SplitApp
 		 */
-		//	onAfterRendering: function() {
-		//
-		//	},
+
+			onAfterRendering: function() {
+				var thisDomObj =  this;
+				var consultantID = this.getConsultantID();
+				//this.setSplitAppUserName(consultantID);
+		    	 var query = "/Consultants?$filter=Consultant_ID%20eq%20"+consultantID;
+			     var oModel =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+			     oModel.read(query,{success: function(oData){
+			    	 				if(oData.results.length > 0){
+			    	 					//console.log(oData.results[0].Consultant_Name);
+			    	 					//console.log(thisDomObj.getView().byId("splitAppMenuButton"));
+			    	 					thisDomObj.getView().byId("splitAppMenuButton").setText(oData.results[0].Consultant_Name);
+			    	 				}
+			 					}, error: function(){console.log("Error");}}		
+			 	 );				
+				
+			},
+
 
 		/**
 		 * Called when the Controller is destroyed. Use this one to free resources and finalize activities.

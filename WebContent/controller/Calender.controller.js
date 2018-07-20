@@ -17,8 +17,6 @@ sap.ui.define([
 		 * @memberOf consultanttracker.Consultant-Tracker_Prototype-1.view.MasterManager
 		 */
 			onInit: function() {
-				
-//				
 				//getting id from the URL
 				var oRouter = this.getRouter();
 				oRouter.getRoute("Calender").attachMatched(this._onRouteMatched, this);
@@ -140,7 +138,6 @@ sap.ui.define([
 						 var result = JSON.stringify(data);
 						 tasksModel.setData(data);
 //						 alert(result);
-						 console.log(result);
 					  },
 					  error: function(oError) {
 						  alert("error");
@@ -152,9 +149,15 @@ sap.ui.define([
 			},	
 
 			onNavBack: function(evt){
+
+				var oModel = this.getView().getModel();
+//				
+				var projectId = oModel.oData.results[0].TaskDetails.ProjectDetails.Project_ID;
+				//make provision for when there is no data
 				this.getRouter()
 					.navTo("DetailConsultant",
-							{listId:1});
+							{listId:projectId});
+
 			}
 			
 

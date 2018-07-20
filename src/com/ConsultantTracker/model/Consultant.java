@@ -14,7 +14,7 @@ public class Consultant implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="primaryKeyGenerator")
 	private int consultant_ID;
 
 	private int consultant_Admin;

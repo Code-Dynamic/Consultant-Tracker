@@ -41,7 +41,6 @@ id="SimpleFormAddTask">
 </beginButton>
 <endButton>
 
-<Button text="Close" press="onCancle"/>
 
 </endButton>
 

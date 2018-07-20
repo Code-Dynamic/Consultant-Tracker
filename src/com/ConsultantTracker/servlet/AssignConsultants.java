@@ -61,6 +61,16 @@ public class AssignConsultants extends HttpServlet {
 			}
 			else
 				ObjToReturn = "rs is null???";
+			int year = java.time.Year.now().getValue();
+			//TODO update dev branch
+			statement = connection.prepareStatement("INSERT INTO ratings(NUM_VOTES, RATING, YEAR,PROJECT_PROJECT_ID, CONSULTANT_CONSULTANT_ID) VALUES(?,?,?,?,?)");
+			statement.setInt(1, 0);
+			statement.setDouble(2, 0.0);
+			statement.setInt(3, year);
+			statement.setString(4, projectID);
+			statement.setString(5, consultantID);
+			statement.executeUpdate();
+			statement.close();
 			
 				response.setContentType("text/plain");
 				response.getWriter().write(ObjToReturn);	// return response

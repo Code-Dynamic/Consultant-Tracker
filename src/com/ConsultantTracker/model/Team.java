@@ -14,7 +14,7 @@ public class Team implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="primaryKeyGenerator")
 	private int team_ID;
 
 	private String team_Description;
