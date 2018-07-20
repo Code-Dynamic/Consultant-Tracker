@@ -17,9 +17,11 @@
 								<Label text="Email"/>
 								<Input value=""/>
 								<Label text="Password"/>
+
 								<Input value="" type ="Password"/>
 								<Label text="Repeat Password"/>
 								<Input value="" type ="Password"/>
+
 								<Button width="12rem" text="Create Account" type="Emphasized" press="onRegisterClick"/>
 							
 							</form:content>

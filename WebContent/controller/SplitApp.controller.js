@@ -28,6 +28,7 @@ sap.ui.define([
 		 * This hook is the same one that SAPUI5 controls get after being rendered.
 		 * @memberOf consultanttracker.Consultant-Tracker_Prototype-1.view.SplitApp
 		 */
+
 			onAfterRendering: function() {
 				var thisDomObj =  this;
 				var consultantID = this.getConsultantID();
@@ -44,6 +45,7 @@ sap.ui.define([
 			 	 );				
 				
 			},
+
 
 		/**
 		 * Called when the Controller is destroyed. Use this one to free resources and finalize activities.

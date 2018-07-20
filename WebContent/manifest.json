@@ -97,6 +97,7 @@
 					"target": [
 						"DetailAdmin",
 						"MasterAdmin"
+
 					]
 				},	
 				{
@@ -113,6 +114,7 @@
 					"target": [
 						"MasterAdmin",
 						"DetailAdmin"
+
 					]
 				},
 				{
@@ -159,6 +161,7 @@
 					"target": [
 						"MasterAdmin",
 						"DetailConsultantView"
+
 					]
 				},
 				{
@@ -195,6 +198,7 @@
 					"viewName": "MasterAdmin",
 					"viewLevel": 1,
 					"viewId": "MasterAdmin",
+
 					"controlAggregation": "masterPages",
 					"controlId": "idSplitAppControl",
 					"parent": "splitview"
@@ -207,6 +211,7 @@
 					"controlAggregation": "detailPages",
 					"parent": "splitview"
 				},
+
 				"MasterConsultant": {
 					"viewName": "MasterConsultant",
 					"viewLevel": 1,
@@ -218,6 +223,7 @@
 				"DetailAdmin": {
 					"viewName": "DetailAdmin",
 					"viewId": "DetailAdmin",
+
 					"viewLevel": 2,
 					"controlId": "idSplitAppControl",
 					"controlAggregation": "detailPages",
@@ -243,6 +249,7 @@
 					"controlAggregation": "detailPages",
 					"parent": "splitview"
 				},
+
 				"Calender": {
 					"viewName": "Calender",
 					"viewId": "Calender",
@@ -259,6 +266,7 @@
 					"controlAggregation": "detailPages",
 					"parent": "splitview"
 				},
+
 				"login": {
 					"viewName": "Login",
 					"viewId": "LoginView"
@@ -290,7 +298,6 @@
                     "parent": "splitview"
             
                 }
-				
 			}
 		}
 	}

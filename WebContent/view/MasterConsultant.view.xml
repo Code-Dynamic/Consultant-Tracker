@@ -28,6 +28,7 @@
 		<items>
 			<ObjectListItem
 				title="{assignmentsModel>ProjectDetails/Project_Name}"
+
 				type="Active"
 				press="onListItemPress">
 				<firstStatus>
@@ -39,6 +40,7 @@
 				</attributes>
 			</ObjectListItem>
 		</items>
+
 	</List>							
 
 			</content>

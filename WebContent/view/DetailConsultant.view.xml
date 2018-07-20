@@ -8,13 +8,17 @@
 			controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.DetailConsultant" 
 			xmlns:html="http://www.w3.org/1999/xhtml">
 		<semantic:DetailPage id="DetailConsultant" navButtonPress="onNavBack" showNavButton="{device>/system/phone}"
+
 		title="Project Details" busy="{detailView>/busy}" busyIndicatorDelay="{detailView>/delay}">
+
 		<semantic:customHeaderContent>
 			<Button press="openCalender" id="cartIcon" text="Schedule" icon="sap-icon://accelerated"/>
 		</semantic:customHeaderContent>
 <semantic:content>
 			
+
 		<ObjectHeader
+
 		id="oh1"
 		responsive="true"
 		fullScreenOptimized="false"
@@ -22,10 +26,12 @@
 		iconAlt="{Name}"
 		intro="{projectsModel>/Project_Description}"
 		title="{projectsModel>/Project_Name}"
+
 		number="34%"
 		numberUnit="Completed"
 		numberState="Success"
 		backgroundDesign="Transparent">
+
 		<attributes>
 			<ObjectAttribute
 				title="ProjectID"
@@ -50,6 +56,7 @@
 				state="Warning"/>
 		</statuses>
 	</ObjectHeader>
+
 			
 			<IconTabBar id="iconTabBar" class="sapUiResponsiveContentPadding" expandable="false">
 				<items>
@@ -73,6 +80,7 @@
 										</ObjectListItem>
 											
 									
+
 								</items>
 							</List>
 						</content>

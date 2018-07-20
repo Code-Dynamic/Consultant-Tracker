@@ -30,10 +30,12 @@
 				<Input id="p_Name"/>
 				<Label text="Description"/>
 				<TextArea id="p_Description"/>
+
 				<Label text="Start Date"/>
 				<DatePicker valueFormat="yyyy-MM-dd" displayFormat="long" width="100%" id="p_StartDate"/>					
 				<Label text="Deadline"/>
 				<DatePicker valueFormat="yyyy-MM-dd" displayFormat="long" width="100%" id="p_Deadline"/>			
+
 				<Label text="OnSite"/>
 				<CheckBox id="p_OnSite"/>
 					
@@ -45,6 +47,7 @@
 		</beginButton>
 		<endButton>
 			<Button text="Close" press="onClose" id="closeProjectModalButton"/>
+
 		</endButton>
 	</Dialog>
 	

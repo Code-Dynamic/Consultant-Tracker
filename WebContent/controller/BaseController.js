@@ -1,10 +1,12 @@
 /*global history */
 sap.ui.define([
 		"sap/ui/core/mvc/Controller",
+
 		"sap/ui/core/routing/History",
 		"sap/m/MessageToast",
 	], function (Controller, History,MessageToast) {
 		"use strict";
+
 		return Controller.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.BaseController", {
 			/**
 			 * Convenience method for accessing the router in every controller of the application.
@@ -13,6 +15,7 @@ sap.ui.define([
 			 */
 			getRouter : function () {
 				return this.getOwnerComponent().getRouter();
+
 			},		    
 			onRequestUserTimes : function(){
 				var consultantID = this.getConsultantID();		
@@ -350,7 +353,7 @@ sap.ui.define([
 				);
 				
 				this.getView().setModel(consultantsModel,"consultantsModel");		
-			},			
+			},		
 
 			/**
 			 * Convenience method for getting the view model by name in every controller of the application.

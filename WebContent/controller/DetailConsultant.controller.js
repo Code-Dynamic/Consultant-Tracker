@@ -2,6 +2,7 @@ sap.ui.define([
 		"consultanttracker/Consultant-Tracker_Prototype-1/controller/BaseController",
 		"sap/ui/model/json/JSONModel",
 		'sap/ui/core/mvc/Controller',
+
 		'jquery.sap.global',
 		'sap/ui/core/Fragment',
 
@@ -89,7 +90,6 @@ sap.ui.define([
 							  success: function(data){
 								   membersDetailModel.setData(data);
 									var results = JSON.stringify(data);
-//									console.log(results);
 //									alert(results);
 							  },
 							  error: function(oError) {
@@ -184,6 +184,7 @@ sap.ui.define([
 				//get model of DetailConsultant controller
 				var oModel = this.getView().getModel("projectsModel");
 				//console.log(oModel);
+
 				//get Project_ID to pass to the calender view
 				var oListId = oModel.oData.Project_ID;
 				this.getRouter()

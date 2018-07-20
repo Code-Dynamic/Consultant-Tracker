@@ -13,7 +13,7 @@ sap.ui.define([
 	var RatingResults;
 	var RatingsErrTxt;	
 	var ConsultantID;
-	
+
 	return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.MasterConsultant", {
 
 		/**
@@ -23,6 +23,7 @@ sap.ui.define([
 		 */
 			onInit: function() {
 //				http://localhost:8080/Consultant-Tracker/emplist.svc/Assigned_Tasks?$expand=ConsultantDetails,TaskDetails,TaskDetails/ProjectDetails&$filter=ConsultantDetails/Consultant_ID%20eq%202
+
 				//getting id from the URL
 				//console.log("function called");
 				//this.printOnPage();
@@ -63,6 +64,7 @@ sap.ui.define([
 				//set model for master
 				var oModel = this.getOwnerComponent().getModel("oModel");
 				var assignmentsModel = new JSONModel();
+
 				oModel.read("/Assignments", {
 					urlParameters: {
 			            "$expand" : "ConsultantDetails",
@@ -71,6 +73,7 @@ sap.ui.define([
 					filters: [ new sap.ui.model.Filter({
 				          path: "ConsultantDetails/Consultant_ID",
 				          operator: sap.ui.model.FilterOperator.EQ,
+
 				          value1: consultantID
 				     })],
 					success: function(data){
@@ -79,12 +82,14 @@ sap.ui.define([
 						 //console.log(data);
 						 if(data.results.length > 0)
 							 thisObj.selectFirstProject();
+
 					  },
 					 error: function(oError) {
 						  alert("error");
 					 	}
 					});
 				
+
 				this.getView().setModel(assignmentsModel,"assignmentsModel");					
 			},
 			setConsultantID: function(idFromRoute){
@@ -238,6 +243,7 @@ sap.ui.define([
 		    	this._ratingsDialog.removeAllContent();
 		    	this._ratingsDialog.close();
 		    },
+
 			
 	
 		/**
