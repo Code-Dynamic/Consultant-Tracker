@@ -7,170 +7,173 @@
 			xmlns:html="http://www.w3.org/1999/xhtml" 
 			xmlns:semantic="sap.m.semantic" 
 			controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.DetailAdmin">
+			
 	<semantic:DetailPage id="DetailAdmin" 
-						showNavButton="{device>/system/phone}" 
-						title="Project Information" 
-						busy="{detailView>/busy}" 
-						busyIndicatorDelay="{detailView>/delay}">
-						<semantic:customHeaderContent>
+		showNavButton="{device>/system/phone}" 
+		title="Project Information" 
+		busy="{detailView>/busy}" 
+		busyIndicatorDelay="{detailView>/delay}">
+		
+		<semantic:customHeaderContent>
 			<Button press="openOverviewCalender" id="cartIcon" text="Overview" icon="sap-icon://accelerated"/>
 		</semantic:customHeaderContent>
+		
 		<semantic:content>
 			
-<!-- <ObjectHeader id="objectHeader" title="{projectsModel>/Project_Name}">
+			<!-- <ObjectHeader id="objectHeader" title="{projectsModel>/Project_Name}">
  			    <statuses>
 			       <ProgressIndicator id="projectProgressId" class="sapUiSmallMarginBottom" percentValue="{progress>/percVal}" displayValue="{progress>/displayVal}%" showValue="true" state="None"/>
 
 			    </statuses> 
 			</ObjectHeader> -->
-					<ObjectHeader
-							id="oh1"
-							responsive="true"
-							fullScreenOptimized="false"
-							icon="{ProductPicUrl}"
-							iconAlt="{Name}"
-							intro="{projectsModel>/Project_Description}"
-							title="{projectsModel>/Project_Name}"
-							titlePress="handleTitlePress"
-							number="{progressModel>/percVal}"
-							numberUnit="Completed"
-							titleSelectorPress="onPress"
-							showMarkers="true"
-							markFlagged="false"
-							markFavorite="false"
-							numberState="Success"
-							backgroundDesign="Transparent">
-							<attributes>
-								<ObjectAttribute
-									title="ProjectID"
-									text="{projectsModel>/Project_ID}"/>
-								<ObjectAttribute
-									title="Due"
-									text="{projectsModel>/Project_Deadline}"/>
-								<ObjectAttribute
-									title="Client Name"
-									text="{projectsModel>/ClientDetails/Client_Name}"/>
 					
-							</attributes>
-							<statuses>
-					 			<ObjectStatus
-									title="Approval"
-									text="Pending"
-									state="Warning"/>
-							</statuses>
-						</ObjectHeader>			
+			<ObjectHeader
+				id="oh1"
+				responsive="true"
+				fullScreenOptimized="false"
+				icon="{ProductPicUrl}"
+				iconAlt="{Name}"
+				intro="{projectsModel>/Project_Description}"
+				title="{projectsModel>/Project_Name}"
+				titlePress="handleTitlePress"
+				number="{progressModel>/percVal}"
+				numberUnit="Completed"
+				titleSelectorPress="onPress"
+				showMarkers="true"
+				markFlagged="false"
+				markFavorite="false"
+				numberState="Success"
+				backgroundDesign="Transparent">
+				
+				<attributes>
+					<ObjectAttribute
+						title="ProjectID"
+						text="{projectsModel>/Project_ID}"/>
+					
+					<ObjectAttribute
+						title="Due"
+						text="{projectsModel>/Project_Deadline}"/>
+					
+					<ObjectAttribute
+						title="Client Name"
+						text="{projectsModel>/ClientDetails/Client_Name}"/>
+				</attributes>
+							
+				<statuses>
+					<ObjectStatus
+						title="Approval"
+						text="Pending"
+						state="Warning"/>
+				</statuses>
+			</ObjectHeader>
+			
 			<IconTabBar id="iconTabBar" class="sapUiResponsiveContentPadding" expandable="false">
 				<items>
-				<IconTabFilter id="iconTabBarFilter2" icon="sap-icon://group" tooltip="list of tasks" text="Members">
+					<IconTabFilter id="iconTabBarFilter2" icon="sap-icon://group" tooltip="list of tasks" text="Members">
 						<content>
 							<Table id="teamMemberTable"
-		inset="false"
-		items="{membersModel>/results}">
-		<headerToolbar>
-			<Toolbar>
-				<content>
-					<Title text="Available Members" level="H2"/>
-					<ToolbarSpacer />
-						<Button icon="sap-icon://delete" text="Team members" press="onDeleteConsultantFromProject"/>
-						<Button icon="sap-icon://add" text="Team member" press="addConsultantToProject"/>
+								inset="false"
+								items="{membersModel>/results}">
+								
+								<headerToolbar>
+									<Toolbar>
+										<content>
+											<Title text="Available Members" level="H2"/>
+											<ToolbarSpacer />
+											<Button icon="sap-icon://delete" text="Team members" press="onDeleteConsultantFromProject"/>
+											<Button icon="sap-icon://add" text="Team member" press="addConsultantToProject"/>
+										</content>
+									</Toolbar>
+								</headerToolbar>
+								
+								<columns>
+									<Column width="12em">
+										<Text text="Name"/>
+									</Column>
 									
-				</content>
-			</Toolbar>
-		</headerToolbar>
-		<columns>
-			<Column
-				width="12em">
-				<Text text="Name"/>
-			</Column>
-			<Column
-				minScreenWidth="Tablet"
-				demandPopin="true">
-				<Text text="Email" />
-			</Column>
+									<Column
+										minScreenWidth="Tablet"
+										demandPopin="true">
+										
+										<Text text="Email" />
+									</Column>
 
-			<Column
-				minScreenWidth="Desktop"
-				demandPopin="true"
-				hAlign="Center">
-				<Text text="Role" />
-			</Column>
-				</columns>
-		<items>
-			<ColumnListItem>
-				<cells>
-					<Text
-						text="{membersModel>ConsultantDetails/Consultant_Name}" />
-					<Text
-						text="{membersModel>ConsultantDetails/Consultant_email}" />
-					<Text
-						text="Programmer" />
-					
-
-				</cells>
-			</ColumnListItem>
-		</items>
-	</Table>
+									<Column
+										minScreenWidth="Desktop"
+										demandPopin="true"
+										hAlign="Center">
+										<Text text="Role" />
+									</Column>
+								</columns>
+								
+								<items>
+									<ColumnListItem>
+										<cells>
+											<Text text="{membersModel>ConsultantDetails/Consultant_Name}" />
+											<Text text="{membersModel>ConsultantDetails/Consultant_email}" />
+											<Text text="Programmer" />
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
 						</content>
 					</IconTabFilter>
+					
 					<IconTabFilter id="iconTabBarFilter3" icon="sap-icon://activities" tooltip="{i18n>detailIconTabBarAttachments}" text="Tasks">
-
-		<Table id="idProductsTable"
-		inset="false"
-		items="{tasksModel>/results}">
-		<headerToolbar>
-			<Toolbar>
-				<content>
-					<Title text="Available Tasks" level="H2"/>
-					<ToolbarSpacer />
-															<ToolbarSpacer/>
-							<Button icon="sap-icon://delete" text="Task" press="onDeleteConsultantFromProject"/>
-							<Button icon="sap-icon://add" text="Task" press="onAddTask"/>
-
-				</content>
-			</Toolbar>
-		</headerToolbar>
-		<columns>
-			<Column
-				width="12em">
-				<Text text="Name"/>
-			</Column>
-			<Column
-				minScreenWidth="Tablet"
-				demandPopin="true">
-				<Text text="Due Date" />
-			</Column>
-			<Column
-				minScreenWidth="Desktop"
-				demandPopin="true"
-				hAlign="End">
-				<Text text="Progress" />
-			</Column>
-			<Column
-				minScreenWidth="Desktop"
-				demandPopin="true"
-				hAlign="Center">
-				<Text text="Feedback" />
-			</Column>
-		</columns>
-		<items>
-			<ColumnListItem>
-				<cells>
-					<ObjectIdentifier
-						title="{tasksModel>TaskDetails/Name}"/>
-					<Text
-						text="{tasksModel>TaskDetails/Due_Date}" />
-					<Text
-						text="10%" />
-					
-
-				</cells>
-			</ColumnListItem>
-		</items>
-	</Table>
-
-
+						<Table id="idProductsTable"
+							inset="false"
+							items="{tasksModel>/results}">
+							
+							<headerToolbar>
+								<Toolbar>
+									<content>
+										<Title text="Available Tasks" level="H2"/>
+										<ToolbarSpacer />
+										<ToolbarSpacer/>
+										<Button icon="sap-icon://delete" text="Task" press="onDeleteConsultantFromProject"/>
+										<Button icon="sap-icon://add" text="Task" press="onAddTask"/>
+									</content>
+								</Toolbar>
+							</headerToolbar>
+							
+							<columns>
+								<Column width="12em">
+									<Text text="Name"/>
+								</Column>
+								
+								<Column
+									minScreenWidth="Tablet"
+									demandPopin="true">
+									<Text text="Due Date" />
+								</Column>
+								
+								<Column
+									minScreenWidth="Desktop"
+									demandPopin="true"
+									hAlign="End">
+									<Text text="Progress" />
+								</Column>
+								
+								<Column
+									minScreenWidth="Desktop"
+									demandPopin="true"
+									hAlign="Center">
+									<Text text="Feedback" />
+								</Column>
+							</columns>
+		
+							<items>
+								<ColumnListItem>
+									<cells>
+										<ObjectIdentifier
+											title="{tasksModel>TaskDetails/Name}"/>
+										<Text text="{tasksModel>TaskDetails/Due_Date}" />
+										<Text text="10%" />
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
 					</IconTabFilter>
-					
 					
 					<IconTabFilter id="iconTabBarFilter4" icon="sap-icon://attachment" tooltip="{i18n>detailIconTabBarInfo}" text="Attachments">
 						<content>
@@ -198,17 +201,19 @@
 										</cells> 
 									</ColumnListItem>
 								</items>
+								
 								<columns>
 									<Column>
 										<Text text="File Name"/>
 									</Column>
+									
 									<Column>
 										<Text text="Date Uploaded"/>
 									</Column>
+									
 									<Column>
 										<Text text="Size"/>
 									</Column>
-									
 								</columns>
 							</Table>
 						</content>
@@ -222,8 +227,8 @@
 				<Button icon="sap-icon://add" text="Project" press="addProject" id="addProjectButton">
 					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
 				</Button>			
-			<Button id="removeProjectButton" text="Remove Project" icon="sap-icon://delete" press="confirmDeleteProject"/>
-					<Button press="openProjectsOverviewCalender" id="cartIcon1" text="viewAll" icon="sap-icon://accelerated"/>
+				<Button id="removeProjectButton" text="Remove Project" icon="sap-icon://delete" press="confirmDeleteProject"/>
+				<Button press="openProjectsOverviewCalender" id="cartIcon1" text="viewAll" icon="sap-icon://accelerated"/>
 		</semantic:customFooterContent>
 	</semantic:DetailPage>
 </mvc:View>
