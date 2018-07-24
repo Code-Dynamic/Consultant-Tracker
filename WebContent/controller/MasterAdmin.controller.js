@@ -25,85 +25,40 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	 */
 	onInit: function() {
 		var oRouter = this.getRouter();
-		oRouter.getRoute("MasterAdmin").attachMatched(this._onRouteMatched, this);		
+		oRouter.getRoute("MasterAdmin").attachMatched(this.onRouteMatched, this);		
 		this.goToProjects();
 		this.goToConsultants();
-/*		var consultantID = this.getView().getModel("consultantsModel");
-		console.log(consultantID);*/	
-
 	},
-	_onRouteMatched: function(oEvent){
+	onRouteMatched: function(oEvent){
 		var oArgs = oEvent.getParameter("arguments");
-		if(sessionStorage){
+		
+		if(sessionStorage)
 			sessionStorage.ConsultantID = oArgs.consultantId;
-			
-		}else{
+		else
 			ConsultantID = oArgs.consultantId;
-		}
-		
 	},
-	PR_Search_Project: function(oEvent) {
-//      var tpmla = oEvent.getParameter("newValue");
-//      var filters = new Array();
-//      var oFilter = new sap.ui.model.Filter("PoNumber", sap.ui.model.FilterOperator.Contains, tpmla);
-//      filters.push(oFilter);
-//
-//      //get list created in view
-//      this.oList = sap.ui.getCore().byId("orders");5
-//      this.oList.getBinding("items").filter(filters);
-
-		//		btnConsultantSelected = false;
+	onSearchProject: function(oEvent) {
 		
-		//var item = this.getView().byId("orders").data("items","{/Projects}");
-
-      var searchString = this.getView().byId("searchField").getValue();
-      console.log("Search String "+ searchString);
-			var list = this.getView().byId("orders");
-		         
-		         list.bindItems("/results",
-		           new sap.m.StandardListItem({
-		             title: "{Project_Name}",
-		             press: "onSelect"
-		         
-		           }).addStyleClass("listItems")
-		       );
-				
-		         var oModel = new sap.ui.model.json.JSONModel();
-		         var oDataProjects =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
-		         var arrProjects = {Projects:[]};
-		         var arrConsultants = {Consultants:[]};
-		         oDataProjects.read(
-					"/Projects?$filter=substringof('"+searchString+"', Project_Name) eq true and Project_Deleted eq false",{success: function(oCreatedEn){ GotProjects(oCreatedEn) }, error: function(){console.log("Error");}}
-			     );
+      var searchString = this.getView().byId("projectSearchField").getValue();
+      this.searchProjects(searchString);
+      
+	},
+	onSearchConsultant: function(oEvent) {
 		
-			//		$.post('getProjects',function(responseText){
-			//			console.log("servlet responded");
-			function GotProjects(oCreatedEn){
-				//			arrProjects = {Projects:[]};
-				//			var array = responseText.split(';');
-				//array.forEach(createProjectObj);
-					
-				oModel.setData(oCreatedEn);
-				console.log(oCreatedEn);
-				sap.ui.getCore().setModel(oModel);
-				app.to("DetailAdmin");
-			}
-		// console.log("Search Input: "+searchString);
-  },
+	      var searchString = this.getView().byId("consultantSearchField").getValue();
+	      this.searchConsultants(searchString);
+	      
+	},
 	onProjectListItemPress: function(evt){
 		var sPath = evt.getSource().getBindingContext("projectsModel").getPath();
 		var oData = this.getView().getModel("projectsModel").getProperty(sPath);
+		
 		//NB as a manager you can view all projects under you
-//		var oProjectId = evt.getSource().getBindingContext("projectsModel").getProperty("projectsModel>/Project_ID");
-//		var model = evt.getSource("projectsModel");
-//		console.log(oData.Project_ID);
 		var projectID = oData.Project_ID;
 		
-		this.getRouter()
-			.navTo("DetailAdmin", 
-				{projectId:projectID});
-//		console.log(sListId);
-	/*	MessageToast.show("Pressed : " + evt.getSource().getTitle());*/
+		this.getRouter().navTo("DetailAdmin", 
+		{projectId:projectID});
+		
 		//TODO Ngoni: consult Mamba, save project ID in model instead of using global
 		PROJECT_ID = projectID;
 		var consultantID = this.getConsultantID();		

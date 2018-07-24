@@ -8,69 +8,76 @@
 		xmlns:semantic="sap.m.semantic">
 	<semantic:MasterPage id="MasterAdmin"  >
 		<semantic:subHeader></semantic:subHeader>
+		
 		<semantic:content>
-		<IconTabBar 	id="iconTabBar" 
-						class="sapUiResponsiveContentPadding" 
-						expandable="false"
-						width="100%">
-				<items>
-										
+			<IconTabBar id="iconTabBar" 
+				class="sapUiResponsiveContentPadding" 
+				expandable="false"
+				width="100%">
+				
+				<items>		
 					<IconTabFilter id="iconTabBarFilter2" 
-								icon="sap-icon://folder" 
-								tooltip="List of all projects" 
-								text="Projects"
-								press="goToProjects">
+						icon="sap-icon://folder" 
+						tooltip="List of all projects" 
+						text="Projects"
+						press="goToProjects">
+						
 						<content>
-						<Bar id="headerBar">
-				<contentMiddle>
-					<SearchField id="searchField" showRefreshButton="{= !${device>/support/touch} }" tooltip="{i18n>masterSearchTooltip}" width="100%"
-						search="PR_Search_Project" liveChange="PR_Search_Project"></SearchField>
-				</contentMiddle>
-			</Bar>
-						<List id="projectsList"
-							items="{projectsModel>/results/}">
-							<items>
-								<ObjectListItem
-									title="{projectsModel>Project_Name}"
-									type="Active"
-									press="onProjectListItemPress"
-									number = "{projectsModel>Project_ID}">
-									<firstStatus>
-										<ObjectStatus
-											text="In Progress" />
-									</firstStatus>
-									<attributes>
-										<ObjectAttribute text="Date " />
-									</attributes>
-								</ObjectListItem>
-							</items>
-						</List>
+							<Bar id="headerBar">
+								<contentMiddle>
+									
+									<SearchField id="projectSearchField" showRefreshButton="{= !${device>/support/touch} }" tooltip="{i18n>masterSearchTooltip}" width="100%"
+										search="onSearchProject" liveChange="onSearchProject"></SearchField>
+								</contentMiddle>
+							</Bar>
+							
+							<List id="projectsList"
+								items="{projectsModel>/results/}">
+								<items>
+									<ObjectListItem
+										title="{projectsModel>Project_Name}"
+										type="Active"
+										press="onProjectListItemPress"
+										number = "{projectsModel>Project_ID}">
+										<firstStatus>
+											<ObjectStatus text="In Progress" />
+										</firstStatus>
+										
+										<attributes>
+											<ObjectAttribute text="Date " />
+										</attributes>
+									</ObjectListItem>
+								</items>
+							</List>
 						</content>
 					</IconTabFilter>
+					
 					<IconTabSeparator icon="sap-icon://vertical-grip"/>
 					<IconTabSeparator icon="sap-icon://vertical-grip"/>
-
 					<IconTabFilter id="iconTabBarFilter3" 
-									icon="sap-icon://employee" 
-									tooltip="list of all Consultants" 
-									text="Consultants">
-					<content>
-					<Bar id="headerBar2">
-				<contentMiddle>
-					<SearchField id="searchField2" showRefreshButton="{= !${device>/support/touch} }" tooltip="{i18n>masterSearchTooltip}" width="100%"
-						search="PR_Search_Project" liveChange="PR_Search_Project"></SearchField>
-				</contentMiddle>
-			</Bar>
-						<List id="consultants"
-							items="{consultantsModel>/results/}">
-							<items>
-								<ObjectListItem
-									title="{consultantsModel>Consultant_Name} {consultantsModel>Consultant_Surname}"
-									type="Active"
-									press="onConsultantListItemPress">
-									<attributes>
-										<ObjectAttribute text="{consultantsModel>Consultant_Cell}" />
-									</attributes>
+						icon="sap-icon://employee" 
+						tooltip="list of all Consultants" 
+						text="Consultants">
+					
+						<content>
+							<Bar id="headerBar2">
+								<contentMiddle>
+								<SearchField id="consultantSearchField" showRefreshButton="{= !${device>/support/touch} }" tooltip="{i18n>masterSearchTooltip}" width="100%"
+									search="onSearchConsultant" liveChange="onSearchConsultant"></SearchField>
+								</contentMiddle>
+							</Bar>
+						
+							<List id="consultants"
+								items="{consultantsModel>/results/}">
+								<items>
+									<ObjectListItem
+										title="{consultantsModel>Consultant_Name} {consultantsModel>Consultant_Surname}"
+										type="Active"
+										press="onConsultantListItemPress">
+									
+										<attributes>
+											<ObjectAttribute text="{consultantsModel>Consultant_Cell}" />
+										</attributes>
 								</ObjectListItem>
 							</items>
 						</List>
@@ -81,29 +88,32 @@
 			</IconTabBar>	
 				
 		</semantic:content>
+		
 		<semantic:customFooterContent>
- 				 <Button  id="rateTeamBtn" text="Rate Members" icon="sap-icon://favorite" press="onRateTeam" enabled="{ratingsBtnConfig>/enabled}" visible="{ratingsBtnConfig>/visible}">
-				 	<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
-				 </Button>
-				<Button  id="requestUserTimesBtn" text="Times" icon="sap-icon://time-entry-request" press="onRequestUserTimes">
-					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
-				</Button>		
+ 			<Button  id="rateTeamBtn" text="Rate Members" icon="sap-icon://favorite" press="onRateTeam" enabled="{ratingsBtnConfig>/enabled}" visible="{ratingsBtnConfig>/visible}">
+				<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
+			 </Button>
+			
+			<Button  id="requestUserTimesBtn" text="Times" icon="sap-icon://time-entry-request" press="onRequestUserTimes">
+				<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
+			</Button>		
 		</semantic:customFooterContent>
 	</semantic:MasterPage>
- <!-- TODO Ngoni, use fragments instead -->
- 	<!--Dialog for user to add times	 -->		
  	
+ 	<!-- TODO Ngoni, use fragments instead -->
+ 	<!--Dialog for user to add times	 -->		
  	 <Dialog title="Task Times" id="timesDialog">
 		<beginButton>
 			<Button id="submitUserTimesBtn" text="Submit" press="onSubmitTimes" />
 		</beginButton>
+		
 		<endButton>
 			<Button text="Close" press="onDialogClose" />
 		</endButton>
-	</Dialog>	
-<!-- 	Dialog for user to add times	 -->							
+	</Dialog>
+	
+	<!-- 	Dialog for user to add times	 -->							
 	<Dialog title="Rate Team Members" id="ratingsDialog">
-
 		<beginButton>
 			<Button text="Submit" press="onSubmitRates" id="submitRatesButton"/>
 		</beginButton>

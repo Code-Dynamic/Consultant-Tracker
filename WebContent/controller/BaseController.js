@@ -261,8 +261,7 @@ sap.ui.define([
 				}else{
 					return ConsultantID;
 				}						
-			}			
-			,
+			},
 			goToProjects : function(oEvt){
 				var thisDomObj = this;
 				var projectsModel = new sap.ui.model.json.JSONModel();
@@ -270,7 +269,7 @@ sap.ui.define([
 				
 				//read projects
 				oModel.read(
-						"/Projects?$filter=Project_Deleted%20eq%20false",{
+						"/Projects?$filter=Project_Deleted eq false",{
 							success: function(data){ 
 								projectsModel.setData(data);
 								thisDomObj.getView().setModel(projectsModel,"projectsModel");
@@ -289,6 +288,70 @@ sap.ui.define([
 								console.log("Error");}
 								}		
 				);
+			
+			},
+			searchProjects : function(oEvt){
+				var thisDomObj = this;
+				var projectsModel = new sap.ui.model.json.JSONModel();
+				var oModel = this.getOwnerComponent().getModel("oModel");
+				var searchString = arguments[0];
+				
+				//read projects
+				oModel.read(
+						"/Projects",{
+							filters: [ new sap.ui.model.Filter({
+								path: "Project_Name",
+								operator: sap.ui.model.FilterOperator.Contains,
+								value1: searchString
+								}) 
+							],
+							
+							success: function(data){
+								console.log(data);
+								projectsModel.setData(data);
+								thisDomObj.getView().setModel(projectsModel,"projectsModel");
+								if(data.results.length > 0){
+									var firstItem = thisDomObj.getView().byId("projectsList").getItems()[0];
+									//saved projectID in m
+									 //thisDomObj.selectProjectByID(firstItem.getNumber());	
+										var oData = thisDomObj.getView().getModel("projectsModel").getProperty("/results/0");
+										var projectID = oData.Project_ID;				
+										var projectCompleted = oData.Project_Completed;
+										thisDomObj.selectProjectByID(projectID,projectCompleted);											 
+								}
+							},
+								
+							error: function(){
+								console.log("Error");}
+						}		
+				);
+			
+			},
+			searchConsultants : function(oEvt){
+				var searchString = arguments[0];
+				var oModel = this.getOwnerComponent().getModel("oModel");
+				var consultantsModel = new sap.ui.model.json.JSONModel();
+				
+				//read consultant data
+				oModel.read("/Consultants",
+						{
+							filters: [ new sap.ui.model.Filter({
+								path: "Consultant_Name",
+								operator: sap.ui.model.FilterOperator.Contains,
+								value1: searchString
+							}) ],
+						
+							success: function(data){ 
+								consultantsModel.setData(data);
+								//console.log(data);
+								},
+								
+							error: function(){
+								console.log("Error");}
+								}		
+				);
+				
+				this.getView().setModel(consultantsModel,"consultantsModel");	
 			
 			},
 			 selectProjectByID : function(projectID,projectCompleted){
