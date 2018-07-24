@@ -7,16 +7,16 @@
 	
 	
 		<SelectDialog
-		noDataText="No ConsultantsFound"
-		title="Select Consultants"
+		noDataText="No Tasks Found"
+		title="Select Tasks"
 		search="handleSearch"
-		confirm="handleClose"
-		cancel="handleClose"
-		items="{membersModel>/results}" >
+		confirm="handleCloseRemoveTask"
+		cancel="handleCloseRemoveTask"
+		items="{tasksModel>/results}" >
 		
 		<StandardListItem
-			title="{membersModel>ConsultantDetails/Consultant_Name} {membersModel>ConsultantDetails/Consultant_Surname}"
-			description="SAP programmer"
+			title="{tasksModel>TaskDetails/Name}"
+			description="{tasksModel>TaskDetails/Due_Date}"
 			iconDensityAware="false"
 			iconInset="false"
 			type="Active" />
