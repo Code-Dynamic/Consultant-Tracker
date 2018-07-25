@@ -1,24 +1,71 @@
-<mvc:View showHeader="false"  xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:semantic="sap.m.semantic" xmlns:html="http://www.w3.org/1999/xhtml" 
+<mvc:View 
+showHeader="false"  
+xmlns:core="sap.ui.core" 
+xmlns:mvc="sap.ui.core.mvc" 
+xmlns="sap.m"
+xmlns:semantic="sap.m.semantic" 
+xmlns:html="http://www.w3.org/1999/xhtml" 
 controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.DetailFeedback">
-    <semantic:DetailPage  id="detailFeedback" navButtonPress="onNavBack" showNavButton="{device>/system/phone}" busy="{detailView>/busy}" busyIndicatorDelay="{detailView>/delay}" showSubHeader="false">
+
+    <semantic:DetailPage  
+    id="detailFeedback" 
+    navButtonPress="onNavBack" 
+    showNavButton="{device>/system/phone}" 
+    busy="{detailView>/busy}" 
+    busyIndicatorDelay="{detailView>/delay}" 
+    showSubHeader="false">
+    
         <semantic:content>
-            <Panel id="panel0" class="sapUiResponsiveMargin" height="80%" expanded="true">
+            <Panel 
+            id="panel0" 
+            class="sapUiResponsiveMargin" 
+            height="80%" 
+            expanded="true">
+            
                 <content>
-                    <ScrollContainer height="100%" width="100%" horizontal="true" vertical="true" focusable="true">
-                        <List showSeparators="Inner" items="{/EntryCollection}">
-                            <FeedListItem sender="{Author}" icon="{AuthorPicUrl}" senderPress="onSenderPress" iconPress="onIconPress" iconDensityAware="false" info="{Type}" timestamp="{Date}" text="{Text}" convertLinksToAnchorTags="All"/>
+                
+                    <ScrollContainer 
+                    height="100%" 
+                    width="100%" 
+                    horizontal="true" 
+                    vertical="true" 
+                    focusable="true">
+                    
+                        <List 
+                        showSeparators="Inner" 
+                        items="{/EntryCollection}">
+                        
+                            <FeedListItem 
+                            sender="{Author}" 
+                            icon="{AuthorPicUrl}" 
+                            senderPress="onSenderPress" 
+                            iconPress="onIconPress" 
+                            iconDensityAware="false" 
+                            info="{Type}" 
+                            timestamp="{Date}" 
+                            text="{Text}" 
+                            convertLinksToAnchorTags="All"/>
+                            
                         </List>
+                        
                     </ScrollContainer>
+                    
                 </content>
+                
             </Panel>
 
-                    <FeedInput xmlns="sap.m" post="onPost" icon="https://www.ienglishstatus.com/wp-content/uploads/2018/04/Anonymous-Whatsapp-profile-picture.jpg
-https://www.ienglishstatus.com/wp-content/uploads/2018/04/Anonymous-Whatsapp-profile-picture.jpg
-" class="sapUiSmallMarginTopBottom"/>
+                    <FeedInput 
+                    xmlns="sap.m" 
+                    post="onPost" 
+                    icon="https://www.ienglishstatus.com/wp-content/uploads/2018/04/Anonymous-Whatsapp-profile-picture.jpg
+https://www.ienglishstatus.com/wp-content/uploads/2018/04/Anonymous-Whatsapp-profile-picture.jpg"
+					 class="sapUiSmallMarginTopBottom"/>
                 
         </semantic:content>
+        
         <semantic:customFooterContent>
         
         </semantic:customFooterContent>
+        
     </semantic:DetailPage>
 </mvc:View>
