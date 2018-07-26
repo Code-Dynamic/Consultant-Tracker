@@ -201,7 +201,8 @@ sap.ui.define([
     	oProject.Project_Deadline = _Deadline;
     	oProject.Project_StartDate = _StartDate;
     	oProject.Project_OnSite = _OnSite;    
-    	$.post('CreateProject', { Name: _Name ,ClientID: 2,Desc: _Description, Deadl: _Deadline ,StartDate: _StartDate,OnSite:  _OnSite, Project_Creator: this.getConsultantID()},function(responseText) {  
+    	$.post('CreateProject', { Name: _Name ,ClientID: 2,Desc: _Description, Deadl: _Deadline ,StartDate: _StartDate,OnSite:  _OnSite, Project_Creator: this.getConsultantID()},
+    		function(responseText) {  
     		//var array = responseText.split(';');
     		MessageToast.show("Project Created Succesfully");
     		

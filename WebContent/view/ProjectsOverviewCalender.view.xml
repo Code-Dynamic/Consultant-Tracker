@@ -5,13 +5,28 @@
 			xmlns:semantic="sap.m.semantic" 
 			xmlns:html="http://www.w3.org/1999/xhtml" 
 			controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.ProjectsOverviewCalender">
-	<semantic:MasterPage id="ProjectsOverviewCalender" title="Overview" navButtonPress="onNavBack" showNavButton="true">
+			
+	<semantic:MasterPage 
+	id="ProjectsOverviewCalender" 
+	title="Overview" 
+	navButtonPress="onNavBack" 
+	showNavButton="true">
+	
 		<semantic:customHeaderContent>
+		
 			<ToolbarSpacer/>
-				<Button id="addButton1" icon="sap-icon://add" press="handleAddTaskDialog" tooltip="Add"/>
+				<Button 
+				id="addButton1" 
+				icon="sap-icon://add" 
+				press="handleAddTaskDialog" 
+				tooltip="Add"/>
+				
 		</semantic:customHeaderContent>
+		
 		<semantic:content>
+		
 	<VBox class="sapUiSmallMargin">
+	
 		<PlanningCalendar
 			id="calenderRows1"
 			rows="{projectsOverviewModel>/results}"
@@ -20,7 +35,9 @@
 			appointmentSelect="handleAppointmentSelect"
 			showEmptyIntervalHeaders="false"
 			showWeekNumbers="true">
+			
 			<rows>
+			
 				<PlanningCalendarRow
 				icon="sap-icon://task"
 					title="{projectsOverviewModel>Project_Name}"
@@ -29,6 +46,7 @@
 						appointmentDrop="handleAppointmentDrop">
 					
 							<appointments>
+							
 						<unified:CalendarAppointment
 							startDate="{projectsOverviewModel>Project_StartDate}"
 							endDate="{projectsOverviewModel>Project_Deadline}"
@@ -37,10 +55,15 @@
 							text="{projectsOverviewModel>Project_Deadline}"
 							type="{type}"
 							tentative="{tentative}">
+							
 						</unified:CalendarAppointment>
+						
 					</appointments>
+					
 				</PlanningCalendarRow>
+				
 			</rows>
+			
 		</PlanningCalendar>
 		
 	</VBox>

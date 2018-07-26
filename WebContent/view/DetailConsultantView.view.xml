@@ -11,8 +11,15 @@
 			xmlns:viz.data="sap.viz.ui5.data"			 
 			controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.DetailConsultantView" 
 			xmlns:html="http://www.w3.org/1999/xhtml">
-		<semantic:DetailPage id="DetailConsultantView" navButtonPress="onNavBack" showNavButton="{device>/system/phone}"
-		title="Consultant Details" busy="{detailView>/busy}" busyIndicatorDelay="{detailView>/delay}">
+			
+		<semantic:DetailPage 
+		id="DetailConsultantView" 
+		navButtonPress="onNavBack" 
+		showNavButton="{device>/system/phone}"
+		title="Consultant Details" 
+		busy="{detailView>/busy}" 
+		busyIndicatorDelay="{detailView>/delay}">
+		
 <semantic:content>
 			
 		<ObjectHeader
@@ -31,33 +38,43 @@
 		numberState="Success"
 		backgroundDesign="Transparent">
 		<attributes>
+		
 			<ObjectAttribute
 				title="Utilization"
 				text="{utilization>/prevMonthUtilization} % ({utilization>/prevMonth})"/>
+				
 			<ObjectAttribute
 				title="Rating"
 				text="{ratings>/avgRating}"/>
+				
 			<ObjectAttribute
 				title="Name"
 				text="{consultantsModel>/Consultant_Name}"/>
+				
 			<ObjectAttribute
 				title="Contact"
 				text="{consultantsModel>/Consultant_Cell}"/>
+				
 			<ObjectAttribute
 				title="Email"
 				text="{consultantsModel>/Consultant_email}"/>
+				
 		</attributes>
-		<statuses>
- 			<ObjectStatus
-				title="Approval"
-				text="Pending"
-				state="Warning"/>
-		</statuses>
+		
 	</ObjectHeader>
 			
-			<IconTabBar id="iconTabBar" class="sapUiResponsiveContentPadding" expandable="false">
+			<IconTabBar 
+			id="iconTabBar" 
+			class="sapUiResponsiveContentPadding" 
+			expandable="false">
+			
 				<items>
-					<IconTabFilter id="iconTabBarFilter1" icon="sap-icon://folder"  tooltip="{i18n>detailIconTabBarAttachments}" text="Projects">
+					<IconTabFilter 
+					id="iconTabBarFilter1" 
+					icon="sap-icon://folder"  
+					tooltip="{i18n>detailIconTabBarAttachments}" 
+					text="Projects">
+					
 						<content>
 						
 							<List 	id="consultantProjects" 
@@ -69,26 +86,43 @@
 											title="Name: {consultantProjectsModel>ProjectDetails/Project_Name}" 
 											type="Active"
 											press= "handleOpenDialog" >
-												<firstStatus>
-												<ObjectStatus />
-												</firstStatus>
 												<attributes>
-												<ObjectAttribute text="Date " icon="sap-icon://task" />
+												<ObjectAttribute
+												 text="Date " 
+												 icon="sap-icon://task" />
+												 
 												</attributes>
 										</ObjectListItem>
 											
-									
 								</items>
+								
 							</List>
+							
 						</content>
+						
 					</IconTabFilter>
 
-					<IconTabFilter id="iconTabBarFilter2" icon="sap-icon://line-chart-time-axis" tooltip="Utilization" text="Utilization" design="sap.m.IconTabFilterDesign.Vertical">
+					<IconTabFilter 
+					id="iconTabBarFilter2" 
+					icon="sap-icon://line-chart-time-axis" 
+					tooltip="Utilization" 
+					text="Utilization" 
+					design="sap.m.IconTabFilterDesign.Vertical">
+					
 						<content>	
 									<OverflowToolbar>
-										<Title text="Utilization" level="H2"/>
+									
+										<Title 
+										text="Utilization" 
+										level="H2"/>
+										
 										<ToolbarSpacer/>
-										<Select id="utilizationMonthSelect" change="onUtilizationMonthChange" name="{consultantsModel>/Consultant_ID}">
+										
+										<Select 
+										id="utilizationMonthSelect" 
+										change="onUtilizationMonthChange" 
+										name="{consultantsModel>/Consultant_ID}">
+										
 											<core:Item text="January" id="month0" />
 											<core:Item text="February" id="month1" />
 											<core:Item text="March" id="month2" />
@@ -103,77 +137,182 @@
 											<core:Item text="December" id="month11" />
 											<core:Item text="All" id="monthAll" />
 										</Select>
+										
 										<!-- <ToolbarSpacer/> -->
- 										<Input id="utilizationYearInput" type="Number" maxlength="4" liveChange="onUtilizationYearLiveChange" width="10%"/>
+ 										<Input 
+ 										id="utilizationYearInput" 
+ 										type="Number" 
+ 										maxlength="4" 
+ 										liveChange="onUtilizationYearLiveChange" 
+ 										width="10%"/>
+ 										
 									</OverflowToolbar>		
-							<HBox justifyContent="sap.m.FlexJustifyContent.Center">									
-					        <viz:VizFrame id="oVizFrame" busy="false" busyIndicatorDelay="1000" visible="true" uiConfig="{ 'applicationSet': 'fiori' }" vizType="pie" 
-					        vizProperties="{ title: {visible:'false'}, plotArea:{dataLabel:{visible:'true'}} }" legendVisible="true">
+							
+							<HBox 
+							justifyContent="sap.m.FlexJustifyContent.Center">	
+															
+					        <viz:VizFrame 
+					        id="oVizFrame" 
+					        busy="false" 
+					        busyIndicatorDelay="1000" 
+					        visible="true" 
+					        uiConfig="{ 'applicationSet': 'fiori' }" 
+					        vizType="pie" 
+					        vizProperties="{ title: {visible:'false'}, plotArea:{dataLabel:{visible:'true'}} }" 
+					        legendVisible="true">
+								
 								<viz:dataset>
-									<viz.data:FlattenedDataset data="{utilization>/utilization}">
+								
+									<viz.data:FlattenedDataset 
+									data="{utilization>/utilization}">
+									
 										<viz.data:dimensions>
-											<viz.data:DimensionDefinition name="category" value="{category}"/>
+										
+											<viz.data:DimensionDefinition 
+											name="category" 
+											value="{category}"/>
+											
 										</viz.data:dimensions>
+										
 										<viz.data:measures>
-											<viz.data:MeasureDefinition group="1" name="hours" value="{hours}"/>
+										
+											<viz.data:MeasureDefinition 
+											group="1"
+											name="hours" 
+											value="{hours}"/>
 											
 										</viz.data:measures>
+										
 									</viz.data:FlattenedDataset>
+									
 								</viz:dataset>
 								<!-- sap.viz.ui5.data.Dataset -->
+								
 								<viz:feeds>
-									<viz.feeds:FeedItem id="value1" uid="size" type="Measure" values="hours"/>
+								
+									<viz.feeds:FeedItem 
+									id="value1" 
+									uid="size" 
+									type="Measure" 
+									values="hours"/>
 									
-									<viz.feeds:FeedItem uid="color" type="Dimension" values="category"/>
+									<viz.feeds:FeedItem 
+									uid="color" 
+									type="Dimension" 
+									values="category"/>
+									
 								</viz:feeds>
+								
 							</viz:VizFrame>	
 							</HBox>
-						</content>		
+							
+						</content>	
+							
 					</IconTabFilter>				
 						
-					<IconTabFilter id="iconTabBarFilter3" icon="sap-icon://favorite" tooltip="{i18n>detailIconTabBarAttachments}" text="Rating">
+					<IconTabFilter 
+					id="iconTabBarFilter3" 
+					icon="sap-icon://favorite" 
+					tooltip="{i18n>detailIconTabBarAttachments}" 
+					text="Rating">
 
-						<Table mode="SingleSelectMaster" selectionChange=""  growing="true" inset="false" items="{ratings>/results}">
+						<Table 
+						mode="SingleSelectMaster" 
+						selectionChange=""  
+						growing="true" 
+						inset="false" 
+						items="{ratings>/results}">
+						
 							<headerToolbar>
+							
 								<OverflowToolbar>
-									<Title text="Rating" level="H2"/>
+								
+									<Title 
+									text="Rating" 
+									level="H2"/>
 
 								</OverflowToolbar>
+								
 							</headerToolbar>
+							
 							<columns>
+							
 								<Column width="12em" >
-									<Text text="Project"/>
+								
+									<Text 
+									text="Project"/>
+									
 								</Column>
-								<Column minScreenWidth="Tablet" demandPopin="true">
+								
+								<Column 
+								minScreenWidth="Tablet" 
+								demandPopin="true">
+								
 									<Text text="Rating"/>
+									
 								</Column>
-								<Column minScreenWidth="Tablet" demandPopin="true">
+								
+								<Column minScreenWidth="Tablet"
+										demandPopin="true">
+										
 									<Text text="Number of Voters"/>
-								</Column>								
+									
+								</Column>
+																
 							</columns>
+							
 							<items>
+							
 								<ColumnListItem>
+								
 									<cells>
-										<ObjectIdentifier text="{ratings>ProjectDetails/Project_Name}"/>
-										<ProgressIndicator class="sapUiSmallMarginBottom" percentValue="{ratings>Rating}" displayValue="{ratings>Rating}" showValue="true" state="None"/>
-										<Text renderWhitespace="true" text="\t {ratings>Num_Votes}"/>
+									
+										<ObjectIdentifier
+										text="{ratings>ProjectDetails/Project_Name}"/>
+										
+										<ProgressIndicator 
+										class="sapUiSmallMarginBottom" 
+										percentValue="{ratings>Rating}" 
+										displayValue="{ratings>Rating}" 
+										showValue="true" state="None"/>
+										
+										<Text 
+										renderWhitespace="true" 
+										text="\t {ratings>Num_Votes}"/>
 										
 									</cells>
 							
 								</ColumnListItem>
+								
 							</items>
+							
 						</Table>
+						
 					</IconTabFilter>						
 					
 				</items>
+				
 			</IconTabBar>
+			
 		</semantic:content>
 
-		<semantic:customFooterContent>			
-				<Button type="Default" icon="sap-icon://add" text="Consultant" press="addConsultant">
-					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
-				</Button>			
+		<semantic:customFooterContent>	
+				
+				<Button 
+				type="Default" 
+				icon="sap-icon://add" 
+				text="Consultant" 
+				press="addConsultant">
+				
+					<layoutData>
+					<OverflowToolbarLayoutData 
+					priority="NeverOverflow" />
+					</layoutData>
+					
+				</Button>		
+					
 		</semantic:customFooterContent>
+		
 	</semantic:DetailPage>
 
 </mvc:View>

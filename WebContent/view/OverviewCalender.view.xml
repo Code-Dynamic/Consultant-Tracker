@@ -5,13 +5,29 @@
 			xmlns:semantic="sap.m.semantic" 
 			xmlns:html="http://www.w3.org/1999/xhtml" 
 			controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.OverviewCalender">
-	<semantic:MasterPage id="OverviewCalender" title="Overview" navButtonPress="onNavBack" showNavButton="true">
+			
+	<semantic:MasterPage 
+	id="OverviewCalender" 
+	title="Overview" 
+	navButtonPress="onNavBack" 
+	showNavButton="true">
+	
 		<semantic:customHeaderContent>
+		
 			<ToolbarSpacer/>
-				<Button id="addButton" icon="sap-icon://add" press="handleAddTaskDialog" tooltip="Add"/>
+			
+				<Button 
+				id="addButton" 
+				icon="sap-icon://add" 
+				press="handleAddTaskDialog" 
+				tooltip="Add"/>
+				
 		</semantic:customHeaderContent>
+		
 		<semantic:content>
+		
 	<VBox class="sapUiSmallMargin">
+	
 		<PlanningCalendar
 			id="PC1"
 			rows="{/results}"
@@ -20,7 +36,9 @@
 			appointmentSelect="handleAppointmentSelect"
 			showEmptyIntervalHeaders="false"
 			showWeekNumbers="true">
+			
 			<rows>
+			
 				<PlanningCalendarRow
 					icon="sap-icon://employee"
 					title="{ConsultantDetails/Consultant_Name}"
