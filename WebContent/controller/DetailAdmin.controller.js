@@ -16,7 +16,7 @@ sap.ui.define([
 * @memberOf splitapp.detail
 */
 	onInit: function() {
-		//geting id from the URL
+		//getting id from the URL
 		var oRouter = this.getRouter();
 		oRouter.getRoute("DetailAdmin").attachMatched(this.onRouteMatched, this);
 	},
