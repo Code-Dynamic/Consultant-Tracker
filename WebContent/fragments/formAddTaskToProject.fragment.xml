@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <core:FragmentDefinition
 	xmlns:semantic="sap.m.semantic"
 	xmlns:core="sap.ui.core"
@@ -26,7 +27,7 @@
 			id="SimpleFormAddTask">
 				<f:content>
 					<Label 
-						text="Tasksasd Name"/>
+						text="Task Name"/>
 					<Input 
 						id="t_Name"/>
 					<Label 
@@ -44,13 +45,14 @@
 			</f:SimpleForm>
 		</content>
 		<beginButton>
-			<Button
-				text="Submit"
+			<Button 
+				text="Submit" 
 				press="onSubmitTask"/>
+		</beginButton>
+		<endButton>
 			<Button
  				text="Close"
  				press="handleCloseAddTask"/>
-		</beginButton>
-		<endButton></endButton>
+		</endButton>
 	</Dialog>
 </core:FragmentDefinition>

@@ -71,8 +71,8 @@ sap.ui.define([
  				        			 value:"00:00",
  				       				 valueFormat:"hh:mm",
  				       				 displayFormat:"HH:mm",
- 				       				 minutesStep: 15,
- 				       				 id:timePickerId+i
+ 				       				 minutesStep: 15
+// 				       				 id:timePickerId+i
  				       				 
  				        		 }); 
  				        		timePicker.attachChange(function(oEvent){
@@ -92,8 +92,8 @@ sap.ui.define([
  				        		value:"00:00",
  				       			valueFormat:"hh:mm",
  				       			displayFormat:"HH:mm",
- 				       			minutesStep: 15,
- 				       			id:timePickerId+"General"
+ 				       			minutesStep: 15
+// 				       			id:timePickerId+"General"
  				        	}); 
 					        timePicker.attachChange(function(oEvent){
 	 				        		onLiveChangeTimesInput(this,oEvent);

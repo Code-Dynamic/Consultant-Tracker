@@ -401,7 +401,7 @@ sap.ui.define([
 			oEvent.getSource().getBinding("items").filter([]);
 		},
 		onAddTask: function(){
-			 this._DialogAddTask = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.addTask", this);
+			 this._DialogAddTask = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddTaskToProject", this);
 			 this._DialogAddTask.open();
 		},
 		handleCloseAddTask: function(oEvent){

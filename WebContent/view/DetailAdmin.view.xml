@@ -223,8 +223,8 @@
 						<ToolbarSpacer/>
 						
 							<Button 
-								icon="sap-icon://delete" 
-								text="Task" 
+								icon="sap-icon://delete"
+								text="Task"
 								press="onRemoveTaskFromProject"/>
 								
 							<Button 
