@@ -7,12 +7,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ConsultantTracker.model.Assignment;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -39,35 +45,46 @@ public class UnassignConsultant extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		int assignmentID = Integer.parseInt(request.getParameter("assignment"));
-		Connection connection = (Connection) getServletContext().getAttribute("DBConnection"); //establish database connection
-		PreparedStatement statement = null;
-//		ResultSet set = null;
-			// return response
 		
-		try {
-			statement = connection.prepareStatement("DELETE FROM assignment WHERE ASSIGNMENT_ID =?");
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
+		EntityManager em = emf.createEntityManager();
+		
+		Assignment a =  em.find(Assignment.class, assignmentID);
+		em.getTransaction().begin();
+		em.remove(a);
+		em.getTransaction().commit();
+//		Connection connection = (Connection) getServletContext().getAttribute("DBConnection"); //establish database connection
+//		PreparedStatement statement = null;
+//		ResultSet set = null;
+//		
+//		try {
+//		
 //			statement = connection.prepareStatement("DELETE FROM assignment WHERE ASSIGNMENT_ID = ?");
-			statement.setInt(1, assignmentID);
-			statement.executeUpdate();
-
-			/*PrintWriter out = response.getWriter();
-			response.setContentType("text/plain");
-			out.write("After Post: IN SERVLET");*/
-		}
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
-		finally
-		{
-			try 
-			{
-				if(statement != null)
-					statement.close();
-				//connection.close();
-			}
-			catch (SQLException e) {}
-		}
+//			statement.setInt(1, assignmentID);
+//			statement.executeUpdate();	// execute sql query
+//			statement.close();
+//			//see if it was inserted into the database
+//			
+//				PrintWriter out = response.getWriter();
+//				response.setContentType("text/plain");
+//				out.write("Unassign Done");	// return response
+//
+//			
+//		}
+//		catch (SQLException e)
+//		{
+//			e.printStackTrace();
+//		}
+//		finally
+//		{
+//			try 
+//			{
+//				if(set != null)
+//					set.close();
+//				//connection.close();
+//			}
+//			catch (SQLException e) {}
+//		}
 	}
 
 	/**

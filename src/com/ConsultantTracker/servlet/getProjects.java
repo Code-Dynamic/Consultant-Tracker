@@ -7,12 +7,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ConsultantTracker.model.Daily_Times;
+import com.ConsultantTracker.model.Project;
 
 
 
@@ -39,53 +45,69 @@ public class getProjects extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-			Connection con = (Connection) getServletContext().getAttribute("DBConnection");
-			PreparedStatement ps = null;
-			ResultSet rs = null;
-			try {
-				ps = con.prepareStatement("select * from projects join client on projects.Client_ID=client.Client_ID where projects.Project_Deleted = ? order by projects.Project_ID ");				
-				ps.setInt(1, 0);
-				rs = ps.executeQuery();
-				if(rs != null){
-					
-					//User user = new User(rs.getString("name"), rs.getString("email"), rs.getString("country"), rs.getInt("id"));
-					//logger.info("User found with details="+user);
-					//response.setContentType("application/json");
-					String ObjToReturn="";
-					while(rs.next()) {
-						if(!ObjToReturn.equals(""))
-							ObjToReturn +=";";
-					 ObjToReturn +=rs.getString("Project_Name")+','+rs.getString("Project_Description")+','+rs.getString("Client_Name")+','+rs.getString("Project_Deadline")+','+rs.getString("Project_StartDate")+','+rs.getString("Project_OnSite")+','+rs.getString("Project_ID");
-				
-					}
-					//PrintWriter out = response.getWriter();
-					//out.wr(ObjToReturn);
-					response.setContentType("text/plain");
-					response.getWriter().write(ObjToReturn);
-				}else{
-					RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
-					PrintWriter out= response.getWriter();
-					//logger.error("User not found with email="+email);
-					out.println("<font color=red>No user found with given email id, please register first.</font>");
-					rd.include(request, response);
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-				//logger.error("Database connection problem");
-				 response.getWriter().println("Connection Failed");
-				throw new ServletException("DB Connection problem.");
-			}finally{
-				try {
-					if(rs != null)
-						rs.close();
-					if(ps != null)
-						ps.close();
-				} catch (SQLException e) {
-					//logger.error("SQLException in closing PreparedStatement or ResultSet");;
-				}
-				
-			}
+		
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
+		EntityManager em = emf.createEntityManager();
+		
+		java.util.List<Project> projectList = em.createQuery("select * from projects where Project_Deleted = 0",Project.class).getResultList();
+		String ObjToReturn="";
+		for(int i=0;i<projectList.size();i++) {
+			Project p = projectList.get(i);
+			if(!ObjToReturn.equals(""))
+				ObjToReturn +=";";
+			
+			ObjToReturn +=p.getProject_Name()+','+p.getProject_Description()+','+p.getClient_ID().getClient_Name()+','+p.getProject_Deadline()+','+p.getProject_OnSite()+','+p.getProject_ID();
+			PrintWriter out = response.getWriter();
+			
+			response.setContentType("text/plain");
+			response.getWriter().write(ObjToReturn);
+		}
+//			Connection con = (Connection) getServletContext().getAttribute("DBConnection");
+//			PreparedStatement ps = null;
+//			ResultSet rs = null;
+//			try {
+//				ps = con.prepareStatement("select * from projects join client on projects.Client_ID=client.Client_ID where projects.Project_Deleted = ? order by projects.Project_ID ");				
+//				ps.setInt(1, 0);
+//				rs = ps.executeQuery();
+//				if(rs != null){
+//					
+//					//User user = new User(rs.getString("name"), rs.getString("email"), rs.getString("country"), rs.getInt("id"));
+//					//logger.info("User found with details="+user);
+//					//response.setContentType("application/json");
+//					String ObjToReturn="";
+//					while(rs.next()) {
+//						if(!ObjToReturn.equals(""))
+//							ObjToReturn +=";";
+//					 ObjToReturn +=rs.getString("Project_Name")+','+rs.getString("Project_Description")+','+rs.getString("Client_Name")+','+rs.getString("Project_Deadline")+','+rs.getString("Project_OnSite")+','+rs.getString("Project_ID");
+//				
+//					}
+//					//PrintWriter out = response.getWriter();
+//					//out.wr(ObjToReturn);
+//					response.setContentType("text/plain");
+//					response.getWriter().write(ObjToReturn);
+//				}else{
+//					RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
+//					PrintWriter out= response.getWriter();
+//					//logger.error("User not found with email="+email);
+//					out.println("<font color=red>No user found with given email id, please register first.</font>");
+//					rd.include(request, response);
+//				}
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//				//logger.error("Database connection problem");
+//				 response.getWriter().println("Connection Failed");
+//				throw new ServletException("DB Connection problem.");
+//			}finally{
+//				try {
+//					if(rs != null)
+//						rs.close();
+//					if(ps != null)
+//						ps.close();
+//				} catch (SQLException e) {
+//					//logger.error("SQLException in closing PreparedStatement or ResultSet");;
+//				}
+//				
+//			}
 	}
 
 	/**

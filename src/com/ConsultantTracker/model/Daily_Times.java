@@ -19,6 +19,8 @@ public class Daily_Times implements Serializable {
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="primaryKeyGenerator")
 	private int entry_ID;
 	
+	@OneToOne
+	@JoinColumn(name = "CONSULTANT_CONSULTANT_ID")
 	private Consultant consultant;
 	private double general_Time;
 	private double total_Assigned_Tasks_Time;

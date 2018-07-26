@@ -7,11 +7,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.eclipse.persistence.internal.sessions.DirectCollectionChangeRecord.NULL;
+
+import com.ConsultantTracker.model.Consultant;
+import com.ConsultantTracker.model.Project;
+import com.ConsultantTracker.model.Ratings;
+import com.ConsultantTracker.model.Ratings_Entry;
 
 /**
  * Servlet implementation class EnterConsultantRatings
@@ -48,34 +58,51 @@ public class EnterConsultantRatings extends HttpServlet {
 		double currentRate = 0;
 		int	currentVotes = 0;
 		int newNumVotes = 1;
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
+		EntityManager em = emf.createEntityManager();
+		
 		for(int i = 0; i < resultsArr.length; i++) {
 			
-			try {
+//			try {
 				memberRateAndID = resultsArr[i].split(":");
 				memberID = Integer.parseInt(memberRateAndID[0]);
 				memberRate = Integer.parseInt(memberRateAndID[1]);				
 				
-				ps = con.prepareStatement("SELECT * FROM ratings WHERE CONSULTANT_CONSULTANT_ID = ? AND PROJECT_PROJECT_ID = ?");
-				ps.setInt(1, memberID);
-				ps.setInt(2, projectID);				
-				rs = ps.executeQuery();				
-				if(rs != null){
-					if(rs.next()) {
-					currentRate = rs.getDouble("Rating");
-					currentVotes = rs.getInt("Num_Votes");
-					}
-				}	
-				ps.close();
+//				ps = con.prepareStatement("SELECT * FROM ratings WHERE CONSULTANT_CONSULTANT_ID = ? AND PROJECT_PROJECT_ID = ?");
+				Consultant c = em.find(Consultant.class, memberID);
+				Project p = em.find(Project.class, projectID);
+				Ratings r = em.createQuery("SELECT * FROM Ratings r where r.CONSULTANT_CONSULTANT_ID = ? AND PROJECT_PROJECT_ID = ?",Ratings.class)
+		                 .setParameter(1, c).setParameter(2, p).getSingleResult();
+				if(r != null) {
+					currentRate = r.getRating();
+					currentVotes = r.getNum_Votes();
+				}
+				
+//				ps.setInt(1, memberID);
+//				ps.setInt(2, projectID);				
+//				rs = ps.executeQuery();				
+//				if(rs != null){
+//					if(rs.next()) {
+//					currentRate = rs.getDouble("Rating");
+//					currentVotes = rs.getInt("Num_Votes");
+//					}
+//				}	
+//				ps.close();
 				newNumVotes += currentVotes;
-				ps = con.prepareStatement("UPDATE ratings SET NUM_VOTES = ?, RATING = ? WHERE CONSULTANT_CONSULTANT_ID = ? AND PROJECT_PROJECT_ID = ?");
-				//System.out.println(newNumVotes);
-				ps.setInt(1, newNumVotes);
-				ps.setDouble(2, calcNewRate(currentRate,memberRate,newNumVotes));
-				ps.setInt(3, memberID);
-				ps.setInt(4, projectID);	
-				ps.executeUpdate();	
-				ps.close();
-					
+//				ps = con.prepareStatement("UPDATE ratings SET NUM_VOTES = ?, RATING = ? WHERE CONSULTANT_CONSULTANT_ID = ? AND PROJECT_PROJECT_ID = ?");
+//				//System.out.println(newNumVotes);
+//				ps.setInt(1, newNumVotes);
+//				ps.setDouble(2, calcNewRate(currentRate,memberRate,newNumVotes));
+//				ps.setInt(3, memberID);
+//				ps.setInt(4, projectID);	
+//				ps.executeUpdate();	
+//				ps.close();
+				
+				r.setNum_Votes(newNumVotes);
+				r.setRating(calcNewRate(currentRate,memberRate,newNumVotes));
+				em.getTransaction().begin();
+				em.persist(r);
+				em.getTransaction().commit();
 /*				
 				ps = con.prepareStatement("UPDATE ratings SET RATING = ? WHERE CONSULTANT_CONSULTANT_ID = ? AND PROJECT_PROJECT_ID = ?");
 				ps.setDouble(1, calcNewRate(currentRate,memberRate,newNumVotes));
@@ -84,39 +111,49 @@ public class EnterConsultantRatings extends HttpServlet {
 				ps.executeUpdate();	
 				ps.close();			*/	
 				
-			} catch (SQLException e) {
-				e.printStackTrace();
-				//logger.error("Database connection problem");d
-				throw new ServletException("DB Connection problem.");
-			}finally{
-/*				try {
-					ps.close();
-				} catch (SQLException e) {
-					//logger.error("SQLException in closing PreparedStatement or ResultSet");;
-				}*/
-			}			
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//				//logger.error("Database connection problem");d
+//				throw new ServletException("DB Connection problem.");
+//			}finally{
+///*				try {
+//					ps.close();
+//				} catch (SQLException e) {
+//					//logger.error("SQLException in closing PreparedStatement or ResultSet");;
+//				}*/
+//			}
 		}
 		
-		try {
-			ps = con.prepareStatement("INSERT INTO ratings_entry (CONSULTANT_CONSULTANT_ID,PROJECT_PROJECT_ID) VALUES (?,?);");
-			ps.setInt(1, raterID);
-			ps.setInt(2, projectID);	
-			ps.executeUpdate();				
-		} catch (SQLException e) {
-			e.printStackTrace();
-			//logger.error("Database connection problem");d
-			throw new ServletException("DB Connection problem.");
-		}finally{
-			try {
-				ps.close();
-				PrintWriter out = response.getWriter();
-				response.setContentType("text/plain");
-				out.write("Ratings submitted, Thank you.");				
-				
-			} catch (SQLException e) {
-				//logger.error("SQLException in closing PreparedStatement or ResultSet");;
-			}
-		}			
+//		try {
+			
+			Ratings_Entry re = new Ratings_Entry();
+			Project p = em.find(Project.class, projectID);
+			Consultant c =em.find(Consultant.class, raterID);
+			re.setConsultant(c);
+			re.setProject(p);
+			
+			em.getTransaction().begin();
+			em.persist(re);
+			em.getTransaction().commit();
+//			ps = con.prepareStatement("INSERT INTO ratings_entry (CONSULTANT_CONSULTANT_ID,PROJECT_PROJECT_ID) VALUES (?,?);");
+//			ps.setInt(1, raterID);
+//			ps.setInt(2, projectID);	
+//			ps.executeUpdate();				
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			//logger.error("Database connection problem");d
+//			throw new ServletException("DB Connection problem.");
+//		}finally{
+//			try {
+//				ps.close();
+//				PrintWriter out = response.getWriter();
+//				response.setContentType("text/plain");
+//				out.write("Ratings submitted, Thank you.");				
+//				
+//			} catch (SQLException e) {
+//				//logger.error("SQLException in closing PreparedStatement or ResultSet");;
+//			}
+//		}			
 		
 	}
 
