@@ -7,7 +7,7 @@
 	
 	
 		<SelectDialog
-		noDataText="No ConsultantsFound"
+		noDataText="No Consultants Found"
 		title="Select Consultants"
 		search="handleSearch"
 		confirm="handleClose"

@@ -63,37 +63,37 @@
 					
 	</ObjectHeader>		
 		
-			<IconTabBar 
-				id="iconTabBar" 
-				class="sapUiResponsiveContentPadding" 
-				expandable="false">
+	<IconTabBar 
+		id="iconTabBar" 
+		class="sapUiResponsiveContentPadding" 
+		expandable="false">
 				
-				<items>
+		<items>
 				
-				<IconTabFilter 
-					id="iconTabBarFilter2" 
-					icon="sap-icon://group" 
-					tooltip="list of tasks" 
-					text="Members">
+			<IconTabFilter 
+				id="iconTabBarFilter2" 
+				icon="sap-icon://group" 
+				tooltip="list of tasks" 
+				text="Members">
 					
-						<content>
-						
-		<Table 
-		id="teamMemberTable"
-		inset="false"
-		items="{membersModel>/results}">
-		
-		<headerToolbar>
-		
-			<Toolbar>
-			
 				<content>
-				
-					<Title 
-						text="Available Members" 
-						level="H2"/>
 						
-					<ToolbarSpacer />
+					<Table 
+						id="teamMemberTable"
+						inset="false"
+						items="{membersModel>/results}">
+		
+						<headerToolbar>
+		
+							<Toolbar>
+			
+								<content>
+				
+									<Title 
+										text="Available Members" 
+										level="H2"/>
+						
+									<ToolbarSpacer />
 					
 						<Button
 							icon="sap-icon://delete" 

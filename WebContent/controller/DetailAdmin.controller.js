@@ -314,40 +314,57 @@ sap.ui.define([
 			
 			
 			var aContexts = oEvent.getParameter("selectedContexts");
-			console.log(aContexts);
 			if (aContexts && aContexts.length) {
-				this.oUnassign = aContexts.map(function(oContext) {
-					return oContext.getObject().ConsultantDetails.Consultant_ID; }).join(", ");
+				this.oUnassign = aContexts.map(
+						function(oContext) {
+							var assignmentID=oContext.getObject().Assignment_ID;
+							
+							$.post('UnassignConsultant', { 
+								assignment: assignmentID},
+								function(data) {  
+								var array = data.split(';');
+								console.log(data);
+							});
+							return oContext.getObject().Assignment_ID; 
+						}
+				).join(", ");
+				
+				
 				MessageToast.show("You have chosen " + this.oUnassign);
 //					this.oUnassugn  = oContext.getObject().ConsultantDetails.Consultant_ID;
 			} else {
 				MessageToast.show("No new item was selected.");
 			}
 			oEvent.getSource().getBinding("items").filter([]);
-			
-			console.log("Test1: "+this.oUnassign);
-			
-			$.post('UnassignConsultant', { 
-				assignment: this.oUnassign},
-				function(data) {  
-				var array = data.split(';');
-				console.log(data);
-			});
+		
 			console.log("Assignment_ID" + this.oUnassign);
 //			this.refreshData();
 		},
-//		handleClose2: function(oEvent) {
-//			var aContexts = oEvent.getParameter("selectedContexts");
-//			console.log(aContexts);
-//			if (aContexts && aContexts.length) {
-//				MessageToast.show("You have chosen " + aContexts.map(function(oContext) {
+		handleClose2: function(oEvent) {
+			var aContexts = oEvent.getParameter("selectedContexts");
+			var oModel = this.getView().getModel("projectsModel");
+			if (aContexts && aContexts.length) {
+				MessageToast.show("You have chosen " + aContexts.map(function(oContext) {
 //					console.log("test: "+JSON.stringify(oContext.getObject()));
-//					return oContext.getObject().Consultant_Name; }).join(", "));
-//			} else {
-//				MessageToast.show("No new item was selected.");
-//			}
+//					console.log("Consultant_ID " + oContext.getObject().Consultant_ID);
+//					console.log("Project_ID " + oModel.oData.Project_ID);
+					var consultantID = oContext.getObject().Consultant_ID;
+					var projectID = oModel.oData.Project_ID;
+					$.post('AssignConsultants', { 
+						project: projectID,
+						consultant: consultantID},
+						function(data) {  
+						var array = data.split(';');
+						console.log(data);
+					});
+					return oContext.getObject().Consultant_Name; }).join(", "));
+			} else {
+				MessageToast.show("No new item was selected.");
+			}
+			
 //			oEvent.getSource().getBinding("items").filter([]);
-//		},
+			
+		},
 		//Members tab functions end here
 		//*********************************************************************//
 		

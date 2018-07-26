@@ -41,21 +41,18 @@ public class UnassignConsultant extends HttpServlet {
 		int assignmentID = Integer.parseInt(request.getParameter("assignment"));
 		Connection connection = (Connection) getServletContext().getAttribute("DBConnection"); //establish database connection
 		PreparedStatement statement = null;
-		ResultSet set = null;
+//		ResultSet set = null;
+			// return response
 		
 		try {
-		
-			statement = connection.prepareStatement("DELETE FROM assignment WHERE ASSIGNMENT_ID = ?");
+			statement = connection.prepareStatement("DELETE FROM assignment WHERE ASSIGNMENT_ID =?");
+//			statement = connection.prepareStatement("DELETE FROM assignment WHERE ASSIGNMENT_ID = ?");
 			statement.setInt(1, assignmentID);
-			statement.executeUpdate();	// execute sql query
-			statement.close();
-			//see if it was inserted into the database
-			
-				PrintWriter out = response.getWriter();
-				response.setContentType("text/plain");
-				out.write("Unassign Done");	// return response
+			statement.executeUpdate();
 
-			
+			/*PrintWriter out = response.getWriter();
+			response.setContentType("text/plain");
+			out.write("After Post: IN SERVLET");*/
 		}
 		catch (SQLException e)
 		{
@@ -65,8 +62,8 @@ public class UnassignConsultant extends HttpServlet {
 		{
 			try 
 			{
-				if(set != null)
-					set.close();
+				if(statement != null)
+					statement.close();
 				//connection.close();
 			}
 			catch (SQLException e) {}
