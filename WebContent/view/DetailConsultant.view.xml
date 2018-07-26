@@ -37,10 +37,6 @@
 		iconAlt="{Name}"
 		intro="{projectsModel>/Project_Description}"
 		title="{projectsModel>/Project_Name}"
-
-		number="34%"
-		numberUnit="Completed"
-		numberState="Success"
 		backgroundDesign="Transparent">
 
 		<attributes>
@@ -60,10 +56,6 @@
 			<ObjectAttribute
 				title="Client Contact"
 				text="{projectsModel>/ClientDetails/Client_PhoneNum}"/>
-				
-			<ObjectAttribute
-				title="Dimension per unit"
-				text="{Width} x {Depth} x {Height} {DimUnit}"/>
 				
 		</attributes>
 

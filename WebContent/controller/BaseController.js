@@ -262,34 +262,131 @@ sap.ui.define([
 					return ConsultantID;
 				}						
 			},
-			goToProjects : function(oEvt){
+			goToProjects : function(selectFirstProject){
 				var thisDomObj = this;
 				var projectsModel = new sap.ui.model.json.JSONModel();
 				var oModel = this.getOwnerComponent().getModel("oModel");
 				
 				//read projects
 				oModel.read(
-						"/Projects?$filter=Project_Deleted eq false",{
+						"/Projects?$filter=Project_Deleted%20eq%20false",{
 							success: function(data){ 
+								for(var i=0; i<data.results.length; i++){
+									if(data.results[i].Project_Completed){
+										data.results[i].status = "Completed";
+									}else{
+										data.results[i].status = "In progress";
+									}
+								}
 								projectsModel.setData(data);
 								thisDomObj.getView().setModel(projectsModel,"projectsModel");
-								if(data.results.length > 0){
-									var firstItem = thisDomObj.getView().byId("projectsList").getItems()[0];
-									//saved projectID in m
-									 //thisDomObj.selectProjectByID(firstItem.getNumber());	
-										var oData = thisDomObj.getView().getModel("projectsModel").getProperty("/results/0");
+									if(data.results.length > 0){
+										
+										var resultsLocationStr;
+										if(selectFirstProject){
+											resultsLocationStr = "/results/0";
+										}
+										else{
+											resultsLocationStr =  "/results/" + (data.results.length -1);
+											console.log(resultsLocationStr);
+										}
+										var oData = thisDomObj.getView().getModel("projectsModel").getProperty(resultsLocationStr);
 										var projectID = oData.Project_ID;				
 										var projectCompleted = oData.Project_Completed;
-										thisDomObj.selectProjectByID(projectID,projectCompleted);											 
-									}
-								},
-								
+										thisDomObj.selectProjectByID(projectID,projectCompleted);	
+								}
+							},	
 							error: function(){
 								console.log("Error");}
 								}		
 				);
 			
 			},
+			 selectProjectByID : function(projectID,projectCompleted){
+				 var consultantID = this.getConsultantID();
+					this.getRouter()
+					.navTo("DetailAdmin", 
+						{projectId:projectID});
+				//RATINGS CODE
+				//TODO Ngoni: check with Mamba hw to get odata model address
+				var attachModel = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+				var thisObj = this;
+				attachModel.read(
+						"/Ratings_Entrys?$expand=ProjectDetails,ConsultantDetails&$filter=ProjectDetails/Project_ID%20eq%20"+projectID+"%20and%20ConsultantDetails/Consultant_ID%20eq%20"+consultantID,{async:false,success: function(oCreatedEn){ ratingsBtnConfig(oCreatedEn) }, error: function(e){console.log(e);}}		
+						);					
+				function ratingsBtnConfig(oResults){
+					var ratingsBtnConfigModel;
+					//user has already given a rating for the project
+					if(oResults.results.length > 0){
+						ratingsBtnConfigModel = new sap.ui.model.json.JSONModel({
+						    visible: false,
+						    enabled: false
+						});
+					} //project is completed, rating not yet given
+					else if(projectCompleted === true) {
+						ratingsBtnConfigModel = new sap.ui.model.json.JSONModel({
+							    visible: true,
+							    enabled: true
+							});
+					} //project not yet completed
+					else{
+						ratingsBtnConfigModel = new sap.ui.model.json.JSONModel({
+						    visible: true,
+						    enabled: false
+						});
+					}
+					thisObj.getView().setModel(ratingsBtnConfigModel,"ratingsBtnConfig");				
+				}
+				
+				//TODO fix project progress
+				$.post('getProjectProgress',{Project_Id:projectID},function(responseText){
+					var progress = {percVal:0,displayVal:0};
+					progress.percVal = parseFloat(responseText);
+					progress.displayVal = responseText;
+			          var progressModel = new sap.ui.model.json.JSONModel();
+			          progressModel.setData(progress);
+		/*	          console.log(progressModel);*/
+			          thisObj.getView().setModel(progressModel,"progressModel");
+				});				
+				
+			},
+			goToConsultants : function(oEvt){
+				var oModel = this.getOwnerComponent().getModel("oModel");
+				var consultantsModel = new sap.ui.model.json.JSONModel();
+				var thisDomObj = this;
+				//read consultant data
+				oModel.read("/Consultants",{
+							success: function(data){ 
+								consultantsModel.setData(data);
+								thisDomObj.getView().setModel(consultantsModel,"consultantsModel");	
+								if(data.results.length > 0){
+									var oData = thisDomObj.getView().getModel("consultantsModel").getProperty("/results/0");
+									var consultantID = oData.Consultant_ID;				
+									thisDomObj.selectConsultantByID(consultantID);	
+								}
+							},
+								
+							error: function(){
+								console.log("Error");}
+								}		
+				);
+			},
+			selectConsultantByID : function(consultantID){
+				this.getRouter()
+				.navTo("DetailConsultantView", 
+					{consultantId:consultantID});				
+			}
+			,
+			onMasterIconTabFilterSelect: function(oEvent) {
+	            var key =oEvent.getParameters().key;
+	            if(key === 'projectsSelect') {
+	            	var firstProjectSelected = true;
+	              this.goToProjects(firstProjectSelected);
+	            }
+	            else if(key == 'consultantsSelect') {
+	              this.goToConsultants();
+	            };
+	        },	
 			searchProjects : function(oEvt){
 				var thisDomObj = this;
 				var projectsModel = new sap.ui.model.json.JSONModel();
@@ -307,7 +404,7 @@ sap.ui.define([
 							],
 							
 							success: function(data){
-								console.log(data);
+								//console.log(data);
 								projectsModel.setData(data);
 								thisDomObj.getView().setModel(projectsModel,"projectsModel");
 								if(data.results.length > 0){
@@ -354,70 +451,6 @@ sap.ui.define([
 				this.getView().setModel(consultantsModel,"consultantsModel");	
 			
 			},
-			 selectProjectByID : function(projectID,projectCompleted){
-				 //console.log("projectCompleted: "+projectCompleted);
-				 var getConsultantID = this.getConsultantID();
-				 var consultantID = this.getConsultantID();
-					this.getRouter()
-					.navTo("DetailAdmin", 
-						{projectId:projectID});
-				//MessageToast.show("Pressed : " + evt.getSource().getTitle());
-				
-				//RATINGS CODE
-				//TODO Ngoni: check with Mamba hw to get odata model address
-				var attachModel = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
-				//var projectCompleted = false;
-				var thisObj = this;
-				//console.log(projectCompleted);
-				attachModel.read(
-						"/Ratings_Entrys?$expand=ProjectDetails,ConsultantDetails&$filter=ProjectDetails/Project_ID%20eq%20"+projectID+"%20and%20ConsultantDetails/Consultant_ID%20eq%20"+consultantID,{async:false,success: function(oCreatedEn){ ratingsBtnConfig(oCreatedEn) }, error: function(e){console.log(e);}}		
-						);					
-				function ratingsBtnConfig(oResults){
-					var ratingsBtnConfigModel;
-					//user has already given a rating for the project
-					if(oResults.results.length > 0){
-						//console.log("Ratings entered");
-						ratingsBtnConfigModel = new sap.ui.model.json.JSONModel({
-						    visible: false,
-						    enabled: false
-						});
-					} //project is completed, rating not yet given
-					else if(projectCompleted === true) {
-						//console.log("project is completed, rating not yet given");
-						ratingsBtnConfigModel = new sap.ui.model.json.JSONModel({
-							    visible: true,
-							    enabled: true
-							});
-					} //project not yet completed
-					else{
-						//console.log("project not completed");
-						ratingsBtnConfigModel = new sap.ui.model.json.JSONModel({
-						    visible: true,
-						    enabled: false
-						});
-					}
-					thisObj.getView().setModel(ratingsBtnConfigModel,"ratingsBtnConfig");				
-				}
-			},
-			goToConsultants : function(oEvt){
-				var oModel = this.getOwnerComponent().getModel("oModel");
-				var consultantsModel = new sap.ui.model.json.JSONModel();
-				//read consultant data
-				oModel.read("/Consultants",{
-							
-							success: function(data){ 
-								consultantsModel.setData(data);
-								//console.log(data);
-								},
-								
-							error: function(){
-								console.log("Error");}
-								}		
-				);
-				
-				this.getView().setModel(consultantsModel,"consultantsModel");		
-			},		
-
 			/**
 			 * Convenience method for getting the view model by name in every controller of the application.
 			 * @public

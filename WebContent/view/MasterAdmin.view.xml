@@ -16,7 +16,8 @@
 			id="iconTabBar" 
 			class="sapUiResponsiveContentPadding" 
 			expandable="false"
-			width="100%">
+			width="100%"
+			select = "onMasterIconTabFilterSelect">
 				
 				<items>		
 					<IconTabFilter 
@@ -24,7 +25,8 @@
 						icon="sap-icon://folder" 
 						tooltip="List of all projects" 
 						text="Projects"
-						press="goToProjects">
+						key = "projectsSelect"
+						>
 						
 						<content>
 						
@@ -87,8 +89,9 @@
 						id="iconTabBarFilter3" 
 						icon="sap-icon://employee" 
 						tooltip="list of all Consultants" 
-						text="Consultants">
-					
+						text="Consultants"
+						key = "consultantsSelect">
+						
 						<content>
 						
 							<Bar id="headerBar2">

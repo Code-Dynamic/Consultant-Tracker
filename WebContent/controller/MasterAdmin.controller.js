@@ -26,8 +26,8 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	onInit: function() {
 		var oRouter = this.getRouter();
 		oRouter.getRoute("MasterAdmin").attachMatched(this.onRouteMatched, this);		
-		this.goToProjects();
-		this.goToConsultants();
+		var selectFirstProject = true;
+		this.goToProjects(selectFirstProject);
 	},
 	onRouteMatched: function(oEvent){
 		var oArgs = oEvent.getParameter("arguments");
