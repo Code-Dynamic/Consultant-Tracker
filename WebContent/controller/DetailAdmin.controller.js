@@ -114,8 +114,8 @@ sap.ui.define([
 						  success: function(data){
 							  consultantsDetailModel.setData(data);
 								var results = JSON.stringify(data);
-								console.log(results);
-								console.log(data);
+								//console.log(results);
+								//console.log(data);
 //								alert(results);
 						  },
 						  error: function(oError) {
@@ -174,6 +174,7 @@ sap.ui.define([
 	},
 	// onSubmit event handler of the fragment
     onSubmitProject : function() {
+    	var thisDomObj = this;
     	var oProject = {
     			Project_Name: "none", 
     			Project_DEscription: "none",  
@@ -205,11 +206,12 @@ sap.ui.define([
     		function(responseText) {  
     		//var array = responseText.split(';');
     		MessageToast.show("Project Created Succesfully");
+    		//ensures that newly created project is selected
+    		var selectFirstProject = false;
+    		thisDomObj.goToProjects(selectFirstProject);    		
     		
     	});
-		
-    	this.goToProjects();
-    	
+	
     	//close model
 		this.onClose();
     	
@@ -259,7 +261,7 @@ sap.ui.define([
 				
 				this._Dialog.open();
 				
-				
+				var arrConsultants;
 				//getConsultants
 				//return all consultants
 		         $.post('getProjectConsultants',function(responseText){
@@ -727,30 +729,9 @@ sap.ui.define([
 						 this._Dialog = sap.ui.xmlfragment("consultant-tracker.fragments.feedback", this);
 						 this._Dialog.open();
 				},
-				//End of code for Task
-				goToProjects : function(oEvent){
-						var projectsModel = new sap.ui.model.json.JSONModel();
-						var oModel = this.getOwnerComponent().getModel("oModel");
+				onAfterRendering: function() {
 						
-						//read projects
-						oModel.read(
-								"/Projects?$filter=Project_Deleted%20eq%20false",{
-									success: function(data){ 
-										projectsModel.setData(data);
-//										console.log(data);
-										},
-										
-									error: function(){
-										console.log("Error");}
-										}		
-						);
-						
-						sap.ui.getCore().setModel(projectsModel,"projectsModel");
-					
-					},
-					onAfterRendering: function() {
-						
-					}
+				}
 
 		});
 });
