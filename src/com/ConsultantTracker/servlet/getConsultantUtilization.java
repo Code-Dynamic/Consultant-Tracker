@@ -129,7 +129,7 @@ public class getConsultantUtilization extends HttpServlet {
 		Consultant c = em.find(Consultant.class, Integer.parseInt(Consultant_ID));
 		java.util.List<Daily_Times> times = em.createQuery("SELECT d FROM Daily_Times d WHERE d.consultant = :consultant AND d.date BETWEEN :startDate AND :endDate",Daily_Times.class)
                 .setParameter("consultant", c).setParameter("startDate", sqlDate1).setParameter("endDate", sqlDate2).getResultList();
-		System.out.println("Times size: "+ times.size());
+//		System.out.println("Times size: "+ times.size());
 				int workingDaysWithHols = getWorkingDaysInMonth(startDate.getTimeInMillis(),endDate.getTimeInMillis());
 				int workingDays = removeHolidays(month, workingDaysWithHols);
 				  //System.out.println("workDays: "+ workingDays);
