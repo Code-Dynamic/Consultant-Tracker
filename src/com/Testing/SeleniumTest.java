@@ -113,14 +113,14 @@ public class SeleniumTest {
 		driver.navigate().refresh();
 		
 		// User Test Cases
-		// User Test Case 1: Time
+	/*	// User Test Case 1: Time
 		js.executeScript("alert('Test Case 2: Time Entering')");
 		Thread.sleep(1500);
 		driver.switchTo().alert().dismiss();
 		
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--requestUserTimesBtn"))).click();
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("tpGeneral-inner"))).sendKeys("08:00");
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--submitUserTimesBtn"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--submitUserTimesBtn"))).click();*/
 		
 		// User Test Case 2: Ratings
 		js.executeScript("alert('Test Case 2: Ratings')");

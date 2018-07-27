@@ -40,7 +40,6 @@ public class AssignConsultants extends HttpServlet {
 		ResultSet set = null;
 		
 		try {
-		
 			statement = connection.prepareStatement("INSERT INTO assignment(PROJECT_PROJECT_ID, CONSULTANT_CONSULTANT_ID) VALUES(?,?)");
 			statement.setString(1, projectID);
 			statement.setString(2, consultantID);

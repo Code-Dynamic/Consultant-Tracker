@@ -12,18 +12,18 @@ controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.Spli
     enableScrolling="true">
     
      <tnt:ToolHeader>
-     
+
         <Button 
         text="Consultant Tracker"
         type="Transparent" 
         press="onHomePress">
-        
+
             <layoutData>
-            
+
                 <OverflowToolbarLayoutData priority="NeverOverflow"/>
-                
+
             </layoutData>
-            
+
         </Button>
         <IconTabHeader 
         id="iconTabHeader" 
@@ -31,17 +31,17 @@ controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.Spli
         select="onSelectTab" 
         showOverflowSelectList="true" 
         backgroundDesign="Transparent">
-        
+
             <layoutData>
-            
+
                 <OverflowToolbarLayoutData 
                 priority="NeverOverflow" 
                 shrinkable="true"/>
-                
+
             </layoutData>
-            
+
         </IconTabHeader>
-        
+
         <ToolbarSpacer>
         
             <layoutData>
@@ -84,7 +84,6 @@ controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.Spli
         </MenuButton>
         
     </tnt:ToolHeader>
-    
  <content>
  
  <SplitApp id="idSplitAppControl"/>

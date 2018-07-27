@@ -405,7 +405,7 @@ sap.ui.define([
 			 this._DialogAddTask.open();
 		},
 		handleCloseAddTask: function(oEvent){
-			var aContexts = oEvent.getParameter("selectedContexts");
+			/*var aContexts = oEvent.getParameter("selectedContexts");
 			console.log(aContexts);
 			if (aContexts && aContexts.length) {
 				MessageToast.show("You have chosen " + aContexts.map(function(oContext) {
@@ -414,20 +414,40 @@ sap.ui.define([
 			} else {
 				MessageToast.show("No new item was selected.");
 			}
-			oEvent.getSource().getBinding("items").filter([]);
+			oEvent.getSource().getBinding("items").filter([]);*/
+			this._DialogAddTask.destroy();
 		},
-		onSubmitTask: function(){
+		onSubmitTask: function(oEvent){
 			console.log("Start creating task");
 			
 	    	var _Name = sap.ui.getCore().byId("t_Name").getValue();
 	    	var _Description = sap.ui.getCore().byId("t_Description").getValue();
 	    	var _DueDate = sap.ui.getCore().byId("t_Deadline").getValue();
-	    	var _projectID = this.oProjectId;
+	    	var oModel = this.getView().getModel("projectsModel");
+//	    	console.log(oModel.oData.Project_ID);
+	    	var _projectID = oModel.oData.Project_ID;
+	    	
+	    /*	var aContexts = oEvent.getParameter("selectedContexts");
+			var oModel = this.getView().getModel("projectsModel");
+			if (aContexts && aContexts.length) {
+				MessageToast.show("You have chosen " + aContexts.map(function(oContext) {
+					var consultantID = oContext.getObject().Consultant_ID;
+					var projectID = oModel.oData.Project_ID;
+					$.post('createTask',{description: _Description,dueDate: _DueDate,name:_Name, projectID: _projectID},function(responseText){
+			    		  console.log("Creating task completed");
+//							console.log("Done!");
+						});
+					return oContext.getObject().Consultant_Name; }).join(", "));
+			} else {
+				MessageToast.show("No new item was selected.");
+			}*/
+	    	
+	    	console.log(_Name+" "+_Description+" "+_DueDate+" "+_projectID);
 //	    	
-	    	  $.post('createTask',{description: _Description,dueDate: _DueDate,name:_Name, projectID: _projectID},function(responseText){
+	    	$.post('createTask',{description: _Description,dueDate: _DueDate,name:_Name, projectID: _projectID},function(responseText){
 	    		  console.log("Creating task completed");
 //					console.log("Done!");
-				});
+			});
 	    	  
 	    	//close model
 			this._DialogAddTask.destroy();
