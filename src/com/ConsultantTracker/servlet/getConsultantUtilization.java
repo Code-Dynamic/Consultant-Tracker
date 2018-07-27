@@ -10,16 +10,24 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.TemporalType;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ConsultantTracker.model.Consultant;
+import com.ConsultantTracker.model.Daily_Times;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 
 
 /**
@@ -33,14 +41,12 @@ public class getConsultantUtilization extends HttpServlet {
      */
     public getConsultantUtilization() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
@@ -48,7 +54,6 @@ public class getConsultantUtilization extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		
 		String Consultant_ID = request.getParameter("Consultant_ID");	//set project Name from request
 		String strMonth = request.getParameter("month");
@@ -106,31 +111,43 @@ public class getConsultantUtilization extends HttpServlet {
 		java.sql.Date sqlDate1 = new java.sql.Date(startDate.getTimeInMillis());
 		java.sql.Date sqlDate2 = new java.sql.Date(endDate.getTimeInMillis());		
 		
-		Connection con = (Connection) getServletContext().getAttribute("DBConnection"); //establish database connection
-		PreparedStatement ps = null;
-		ResultSet rs = null;
+//		Connection con = (Connection) getServletContext().getAttribute("DBConnection"); //establish database connection
+//		PreparedStatement ps = null;
+//		ResultSet rs = null;
 		
-		try {
-				ps = con.prepareStatement(" SELECT * FROM daily_times WHERE CONSULTANT_CONSULTANT_ID = ? AND DATE BETWEEN ? AND ?");				
-				ps.setString(1, Consultant_ID);
-				ps.setDate(2, sqlDate1);
-				ps.setDate(3, sqlDate2);
-				rs = ps.executeQuery();
+//		try {
+//				ps = con.prepareStatement(" SELECT * FROM daily_times WHERE CONSULTANT_CONSULTANT_ID = ? AND DATE BETWEEN ? AND ?");				
+//				ps.setString(1, Consultant_ID);
+//				ps.setDate(2, sqlDate1);
+//				ps.setDate(3, sqlDate2);
+//				rs = ps.executeQuery();
+		
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
+		EntityManager em = emf.createEntityManager();
+		
+	
+		Consultant c = em.find(Consultant.class, Integer.parseInt(Consultant_ID));
+		java.util.List<Daily_Times> times = em.createQuery("SELECT d FROM Daily_Times d WHERE d.consultant = :consultant AND d.date BETWEEN :startDate AND :endDate",Daily_Times.class)
+                .setParameter("consultant", c).setParameter("startDate", sqlDate1).setParameter("endDate", sqlDate2).getResultList();
+		System.out.println("Times size: "+ times.size());
 				int workingDaysWithHols = getWorkingDaysInMonth(startDate.getTimeInMillis(),endDate.getTimeInMillis());
 				int workingDays = removeHolidays(month, workingDaysWithHols);
 				  //System.out.println("workDays: "+ workingDays);
 				int hoursPerDay = 8;
 				double expectedHours = hoursPerDay * workingDays;				
-			if(rs != null){
+			if(times != null){
 				//User user = new User(rs.getString("name"), rs.getString("email"), rs.getString("country"), rs.getInt("id"));
 				//logger.info("User found with details="+user);
 				//response.setContentType("application/json");
 				Double generalTime = 0.0;
 				Double assignedTaskTime = 0.0;
 				int numResults = 0;
-				while(rs.next()) {
-					generalTime += Double.parseDouble(rs.getString("GENERAL_TIME"));
-					assignedTaskTime += Double.parseDouble(rs.getString("TOTAL_ASSIGNED_TASKS_TIME"));
+				for(int i =0;i<times.size();i++) {
+					Daily_Times d = times.get(i);
+//					generalTime += Double.parseDouble(rs.getString("GENERAL_TIME"));
+//					assignedTaskTime += Double.parseDouble(rs.getString("TOTAL_ASSIGNED_TASKS_TIME"));
+					generalTime += d.getGeneral_Time();
+					assignedTaskTime += d.getTotal_Assigned_Tasks_Time();
 					numResults++;
 				}
 				//System.out.println("numResults: "+numResults);
@@ -157,19 +174,19 @@ public class getConsultantUtilization extends HttpServlet {
 					return valuesStr;					
 				}
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new ServletException("DB Connection problem.");
-		}finally{
-			try {
-				if(rs != null)
-					rs.close();
-				if(ps != null)
-					ps.close();
-			} catch (SQLException e) {
-				//logger.error("SQLException in closing PreparedStatement or ResultSet");;
-			}
-		}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			throw new ServletException("DB Connection problem.");
+//		}finally{
+//			try {
+//				if(rs != null)
+//					rs.close();
+//				if(ps != null)
+//					ps.close();
+//			} catch (SQLException e) {
+//				//logger.error("SQLException in closing PreparedStatement or ResultSet");;
+//			}
+//		}
 	}	
 		
 	//assumes that consultants don't work on Saturdays

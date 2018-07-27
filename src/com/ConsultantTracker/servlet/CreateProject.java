@@ -6,13 +6,23 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ConsultantTracker.model.Client;
+import com.ConsultantTracker.model.Project;
 
 //import static java.lang.System.out;
 /**
@@ -41,66 +51,45 @@ public class CreateProject extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		String proj_Name = request.getParameter("Name");	//set project Name from request
+		String proj_Name = request.getParameter("Name");	
 		String ClientID = request.getParameter("ClientID");
+		int c_ID =Integer.parseInt(ClientID);
 		String Proj_Desc = request.getParameter("Desc");
+		
 		String Proj_Deadl = request.getParameter("Deadl");
-		String Proj_StartDate = request.getParameter("StartDate");
-		int on_Site = Integer.parseInt(request.getParameter("OnSite"));
-		int projectCreator=Integer.parseInt(request.getParameter("Project_Creator"));
-		
-		Connection con = (Connection) getServletContext().getAttribute("DBConnection"); //establish database connection
-		PreparedStatement ps = null;
-		ResultSet rs = null;
+		SimpleDateFormat sdf =new SimpleDateFormat("dd-mm-yyyy");
+		Date Deadline = new Date();
 		try {
-			ps = con.prepareStatement("INSERT INTO project (PROJECT_NAME,CLIENT_ID,PROJECT_DESCRIPTION," + 
-					"PROJECT_DEADLINE,PROJECT_STARTDATE,PROJECT_ONSITE,PROJECT_COMPLETED,PROJECT_CREATOR) VALUES (?,?,?,?,?,?,?,?);");		//create prepared sql statement	
-			
-			ps.setString(1, proj_Name);
-			ps.setString(2, ClientID);
-			ps.setString(3, Proj_Desc);
-			ps.setString(4, Proj_Deadl);
-			ps.setString(5, Proj_StartDate);
-			ps.setInt(6, on_Site);
-			ps.setInt(7,0);
-			ps.setInt(8,projectCreator);
-			ps.executeUpdate();				// execute sql query
-			System.out.println("startDate: "+ Proj_StartDate);
-			ps.close();
-		
-			ps = con.prepareStatement("select * from project");
-			rs = ps.executeQuery();				// execute sql query
-			if(rs != null){
-				String ObjToReturn="";
-				while(rs.next()) {				// build return string based on query response
-					if(!ObjToReturn.equals(""))
-						ObjToReturn +=";";
-				 ObjToReturn +=rs.getString("PROJECT_NAME")+','+rs.getString("PROJECT_DESCRIPTION")+','+rs.getString("PROJECT_DEADLINE")+','+rs.getString("PROJECT_STARTDATE");
-			
-				}
-				PrintWriter out = response.getWriter();
-			
-				response.setContentType("text/plain");
-				out.write(ObjToReturn);	// return response
-			}else{
-				RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
-				PrintWriter out= response.getWriter();
-				//logger.error("User not found with email="+email);
-				out.write("SQL Query Failed for DeleteProject.");
-				rd.include(request, response);
-			}
-		} catch (SQLException e) {
+			Deadline = sdf.parse(Proj_Deadl);
+		} catch (ParseException e) {
 			e.printStackTrace();
-			//logger.error("Database connection problem");
-			throw new ServletException("DB Connection problem.");
-		}finally{
-			try {
-				if(rs!= null)
-					rs.close();
-				ps.close();
-			} catch (SQLException e) {
-				//logger.error("SQLException in closing PreparedStatement or ResultSet");;
-			}
+		}
+		
+		boolean onSite = Boolean.parseBoolean(request.getParameter("OnSite"));
+		int on_Site = Integer.parseInt(request.getParameter("OnSite"));
+
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
+		EntityManager em = emf.createEntityManager();
+		
+
+		Client c = em.find(Client.class, c_ID);
+		if(c != null) {
+			Project p = new Project();
+			p.setProject_Name(proj_Name);
+			p.setProject_Deadline(Deadline);
+			p.setProject_Deleted(false);
+			p.setProject_Description(Proj_Desc);
+			p.setClient_ID(c);
+			p.setProject_OnSite(onSite);
+	
+
+			em.getTransaction().begin();
+			em.persist(p);
+			em.getTransaction().commit();
+			response.getWriter().write("Successd: new Project Added");
+		}
+		else {
+			response.getWriter().write("Error: No Client Found");
 		}
 	}
 

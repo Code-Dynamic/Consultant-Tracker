@@ -7,12 +7,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ConsultantTracker.model.Assignment;
+import com.ConsultantTracker.model.Client;
+import com.ConsultantTracker.model.Consultant;
+import com.ConsultantTracker.model.Project;
 
 /**
  * Servlet implementation class AssignConsultants
@@ -35,59 +43,20 @@ public class AssignConsultants extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String projectID = (request.getParameter("project"));
 		String consultantID = (request.getParameter("consultant"));
-		Connection connection = (Connection) getServletContext().getAttribute("DBConnection"); //establish database connection
-		PreparedStatement statement = null;
-		ResultSet set = null;
-		
-		try {
-			statement = connection.prepareStatement("INSERT INTO assignment(PROJECT_PROJECT_ID, CONSULTANT_CONSULTANT_ID) VALUES(?,?)");
-			statement.setString(1, projectID);
-			statement.setString(2, consultantID);
-			statement.executeUpdate();	// execute sql query
-			statement.close();
+
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
+		EntityManager em = emf.createEntityManager();
+
+		Assignment a = new Assignment();
+		Project p = em.find(Project.class, Integer.parseInt(projectID));
+		Consultant c = em.find(Consultant.class, Integer.parseInt(consultantID));
+		a.setConsultant1(c);
+		a.setProject(p);
+
+		em.getTransaction().begin();
+		em.persist(a);
+		em.getTransaction().commit();
 			
-			//see if it was inserted into the database
-			statement = connection.prepareStatement("SELECT * FROM assignment WHERE PROJECT_PROJECT_ID = ? and CONSULTANT_CONSULTANT_ID = ?");
-			statement.setString(1, projectID);
-			statement.setString(2, consultantID);
-			set = statement.executeQuery();
-			
-			String ObjToReturn = "Done";
-			if(set != null) {
-				while(set.next())
-					ObjToReturn=set.getString("ASSIGNMENT_ID") + ", " + set.getString("PROJECT_PROJECT_ID") + ", " + set.getString("CONSULTANT_CONSULTANT_ID");
-					//PrintWriter out = response.getWriter();
-			}
-			else
-				ObjToReturn = "rs is null???";
-			int year = java.time.Year.now().getValue();
-			//TODO update dev branch
-			statement = connection.prepareStatement("INSERT INTO ratings(NUM_VOTES, RATING, YEAR,PROJECT_PROJECT_ID, CONSULTANT_CONSULTANT_ID) VALUES(?,?,?,?,?)");
-			statement.setInt(1, 0);
-			statement.setDouble(2, 0.0);
-			statement.setInt(3, year);
-			statement.setString(4, projectID);
-			statement.setString(5, consultantID);
-			statement.executeUpdate();
-			statement.close();
-			
-				response.setContentType("text/plain");
-				response.getWriter().write(ObjToReturn);	// return response
-		}
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
-		finally
-		{
-			try 
-			{
-				if(set != null)
-					set.close();
-				//connection.close();
-			}
-			catch (SQLException e) {}
-		}
 	}
 
 	/**

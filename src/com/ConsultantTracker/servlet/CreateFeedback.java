@@ -6,15 +6,25 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.sql.Date;
+import java.util.Date;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ConsultantTracker.model.Consultant;
+import com.ConsultantTracker.model.Feedback;
+import com.ConsultantTracker.model.Project;
+import com.ConsultantTracker.model.Task;
 
 /**
  * Servlet implementation class CreateFeedback
@@ -38,66 +48,35 @@ public class CreateFeedback extends HttpServlet {
 		// TODO Auto-generated method stub
 		//String date = request.getParameter("date");	//set project Name from request
 		String msg = request.getParameter("msg");
-		int Consultant = Integer.parseInt(request.getParameter("consultant"));
-		int Project = Integer.parseInt(request.getParameter("project"));
-		int Task = Integer.parseInt(request.getParameter("task"));
-
-		LocalDate d = LocalDate.now();
-		java.sql.Date mydate = java.sql.Date.valueOf(d);
+		int consultant = Integer.parseInt(request.getParameter("consultant"));
+		int project = Integer.parseInt(request.getParameter("project"));
+		int task = Integer.parseInt(request.getParameter("task"));
 		
-		String date = d.toString();
-		Connection con = (Connection) getServletContext().getAttribute("DBConnection"); //establish database connection
-		PreparedStatement ps = null;
-		ResultSet rs = null;
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
+		EntityManager em = emf.createEntityManager();
+		
+		Feedback f = new Feedback();
+		Project p = em.find(Project.class, project);
+		Task t= em.find(Task.class, task);
+		Consultant c = em.find(Consultant.class, consultant);
+		
+		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-mm-dd");
+		Date dateSent = new Date();
 		try {
-			ps = con.prepareStatement("INSERT INTO feedback (DATE,MESSAGE,CONSULTANT_CONSULTANT_ID," + 
-					"PROJECT_PROJECT_ID,TASK_TASK_ID) VALUES (?,?,?,?,?);");		//create prepared sql statement	
-			
-			ps.setDate(1, mydate);
-			ps.setString(2, msg);
-			ps.setInt(3, Consultant);
-			ps.setInt(4, Project);
-			ps.setInt(5, Task);
-			System.out.println(ps.toString());
-			ps.executeUpdate();				// execute sql query
-			
-			ps.close();
-		
-			ps = con.prepareStatement("select * from feedback");
-			rs = ps.executeQuery();				// execute sql query
-			if(rs != null){
-				String ObjToReturn="";
-				while(rs.next()) {				// build return string based on query response
-					if(!ObjToReturn.equals(""))
-						ObjToReturn +=";";
-				 ObjToReturn +=rs.getString("DATE")+','+rs.getString("MESSAGE")+','+rs.getString("CONSULTANT_CONSULTANT_ID") ;
-			
-				}
-				PrintWriter out = response.getWriter();
-			
-				response.setContentType("text/plain");
-				out.write(ObjToReturn);	// return response
-			}else{
-				RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
-				PrintWriter out= response.getWriter();
-				//logger.error("User not found with email="+email);
-				out.write("SQL Query Failed for DeleteProject.");
-				rd.include(request, response);
-			}
-		} catch (SQLException e) {
+			dateSent = sdf.parse(LocalDate.now().toString());
+		} catch (ParseException e) {
 			e.printStackTrace();
-			//logger.error("Database connection problem");
-			throw new ServletException("DB Connection problem.");
-		}finally{
-			try {
-				if(rs!= null)
-					rs.close();
-				if(ps!=null)
-				ps.close();
-			} catch (SQLException e) {
-				//logger.error("SQLException in closing PreparedStatement or ResultSet");;
-			}
 		}
+		f.setDate(dateSent);
+		f.setMessage(msg);
+		f.setConsultant_ID(c);
+		f.setProject(p);
+		f.setTask_ID(t);
+		
+		em.getTransaction().begin();
+		em.persist(f);
+		em.getTransaction().commit();
+		
 	}
 
 	/**

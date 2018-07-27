@@ -4,12 +4,22 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ConsultantTracker.model.Project;
+import com.ConsultantTracker.model.Task;
 
 /**
  * Servlet implementation class createTask
@@ -31,34 +41,32 @@ public class createTask extends HttpServlet {
 		String description= request.getParameter("description");
 		String dueDate = request.getParameter("dueDate");
 		String name = request.getParameter("name");
+		System.out.println(request.getParameter("projectID"));
 		int projectID = Integer.parseInt(request.getParameter("projectID"));
-		Connection con = (Connection) getServletContext().getAttribute("DBConnection");
-		PreparedStatement ps = null;
+	
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
+		EntityManager em = emf.createEntityManager();
+		
+		Task t = new Task();
+		Project p = em.find(Project.class, projectID);
+		
+		t.setDescription(description);
+		t.setName(name);
+		
+		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-mm-dd");
+		Date dDate = new Date();
 		try {
-			
-			ps = con.prepareStatement("INSERT INTO task (description, due_date, name, project_project_id) VALUES (?, ?, ?, ?)");
-			ps.setString(1, description);
-			ps.setString(2, dueDate);
-			ps.setString(3, name);
-			ps.setInt(4, projectID);
-			ps.executeUpdate();
-			//**sends success message back if user is stored successfully 
-			String ObjToReturn = "Task created succesfully!" ;
-			response.setContentType("text/plain");
-			response.getWriter().write(ObjToReturn);
-
-		} catch (SQLException e) {
+			dDate = sdf.parse(dueDate);
+		} catch (ParseException e) {
 			e.printStackTrace();
-			//logger.error("Database connection problem");
-			throw new ServletException("DB Connection problem.");
-		}finally{
-			try {
-				if (ps!= null)
-					ps.close();
-			} catch (SQLException e) {
-				//logger.error("SQLException in closing PreparedStatement or ResultSet");;
-			}
 		}
+		t.setDue_Date(dDate);
+		t.setProject(p);
+		
+		em.getTransaction().begin();
+		em.persist(t);
+		em.getTransaction().commit();
+		
 	}
 
 	/**
