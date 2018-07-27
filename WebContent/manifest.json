@@ -191,7 +191,21 @@
 					"target": [
 						"MasterAdmin","ProjectsOverviewCalender"
 					]
-				}
+				},
+				{
+                    "name": "Feedback",
+                    "pattern": "feedback",
+                    "target": [
+                        "MasterFeedback","DetailFeedback"
+                    ]
+                },
+                {
+                    "name": "DetailFeedback",
+                    "pattern": "DetailFeedback/{taskID}",
+                    "target": [
+                        "MasterFeedback","DetailFeedback"
+                    ]
+                }
 			],
 			"targets": {
 				"MasterAdmin": {

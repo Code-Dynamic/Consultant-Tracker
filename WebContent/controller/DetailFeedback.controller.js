@@ -12,34 +12,78 @@ sap.ui.define([
 
         onInit: function() {
             // set mock model
-        
-            var oModel = new JSONModel("model/feed.json");
-            this.getView().setModel(oModel);
+        	var oRouter = this.getRouter();
+			oRouter.getRoute("DetailFeedback").attachMatched(this._onRouteMatched, this);
             
         },
 
         onPost: function(oEvent) {
-            var oFormat = DateFormat.getDateTimeInstance({ style: "medium" });
+            var oFormat = DateFormat.getDateTimeInstance({ style: "long" });
             var oDate = new Date();
             var sDate = oFormat.format(oDate);
             // create new entry
+            var consultantID = this.getConsultantID();
+            var oArgs = oEvent.getParameter("arguments");
+            
             var sValue = oEvent.getParameter("value");
-            var oEntry = {
-                Author: "Anom",
-                AuthorPicUrl: "https://www.ienglishstatus.com/wp-content/uploads/2018/04/Anonymous-Whatsapp-profile-picture.jpg",
-                Type: "Reply",
-                Date: "" + sDate,
-                Text: sValue
-            };
-
-            // update model
-            var oModel = this.getView().getModel();
-            var aEntries = oModel.getData().EntryCollection;
-            aEntries.push(oEntry);
-            oModel.setData({
-                EntryCollection: aEntries
-            });
+            var oModel = this.getOwnerComponent().getModel("oModel");
+            var taskDetailModel = new JSONModel();
+            var thisObj = this;
+            $.post('CreateFeedback', {msg: sValue, consultant:consultantID, project: 1, task:this.passedTaskID },function(responseText) {  
+        		var array = responseText.split(';');
+        		//console.log(array);
+        		oModel.read("/Feedbacks", {
+					urlParameters: {
+						"$expand" : "TaskDetails,ConsultantDetails"
+			        },
+					filters: [ new sap.ui.model.Filter({
+				          path: "TaskDetails/Task_ID",
+				          operator: sap.ui.model.FilterOperator.EQ,
+				          value1: thisObj.passedTaskID
+				     })],
+					  success: function(data){
+						  taskDetailModel.setData(data);
+					  },
+					  error: function(oError) {
+						  alert("error");
+						 }
+					});
+        		thisObj.getView().setModel(taskDetailModel);
+        	});
+            
         },
+        
+        _onRouteMatched: function(oEvent) {
+			
+//			///set model for detail page
+			var oArgs, oView;
+			oArgs = oEvent.getParameter("arguments");
+			
+			var oModel = this.getOwnerComponent().getModel("oModel");
+        	var taskDetailModel = new JSONModel();
+			
+        	this.passedTaskID = oArgs.taskID;
+			//read the Project table based on id
+				oModel.read("/Feedbacks", {
+					urlParameters: {
+						"$expand" : "TaskDetails,ConsultantDetails"
+			        },
+					filters: [ new sap.ui.model.Filter({
+				          path: "TaskDetails/Task_ID",
+				          operator: sap.ui.model.FilterOperator.EQ,
+				          value1: oArgs.taskID
+				     })],
+					  success: function(data){
+						  taskDetailModel.setData(data);
+					  },
+					  error: function(oError) {
+						  alert("error");
+						 }
+					});
+				this.getView().setModel(taskDetailModel);
+				console.log(taskDetailModel)
+				
+		},
 
         onSenderPress: function(oEvent) {
             MessageToast.show("Clicked on Link: " + oEvent.getSource().getSender());

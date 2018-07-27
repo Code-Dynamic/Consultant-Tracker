@@ -370,6 +370,9 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddProject",this);
 		this._Dialog.open();		
 	}*/,
+	onFeedbackPress: function(){
+        this.getRouter().navTo("Feedback");
+    }, 
 
 	/**
 	 * Called when the View has been rendered (so its HTML is part of the document). Post-rendering manipulations of the HTML could be done here.

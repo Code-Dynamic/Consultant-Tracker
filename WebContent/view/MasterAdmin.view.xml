@@ -164,12 +164,21 @@
 			text="Times" 
 			icon="sap-icon://time-entry-request" 
 			press="onRequestUserTimes">
-			
+				<layoutData>
+					<OverflowToolbarLayoutData priority="NeverOverflow" />
+				</layoutData>
+			</Button>
+			<Button  
+			id="feedBackAdminBtn" 
+			icon="sap-icon://post" 
+			press="onFeedbackPress">
+				 
 			<layoutData>
 					<OverflowToolbarLayoutData priority="NeverOverflow" />
 			</layoutData>
 			
-			</Button>	
+			</Button>
+				
 				
 		</semantic:customFooterContent>
 		

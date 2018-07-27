@@ -11,14 +11,16 @@
 	<semantic:MasterPage id="MasterConsultant">
 	
 		<semantic:content>
-
+					
 		<IconTabBar 	id="iconTabBar" 
 						class="sapUiResponsiveContentPadding" 
 						expandable="false"
 						width="100%">
 						
 				<items>
-			
+					<IconTabSeparator icon="sap-icon://vertical-grip"/>
+					
+					<IconTabSeparator icon="sap-icon://vertical-grip"/>
 										
 					<IconTabFilter id="iconTabBarFilter2" 
 								icon="sap-icon://folder" 
@@ -60,18 +62,6 @@
 					<IconTabSeparator icon="sap-icon://vertical-grip"/>
 					
 					<IconTabSeparator icon="sap-icon://vertical-grip"/>
-					
-				<IconTabFilter id="iconTabBarFilter3" 
-								icon="sap-icon://post" 
-								tooltip="List of all projects" 
-								text="Feedback">
-								
-							<content>				
-
-							</content>
-							
-					</IconTabFilter>
-
 				</items>		
 			</IconTabBar>
 
@@ -93,6 +83,11 @@
 				 text="Times" 
 				 icon="sap-icon://time-entry-request" 
 				 press="onRequestUserTimes"/>
+				 
+				 <Button  
+				 id="feedBackBtn" 
+				 icon="sap-icon://post" 
+				 press="onFeedbackPress"/>
 				 
 		</semantic:customFooterContent>		
 	</semantic:MasterPage>

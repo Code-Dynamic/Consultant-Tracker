@@ -1,103 +1,39 @@
-<mvc:View 
-xmlns:core="sap.ui.core" 
-xmlns:mvc="sap.ui.core.mvc" 
-xmlns="sap.m" 
-xmlns:semantic="sap.m.semantic"
-xmlns:tnt="sap.tnt"
-xmlns:html="http://www.w3.org/1999/xhtml" 
-controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.MasterFeedback">
-
-    <semantic:MasterPage 
-    id="masterFeedback" 
-    title="Communications Hub"
-    navButtonPress="onNavBack" 
-    showNavButton="true">
-    
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:semantic="sap.m.semantic" xmlns:tnt="sap.tnt"
+    xmlns:html="http://www.w3.org/1999/xhtml" 
+    controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.MasterFeedback">
+    <semantic:MasterPage id="masterFeedback" title="Communications Hub" navButtonPress="onNavBack" showNavButton="true" icon= "sap-icon://home">
         <semantic:content>
-        
-            <Bar id="bar0">
-            
-                <contentLeft>
-                
-                    <Button 
-                    text="Tasks"
-                    width="100px" 
-                    id="taskB"
-                    press="getTasks"/>
-                    
-                </contentLeft>
-                
-                <contentMiddle>
-                
-                    <Button 
-                    text="Consultants" 
-                    width="100px" 
-                    id="consultantB" 
-                    press="getConsultants"/>
-                    
+            <Bar id="bar0" text="tasks">
+            	<contentMiddle>
+                    <Text text="Task" id="text4"/>
                 </contentMiddle>
-                
+                <!-- <contentLeft>
+                    <Button text="Tasks" width="100px" id="taskB" press="getTasks"/>
+                </contentLeft>
+               <contentMiddle>
+                    <Button text="Consultants" width="100px" id="consultantB" press="getConsultants"/>
+                </contentMiddle>
                 <contentRight>
-                
-                    <Button 
-                    text="Projects" 
-                    width="100px" 
-                    id="projectsB" 
-                    press="getProjects"/>
-                    
-                </contentRight>
+                    <Button text="Projects" width="100px" id="projectsB" press="getProjects"/>
+                </contentRight>-->
             </Bar>
-
+            <!--<List showSeparators="Inner" items="{/ProductCollection}">-->
+            <!--    <items>-->
+            <!--        <StandardListItem title="{Name}" description=""/>-->
+            <!--    </items>-->
+            <!--</List>
+            <List id="listFeedback" mode="SingleSelectMaster" selectionChange="onSelect"/>-->
             <List id="listFeedback"
 				items="{/results/}">
-				
 				<items>
-				
 					<ObjectListItem
 						title="{TaskDetails/Name}"
 						type="Active"
 						press="onTaskSelect">
-						
 					</ObjectListItem>
-					
 				</items>
-				
 			</List>
-			
         </semantic:content>
-        
-        <semantic:sort>
-        
-            <semantic:SortSelect 
-            change="onSemanticSelectChange" 
-            items="{ path: '/ProductCollectionStats/Filters', sorter: { path: 'Name' } }">
-            
-                <core:Item 
-                key="{type}" 
-                text="{type}"/>
-                
-            </semantic:SortSelect>
-            
-        </semantic:sort>
-        
-        <semantic:filter>
-        
-            <semantic:FilterAction press="onSemanticButtonPress"/>
-            
-        </semantic:filter>
-        
-        <semantic:group>
-        
-            <semantic:GroupAction press="onSemanticButtonPress"/>
-            
-        </semantic:group>
-        
-        <semantic:addAction>
-        
-            <semantic:AddAction press="onSemanticButtonPress"/>
-            
-        </semantic:addAction>
-        
+     
     </semantic:MasterPage>
-    
 </mvc:View>
