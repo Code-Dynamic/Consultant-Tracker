@@ -48,13 +48,13 @@ public class AssignConsultants extends HttpServlet {
 		EntityManager em = emf.createEntityManager();
 
 		Assignment a = new Assignment();
-		Project p = em.find(Project.class, projectID);
-		Consultant c = em.find(Consultant.class, consultantID);
+		Project p = em.find(Project.class, Integer.parseInt(projectID));
+		Consultant c = em.find(Consultant.class, Integer.parseInt(consultantID));
 		a.setConsultant1(c);
 		a.setProject(p);
 
 		em.getTransaction().begin();
-		em.persist(p);
+		em.persist(a);
 		em.getTransaction().commit();
 			
 	}

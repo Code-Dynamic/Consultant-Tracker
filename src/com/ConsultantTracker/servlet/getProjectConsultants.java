@@ -58,14 +58,13 @@ public class getProjectConsultants extends HttpServlet {
 			java.util.List<Assignment> consultantList;
 				if(proj_ID != null) {
 					Project p = em.find(Project.class, Integer.parseInt(proj_ID));
-				 consultantList = em.createQuery("SELECT * FROM assignment WHERE PROJECT_PROJECT_ID=?",Assignment.class)
-			                .setParameter(1, p).getResultList();
+				 consultantList = em.createQuery("SELECT a FROM Assignment a WHERE a.project=:proj",Assignment.class)
+			                .setParameter("proj", p).getResultList();
 //					ps = con.prepareStatement("select * from assignment join consultant on assignment.CONSULTANT_CONSULTANT_ID=consultants.CONSULTANT_ID where assignment.PROJECT_PROJECT_ID=?");				
 //					ps.setString(1, proj_ID);
 				}
 				else
-					consultantList = em.createQuery("SELECT * FROM assignment ",Assignment.class)
-	                .setParameter(1, proj_ID).getResultList();
+					consultantList = em.createQuery("SELECT a FROM Assignment a",Assignment.class).getResultList();
 //					ps = con.prepareStatement("Select * from Consultant");
 //					rs = ps.executeQuery();
 				if(consultantList != null){

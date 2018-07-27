@@ -261,7 +261,7 @@ sap.ui.define([
 				
 				this._Dialog.open();
 				
-				
+				var arrConsultants;
 				//getConsultants
 				//return all consultants
 		         $.post('getProjectConsultants',function(responseText){
