@@ -124,6 +124,9 @@ sap.ui.define([
 						});
 //					set the project detail model
 					this.getView().setModel(consultantsDetailModel,"consultants"); 
+					
+					//end the loading indicator
+					sap.ui.core.BusyIndicator.hide();
 	},
 	onSubmit: function(evt){
 		var name = sap.ui.getCore().byId("name").getValue();

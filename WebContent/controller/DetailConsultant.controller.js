@@ -43,6 +43,9 @@ sap.ui.define([
 					});
 				
 				this._iEvent = 0;
+
+				//end the loading indicator
+				sap.ui.core.BusyIndicator.hide();
 			},
 			
 			_onRouteMatched: function(oEvent) {
