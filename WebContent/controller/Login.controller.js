@@ -55,6 +55,7 @@ sap.ui.define([
 				var oModel2 = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
 				var thisPtr = this;
 				
+				//start the loading indicator
 				sap.ui.core.BusyIndicator.show(0)
 				oModel2.read( "/Consultants?$select=Consultant_ID, Consultant_Admin&$filter=Consultant_email eq \'"+ email + "\'", {
 					success: function(data){
