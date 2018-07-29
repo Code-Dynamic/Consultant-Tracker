@@ -1,7 +1,6 @@
 sap.ui.define([
-		'consultanttracker/Consultant-Tracker_Prototype-1/controller/BaseController',
-		'sap/ui/core/Fragment'
-], function(BaseController, Fragment) {
+		'consultanttracker/Consultant-Tracker_Prototype-1/controller/BaseController'
+], function(BaseController) {
 	"use strict";
 
 	return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.Login", {
@@ -65,6 +64,8 @@ sap.ui.define([
 								duration: 5000,
 								autoClose: true
 							 });
+							//end the loading indicator
+							sap.ui.core.BusyIndicator.hide();
 						}							
 						else{
 							oConsultantId = data.results[0].Consultant_ID;
@@ -76,6 +77,8 @@ sap.ui.define([
 											duration: 5000,
 											autoClose: true
 										 });
+										//end the loading indicator
+										sap.ui.core.BusyIndicator.hide();
 									}
 									else{
 										if (oConsutlantAdmin == 1)
