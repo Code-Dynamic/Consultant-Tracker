@@ -42,7 +42,6 @@ public class CreateProject extends HttpServlet {
      */
     public CreateProject() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -66,7 +65,6 @@ public class CreateProject extends HttpServlet {
 		}
 		
 		boolean onSite = Boolean.parseBoolean(request.getParameter("OnSite"));
-		int on_Site = Integer.parseInt(request.getParameter("OnSite"));
 
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
 		EntityManager em = emf.createEntityManager();
@@ -97,7 +95,7 @@ public class CreateProject extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+
 		doGet(request, response);
 	}
 

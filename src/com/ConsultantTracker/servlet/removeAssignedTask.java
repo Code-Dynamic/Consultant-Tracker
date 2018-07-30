@@ -58,45 +58,7 @@ public class removeAssignedTask extends HttpServlet {
 		em.remove(t);
 		em.getTransaction().commit();
 			
-//		Connection connection = (Connection) getServletContext().getAttribute("DBConnection"); //establish database connection
-//		PreparedStatement statement = null;
-//		PreparedStatement deleteStatement = null;
-//		ResultSet set = null;
-//		try {
-//			
-//			//search for consultant in the assignments table 
-//			statement = connection.prepareStatement("SELECT * FROM assigned_task WHERE task_task_ID = ?");
-//			statement.setString(1, taskID);
-//			set = statement.executeQuery();
-//			while(set.next())
-//			{
-//				deleteStatement = connection.prepareStatement("DELETE FROM assigned_task WHERE task_task_ID = ?");
-//				deleteStatement.setString(1, set.getString("task_task_ID"));
-//				deleteStatement.executeUpdate();
-//				deleteStatement.close();
-//			}
-//			
-//			deleteStatement = connection.prepareStatement("DELETE FROM task WHERE task_ID =?");
-//			deleteStatement.setString(1, taskID);
-//			deleteStatement.executeUpdate();
-//			deleteStatement.close();
-//			statement.close();
-//			response.setContentType("text/plain");
-//			response.getWriter().write("Done");	// return response
-//		}
-//		catch (SQLException e)
-//		{
-//			e.printStackTrace();
-//		}
-//		finally
-//		{
-//			try 
-//			{
-//				if (set !=null)
-//					set.close();
-//			}
-//			catch (SQLException e) {}
-//		}
+
 	}
 
 	/**

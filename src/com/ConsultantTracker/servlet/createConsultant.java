@@ -24,7 +24,7 @@ import com.ConsultantTracker.model.Consultant;
 public class createConsultant extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	//static Logger logger = Logger.getLogger(LoginServlet.class);
+
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Entereed create consultant servlet");
@@ -37,19 +37,6 @@ public class createConsultant extends HttpServlet {
 		if(adminStr.equals("1")) {
 			admin = true;
 		}
-//		error handling done at front-end......confirm
-//		String errorMsg = null;
-//		if(email == null || email.equals("")){
-//			errorMsg ="User Email can't be null or empty";
-//		}
-//		
-//		if(errorMsg != null){
-//			RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
-//			PrintWriter out= response.getWriter();
-//			out.println("<font color=red>"+errorMsg+"</font>");
-//			rd.include(request, response);
-//		}else{
-
 		
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
 		EntityManager em = emf.createEntityManager();
@@ -72,7 +59,6 @@ public class createConsultant extends HttpServlet {
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}	
 	

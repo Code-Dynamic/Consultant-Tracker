@@ -33,14 +33,14 @@ public class RemoveConsultant extends HttpServlet {
      */
     public RemoveConsultant() {
         super();
-        // TODO Auto-generated constructor stub
+        
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
 		String consultant = request.getParameter("consultant");
 		
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
@@ -61,50 +61,13 @@ public class RemoveConsultant extends HttpServlet {
 		em.getTransaction().begin();
 		em.remove(c);
 		em.getTransaction().commit();
-//		Connection connection = (Connection) getServletContext().getAttribute("DBConnection"); //establish database connection
-//		PreparedStatement statement = null;
-//		PreparedStatement deleteStatement = null;
-//		ResultSet set = null;
-//		try {
-//			
-//			//search for consultant in the assignments table 
-//			statement = connection.prepareStatement("SELECT * FROM assignment WHERE CONSULTANT_CONSULTANT_ID = ?");
-//			statement.setString(1, consultant);
-//			set = statement.executeQuery();
-//			while(set.next())	
-//			{
-//				deleteStatement = connection.prepareStatement("DELETE FROM assignment WHERE ASSIGNMENT_ID = ?");
-//				deleteStatement.setString(1, set.getString("Assignment_ID"));
-//				deleteStatement.executeUpdate();
-//				deleteStatement.close();
-//			}
-//			
-//			deleteStatement = connection.prepareStatement("DELETE FROM consultant WHERE CONSULTANT_ID =?");
-//			deleteStatement.setString(1, consultant);
-//			deleteStatement.executeUpdate();
-//			deleteStatement.close();
-//			statement.close();
-//		}
-//		catch (SQLException e)
-//		{
-//			e.printStackTrace();
-//		}
-//		finally
-//		{
-//			try 
-//			{
-//				if (set !=null)
-//					set.close();
-//			}
-//			catch (SQLException e) {}
-//		}
+
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 
