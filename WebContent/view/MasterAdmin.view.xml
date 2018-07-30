@@ -16,7 +16,8 @@
 			id="iconTabBar" 
 			class="sapUiResponsiveContentPadding" 
 			expandable="false"
-			width="100%">
+			width="100%"
+			select = "onMasterIconTabFilterSelect">
 				
 				<items>		
 					<IconTabFilter 
@@ -24,7 +25,8 @@
 						icon="sap-icon://folder" 
 						tooltip="List of all projects" 
 						text="Projects"
-						press="goToProjects">
+						key = "projectsSelect"
+						>
 						
 						<content>
 						
@@ -54,18 +56,17 @@
 									<ObjectListItem
 										title="{projectsModel>Project_Name}"
 										type="Active"
-										press="onProjectListItemPress"
-										number = "{projectsModel>Project_ID}">
+										press="onProjectListItemPress">
 										
 										<firstStatus>
 										
-											<ObjectStatus text="In Progress" />
+											<ObjectStatus text="{projectsModel>status}" />
 											
 										</firstStatus>
 										
 										<attributes>
 										
-											<ObjectAttribute text="Date " />
+											<ObjectAttribute text="{projectsModel>Project_Deadline}" />
 											
 										</attributes>
 										
@@ -87,8 +88,9 @@
 						id="iconTabBarFilter3" 
 						icon="sap-icon://employee" 
 						tooltip="list of all Consultants" 
-						text="Consultants">
-					
+						text="Consultants"
+						key = "consultantsSelect">
+						
 						<content>
 						
 							<Bar id="headerBar2">
@@ -137,7 +139,7 @@
 					
 				</items>
 				
-			</IconTabBar>	
+			</IconTabBar>		
 				
 		</semantic:content>
 		
