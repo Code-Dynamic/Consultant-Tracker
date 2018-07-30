@@ -36,14 +36,12 @@ public class UnassignConsultant extends HttpServlet {
      */
     public UnassignConsultant() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		int assignmentID = Integer.parseInt(request.getParameter("assignment"));
 		
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
@@ -53,45 +51,13 @@ public class UnassignConsultant extends HttpServlet {
 		em.getTransaction().begin();
 		em.remove(a);
 		em.getTransaction().commit();
-//		Connection connection = (Connection) getServletContext().getAttribute("DBConnection"); //establish database connection
-//		PreparedStatement statement = null;
-//		ResultSet set = null;
-//		
-//		try {
-//		
-//			statement = connection.prepareStatement("DELETE FROM assignment WHERE ASSIGNMENT_ID = ?");
-//			statement.setInt(1, assignmentID);
-//			statement.executeUpdate();	// execute sql query
-//			statement.close();
-//			//see if it was inserted into the database
-//			
-//				PrintWriter out = response.getWriter();
-//				response.setContentType("text/plain");
-//				out.write("Unassign Done");	// return response
-//
-//			
-//		}
-//		catch (SQLException e)
-//		{
-//			e.printStackTrace();
-//		}
-//		finally
-//		{
-//			try 
-//			{
-//				if(set != null)
-//					set.close();
-//				//connection.close();
-//			}
-//			catch (SQLException e) {}
-//		}
+
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 
