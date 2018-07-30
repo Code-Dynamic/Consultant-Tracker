@@ -338,7 +338,7 @@ sap.ui.define([
 					thisObj.getView().setModel(ratingsBtnConfigModel,"ratingsBtnConfig");				
 				}
 				
-				//TODO fix project progress
+				//TODO fix project progress on project view
 				$.post('getProjectProgress',{Project_Id:projectID},function(responseText){
 					var progress = {percVal:0,displayVal:0};
 					progress.percVal = parseFloat(responseText);
