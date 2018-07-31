@@ -39,7 +39,7 @@ public class EnterDailyTimes extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-mm-dd");
+		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
 		Date date = new Date();
 
 		try {

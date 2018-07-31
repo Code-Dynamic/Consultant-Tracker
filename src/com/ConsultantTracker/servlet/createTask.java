@@ -53,7 +53,7 @@ public class createTask extends HttpServlet {
 		t.setDescription(description);
 		t.setName(name);
 		
-		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-mm-dd");
+		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
 		Date dDate = new Date();
 		try {
 			dDate = sdf.parse(dueDate);

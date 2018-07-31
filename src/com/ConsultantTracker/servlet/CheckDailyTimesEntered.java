@@ -45,7 +45,7 @@ public class CheckDailyTimesEntered extends HttpServlet {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
 		EntityManager em = emf.createEntityManager();
 		
-		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-mm-dd");
+		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
 		Date dateSent = new Date();
 		try {
 			dateSent = sdf.parse(LocalDate.now().toString());

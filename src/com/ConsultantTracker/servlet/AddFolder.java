@@ -134,7 +134,7 @@ public class AddFolder extends HttpServlet {
 				a.setAttachment_Size(fileItem.getSize());
 				a.setAttachment_Type( fileItem.getContentType());
 				
-				SimpleDateFormat sdf =new SimpleDateFormat("yyyy-mm-dd");
+				SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
 				Date uploadDate = new Date();
 				try {
 					uploadDate = sdf.parse(LocalDate.now().toString());

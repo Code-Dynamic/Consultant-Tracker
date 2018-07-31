@@ -38,14 +38,12 @@ public class CreateFeedback extends HttpServlet {
      */
     public CreateFeedback() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		//String date = request.getParameter("date");	//set project Name from request
 		String msg = request.getParameter("msg");
 		int consultant = Integer.parseInt(request.getParameter("consultant"));
@@ -60,13 +58,14 @@ public class CreateFeedback extends HttpServlet {
 		Task t= em.find(Task.class, task);
 		Consultant c = em.find(Consultant.class, consultant);
 		
-		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-mm-dd");
+		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
 		Date dateSent = new Date();
 		try {
 			dateSent = sdf.parse(LocalDate.now().toString());
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		System.out.println("Date = " +dateSent);
 		f.setDate(dateSent);
 		f.setMessage(msg);
 		f.setConsultant_ID(c);

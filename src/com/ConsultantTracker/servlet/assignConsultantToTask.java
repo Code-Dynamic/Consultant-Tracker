@@ -37,7 +37,6 @@ public class assignConsultantToTask extends HttpServlet {
      */
     public assignConsultantToTask() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -59,7 +58,7 @@ public class assignConsultantToTask extends HttpServlet {
 		
 		Assigned_Task a= new Assigned_Task();
 		
-		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-mm-dd");
+		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
 		Date DateAssigned = new Date();
 		Date DueDate = new Date();
 		Date lastUpdate = new Date();
