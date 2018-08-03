@@ -11,8 +11,44 @@ sap.ui.define([
 		 * @memberOf consultanttracker.Consultant-Tracker_Prototype-1.view.Login
 		 */
 			onInit: function() {
-				
-				
+//				check if the super user account has been created. If not, then create the superuser account
+				//start the loading indicator
+				sap.ui.core.BusyIndicator.show(100)
+				var oModel2 = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
+				oModel2.read("/Consultants?$filter=Consultant_email eq 'Superuser'", {
+					success: function(data){
+						if (data.results.length == 0){
+							$.post("createConsultant", {name:"Superuser",surname:"Admin",email:"Superuser",
+									cell:"0000000000", admin:1},function(responseText) { 
+										oModel2.read( "/Consultants?$select=Consultant_ID&$filter=Consultant_email eq 'Superuser'", {
+											success: function(data){
+												console.log (data.results);
+												if (data.results.length != 0){
+													$.post("CreateUser", {conID:data.results[0].Consultant_ID, password:"CodeDynamicTesting"},
+															function(responseText) { });
+												}
+											}
+										});
+									});
+//							add to the database in the users table
+							
+						}
+						
+						
+						//end the loading indicator
+						var _timeout = jQuery.sap.delayedCall(3000, this, function () {
+							sap.ui.core.BusyIndicator.hide();
+						});
+					},		
+					error: function(oError) {
+						sap.m.MessageToast.show(oError, {
+							duration: 10000,
+							autoClose: true
+						});
+						//end the loading indicator
+						sap.ui.core.BusyIndicator.hide();
+					}
+				});
 			},
 
 		/**
@@ -47,61 +83,59 @@ sap.ui.define([
 		},
 		//Log user into account
 		onLoginClick: function(){
-				var email = this.getView().byId("username-email").getValue();
-				var password =this.getView().byId("password").getValue();
-				var oModel = this.getOwnerComponent().getModel("oModel");
-				var oConsultantId;
-			    var oConsutlantAdmin;
-				var oModel2 = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
-				var thisPtr = this;
-				
-				//start the loading indicator
-				sap.ui.core.BusyIndicator.show(0)
-				oModel2.read( "/Consultants?$select=Consultant_ID, Consultant_Admin&$filter=Consultant_email eq \'"+ email + "\'", {
-					success: function(data){
-						if (data.results.length == 0){
-							thisPtr._DialogLoading.close();
-							sap.m.MessageToast.show('Invalid user details. Check username and password', {
-								duration: 5000,
-								autoClose: true
-							 });
-							//end the loading indicator
-							sap.ui.core.BusyIndicator.hide();
-						}							
-						else{
-							oConsultantId = data.results[0].Consultant_ID;
-							oConsutlantAdmin = data.results[0].Consultant_Admin;
-							oModel2.read("/Users?$select=Password&$filter=ConsultantID eq "+ oConsultantId + " and Password eq \'" +password+ "\'",{
-								success: function(data, response){
-									if (data.results.length == 0){
-										sap.m.MessageToast.show('Invalid user details. Check username and password', {
-											duration: 5000,
-											autoClose: true
-										 });
-										//end the loading indicator
-										sap.ui.core.BusyIndicator.hide();
-									}
-									else{
-										if (oConsutlantAdmin == 1)
-											thisPtr.getRouter().navTo("MasterAdmin", {consultantId: oConsultantId});
-										else
-											thisPtr.getRouter().navTo("MasterConsultant", {consultantId: oConsultantId});
-									}
-								}
-							});
-						}
-					  },
-					 error: function(oError) {
-						 sap.m.MessageToast.show(oError, {
-								duration: 10000,
-							 autoClose: false
+			var email = this.getView().byId("username-email").getValue();
+			var password =this.getView().byId("password").getValue();
+			var oModel = this.getOwnerComponent().getModel("oModel");
+			var oConsultantId;
+		    var oConsutlantAdmin;
+			var oModel2 = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
+			var thisPtr = this;
+			
+			//start the loading indicator
+			sap.ui.core.BusyIndicator.show(0)
+			oModel2.read( "/Consultants?$select=Consultant_ID, Consultant_Admin&$filter=Consultant_email eq \'"+ email + "\'", {
+				success: function(data){
+					if (data.results.length == 0){
+						sap.m.MessageToast.show('Invalid user details. Check username and password', {
+							duration: 5000,
+							autoClose: true
 						 });
-						 }
-					});
-////				
-//				this.getRouter().navTo("MasterConsultant");
-		}
-
-	});
+						//close the loading indicator
+						sap.ui.core.BusyIndicator.hide();
+					}							
+					else{
+						oConsultantId = data.results[0].Consultant_ID;
+						oConsutlantAdmin = data.results[0].Consultant_Admin;
+						oModel2.read("/Users?$select=Password&$filter=Consultant_ID eq "+ oConsultantId + " and Password eq \'" +password+ "\'",{
+							success: function(data, response){
+								if (data.results.length == 0){
+									sap.m.MessageToast.show('Invalid user details. Check username and password', {
+										duration: 5000,
+										autoClose: true
+									 });
+									//end the loading indicator
+									sap.ui.core.BusyIndicator.hide();
+								}
+								else{
+									if (oConsutlantAdmin == 1)
+										thisPtr.getRouter().navTo("MasterAdmin", {consultantId: oConsultantId});
+									else
+										thisPtr.getRouter().navTo("MasterConsultant", {consultantId: oConsultantId});
+								}
+							}
+						});
+					}
+				  },
+				 error: function(oError) {
+					 sap.m.MessageToast.show(oError, {
+							duration: 10000,
+						 autoClose: false
+					 });
+					//end the loading indicator
+					sap.ui.core.BusyIndicator.hide();
+					 }
+				});
+	},
+});
 
 });

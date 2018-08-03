@@ -18,8 +18,8 @@ public class User implements Serializable {
 	int id;
 	
 	@OneToOne
-	@JoinColumn(name = "CONSULTANTID")
-	private Consultant consultantID;
+	@JoinColumn(name = "CONSULTANT_ID")
+	private Consultant consultant_ID;
 
 	private String password;
 
@@ -27,11 +27,11 @@ public class User implements Serializable {
 	}
 
 	public Consultant getConsultantID() {
-		return consultantID;
+		return consultant_ID;
 	}
 
-	public void setConsultantID(Consultant consultantID) {
-		this.consultantID = consultantID;
+	public void setConsultantID(Consultant consultant_ID) {
+		this.consultant_ID = consultant_ID;
 	}
 
 	public String getPassword() {
