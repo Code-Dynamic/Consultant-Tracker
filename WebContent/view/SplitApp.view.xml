@@ -71,9 +71,9 @@ controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.Spli
                 
                     <items>
                     
-                        <MenuItem text="Profile"/>
+                        <MenuItem text="Profile" icon = "sap-icon://account"/>
                         
-                        <MenuItem text="Logout"/>
+                        <MenuItem text="Logout" icon="sap-icon://log" press = "onLogoutPress"/>
                         
                     </items>
                     
