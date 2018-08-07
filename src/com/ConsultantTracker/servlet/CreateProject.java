@@ -48,8 +48,20 @@ public class CreateProject extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
+		EntityManager em = emf.createEntityManager();
+		
+		String proj = request.getParameter("ID");
+		int proj_ID;
+		Project p;
+		if(!proj.isEmpty()) {
+			proj_ID = Integer.parseInt(proj);
+			p= em.find(Project.class, proj_ID);
+		}else
+			p = new Project();
+		
+			
 		String proj_Name = request.getParameter("Name");	
 		String ClientID = request.getParameter("ClientID");
 		int c_ID =Integer.parseInt(ClientID);
@@ -64,15 +76,10 @@ public class CreateProject extends HttpServlet {
 			e.printStackTrace();
 		}
 		
-		boolean onSite = Boolean.parseBoolean(request.getParameter("OnSite"));
-
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
-		EntityManager em = emf.createEntityManager();
-		
+		boolean onSite = Boolean.parseBoolean(request.getParameter("OnSite"));		
 
 		Client c = em.find(Client.class, c_ID);
 		if(c != null) {
-			Project p = new Project();
 			p.setProject_Name(proj_Name);
 			p.setProject_Deadline(Deadline);
 			p.setProject_Deleted(false);
@@ -84,7 +91,7 @@ public class CreateProject extends HttpServlet {
 			em.getTransaction().begin();
 			em.persist(p);
 			em.getTransaction().commit();
-			response.getWriter().write("Successd: new Project Added");
+			response.getWriter().write("Success: new Project Added");
 		}
 		else {
 			response.getWriter().write("Error: No Client Found");
