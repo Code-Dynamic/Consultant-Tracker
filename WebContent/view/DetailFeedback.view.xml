@@ -6,7 +6,7 @@ controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.Deta
                 <content>
                     <ScrollContainer height="100%" width="100%" horizontal="true" vertical="true" focusable="true">
                         <List showSeparators="Inner" items="{/results}">
-                            <FeedListItem sender="{ConsultantDetails/Consultant_Name}" icon="{AuthorPicUrl}" senderPress="onSenderPress" iconPress="onIconPress" iconDensityAware="false" info="{Type}" timestamp="{path:'Date',type:'sap.ui.model.type.Date', formatOptions:{style:'long'}}" text="{Message}" convertLinksToAnchorTags="All"/>
+                            <FeedListItem sender="{ConsultantDetails/Consultant_Name}" icon="{AuthorPicUrl}" senderPress="onSenderPress" iconPress="onIconPress" iconDensityAware="false" info="{Type}" timestamp="{ path: 'Date',formatter: '.formatter.date'}" text="{Message}" convertLinksToAnchorTags="All"/>
                         </List>
                     </ScrollContainer>
                 </content>

@@ -238,7 +238,7 @@ title="{selModel>/Project_Name}">
 									
 										<ObjectIdentifier text="{tasks>Name}"/>
 										
-										<Text text="{tasks>Due_Date}"/>
+										<Text text="{ path: 'tasks>Due_Date',formatter: '.formatter.date'}"/>
 										
 										<ProgressIndicator 
 										class="sapUiSmallMarginBottom" 
@@ -352,7 +352,7 @@ title="{selModel>/Project_Name}">
 										
 											<Text text="{attachment>Attachment_Name}"/>
 											
-											<Text text="{attachment>Attachment_Upload_Date}"/>
+											<Text text="{ path: 'attachment>Attachment_Upload_Date',formatter: '.formatter.date'}"/>
 											
 											<Text text="{attachment>Attachment_Size} B"/>
 											

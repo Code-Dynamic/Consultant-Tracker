@@ -31,7 +31,7 @@
 		<PlanningCalendar
 			id="PC1"
 			rows="{/results}"
-			startDate="{Date_Assigned}"
+			startDate="{ path: 'Date_Assigned',formatter: '.formatter.date'}"
 			appointmentsVisualization="Filled"
 			appointmentSelect="handleAppointmentSelect"
 			showEmptyIntervalHeaders="false"
@@ -47,8 +47,8 @@
 					
 							<appointments>
 						<unified:CalendarAppointment
-							startDate="{Date_Assigned}"
-							endDate="{Due_Date}"
+							startDate="{ path: 'Date_Assigned',formatter: '.formatter.date'}"
+							endDate="{ path: 'Due_Date',formatter: '.formatter.date'}"
 							icon="{pic}"
 							title="Desc: {TaskDetails/Description}"
 							text="Assigned Hours: {Assigned_Hours}"

@@ -4,10 +4,12 @@ sap.ui.define([
 
 		"sap/ui/core/routing/History",
 		"sap/m/MessageToast",
-	], function (Controller, History,MessageToast) {
+		"consultanttracker/Consultant-Tracker_Prototype-1/model/formatter"
+	], function (Controller, History,MessageToast,formatter) {
 		"use strict";
 
 		return Controller.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.BaseController", {
+			formatter: formatter,
 			/**
 			 * Convenience method for accessing the router in every controller of the application.
 			 * @public

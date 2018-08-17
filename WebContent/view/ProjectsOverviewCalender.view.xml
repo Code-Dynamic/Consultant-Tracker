@@ -30,7 +30,7 @@
 		<PlanningCalendar
 			id="calenderRows1"
 			rows="{projectsOverviewModel>/results}"
-			startDate="{projectsOverviewModel>Date_Assigned}"
+			startDate="{ path: 'projectsOverviewModel>Date_Assigned',formatter: '.formatter.date'}"
 			appointmentsVisualization="Filled"
 			appointmentSelect="handleAppointmentSelect"
 			showEmptyIntervalHeaders="false"
@@ -41,15 +41,15 @@
 				<PlanningCalendarRow
 				icon="sap-icon://task"
 					title="{projectsOverviewModel>Project_Name}"
-					text="{projectsOverviewModel>Project_Due_Date}"
+					text="{ path: 'projectsOverviewModel>Project_Due_Date',formatter: '.formatter.date'}"
 					enableAppointmentsDragAndDrop="true"
 						appointmentDrop="handleAppointmentDrop">
 					
 							<appointments>
 							
 						<unified:CalendarAppointment
-							startDate="{projectsOverviewModel>Project_StartDate}"
-							endDate="{projectsOverviewModel>Project_Deadline}"
+							startDate="{ path: 'projectsOverviewModel>Project_StartDate',formatter: '.formatter.date'}"
+							endDate="{ path: 'projectsOverviewModel>Project_Deadline',formatter: '.formatter.date'}"
 							icon="{pic}"
 							title="{projectsOverviewModel>Project_Description}"
 							text="{projectsOverviewModel>Project_Deadline}"

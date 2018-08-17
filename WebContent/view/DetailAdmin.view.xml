@@ -53,7 +53,9 @@
 						
 					<ObjectAttribute
 						title="Due"
-						text="{projectsModel>/Project_Deadline}"/>
+						text="{ path: 
+									'projectsModel>/Project_Deadline',
+									formatter: '.formatter.date'}"/>
 						
 					<ObjectAttribute
 						title="Client Name"
@@ -280,7 +282,9 @@
 						title="{tasksModel>TaskDetails/Name}"/>
 						
 					<Text
-						text="{tasksModel>TaskDetails/Due_Date}" />
+						text="{ path: 
+						 			'tasksModel>TaskDetails/Due_Date',
+									formatter: '.formatter.date'}"/>
 						
 					<Text
 						text="10%" />
@@ -366,7 +370,9 @@
 												text="{attachment>Attachment_Name}"/>
 												
 											<Text 
-												text="{attachment>Attachment_Upload_Date}"/>
+												text="{ path: 
+						 									'attachment>Attachment_Upload_Date',
+															formatter: '.formatter.date'}"/>
 												
 											<Text 
 												text="{attachment>Attachment_Size} B"/>

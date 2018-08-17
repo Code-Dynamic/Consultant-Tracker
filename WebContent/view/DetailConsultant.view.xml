@@ -97,7 +97,9 @@
 												<attributes>
 												
 												<ObjectAttribute 
-												text="Role: {tasksModel>TaskDetails/Due_Date}" 
+												text="{ path: 
+															'tasksModel>TaskDetails/Due_Date',
+															formatter: '.formatter.date'}"
 												icon="sap-icon://task" />
 												
 												</attributes>
@@ -203,7 +205,9 @@
 						title="{tasksModel>TaskDetails/Name}"/>
 						
 					<Text
-						text="{tasksModel>TaskDetails/Due_Date}" />
+						text="{ path: 
+									'tasksModel>TaskDetails/Due_Date',
+									formatter: '.formatter.date'}" />
 						
 					<Text
 						text="10%" />
