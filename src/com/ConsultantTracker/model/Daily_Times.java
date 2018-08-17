@@ -18,19 +18,15 @@ public class Daily_Times implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="primaryKeyGenerator")
 	private int entry_ID;
-	
 	private Consultant consultant;
-	private double general_Time;
-	private double total_Assigned_Tasks_Time;
+	private Assigned_Task assigned_task;
+	private double time;
 	@Temporal(TemporalType.DATE)
 	private Date date;
 	
 	public Date getDate() {
 		return date;
 	}
-	
-//random comment
-	
 	public void setDate(Date date) {
 		this.date = date;
 	}
@@ -55,23 +51,26 @@ public class Daily_Times implements Serializable {
 		this.consultant = consultant;
 	}
 
-	public double getGeneral_Time() {
-		return general_Time;
-	}
-
-	public void setGeneral_Time(double general_Time) {
-		this.general_Time = general_Time;
-	}
-
-	public double getTotal_Assigned_Tasks_Time() {
-		return total_Assigned_Tasks_Time;
-	}
-
 	public void setTotal_Assigned_Tasks_Time(double total_Assigned_Tasks_Time) {
 	}
 	
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public Assigned_Task getAssigned_task() {
+		return assigned_task;
+	}
+	
+	public void setAssigned_task(Assigned_Task assigned_task) {
+		this.assigned_task = assigned_task;
+	}
+	
+	public double getTime() {
+		return time;
+	}
+	
+	public void setTime(double time) {
+		this.time = time;
 	}
    
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}	
 }

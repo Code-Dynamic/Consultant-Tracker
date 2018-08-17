@@ -7,7 +7,8 @@ sap.ui.define([
 		"consultanttracker/Consultant-Tracker_Prototype-1/model/formatter"
 	], function (Controller, History,MessageToast,formatter) {
 		"use strict";
-
+		var AssignedTaskIDArr = [];
+		
 		return Controller.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.BaseController", {
 			formatter: formatter,
 			/**
@@ -18,195 +19,190 @@ sap.ui.define([
 			getRouter : function () {
 				return this.getOwnerComponent().getRouter();
 
+			},
+			getStartOfDayUTC: function(date){
+				var x = Date.UTC(date.getFullYear(),date.getMonth(),date.getDate());
+				return x;
 			},		    
 			onRequestUserTimes : function(){
-				var consultantID = this.getConsultantID();		
+				var consultantID = this.getConsultantID();
+		 		 var currentDate = new Date();
+		 		 //sends date value that represents beginning of any day to enable easy comparison in database
+		 		 var dayBeginUTC = this.getStartOfDayUTC(currentDate);
+				this.getTaskAndTimes(consultantID,dayBeginUTC);      
+		    },
+		    getTaskAndTimes: function(ConsultantID, UTC){
+		    	var thisDomObj = this;
 		    	this._Dialog = this.byId("timesDialog");
 		    	var dialog = this._Dialog;
-		    	dialog.setEscapeHandler(this.onDialogPressEscape);
-		    	var masterDomObj = this;
-		    	var taskCompleted = false;
- 		    	$.post('CheckDailyTimesEntered', { Consultant_ID:consultantID},function(timesEnteredBool) {
-		    		if(parseInt(timesEnteredBool)){
-		    			timesEnteredAlready();
-		    		}else{
-		    			setupUserTimes();
-		    		}
- 		    	});				      
-		    	function timesEnteredAlready(){
-		    		masterDomObj.byId("submitUserTimesBtn").setEnabled(false);
-		    		var dateStr = getDateStr();
-		        	var timesEnteredTxt = new sap.m.MessageStrip({
-		        		renderWhitespace:true,
-		        		text:"You have already entered times for "+dateStr,
-		        		type:sap.ui.core.MessageType.Warning,
-		        		showIcon: true
-		        	});		     	 
-		        	dialog.addContent(timesEnteredTxt);			        	    		
-		    	}
- 		    	function setupUserTimes(){
- 		    		masterDomObj.byId("submitUserTimesBtn").setEnabled(true);
- 			    	var oModel =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
- 			    	var query = "/Assigned_Tasks?$expand=TaskDetails,ConsultantDetails&$filter=ConsultantDetails/Consultant_ID%20eq%20"+consultantID+"%20and%20Task_Completed%20eq%20"+taskCompleted;
- 			    	
- 				     oModel.read(query,{success: function(oData){ addInputs(oData) 
- 				 					}, error: function(){console.log("Error");}}		
- 				 	 );
- 				 	 var totalHoursText;
-
- 				         //return all consultants
- 				         function  addInputs(oResults) {	        	 
- 				        	 var timePicker ="";
- 				        	 var timePickerId = "tp";
- 				        	 var input ="";
- 			        		 var vBox = new sap.m.VBox({
- 			        			 });
- 			        		 var hBox;
- 			        		 var description;
- 				        	 for(var i = 0; i < oResults.results.length; i++){
- 				        		 hBox = new sap.m.FlexBox({
- 				        			 alignItems: sap.m.FlexAlignItems.Center
- 				        			 });			        		 
- 				        		 timePicker = new sap.m.TimePicker({
- 				        			 description: " ",
- 				        			 fieldWidth: "80%",
- 				        			 value:"00:00",
- 				       				 valueFormat:"hh:mm",
- 				       				 displayFormat:"HH:mm",
- 				       				 minutesStep: 15
-// 				       				 id:timePickerId+i
- 				       				 
- 				        		 }); 
- 				        		timePicker.attachChange(function(oEvent){
- 				        			 onLiveChangeTimesInput(this,oEvent);
- 				        		 });
- 				        		 description = new sap.m.Text({
- 				        			 renderWhitespace: true,
- 				        			 text:oResults.results[i].TaskDetails.Name
- 				        		 });			        		 
- 				        		 hBox.addItem(timePicker);
- 				        		 hBox.addItem(description);
- 				        		 vBox.addItem(hBox);	
- 				        	 }
-				        	timePicker = new sap.m.TimePicker({
- 				        		description: " ",
- 				        		fieldWidth: "80%",
- 				        		value:"00:00",
- 				       			valueFormat:"hh:mm",
- 				       			displayFormat:"HH:mm",
- 				       			minutesStep: 15
-// 				       			id:timePickerId+"General"
- 				        	}); 
-					        timePicker.attachChange(function(oEvent){
-	 				        		onLiveChangeTimesInput(this,oEvent);
-	 				        	});
- 			        		 description = new sap.m.Text({
- 				        			 renderWhitespace: true,
- 				        			 text:"General"
- 				        		 });
- 			        		 hBox = new sap.m.HBox({
- 				        			 alignItems:sap.m.FlexAlignItems.Center
- 				        	});	
- 			        		hBox.addItem(timePicker);
- 				        	hBox.addItem(description);
- 				        	vBox.addItem(hBox);
- 			        		var dateStr = getDateStr();
- 			        		totalHoursText = new sap.m.Text({
- 			        			 renderWhitespace:true,
- 			        			 text:" 0.0 Total Hours for "+dateStr,
- 			        		 });
- 			        		vBox.addItem(totalHoursText);			        	 
- 			        		dialog.addContent(vBox);			        	 
- 			        		 
- 				        }
- 				         // checks if numbers entered in each input field are valid and also updates total
- 				         function onLiveChangeTimesInput(timePickerObj,oEvent){
- 						        var newValue = timePickerObj.getValue();
- 					            var maxNumberOfHoursPerDay = 10;
- 					            if(newValue > maxNumberOfHoursPerDay || newValue < 0){
- 					                oEvent.getSource().setValueState(sap.ui.core.ValueState.Error);
- 							        var dateStr = getDateStr();
- 					                totalHoursText.setText("-- :     Total Hours for "+dateStr);
- 					            }
- 					            else{
- 					            	oEvent.getSource().setValueState(sap.ui.core.ValueState.Success);
- 							        var pnlDom = dialog.getDomRef();
- 							        var total = 0;
- 							        var inputVal = 0;
- 							        $(pnlDom).find('input').each(function(index, elem){
- 							        	inputVal = masterDomObj.getInputFloat( $(elem)[0].value);
- 							            total+= inputVal;            
- 							            	
- 							        });
- 							        var dateStr = getDateStr();
- 							        totalHoursText.setText(total.toFixed(2) + " :     Total Hours for " +dateStr);
- 					            }
- 				         }
-
- 				         //checks if value is numeric
- 				         function isNumeric(n) {
- 				        	  return !isNaN(parseFloat(n)) && isFinite(n);
- 				        	}				    		
- 		    	}
-		         
-		         function getDateStr(){
-		        	 var today = new Date();
-		        	 var dd = today.getDate();
-		        	 var mm = masterDomObj.getMonthStr(today.getMonth());
-		        	 var year = today.getFullYear();
+		    	dialog.setEscapeHandler(this.onDialogPressEscape);		 
+ 		    	$.post('GetTimesAndTasks', { Consultant_ID:ConsultantID, UTC: UTC},function(timesAndTasksArr) {
+ 		    		var dataArr = timesAndTasksArr.split(",");
+ 		    		var taskNamesArr = [];
+ 		    		var taskTimesArr = [];
+ 		    		var data = [];
+ 		    		for (var i = 0; i < dataArr.length ; i++){
+ 		    			data = dataArr[i].split(":");
+ 		    			taskNamesArr.push(data[0]);
+ 		    			taskTimesArr.push(parseFloat(data[1]));
+ 		    			AssignedTaskIDArr.push(parseInt(data[2]));
+ 		    		}
+ 		    		thisDomObj.setupUserTimes(taskNamesArr,taskTimesArr,UTC)
+		    		thisDomObj._Dialog.open(); 
+ 		    	});	
+		    	
+		    }, 		    	
+		    setupUserTimes: function(taskNamesArr,taskTimesArr, UTC){
+		    		var thisDomObj = this;
+		    		this._EnterTimesUTC = UTC;
+		    	    var consultantID = this.getConsultantID();
+		    	    this.byId("submitUserTimesBtn").setEnabled(true);
+ 				 	var totalHoursText;	        	 
+ 				    var timePicker ="";
+ 				    var timePickerId = "tp";
+ 				    var input ="";
+ 			        var vBox = new sap.m.VBox();
+ 			        var hBox;
+ 			        var datePicker;
+ 			        var description;
+ 			        var today = new Date();
+				    hBox = new sap.m.FlexBox({
+				    			alignItems: sap.m.FlexAlignItems.Center
+ 				    		});			        		 
+				    datePicker = new sap.m.DatePicker({
+ 				    		 description: " ",
+ 				    		 fieldWidth: "80%",
+ 				    		 dateValue:new Date(UTC),
+ 				    		 maxDate:today
+// 				    		 id:timePickerId+i 
+ 				    	 }); 
+				    datePicker.attachChange(function(oEvent){
+ 				    		 onLiveChangeEnterTimesDate(this,oEvent);
+ 				    	 });
+ 				    description = new sap.m.Text({
+ 				    		 renderWhitespace: true,
+ 				    		 text:" Date"
+ 				    	 });			        		 
+ 				    hBox.addItem(datePicker);
+ 				    hBox.addItem(description);
+ 				    vBox.addItem(hBox); 			        		 
+ 				    var totalTime = 0;
+ 				    for(var i = 0; i < taskNamesArr.length; i++){
+ 				    	totalTime += taskTimesArr[i];
+ 				    	hBox = new sap.m.FlexBox({
+ 				    		 alignItems: sap.m.FlexAlignItems.Center
+ 				    		 });			        		 
+ 				    	 timePicker = new sap.m.TimePicker({
+ 				    		 description: " ",
+ 				    		 fieldWidth: "80%",
+ 				    		 value:taskTimesArr[i],
+ 				    		 valueFormat:"hh:mm",
+ 				    		 displayFormat:"HH:mm",
+ 				    		 minutesStep: 15
+// 				    		 id:timePickerId+i
+ 				    	 }); 
+ 				    	timePicker.attachChange(function(oEvent){
+ 				       			 onLiveChangeTimesInput(this,oEvent);
+ 				       		 });
+ 				       		 description = new sap.m.Text({
+ 				       			 renderWhitespace: true,
+ 				       			 text: " "+taskNamesArr[i]+ "\t"
+ 				       		 });			        		 
+ 				       		 hBox.addItem(timePicker);
+ 				       		 hBox.addItem(description);
+ 				       		 vBox.addItem(hBox);	
+ 				    }
+ 			        var dateStr = this.getDateStr(new Date(UTC));
+ 			        totalHoursText = new sap.m.MessageStrip({
+ 			        	 renderWhitespace:true,
+ 			        	 text: " "+ totalTime.toFixed(2)+" Total Hours for "+dateStr,
+ 			        	 type: sap.ui.core.MessageType.Success
+ 			         });
+ 			        vBox.addItem(totalHoursText);
+ 			        this._Dialog.addContent(vBox);			        	 
+ 			        	 
+ 				   // checks if numbers entered in each input field are valid and also updates total
+ 				   function onLiveChangeTimesInput(timePickerObj,oEvent){
+ 					   var newValue = timePickerObj.getValue();
+ 					   var newDate = datePicker.getDateValue();
+ 				       var maxNumberOfHoursPerDay = 10;
+ 				       if(newValue > maxNumberOfHoursPerDay || newValue < 0){
+ 				           oEvent.getSource().setValueState(sap.ui.core.ValueState.Error);
+ 				       }
+ 				       else{
+ 				       	oEvent.getSource().setValueState(sap.ui.core.ValueState.Success);
+ 				       }
+	 				   var pnlDom = thisDomObj._Dialog.getDomRef();
+	 				   var total = 0;
+	 				   var inputVal = 0;
+	 				   $(pnlDom).find('input').each(function(index, elem){
+	 				    	//first element has date
+	 				    	if(index > 0){
+	 	 				    	inputVal = thisDomObj.getInputFloat($(elem)[0].value);
+		 				        total+= inputVal;        		    		 
+	 				    	}
+	 				     });
+	 				   var dateStr = thisDomObj.getDateStr(newDate);
+	 				   if(total >= 24){
+	 					   totalHoursText.setType(sap.ui.core.MessageType.Error);
+	 				   }else if(total >= 12){
+	 					   totalHoursText.setType(sap.ui.core.MessageType.Warning);
+	 				   }
+	 				   totalHoursText.setText(" "+total.toFixed(2) + " :     Total Hours for " +dateStr);
+ 				   }
+ 				   
+ 				   function onLiveChangeEnterTimesDate(datePickerObj,oEvent){
+ 					  var newDate = datePickerObj.getDateValue();
+  					  thisDomObj._Dialog.removeAllContent();
+	 				  AssignedTaskIDArr = [];
+	 				  //sends date value that represents beginning of any day to enable easy comparison in database
+	 				  var dayBegin = thisDomObj.getStartOfDayUTC(newDate);
+	 				  thisDomObj.getTaskAndTimes(consultantID, dayBegin);
+ 				   } 				         			    		
+	 		    },
+ 		    getDateStr: function(date){
+		        	 var dd = date.getDate();
+		        	 var mm = this.getMonthStr(date.getMonth());
+		        	 var year = date.getFullYear();
 
 		        	 if(dd<10) {
 		        	     dd = '0'+dd
 		        	 } 
 		        	 return dd +" "+ mm + " " + year;		        	 
-		         }
-			         
-			     this._Dialog.open();
-				 
-		    },
+		         },
 		    onSubmitTimes: function(){
-		    	var masterDomObj = this;
+		    	var thisDomObj = this;
 				var consultantID;
 				if(sessionStorage){
 					consultantID = sessionStorage.ConsultantID;
 				}else{
 					consultantID = ConsultantID;
-				}	
-				//query for tasks that are not yet completed
-		    	var taskCompleted = false;
-		    	var query = "/Assigned_Tasks?$expand=TaskDetails,ConsultantDetails&$filter=ConsultantDetails/Consultant_ID%20eq%20"+consultantID+"%20and Task_Completed%20eq%20"+taskCompleted;
-
-			     var oModel =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
-			     oModel.read(query,{success: function(oData){ submitTimes(oData) 
-			 					}, error: function(error){console.log("Error: "+ error);}}		
-			 	 );		    	
+				}    	
 		    
 			 	 var pnlDom = this._Dialog.getDomRef();
 			 	 var inputArr = [];
-			 	 var totalTasks = 0;
 			 	 var num;
 			     $(pnlDom).find('input').each(function(index, elem){
-			    	 	num = masterDomObj.getInputFloat($(elem)[0].value);
-			            inputArr.push(num);  
-			            totalTasks += num;
+				    	 if(index > 0){
+					    	 	num = thisDomObj.getInputFloat($(elem)[0].value);
+					            inputArr.push(num);  	 
+				    	 }
 			        });
-			     var general = inputArr.pop();
-			     totalTasks -= general;
-			 	 function submitTimes(oResults){
-			 		 //TODO Ngoni, improve function, make more efficient by sending through 1 post request with all the data
-		        	 for(var i = 0; (i < oResults.results.length && i < (inputArr.length -1)); i++){
-		        		 if(inputArr[i] > 0){
-			        		 var time = Number(oResults.results[i].Hours_Worked) + inputArr[i];
-				 		    	$.post('EnterTaskTimes', { Assigned_Task_ID:oResults.results[i].Assigned_Task_ID, Hours_Worked:time},function(responseText) {  
-						    		//console.log(responseText);
-					    	});			 
-		        		 }
-		        	 }
-		 		    	$.post('EnterDailyTimes', { Consultant_ID:consultantID, general:general, totalTasks:totalTasks},function(responseText) {
-		 		    		MessageToast.show(responseText);
-			    	});				        	 
-		        	 
-			 	 }  	
+			 	 var resultsString = "";
+		         for(var i = 0; i < AssignedTaskIDArr.length; i++){
+			        	if(inputArr[i] > 0){
+								if(resultsString.length > 0 )
+									resultsString +=",";
+								resultsString +=  AssignedTaskIDArr[i] + ":"+inputArr[i];		 
+			        	}
+		         }
+		         // -1 represents general
+		 		   	$.post('EnterTaskTimes', { userTimes : resultsString, Consultant_ID:consultantID ,dayBeginUTC : this._EnterTimesUTC},function(responseText) {  
+				   		//console.log(responseText);
+		 		   		AssignedTaskIDArr = [];
+		 		   		MessageToast.show(responseText);
+		 		   	});			        	 	        	 
+			 	thisDomObj._Dialog.removeAllContent();
 		        this.onDialogClose();		    	
 		    },
 		    getInputFloat: function(inputVal){

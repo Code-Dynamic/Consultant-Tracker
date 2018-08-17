@@ -2,19 +2,12 @@ package com.ConsultantTracker.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.TemporalType;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -27,19 +20,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.text.DecimalFormat;
-import java.text.ParseException;
-
 
 /**
  * Servlet implementation class getConsultantUtilization
  */
-public class getConsultantUtilization extends HttpServlet {
+public class GetConsultantUtilization extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public getConsultantUtilization() {
+	public GetConsultantUtilization() {
 		super();
 	}
 
@@ -55,9 +46,8 @@ public class getConsultantUtilization extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		String Consultant_ID = request.getParameter("Consultant_ID");	//set project Name from request
+		String Consultant_ID = request.getParameter("Consultant_ID");
 		String strMonth = request.getParameter("month");
-		//System.out.println(strMonth);
 		int month = getMonthInt(strMonth);
 		int year = Integer.parseInt(request.getParameter("year"));
 		int firstDayOfMonth = 1;
@@ -66,14 +56,12 @@ public class getConsultantUtilization extends HttpServlet {
 		GregorianCalendar date1;
 		GregorianCalendar date2;
 		if(month == 12) {
-			//System.out.println("all selected");
 			date1 = new GregorianCalendar(year, 0, firstDayOfMonth,0,0);
 			date2 = new GregorianCalendar(year + 1, 0, firstDayOfMonth,0,0);
 		}
 		else {
 			date1 = new GregorianCalendar(year, month, firstDayOfMonth,0,0);
 			date2 = new GregorianCalendar(year, month +1, firstDayOfMonth,0,0);
-
 		}
 
 		//returns value for previous month based on current date, not what user has requested
@@ -87,7 +75,6 @@ public class getConsultantUtilization extends HttpServlet {
 		GregorianCalendar prevMonthBegin;
 		GregorianCalendar prevMonthEnd;
 		if(currentMonth == 1) {
-			//System.out.println("all selected");
 			prevMonthBegin = new GregorianCalendar(currentYear -1, 11, firstDayOfMonth,0,0);
 			prevMonthEnd = new GregorianCalendar(currentYear -1, 12, firstDayOfMonth,0,0);
 		}
@@ -97,7 +84,6 @@ public class getConsultantUtilization extends HttpServlet {
 		}		
 		prevMonth =  true;
 		returnObj += getUtilizationFromDB(prevMonthBegin,prevMonthEnd,currentMonth - 1, prevMonth, Consultant_ID);
-		//COMPLETE rating system and utilization. Do fancy pie charts
 		PrintWriter out = response.getWriter();
 
 		response.setContentType("text/plain");
@@ -121,22 +107,22 @@ public class getConsultantUtilization extends HttpServlet {
 
 		int workingDaysWithHols = getWorkingDaysInMonth(startDate.getTimeInMillis(),endDate.getTimeInMillis());
 		int workingDays = removeHolidays(month, workingDaysWithHols);
-		//System.out.println("workDays: "+ workingDays);
 		int hoursPerDay = 8;
 		double expectedHours = hoursPerDay * workingDays;				
 		if(times != null){
 
 			Double generalTime = 0.0;
 			Double assignedTaskTime = 0.0;
-			int numResults = 0;
-			for(int i =0;i<times.size();i++) {
+			System.out.println("Times: "+times.size());
+			for(int i =0; i < times.size();i++) {
+				
 				Daily_Times d = times.get(i);
-				//					
-				generalTime += d.getGeneral_Time();
-				assignedTaskTime += d.getTotal_Assigned_Tasks_Time();
-				numResults++;
+				if(d.getAssigned_task() == null) {
+					generalTime += d.getTime();
+				}else {
+					assignedTaskTime += d.getTime();
+				}
 			}
-			//System.out.println("numResults: "+numResults);
 			double unnaccountedHours = expectedHours - generalTime - assignedTaskTime;
 			if(prevMonth) {
 				Double utilizationPerc = (assignedTaskTime/(expectedHours)) * 100;

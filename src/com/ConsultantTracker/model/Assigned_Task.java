@@ -20,23 +20,26 @@ public class Assigned_Task implements Serializable {
 	private int assigned_Task_ID;
 	
 	private Task task;
+	private boolean task_Completed;
 	private Consultant consultant;
 	private double assigned_Hours;
 	private double hours_Worked;
 	@Temporal(TemporalType.DATE)
 	private Date last_Update;
-
 	@Temporal(TemporalType.DATE)
 	private Date date_Assigned;
 	@Temporal(TemporalType.DATE)
 	private Date due_Date;
+	@Temporal(TemporalType.DATE)
+	private Date date_Completed;
+	
+	public Assigned_Task() {
+		
+	}
 	
 	public Date getDate_Assigned() {
 		return date_Assigned;
 	}
-	
-	private boolean task_Completed;
-//random comment
 	
 	public void setDate_Assigned(Date date_Assigned) {
 		this.date_Assigned = date_Assigned;
@@ -48,10 +51,6 @@ public class Assigned_Task implements Serializable {
 
 	public void setDue_Date(Date due_Date) {
 		this.due_Date = due_Date;
-	}
-	
-	public Assigned_Task() {
-		
 	}
 
 	public int getAssigned_Task_ID() {
@@ -109,6 +108,22 @@ public class Assigned_Task implements Serializable {
 	public void setTask_Completed(boolean taskCompleted) {
 		this.task_Completed = taskCompleted;
 	}
+	
+	public Date getDate_Completed() {
+		return date_Completed;
+	}
+
+	public void setDate_Completed(Date completion_Date) {
+		this.date_Completed = completion_Date;
+	}	
+	
+	public void subtractHoursWorked(double time) {
+		this.hours_Worked -= time;
+	}
+	
+	public void addHoursWorked(double time) {
+		this.hours_Worked += time;
+	}	
 	
 	public static long getSerialversionuid() {
 		return serialVersionUID;

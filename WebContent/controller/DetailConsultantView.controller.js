@@ -133,7 +133,7 @@ sap.ui.define([
 						monthNum = 11;
 					}
 					var prevMonth = this.getMonthStr(monthNum -1);				
-			    	$.post('getConsultantUtilization', { Consultant_ID:c_ID ,month:monthVal, year:yearVal},function(responseText) {  
+			    	$.post('GetConsultantUtilization', { Consultant_ID:c_ID ,month:monthVal, year:yearVal},function(responseText) {  
 			    		var hoursArr = responseText.split(',');
 			  		  var oModel = new sap.ui.model.json.JSONModel({
 						  utilization: [{

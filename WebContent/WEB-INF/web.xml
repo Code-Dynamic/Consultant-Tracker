@@ -154,13 +154,23 @@
   </servlet-mapping>
   <servlet>
     <description></description>
-    <display-name>getConsultantUtilization</display-name>
-    <servlet-name>getConsultantUtilization</servlet-name>
-    <servlet-class>com.ConsultantTracker.servlet.getConsultantUtilization</servlet-class>
+    <display-name>GetConsultantUtilization</display-name>
+    <servlet-name>GetConsultantUtilization</servlet-name>
+    <servlet-class>com.ConsultantTracker.servlet.GetConsultantUtilization</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>getConsultantUtilization</servlet-name>
-    <url-pattern>/getConsultantUtilization</url-pattern>
+    <servlet-name>GetConsultantUtilization</servlet-name>
+    <url-pattern>/GetConsultantUtilization</url-pattern>
+  </servlet-mapping>
+  <servlet>
+      <description></description>
+    <display-name>GetTimesAndTasks</display-name>
+    <servlet-name>GetTimesAndTasks</servlet-name>
+    <servlet-class>com.ConsultantTracker.servlet.GetTimesAndTasks</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetTimesAndTasks</servlet-name>
+    <url-pattern>/GetTimesAndTasks</url-pattern>
   </servlet-mapping>
   <servlet>
     <description></description>
