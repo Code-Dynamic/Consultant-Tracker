@@ -279,11 +279,11 @@
 				<cells>
 				
 					<ObjectIdentifier
-						title="{tasksModel>TaskDetails/Name}"/>
+						title="{tasksModel>Name}"/>
 						
 					<Text
 						text="{ path: 
-						 			'tasksModel>TaskDetails/Due_Date',
+						 			'tasksModel>Due_Date',
 									formatter: '.formatter.date'}"/>
 						
 					<Text
@@ -422,7 +422,7 @@
 
 		<semantic:customFooterContent>
 		
-				<Button 
+			<Button 
 					icon="sap-icon://add" 
 					text="Project" 
 					press="addProject" 
@@ -435,13 +435,21 @@
 						
 					</layoutData>
 					
-				</Button>		
+			</Button>		
 					
 			<Button 
 				id="removeProjectButton" 
 				text="Remove Project" 
 				icon="sap-icon://delete" 
 				press="confirmDeleteProject"/>
+			
+			
+			<Button 
+					icon="sap-icon://add" 
+					text="Client" 
+					press="addClient" 
+					id="addClientButton"/>	
+				
 				
 			<Button 
 				press="openProjectsOverviewCalender" 

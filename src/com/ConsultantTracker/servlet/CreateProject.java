@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ConsultantTracker.model.Client;
+import com.ConsultantTracker.model.Consultant;
 import com.ConsultantTracker.model.Project;
 
 //import static java.lang.System.out;
@@ -55,7 +56,7 @@ public class CreateProject extends HttpServlet {
 		String proj = request.getParameter("ID");
 		int proj_ID;
 		Project p;
-		if(!proj.isEmpty()) {
+		if(proj!=null && !proj.isEmpty()) {
 			proj_ID = Integer.parseInt(proj);
 			p= em.find(Project.class, proj_ID);
 		}else
@@ -66,6 +67,7 @@ public class CreateProject extends HttpServlet {
 		String ClientID = request.getParameter("ClientID");
 		int c_ID =Integer.parseInt(ClientID);
 		String Proj_Desc = request.getParameter("Desc");
+		int pCreator = Integer.parseInt(request.getParameter("Project_Creator"));
 		
 		String Proj_Deadl = request.getParameter("Deadl");
 		SimpleDateFormat sdf =new SimpleDateFormat("dd-mm-yyyy");
@@ -78,14 +80,17 @@ public class CreateProject extends HttpServlet {
 		
 		boolean onSite = Boolean.parseBoolean(request.getParameter("OnSite"));		
 
-		Client c = em.find(Client.class, c_ID);
-		if(c != null) {
+		Client client = em.find(Client.class, c_ID);
+		Consultant consultant = em.find(Consultant.class, pCreator);
+		
+		if(client != null) {
 			p.setProject_Name(proj_Name);
 			p.setProject_Deadline(Deadline);
 			p.setProject_Deleted(false);
 			p.setProject_Description(Proj_Desc);
-			p.setClient_ID(c);
+			p.setClient_ID(client);
 			p.setProject_OnSite(onSite);
+			p.setProject_Creator(consultant);
 	
 
 			em.getTransaction().begin();

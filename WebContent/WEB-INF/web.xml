@@ -163,7 +163,7 @@
     <url-pattern>/GetConsultantUtilization</url-pattern>
   </servlet-mapping>
   <servlet>
-      <description></description>
+    <description></description>
     <display-name>GetTimesAndTasks</display-name>
     <servlet-name>GetTimesAndTasks</servlet-name>
     <servlet-class>com.ConsultantTracker.servlet.GetTimesAndTasks</servlet-class>
@@ -181,5 +181,35 @@
   <servlet-mapping>
     <servlet-name>CreateUser</servlet-name>
     <url-pattern>/CreateUser</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AddClient</display-name>
+    <servlet-name>AddClient</servlet-name>
+    <servlet-class>com.ConsultantTracker.servlet.AddClient</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddClient</servlet-name>
+    <url-pattern>/AddClient</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CreateClient</display-name>
+    <servlet-name>CreateClient</servlet-name>
+    <servlet-class>com.ConsultantTracker.servlet.CreateClient</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CreateClient</servlet-name>
+    <url-pattern>/CreateClient</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>RemoveTask</display-name>
+    <servlet-name>RemoveTask</servlet-name>
+    <servlet-class>com.ConsultantTracker.servlet.RemoveTask</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RemoveTask</servlet-name>
+    <url-pattern>/RemoveTask</url-pattern>
   </servlet-mapping>
 </web-app>

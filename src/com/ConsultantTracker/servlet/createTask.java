@@ -41,6 +41,7 @@ public class createTask extends HttpServlet {
 		String description= request.getParameter("description");
 		String dueDate = request.getParameter("dueDate");
 		String name = request.getParameter("name");
+		Boolean billable = Boolean.parseBoolean(request.getParameter("billable"));
 		System.out.println(request.getParameter("projectID"));
 		int projectID = Integer.parseInt(request.getParameter("projectID"));
 	
@@ -52,6 +53,7 @@ public class createTask extends HttpServlet {
 		
 		t.setDescription(description);
 		t.setName(name);
+		t.setBillable(billable);
 		
 		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
 		Date dDate = new Date();

@@ -50,5 +50,10 @@ public class FileLocationContextListener implements ServletContextListener{
 		
 		doGet(request, response);
 	}
+	@Override
+	public void contextDestroyed(ServletContextEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

@@ -41,18 +41,21 @@
 						width="100%" 
 						displayFormat="long" 
 						valueFormat="yyyy-MM-dd"/>
+						
+					<Label text="Is Billable?"/>
+					<CheckBox id="t_Billable"/>
 				</f:content>
 			</f:SimpleForm>
 		</content>
 		<beginButton>
 			<Button 
 				text="Submit" 
-				press="onSubmitTask"/>
+				press="handleCloseAddTask"/>
 		</beginButton>
 		<endButton>
 			<Button
  				text="Close"
- 				press="handleCloseAddTask"/>
+ 				press="onCancel"/>
 		</endButton>
 	</Dialog>
 </core:FragmentDefinition>

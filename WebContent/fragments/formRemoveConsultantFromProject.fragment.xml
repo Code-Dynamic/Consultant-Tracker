@@ -10,8 +10,8 @@
 		noDataText="No Consultants Found"
 		title="Select Consultants"
 		search="handleSearch"
-		confirm="handleClose"
-		cancel="handleClose"
+		confirm="handleCloseRemoveConsultantFromProject"
+		cancel="onCancel"
 		items="{membersModel>/results}" >
 		
 		<StandardListItem

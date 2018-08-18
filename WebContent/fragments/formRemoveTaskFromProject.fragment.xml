@@ -11,12 +11,12 @@
 		title="Select Tasks"
 		search="handleSearch"
 		confirm="handleCloseRemoveTask"
-		cancel="handleCloseRemoveTask"
+		cancel="onCancel"
 		items="{tasksModel>/results}" >
 		
 		<StandardListItem
-			title="{tasksModel>TaskDetails/Name}"
-			description="{tasksModel>TaskDetails/Due_Date}"
+			title="{tasksModel>Name}"
+			description="{tasksModel>Due_Date}"
 			iconDensityAware="false"
 			iconInset="false"
 			type="Active" />

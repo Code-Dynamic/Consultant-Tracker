@@ -9,8 +9,8 @@
 		noDataText="No Consultants Found"
 		title="Select Consultants"
 		search="handleSearch"
-		confirm="handleClose2"
-		cancel="handleClose2"
+		confirm="handleCloseAddConsultantToProject"
+		cancel="onCancel"
 		items="{consultants>/results}" >
 		
 		<StandardListItem
