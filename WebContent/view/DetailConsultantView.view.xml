@@ -77,26 +77,63 @@
 					
 						<content>
 						
-							<List 	id="consultantProjects" 
-									items="{consultantProjectsModel>/results}"
-									noDataText="No projects available">
+						<Table 
+						mode="SingleSelectMaster" 
+						selectionChange=""  
+						growing="true" 
+						inset="false" 
+						items="{consultantProjectsModel>/results}">
+							
+							<columns>
+							
+								<Column width="12em" >
+									<Text text="name"/>
+								</Column>
 								
-								<items>
-										<ObjectListItem											
-											title="Name: {consultantProjectsModel>ProjectDetails/Project_Name}" 
-											type="Active"
-											press= "handleOpenDialog" >
-												<attributes>
-												<ObjectAttribute
-												 text="Date " 
-												 icon="sap-icon://task" />
-												 
-												</attributes>
-										</ObjectListItem>
-											
-								</items>
+								<Column 
+								minScreenWidth="Tablet" 
+								demandPopin="true">
 								
-							</List>
+									<Text text="description"/>
+									
+								</Column>
+								
+								<Column 
+								minScreenWidth="Tablet"
+								demandPopin="true">
+										
+									<Text text="progress"/>
+									
+								</Column>
+																
+							</columns>
+							
+							<items>
+							
+								<ColumnListItem>
+								
+									<cells>
+										
+										<Text text="{consultantProjectsModel>ProjectDetails/Project_Name}"></Text>
+										
+										<Text text="{consultantProjectsModel>ProjectDetails/Project_Description}"/>
+										
+										<ProgressIndicator
+										class="sapUiSmallMarginBottom"
+										percentValue="70"
+										displayValue="70%"
+										showValue="true"
+										state="Warning"
+										displayOnly="true" />
+										
+									</cells>
+							
+								</ColumnListItem>
+								
+							</items>
+							
+						</Table>
+
 							
 						</content>
 						

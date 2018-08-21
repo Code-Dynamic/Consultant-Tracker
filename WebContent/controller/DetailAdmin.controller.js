@@ -37,25 +37,9 @@ sap.ui.define([
 		var oArgs, oView;
 		oArgs = oEvent.getParameter("arguments");
 		
-		//1
-		//read the Project table based on id
-			OModel.read("/Projects("+oArgs.projectId+")", {
-				urlParameters: {
-		            "$expand" : "ClientDetails",
-		        },
-				  success: function(data){
-					   projectsDetailModel.setData(data);
-//						var results = JSON.stringify(data);
-//						console.log(results);
-//						alert(results);
-				  },
-				  error: function(oError) {
-					  alert("error");
-					 }
-				});
-			//set the project detail model
-			this.getView().setModel(projectsDetailModel,"projectsModel"); 
-//			
+		//variables for counting members and tasks on a project
+		var countMembers;
+		var countTasks;
 			
 			//2
 			//get Team members for the selected Project (from master)
@@ -75,6 +59,7 @@ sap.ui.define([
 							var results = JSON.stringify(data);
 //							console.log(results);
 //							alert(results);
+							countMembers = data.results.length;
 					  },
 					  error: function(oError) {
 						  alert("error");
@@ -101,6 +86,7 @@ sap.ui.define([
 						 tasksDetailModel.setData(data);
 //						 alert(result);
 //						 console.log("tasksModel##" +result);
+						 countTasks = data.results.length;
 					  },
 					  error: function(oError) {
 						  alert("error");
@@ -109,6 +95,28 @@ sap.ui.define([
 			
 				this.getView().setModel(tasksDetailModel,"tasksModel");
 				
+				//1
+				//read the Project table based on id
+					OModel.read("/Projects("+oArgs.projectId+")", {
+						urlParameters: {
+				            "$expand" : "ClientDetails",
+				        },
+						  success: function(data){
+							  data.countMembers = countMembers;
+							  data.countTasks = countTasks;
+							  projectsDetailModel.setData(data);
+//								var results = JSON.stringify(data);
+//								console.log(results);
+//								alert(results);
+						  },
+						  error: function(oError) {
+							  alert("error");
+							 }
+						});
+					//set the project detail model
+					this.getView().setModel(projectsDetailModel,"projectsModel"); 
+//					
+					
 				//4
 				//get Team members for the selected Project (from master)
 				var consultantsDetailModel = new JSONModel();	
@@ -151,11 +159,34 @@ sap.ui.define([
 					//end the loading indicator
 					sap.ui.core.BusyIndicator.hide();
 	},
+
+	onSelectTab: function(oEvent){
+		
+		
+		this.pKey = oEvent.getParameter("id");
+		
+		console.log("dashboard select :"+this.pKey);
+		if(this.pKey ==  1){
+			
+		}else if (this.pKey == "__component0---DetailAdmin--2"){
+			
+			this.getView().byId("iconTabBar").setSelectedKey("key2");
+			
+		}else if (this.pKey == "__component0---DetailAdmin--3"){
+			
+			this.getView().byId("iconTabBar").setSelectedKey("key3");
+		
+		}else if (this.pKey == "__component0---DetailAdmin--7"){
+		
+			this.getView().byId("iconTabBar").setSelectedKey("key5");
+			this.showMap(oEvent);
+		}
+	},
 	showMap: function(oEvent) {
 		
 		//Generate map when correct tab selected
 		console.log(oEvent.getParameters().selectedKey);
-		if(oEvent.getParameters().selectedKey != "__component0---DetailAdmin--iconTabBarFilter5"){
+		if(!(oEvent.getParameters().selectedKey == "key5" || oEvent.getParameter("id")=="__component0---DetailAdmin--7")){
 			return;
 		}
 		var viewDivId = sap.ui.getCore().byId(this.createId("map_canvas"));
@@ -513,10 +544,10 @@ sap.ui.define([
 		//*********************************************************************//
 		//The following section contains functions under the Tasks tab
 		onRemoveTaskFromProject: function(oEvent){
+
 //			create model to display list of consultants
 			this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formRemoveTaskFromProject",this);
 			this._Dialog.setModel(this.getView().getModel("tasksModel"),"tasksModel");
-			
 			
 			// Multi-select if required
 			var bMultiSelect = !!oEvent.getSource().data("multi");
@@ -852,6 +883,19 @@ sap.ui.define([
 					
 					// Create a File Reader object
 					
+			},
+			openCalender: function(oEvent){
+				
+				//get model of DetailConsultant controller
+				var oModel = this.getView().getModel("projectsModel");
+				//console.log(oModel);
+
+				//get Project_ID to pass to the calender view
+				var oListId = oModel.oData.Project_ID;
+				this.getRouter()
+					.navTo("Calender", 
+						{listId:oListId, projectId:oListId});
+
 			},
 			handleUploadPress: function(oEvent) {
 						var oFileUploader = this.byId("fileUploader");

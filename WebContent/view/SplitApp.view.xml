@@ -53,35 +53,22 @@ controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.Spli
             </layoutData>
             
         </ToolbarSpacer>
+        		<Button 
+				press="employeeProfile" 
+				  id="splitAppMenuButton" 
+				 type="Transparent" 
+				icon="sap-icon://personnel-view"/>
+				
+				<Button 
+				press="logout" 
+				id="logout" 
+				 type="Transparent" 
+				text="logout" 
+				icon="sap-icon://log"/>
+				
+
         
-        <MenuButton 
-        id="splitAppMenuButton" 
-        text="UserName" 
-        type="Transparent">
-        
-            <layoutData>
-            
-                <OverflowToolbarLayoutData priority="NeverOverflow"/>
-                
-            </layoutData>
-            
-            <menu>
-            
-                <Menu>
-                
-                    <items>
-                    
-                        <MenuItem text="Profile" icon = "sap-icon://account"/>
-                        
-                        <MenuItem text="Logout" icon="sap-icon://log" press = "onLogoutPress"/>
-                        
-                    </items>
-                    
-                </Menu>
-                
-            </menu>
-            
-        </MenuButton>
+
         
     </tnt:ToolHeader>
  <content>

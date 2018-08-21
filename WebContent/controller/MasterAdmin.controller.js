@@ -347,43 +347,164 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 				sap.ui.getCore().setModel(oModel,"tasks");
 				app.to("detailPage");
 			}
-			
-			//End code display task
-			//start code for progress
-		
-/*			$.post('getProjectProgress',{Project_Id:sOrderId},function(responseText){
-				var progress = {percVal:0,displayVal:0};
-				progress.percVal = parseFloat(responseText);
-				progress.displayVal = responseText;
-		          var progressModel = new sap.ui.model.json.JSONModel();
-		          progressModel.setData(progress);
-		          sap.ui.getCore().setModel(progressModel,"progress");
-				
-			});*/
-			//end code for progress
 
 		}
 
-	}/*,
-	
-	addProject: function(){
-		this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddProject",this);
-		this._Dialog.open();		
-	}*/,
-	onFeedbackPress: function(){
+	},
+    onFeedbackPress: function(){
         this.getRouter().navTo("Feedback");
-    }, 
-
-	/**
-	 * Called when the View has been rendered (so its HTML is part of the document). Post-rendering manipulations of the HTML could be done here.
-	 * This hook is the same one that SAPUI5 controls get after being rendered.
-	 * @memberOf splitapp.master
-	 */
-		//openfragment
-	// onClose event handler of the fragment
-    onClose : function() {
-                this._Dialog.destroy();
     },
+	addProject: function(){
+		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddProject",this);
+		this._oDialog.open();		
+	},
+	onRateTeam: function(){
+    	this._ratingsDialog = this.byId("ratingsDialog");
+    	var dialog = this._ratingsDialog;
+    	dialog.setEscapeHandler(this.onDialogPressEscape);
+    	var consultantID = this.getConsultantID();
+    	//var projectID = sap.ui.getCore().getModel("selModel").getProperty("/Project_ID");
+    	var projectID = PROJECT_ID;
+    	var query = "/Assignments?$expand=ProjectDetails,ConsultantDetails&$filter=ConsultantDetails/Consultant_ID%20ne%20"+consultantID+"%20and ProjectDetails/Project_ID%20eq%20"+projectID;
+
+	     var oModel =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+	     oModel.read(query,{success: function(oData){ addMembers(oData) 
+	 					}, error: function(){console.log("Error");}}		
+	 	 );
+	 	 var totalHoursText;
+	 	 	 RatingIndicatorArr = [];	
+	         //return all consultants
+	         function  addMembers(oResults) {
+	        	 RatingResults = oResults;
+	        	 var ratingInd ="";
+	        	 var user = "";
+	        	 var vBox = new sap.m.VBox();
+	        	 var hBox;
+	        	 for(var i = 0; i < oResults.results.length; i++){
+	        		 hBox = new sap.m.HBox({
+	        			 alignItems:sap.m.FlexAlignItems.Center
+	        			 })
+	        		 ratingInd = new sap.m.RatingIndicator();
+	        		 RatingIndicatorArr.push(ratingInd);
+	        		 user = new sap.m.Text({
+	        			 renderWhitespace: true,
+	        			 text:"\t"+ oResults.results[i].ConsultantDetails.Consultant_Name
+	        		 });
+	        		 hBox.addItem(ratingInd);
+	        		 hBox.addItem(user);
+	        		 vBox.addItem(hBox);
+	        	 }
+	        	 RatingsErrTxt = new sap.m.Text({
+        			 renderWhitespace: true,
+        			 text:""
+        		 });
+	        	 vBox.addItem(RatingsErrTxt);
+	        	 dialog.addContent(vBox);
+	         }
+    	
+    	dialog.open();
+	},
+	confirmDeleteProject: function(){
+//		console.log("removing projects");
+		this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.confirmDelete",this);
+		this._Dialog.open();
+
+	},
+	addClient: function(){
+		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddClient",this);
+		this._oDialog.open();		
+	},
+	addConsultant: function(){
+		this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddConsultant",this);
+		this._Dialog.open();
+   },
+	onSubmitClient: function(){
+    	var _Name = sap.ui.getCore().byId("c_Name").getValue();
+    	var _EmailAddress = sap.ui.getCore().byId("c_Email").getValue();
+    	var _PhysicalAddress = sap.ui.getCore().byId("c_Address").getValue();
+    	var _Number = sap.ui.getCore().byId("c_Number").getValue();
+    	
+    	$.post('AddClient', { Name: _Name ,EmailAddress: _EmailAddress,PhysicalAddress: _PhysicalAddress, Number: _Number},
+        		function(responseText) {  
+      				MessageToast.show("client submitted Succesfully");
+    				console.log(responseText);
+        		}
+    	);
+    	
+    	//close model
+    	this.onClose();
+    },
+	 onSubmitProject : function() {
+	    	var thisDomObj = this;
+	    	
+	    	var _Name = sap.ui.getCore().byId("p_Name").getValue();
+	    	var _Description = sap.ui.getCore().byId("p_Description").getValue();
+	    	var _Deadline = sap.ui.getCore().byId("p_Deadline").getValue();
+	    	var _StartDate = sap.ui.getCore().byId("p_StartDate").getValue();
+	    	var _cilentID = sap.ui.getCore().byId("idSelected").getSelectedKey();
+	    	var b_OnSite = sap.ui.getCore().byId("p_OnSite").getSelected();;
+	    	var _OnSite;
+	    	if(b_OnSite){
+	    		_OnSite = 1;
+	    	}else{
+	    		_OnSite = 0;
+	    	}
+
+	    	$.post('CreateProject', { Name: _Name ,ClientID: _cilentID,Desc: _Description, Deadl: _Deadline ,StartDate: _StartDate,OnSite:  _OnSite, Project_Creator: this.getConsultantID()},
+	    		function(responseText) {
+	    		MessageToast.show("project submitted Succesfully");
+	    		//ensures that newly created project is selected
+	    		var selectFirstProject = false;
+	    		thisDomObj.goToProjects(selectFirstProject);    		
+	    	});
+	    	//close model
+			this.onClose();
+	    	
+	    },
+	    onSubmitConsultant : function() {
+	    	var thisDomObj = this;
+	    	var oConsultant = {
+					 Consultant_Name : "none",
+					 Consultant_Surname : "none",
+					 Consultant_email : "none",
+					 Consultant_Cell : "none"				
+				};
+	    	
+	    	var _Name = sap.ui.getCore().byId("c_Name").getValue();
+	    	var _Surname = sap.ui.getCore().byId("c_Surname").getValue();
+	    	var _email = sap.ui.getCore().byId("c_email").getValue();
+	    	var _Cell = sap.ui.getCore().byId("c_Cell").getValue();
+	    	var t = this;
+	    	var oDataProjects =   new sap.ui.model.odata.v2.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
+	    	var x=	oDataProjects.createEntry('/Consultants',{
+				properties:{
+					//Client_Details:{},
+					Consultant_Admin:0,
+					Consultant_Cell: _Cell,
+					Consultant_Name: _Name,
+					Consultant_Surname: _Surname,
+					Consultant_email:_email},
+					async:false,
+				created:function(){
+					MessageToast.show("Consultant submitted Succesfully");
+					thisDomObj.goToConsultants();
+					oDataProjects.submitChanges({async:false});
+					},
+				sucesss: function(){ console.log(("posting Project(sucess) It Worked!!")); }
+				, error:function(){console.log("Error in posting Project");}
+	    	});
+	    	
+	    	//close model
+	    	this.onClose();
+
+	    },
+	onClose: function () {
+//		console.log("on close button");
+		if (this._oDialog) {
+			this._oDialog.destroy();
+		}
+//		this._oDialog.destroy();
+	},
     
 	/**
 	 * Called when the Controller is destroyed. Use this one to free resources and finalize activities.

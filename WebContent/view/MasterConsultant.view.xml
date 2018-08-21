@@ -69,25 +69,44 @@
 		</semantic:content>
 		
  		<semantic:customFooterContent>
- 		
-				 <Button  
-				 id="rateTeamBtn" 
-				 text="Rate Members" 
-				 icon="sap-icon://favorite" 
-				 press="onRateTeam" 
-				 enabled="{ratingsBtnConfig>/enabled}" 
-				 visible="{ratingsBtnConfig>/visible}"/>
-				 
-				 <Button  
-				 id="requestUserTimesBtn" 
-				 text="Times" 
-				 icon="sap-icon://time-entry-request" 
-				 press="onRequestUserTimes"/>
-				 
-				 <Button  
-				 id="feedBackBtn" 
-				 icon="sap-icon://post" 
-				 press="onFeedbackPress"/>
+			
+			<MenuButton 
+			text="action menu" 
+			buttonMode="Split" 
+			useDefaultActionOnly="true">
+			
+			<menu>
+			
+				<Menu itemSelected="onMenuAction">
+				
+					<items>
+						<MenuItem
+						id="rateTeamBtn"  
+						text="team member rating" 
+						icon="sap-icon://favorite"
+						press="onRateTeam"
+						enabled="{ratingsBtnConfig>/enabled}" 
+				 		visible="{ratingsBtnConfig>/visible}">
+						</MenuItem>
+						
+						<MenuItem 
+						id="requestUserTimesBtn" 
+						text="time entry" 
+						icon="sap-icon://time-entry-request" 
+				 		press="onRequestUserTimes">
+						</MenuItem>
+						
+						<MenuItem
+						id="feedBackBtn"
+						text="communication" 
+				 		icon="sap-icon://notification-2" 
+				 		press="onFeedbackPress">
+						</MenuItem>
+					</items>
+				</Menu>
+			</menu>
+		</MenuButton>
+		
 				 
 		</semantic:customFooterContent>		
 	</semantic:MasterPage>

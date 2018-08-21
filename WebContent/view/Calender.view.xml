@@ -8,10 +8,11 @@
 			
 	<semantic:MasterPage 
 	id="Calender" 
-	title="Schedule Planning CalenderS" 
+	title="Schedule Planning Calender" 
 	navButtonPress="onNavBack" 
 	showNavButton="true">
-	
+
+				
 		<semantic:content>
 		
 	<VBox class="sapUiSmallMargin">
@@ -19,7 +20,9 @@
 		<PlanningCalendar
 			id="PC1"
 			rows="{/results}"
-			startDate="{Date_Assigned}"
+			
+			builtInViews="Week"
+
 			appointmentsVisualization="Filled"
 			appointmentSelect="handleAppointmentSelect"
 			showEmptyIntervalHeaders="false"
@@ -28,13 +31,12 @@
 			<toolbarContent>
 			
 				<Title 
-				text="{TaskDetails/ProjectDetails/Project_Name} Scheduled Tasks" 
+				text="{TaskDetails/ProjectDetails/Project_Name} individual calander view" 
 				titleStyle="H4"/>
 				
 			</toolbarContent>
 			
 			<rows>
-			
 				<PlanningCalendarRow
 					icon="sap-icon://task"
 					title="{TaskDetails/Name}">

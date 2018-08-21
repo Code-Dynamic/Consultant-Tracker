@@ -25,7 +25,7 @@ sap.ui.define([
 				
 				//geting id from the URL
 				var oRouter = this.getRouter();
-				oRouter.getRoute("DetailConsultant").attachMatched(this._onRouteMatched, this);
+				oRouter.getRoute("DetailConsultant").attachMatched(this.onRouteMatched, this);
 				
 				//for timepicker
 				// for the data binding example do not use the change event for check but the data binding parsing events
@@ -51,22 +51,46 @@ sap.ui.define([
 
 				//end the loading indicator
 				sap.ui.core.BusyIndicator.hide();
-			},showMap: function(oEvent) {
+			},
+
+			onSelectTab: function(oEvent){
+				
+				
+				this.pKey = oEvent.getParameter("id");
+				
+				console.log("dashboard select :"+this.pKey);
+				if(this.pKey ==  1){
+					
+				}else if (this.pKey == "__component0---DetailConsultant--2"){
+					
+					this.getView().byId("iconTabBar").setSelectedKey("key2");
+					
+				}else if (this.pKey == "__component0---DetailConsultant--3"){
+					
+					this.getView().byId("iconTabBar").setSelectedKey("key3");
+				
+				}else if (this.pKey == "__component0---DetailConsultant--7"){
+					
+				
+					this.getView().byId("iconTabBar").setSelectedKey("key5");
+					this.showMap(oEvent);
+
+				}
+			},
+			showMap: function(oEvent) {
 				
 				//Generate map when correct tab selected
-				if(oEvent.getParameters().selectedKey != "__component0---DetailConsultant--iconTabBarFilter5"){
+				console.log(oEvent.getParameters().selectedKey);
+				if(!(oEvent.getParameters().selectedKey == "key5" || oEvent.getParameter("id")=="__component0---DetailConsultant--7")){
 					return;
 				}
 				var viewDivId = sap.ui.getCore().byId(this.createId("map_canvas"));
-//				
-				console.log(this.createId("map_canvas"))
-
-				
+				// instanciate google map
 				 map = new google.maps.Map(viewDivId.getDomRef(), {
 						zoom: 12,
 						center: curLatlng//Initial Location on Map
 					});
-
+//				console.log('Called initmap');
 				var geocoder =new google.maps.Geocoder();
 				var officeAddress = '46 Ingersol Rd, Lynnwood Glen, Pretoria, 0081';
 				 directionsRenderer = new google.maps.DirectionsRenderer({
@@ -77,26 +101,25 @@ sap.ui.define([
 				var EpiuseOfficeMarker = new google.maps.Marker();
 				
 				directionsService = new google.maps.DirectionsService;
-				
-				//Get Current location
+
+				//Get user current location
 				if (navigator.geolocation) {
 				     navigator.geolocation.getCurrentPosition(function (position) {
 				    	 curLatlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-				    	 console.log(curLatlng.lat(),curLatlng.lng());
 				         map.setCenter(curLatlng);
 				         CurrLocationMarker.setPosition(curLatlng);
 				         officeLocation();
 				         
 				     });
 				 }
-				//Get Client location -- Currently defaulted to Epiuse Office
+				//Get Client address -- Currently defaulted to Epiuse Office
 				function officeLocation(){
 				 geocoder.geocode( { 'address': officeAddress},function(result,status){
 					 if(status == google.maps.GeocoderStatus.OK){
 						 EpiuseOfficeMarker.setPosition(result[0].geometry.location);
 						 epPos[0] = result[0].geometry.location.lat();
 						 epPos[1] = result[0].geometry.location.lng();
-						 console.log(epPos);
+						
 						
 					 }
 				 });
@@ -117,6 +140,7 @@ sap.ui.define([
 				EpiuseOfficeMarker.setMap(map);
 				infoWindowClient.open(map, EpiuseOfficeMarker);
 			    
+				
 				var control = this.getView().byId('front-div');
 
 			},
@@ -142,7 +166,7 @@ sap.ui.define([
 					});
 			},
 			
-			_onRouteMatched: function(oEvent) {
+			onRouteMatched: function(oEvent) {
 				
 //				///set model for detail page
 				var oModel = this.getOwnerComponent().getModel("oModel");
@@ -151,26 +175,11 @@ sap.ui.define([
 				var oArgs, oView;
 				oArgs = oEvent.getParameter("arguments");
 				
-				//1
-				//read the Project table based on id
-					oModel.read("/Projects("+oArgs.listId+")", {
-						urlParameters: {
-				            "$expand" : "ClientDetails",
-				        },
-						  success: function(data){
-							   projectsDetailModel.setData(data);
-//								var results = JSON.stringify(data);
-//								console.log(results);
-//								alert(results);
-						  },
-						  error: function(oError) {
-							  alert("error");
-							 }
-						});
-					//set the project detail model
-					this.getView().setModel(projectsDetailModel,"projectsModel"); 
-					
-					
+				//variables for counting members and tasks on a project
+				var countMembers;
+				var countTasks;
+				
+
 					//2
 					//get Team members for the selected Project (from master)
 					var membersDetailModel = new JSONModel();	
@@ -186,8 +195,9 @@ sap.ui.define([
 					     })],
 							  success: function(data){
 								   membersDetailModel.setData(data);
-									var results = JSON.stringify(data);
-//									alert(results);
+//									var results = JSON.stringify(data);
+//									console.log(results);
+								   countMembers = data.results.length;
 							  },
 							  error: function(oError) {
 								  alert("error");
@@ -222,6 +232,8 @@ sap.ui.define([
 								 tasksDetailModel.setData(data);
 //								 alert(result);
 //								 console.log("tasksModel" +result);
+								 countTasks = data.results.length;
+									
 							  },
 							  error: function(oError) {
 								  alert("error");
@@ -230,6 +242,28 @@ sap.ui.define([
 						
 //						console.log(projectsModel);
 						this.getView().setModel(tasksDetailModel,"tasksModel");
+						//1
+						//read the Project table based on id
+							oModel.read("/Projects("+oArgs.listId+")", {
+								urlParameters: {
+						            "$expand" : "ClientDetails",
+						        },
+								  success: function(data){
+									  data.countMembers = countMembers;
+									  data.countTasks = countTasks;
+									   projectsDetailModel.setData(data);
+//										var results = JSON.stringify(data);
+//										console.log(results);
+//										alert(results);
+								  },
+								  error: function(oError) {
+									  alert("error");
+									 }
+								});
+							//set the project detail model
+							this.getView().setModel(projectsDetailModel,"projectsModel"); 
+							
+							
 			},
 
 			handleMemberRatingDialog: function (oEvent) {

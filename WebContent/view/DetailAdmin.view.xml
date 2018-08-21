@@ -4,6 +4,8 @@
 			xmlns:f="sap.ui.layout.form" 
 			xmlns:mvc="sap.ui.core.mvc" 
 			xmlns="sap.m" 
+			xmlns:mc="sap.suite.ui.microchart"
+			xmlns:microchart="sap.suite.ui.microchart"
 			xmlns:html="http://www.w3.org/1999/xhtml" 
 			xmlns:semantic="sap.m.semantic" 
 			controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.DetailAdmin">
@@ -11,17 +13,11 @@
 	<semantic:DetailPage 
 			id="DetailAdmin" 
 			showNavButton="{device>/system/phone}" 
-			title="Project Information" 
 			busy="{detailView>/busy}" 
 			busyIndicatorDelay="{detailView>/delay}">
 			
 	<semantic:customHeaderContent>
-	
-	<Button 
-			press="openOverviewCalender" 
-			id="cartIcon" 
-			text="Overview" 
-			icon="sap-icon://accelerated"/>
+
 			
 	</semantic:customHeaderContent>
 	
@@ -71,10 +67,139 @@
 		expandable="false"
 		select="showMap">
 				
-		<items>
-				
+		<items >
+		
+				<IconTabFilter 
+				id="iconTabBarFilter1"
+				key="key1" 
+				icon="sap-icon://hint" 
+				tooltip="overview dashboard" 
+				text="Dashboard">
+					
+			<content>
+
+			<GenericTile 
+			id="1"
+			class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+			header="Overall progress" 
+			subheader="Current">
+			
+			<TileContent >
+
+			<mc:RadialMicroChart percentage="57" />	
+			
+			</TileContent>
+		
+			</GenericTile>
+			
+			<GenericTile 
+			id="2"
+			class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+			header="Consultants on Project" 
+			subheader="Available" 
+			press="onSelectTab">
+			
+			<TileContent >
+			
+			<NumericContent 
+			value="{projectsModel>/countMembers}" 
+			icon="sap-icon://employee" />
+			
+			</TileContent>
+		
+			</GenericTile>
+			
+			<GenericTile 
+			id="3"
+			class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+			header="Active Tasks" 
+			subheader="in progress"
+			press="onSelectTab">
+			
+			<TileContent >
+			
+			<NumericContent 
+			value="{projectsModel>/countTasks}" 
+			icon="sap-icon://activities"/>
+	
+			</TileContent>
+		
+			</GenericTile>
+			
+			
+			<GenericTile 
+			id="4"
+			class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+			header="Overall hours worked" 
+			subheader="current" >
+			
+			<TileContent 
+			unit="70" 
+			footer="Expected hours">
+			
+			<NumericContent 
+			value="40" 
+			icon="sap-icon://present"/>
+			
+			</TileContent>
+		
+			</GenericTile>
+			
+			<GenericTile 
+			id="5"
+			class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+			header="Notifications" 
+			subheader="new" 
+			press="press">
+			
+			<TileContent 
+			unit="100" 
+			footer="Total messages">
+			
+			<NumericContent 
+			value="3" 
+			icon="sap-icon://notification-2"/>
+			
+			</TileContent>
+		
+			</GenericTile>
+			
+			<GenericTile 
+			id="6"
+			class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+			header="Calender" 
+			subheader="view schedule" 
+			press="openCalender" >
+			
+			<TileContent>
+			
+			<NumericContent 
+			value="{projectsModel>/countTasks}" 
+			icon="sap-icon://accelerated"/>
+			
+			</TileContent>
+		
+			</GenericTile>
+			
+			<GenericTile 
+			id="7"
+			class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+			header="location to" 
+			subheader="{projectsModel>/ClientDetails/Client_Name}" 
+			press="onSelectTab" >
+			
+			<TileContent>
+			
+			</TileContent>
+		
+			</GenericTile>
+			</content>
+						
+					</IconTabFilter>
+					
 			<IconTabFilter 
-				id="iconTabBarFilter2" 
+				id="iconTabBarFilter2"
+				key="key2" 
 				icon="sap-icon://group" 
 				tooltip="list of tasks" 
 				text="Members">
@@ -201,7 +326,8 @@
 	</IconTabFilter>
 	
 	<IconTabFilter 
-			id="iconTabBarFilter3" 
+			id="iconTabBarFilter3"
+			key="key3" 
 			icon="sap-icon://activities" 
 			tooltip="{i18n>detailIconTabBarAttachments}" 
 			text="Tasks">
@@ -286,11 +412,16 @@
 						text="{ path: 
 						 			'tasksModel>Due_Date',
 									formatter: '.formatter.date'}"/>
-						
-					<Text
-						text="10%" />
 					
-
+					<ProgressIndicator
+					class="sapUiSmallMarginBottom"
+					percentValue="25"
+					displayValue="25%"
+					showValue="true"
+					state="Warning"
+					displayOnly="true" />		
+				
+				<Text text="Inprogress" />
 				</cells>
 				
 			</ColumnListItem>
@@ -304,7 +435,8 @@
 					
 					
 					<IconTabFilter
-						 id="iconTabBarFilter4" 
+						 id="iconTabBarFilter4"
+						 key="key4" 
 						 icon="sap-icon://attachment" 
 						 tooltip="{i18n>detailIconTabBarInfo}" 
 						 text="Attachments">
@@ -416,9 +548,11 @@
 					</IconTabFilter>
 					<IconTabFilter 
 							id="iconTabBarFilter5" 
+							key="key5"
 							icon="sap-icon://map"
-							tooltip="{i18n>detailIconTabBarAttachments}" 
-							text="Map"  >
+							tooltip="Maps" 
+							text="Map"
+							>
 	
 							<content id='contentDiv'>
 							
@@ -438,42 +572,7 @@
 			
 		</semantic:content>
 
-		<semantic:customFooterContent>
-		
-			<Button 
-					icon="sap-icon://add" 
-					text="Project" 
-					press="addProject" 
-					id="addProjectButton">
-					
-					<layoutData>
-					
-						<OverflowToolbarLayoutData 
-						priority="NeverOverflow" />
-						
-					</layoutData>
-					
-			</Button>		
-					
-			<Button 
-				id="removeProjectButton" 
-				text="Remove Project" 
-				icon="sap-icon://delete" 
-				press="confirmDeleteProject"/>
-			
-			
-			<Button 
-					icon="sap-icon://add" 
-					text="Client" 
-					press="addClient" 
-					id="addClientButton"/>	
-				
-				
-			<Button 
-				press="openProjectsOverviewCalender" 
-				id="cartIcon1" 
-				text="viewAll" 
-				icon="sap-icon://accelerated"/>
+		<semantic:customFooterContent>			
 				
 		</semantic:customFooterContent>
 		
