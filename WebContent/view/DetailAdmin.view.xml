@@ -68,7 +68,8 @@
 	<IconTabBar 
 		id="iconTabBar" 
 		class="sapUiResponsiveContentPadding" 
-		expandable="false">
+		expandable="false"
+		select="showMap">
 				
 		<items>
 				
@@ -413,7 +414,24 @@
 						</content>
 						
 					</IconTabFilter>
-
+					<IconTabFilter 
+							id="iconTabBarFilter5" 
+							icon="sap-icon://map"
+							tooltip="{i18n>detailIconTabBarAttachments}" 
+							text="Map"  >
+	
+							<content id='contentDiv'>
+							
+	
+							 <Button press="DistFromCurrent" text="Show Route"/>
+							 <Button press="HideRoute" text="Hide Route"/>
+							 <Text text="Distance:" id="Distance" />
+								
+							<HBox id="map_canvas" fitContainer="true" justifyContent="Center" alignItems="Center"   />
+	                             
+							</content>
+	
+						</IconTabFilter>
 				</items>
 				
 			</IconTabBar>

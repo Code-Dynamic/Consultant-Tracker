@@ -73,7 +73,8 @@
 			<IconTabBar 
 			id="iconTabBar" 
 			class="sapUiResponsiveContentPadding" 
-			expandable="false">
+			expandable="false"
+			select="showMap">
 			
 				<items>
 				
@@ -239,6 +240,24 @@
 							icon="sap-icon://kpi-corporate-performance" 
 							tooltip="List of tasks" text="Stats">
 
+
+					</IconTabFilter>
+					<IconTabFilter 
+						id="iconTabBarFilter5" 
+						icon="sap-icon://map"
+						tooltip="{i18n>detailIconTabBarAttachments}" 
+						text="Map"  >
+
+						<content id='contentDiv'>
+						
+
+						 <Button press="DistFromCurrent" text="Show Route"/>
+						 <Button press="HideRoute" text="Hide Route"/>
+						 <Text text="Distance:" id="Distance" />
+							
+						<HBox id="map_canvas" fitContainer="true" justifyContent="Center" alignItems="Center" min-height="200px"  />
+                             
+						</content>
 
 					</IconTabFilter>
 					

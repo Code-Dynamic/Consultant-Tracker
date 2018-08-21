@@ -1,3 +1,8 @@
+var curLatlng;		
+var epPos = [];
+var directionsService;
+var directionsRenderer;
+var map;
 sap.ui.define([
 		"consultanttracker/Consultant-Tracker_Prototype-1/controller/BaseController",
 		"sap/ui/model/json/JSONModel",
@@ -46,6 +51,95 @@ sap.ui.define([
 
 				//end the loading indicator
 				sap.ui.core.BusyIndicator.hide();
+			},showMap: function(oEvent) {
+				
+				//Generate map when correct tab selected
+				if(oEvent.getParameters().selectedKey != "__component0---DetailConsultant--iconTabBarFilter5"){
+					return;
+				}
+				var viewDivId = sap.ui.getCore().byId(this.createId("map_canvas"));
+//				
+				console.log(this.createId("map_canvas"))
+
+				
+				 map = new google.maps.Map(viewDivId.getDomRef(), {
+						zoom: 12,
+						center: curLatlng//Initial Location on Map
+					});
+
+				var geocoder =new google.maps.Geocoder();
+				var officeAddress = '46 Ingersol Rd, Lynnwood Glen, Pretoria, 0081';
+				 directionsRenderer = new google.maps.DirectionsRenderer({
+						map: map
+					});
+				
+				var CurrLocationMarker = new google.maps.Marker();
+				var EpiuseOfficeMarker = new google.maps.Marker();
+				
+				directionsService = new google.maps.DirectionsService;
+				
+				//Get Current location
+				if (navigator.geolocation) {
+				     navigator.geolocation.getCurrentPosition(function (position) {
+				    	 curLatlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+				    	 console.log(curLatlng.lat(),curLatlng.lng());
+				         map.setCenter(curLatlng);
+				         CurrLocationMarker.setPosition(curLatlng);
+				         officeLocation();
+				         
+				     });
+				 }
+				//Get Client location -- Currently defaulted to Epiuse Office
+				function officeLocation(){
+				 geocoder.geocode( { 'address': officeAddress},function(result,status){
+					 if(status == google.maps.GeocoderStatus.OK){
+						 EpiuseOfficeMarker.setPosition(result[0].geometry.location);
+						 epPos[0] = result[0].geometry.location.lat();
+						 epPos[1] = result[0].geometry.location.lng();
+						 console.log(epPos);
+						
+					 }
+				 });
+				}
+				
+
+				 var infoWindowCurrentLocation = new google.maps.InfoWindow({
+			         content: "Current Location"
+			     });
+				 var infoWindowClient = new google.maps.InfoWindow({
+			         content: "Epiuse Office"
+			     });
+				 
+				CurrLocationMarker.setMap(map);
+				infoWindowCurrentLocation.open(map, CurrLocationMarker);
+				
+
+				EpiuseOfficeMarker.setMap(map);
+				infoWindowClient.open(map, EpiuseOfficeMarker);
+			    
+				var control = this.getView().byId('front-div');
+
+			},
+			HideRoute: function (){
+				directionsRenderer.setMap(null);
+			},
+			DistFromCurrent: function (){
+				directionsRenderer.setMap(map);
+				var req = {
+						origin:  new google.maps.LatLng(epPos[0], epPos[1]),
+						destination: new google.maps.LatLng(curLatlng.lat(), curLatlng.lng()),
+						travelMode: 'DRIVING'
+					};
+				var thisPtr =this;
+					directionsService.route(req, function(response, status) {
+						if (status === 'OK') {
+							console.log(response.routes[0].legs[0].distance.text);
+							directionsRenderer.setDirections(response);
+							var distElement = sap.ui.getCore().byId(thisPtr.createId("Distance"));
+							console.log(distElement);
+							distElement.setText("Distance: "+response.routes[0].legs[0].distance.text);	
+					}
+					});
 			},
 			
 			_onRouteMatched: function(oEvent) {
