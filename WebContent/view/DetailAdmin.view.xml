@@ -68,7 +68,7 @@
 		select="showMap">
 				
 		<items >
-		
+
 				<IconTabFilter 
 				id="iconTabBarFilter1"
 				key="key1" 
