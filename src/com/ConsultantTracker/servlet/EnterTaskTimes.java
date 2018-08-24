@@ -66,6 +66,7 @@ public class EnterTaskTimes extends HttpServlet {
 		//returns value for previous month based on current date, not what user has requested
 		Date date = new Date();
 		
+		// sql date class for updates to db
 		java.sql.Date sqlDate = new java.sql.Date(UTC);
 		java.sql.Date today = new java.sql.Date(date.getTime());	
 		
