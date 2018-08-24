@@ -33,27 +33,31 @@ sap.ui.define([
 				var thisDomObj =  this;
 				var consultantID = this.getConsultantID();
 				//this.setSplitAppUserName(consultantID);
-		    	 var query = "/Consultants?$filter=Consultant_ID%20eq%20"+consultantID;
+		    	 var query = "/Consultants?$select=Consultant_Name&$filter=Consultant_ID%20eq%20"+consultantID;
 			     var oModel =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
-			     oModel.read(query,{success: function(oData){
-			    	 				if(oData.results.length > 0){
-			    	 					//console.log(oData.results[0].Consultant_Name);
-			    	 					//console.log(thisDomObj.getView().byId("splitAppMenuButton"));
-			    	 					thisDomObj.getView().byId("splitAppMenuButton").setText(oData.results[0].Consultant_Name);
-			    	 				}
-			 					}, error: function(){console.log("Error");}}		
-			 	 );				
-				
+			     oModel.read(query,{
+			    	success: function(oData){
+			    	 	if(oData.results.length > 0)
+			    	 		thisDomObj.getView().byId("splitAppMenuButton").setText(oData.results[0].Consultant_Name);
+			 		}, 
+			 		error: function(){
+			 			console.log("Error");
+			 		}
+			 	});								
 			},
-
-
+			onLogoutPress: function(){
+				if (sessionStorage){
+					sessionStorage.clear();
+					location.reload();
+					this.getRouter().navTo("login");
+				}
+			},
 		/**
 		 * Called when the Controller is destroyed. Use this one to free resources and finalize activities.
 		 * @memberOf consultanttracker.Consultant-Tracker_Prototype-1.view.SplitApp
 		 */
-		//	onExit: function() {
-		//
-		//	}
+//			onExit: function() {
+//			}
 
 	});
 

@@ -4,10 +4,13 @@ sap.ui.define([
 
 		"sap/ui/core/routing/History",
 		"sap/m/MessageToast",
-	], function (Controller, History,MessageToast) {
+		"consultanttracker/Consultant-Tracker_Prototype-1/model/formatter"
+	], function (Controller, History,MessageToast,formatter) {
 		"use strict";
-
+		var AssignedTaskIDArr = [];
+		
 		return Controller.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.BaseController", {
+			formatter: formatter,
 			/**
 			 * Convenience method for accessing the router in every controller of the application.
 			 * @public
@@ -16,195 +19,190 @@ sap.ui.define([
 			getRouter : function () {
 				return this.getOwnerComponent().getRouter();
 
+			},
+			getStartOfDayUTC: function(date){
+				var x = Date.UTC(date.getFullYear(),date.getMonth(),date.getDate());
+				return x;
 			},		    
 			onRequestUserTimes : function(){
-				var consultantID = this.getConsultantID();		
+				var consultantID = this.getConsultantID();
+		 		 var currentDate = new Date();
+		 		 //sends date value that represents beginning of any day to enable easy comparison in database
+		 		 var dayBeginUTC = this.getStartOfDayUTC(currentDate);
+				this.getTaskAndTimes(consultantID,dayBeginUTC);      
+		    },
+		    getTaskAndTimes: function(ConsultantID, UTC){
+		    	var thisDomObj = this;
 		    	this._Dialog = this.byId("timesDialog");
 		    	var dialog = this._Dialog;
-		    	dialog.setEscapeHandler(this.onDialogPressEscape);
-		    	var masterDomObj = this;
-		    	var taskCompleted = false;
- 		    	$.post('CheckDailyTimesEntered', { Consultant_ID:consultantID},function(timesEnteredBool) {
-		    		if(parseInt(timesEnteredBool)){
-		    			timesEnteredAlready();
-		    		}else{
-		    			setupUserTimes();
-		    		}
- 		    	});				      
-		    	function timesEnteredAlready(){
-		    		masterDomObj.byId("submitUserTimesBtn").setEnabled(false);
-		    		var dateStr = getDateStr();
-		        	var timesEnteredTxt = new sap.m.MessageStrip({
-		        		renderWhitespace:true,
-		        		text:"You have already entered times for "+dateStr,
-		        		type:sap.ui.core.MessageType.Warning,
-		        		showIcon: true
-		        	});		     	 
-		        	dialog.addContent(timesEnteredTxt);			        	    		
-		    	}
- 		    	function setupUserTimes(){
- 		    		masterDomObj.byId("submitUserTimesBtn").setEnabled(true);
- 			    	var oModel =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
- 			    	var query = "/Assigned_Tasks?$expand=TaskDetails,ConsultantDetails&$filter=ConsultantDetails/Consultant_ID%20eq%20"+consultantID+"%20and%20Task_Completed%20eq%20"+taskCompleted;
- 			    	
- 				     oModel.read(query,{success: function(oData){ addInputs(oData) 
- 				 					}, error: function(){console.log("Error");}}		
- 				 	 );
- 				 	 var totalHoursText;
-
- 				         //return all consultants
- 				         function  addInputs(oResults) {	        	 
- 				        	 var timePicker ="";
- 				        	 var timePickerId = "tp";
- 				        	 var input ="";
- 			        		 var vBox = new sap.m.VBox({
- 			        			 });
- 			        		 var hBox;
- 			        		 var description;
- 				        	 for(var i = 0; i < oResults.results.length; i++){
- 				        		 hBox = new sap.m.FlexBox({
- 				        			 alignItems: sap.m.FlexAlignItems.Center
- 				        			 });			        		 
- 				        		 timePicker = new sap.m.TimePicker({
- 				        			 description: " ",
- 				        			 fieldWidth: "80%",
- 				        			 value:"00:00",
- 				       				 valueFormat:"hh:mm",
- 				       				 displayFormat:"HH:mm",
- 				       				 minutesStep: 15,
- 				       				 id:timePickerId+i
- 				       				 
- 				        		 }); 
- 				        		timePicker.attachChange(function(oEvent){
- 				        			 onLiveChangeTimesInput(this,oEvent);
- 				        		 });
- 				        		 description = new sap.m.Text({
- 				        			 renderWhitespace: true,
- 				        			 text:oResults.results[i].TaskDetails.Name
- 				        		 });			        		 
- 				        		 hBox.addItem(timePicker);
- 				        		 hBox.addItem(description);
- 				        		 vBox.addItem(hBox);	
- 				        	 }
-				        	timePicker = new sap.m.TimePicker({
- 				        		description: " ",
- 				        		fieldWidth: "80%",
- 				        		value:"00:00",
- 				       			valueFormat:"hh:mm",
- 				       			displayFormat:"HH:mm",
- 				       			minutesStep: 15,
- 				       			id:timePickerId+"General"
- 				        	}); 
-					        timePicker.attachChange(function(oEvent){
-	 				        		onLiveChangeTimesInput(this,oEvent);
-	 				        	});
- 			        		 description = new sap.m.Text({
- 				        			 renderWhitespace: true,
- 				        			 text:"General"
- 				        		 });
- 			        		 hBox = new sap.m.HBox({
- 				        			 alignItems:sap.m.FlexAlignItems.Center
- 				        	});	
- 			        		hBox.addItem(timePicker);
- 				        	hBox.addItem(description);
- 				        	vBox.addItem(hBox);
- 			        		var dateStr = getDateStr();
- 			        		totalHoursText = new sap.m.Text({
- 			        			 renderWhitespace:true,
- 			        			 text:" 0.0 Total Hours for "+dateStr,
- 			        		 });
- 			        		vBox.addItem(totalHoursText);			        	 
- 			        		dialog.addContent(vBox);			        	 
- 			        		 
- 				        }
- 				         // checks if numbers entered in each input field are valid and also updates total
- 				         function onLiveChangeTimesInput(timePickerObj,oEvent){
- 						        var newValue = timePickerObj.getValue();
- 					            var maxNumberOfHoursPerDay = 10;
- 					            if(newValue > maxNumberOfHoursPerDay || newValue < 0){
- 					                oEvent.getSource().setValueState(sap.ui.core.ValueState.Error);
- 							        var dateStr = getDateStr();
- 					                totalHoursText.setText("-- :     Total Hours for "+dateStr);
- 					            }
- 					            else{
- 					            	oEvent.getSource().setValueState(sap.ui.core.ValueState.Success);
- 							        var pnlDom = dialog.getDomRef();
- 							        var total = 0;
- 							        var inputVal = 0;
- 							        $(pnlDom).find('input').each(function(index, elem){
- 							        	inputVal = masterDomObj.getInputFloat( $(elem)[0].value);
- 							            total+= inputVal;            
- 							            	
- 							        });
- 							        var dateStr = getDateStr();
- 							        totalHoursText.setText(total.toFixed(2) + " :     Total Hours for " +dateStr);
- 					            }
- 				         }
-
- 				         //checks if value is numeric
- 				         function isNumeric(n) {
- 				        	  return !isNaN(parseFloat(n)) && isFinite(n);
- 				        	}				    		
- 		    	}
-		         
-		         function getDateStr(){
-		        	 var today = new Date();
-		        	 var dd = today.getDate();
-		        	 var mm = masterDomObj.getMonthStr(today.getMonth());
-		        	 var year = today.getFullYear();
+		    	dialog.setEscapeHandler(this.onDialogPressEscape);		 
+ 		    	$.post('GetTimesAndTasks', { Consultant_ID:ConsultantID, UTC: UTC},function(timesAndTasksArr) {
+ 		    		var dataArr = timesAndTasksArr.split(",");
+ 		    		var taskNamesArr = [];
+ 		    		var taskTimesArr = [];
+ 		    		var data = [];
+ 		    		for (var i = 0; i < dataArr.length ; i++){
+ 		    			data = dataArr[i].split(":");
+ 		    			taskNamesArr.push(data[0]);
+ 		    			taskTimesArr.push(parseFloat(data[1]));
+ 		    			AssignedTaskIDArr.push(parseInt(data[2]));
+ 		    		}
+ 		    		thisDomObj.setupUserTimes(taskNamesArr,taskTimesArr,UTC)
+		    		thisDomObj._Dialog.open(); 
+ 		    	});	
+		    	
+		    }, 		    	
+		    setupUserTimes: function(taskNamesArr,taskTimesArr, UTC){
+		    		var thisDomObj = this;
+		    		this._EnterTimesUTC = UTC;
+		    	    var consultantID = this.getConsultantID();
+		    	    this.byId("submitUserTimesBtn").setEnabled(true);
+ 				 	var totalHoursText;	        	 
+ 				    var timePicker ="";
+ 				    var timePickerId = "tp";
+ 				    var input ="";
+ 			        var vBox = new sap.m.VBox();
+ 			        var hBox;
+ 			        var datePicker;
+ 			        var description;
+ 			        var today = new Date();
+				    hBox = new sap.m.FlexBox({
+				    			alignItems: sap.m.FlexAlignItems.Center
+ 				    		});			        		 
+				    datePicker = new sap.m.DatePicker({
+ 				    		 description: " ",
+ 				    		 fieldWidth: "80%",
+ 				    		 dateValue:new Date(UTC),
+ 				    		 maxDate:today
+// 				    		 id:timePickerId+i 
+ 				    	 }); 
+				    datePicker.attachChange(function(oEvent){
+ 				    		 onLiveChangeEnterTimesDate(this,oEvent);
+ 				    	 });
+ 				    description = new sap.m.Text({
+ 				    		 renderWhitespace: true,
+ 				    		 text:" Date"
+ 				    	 });			        		 
+ 				    hBox.addItem(datePicker);
+ 				    hBox.addItem(description);
+ 				    vBox.addItem(hBox); 			        		 
+ 				    var totalTime = 0;
+ 				    for(var i = 0; i < taskNamesArr.length; i++){
+ 				    	totalTime += taskTimesArr[i];
+ 				    	hBox = new sap.m.FlexBox({
+ 				    		 alignItems: sap.m.FlexAlignItems.Center
+ 				    		 });			        		 
+ 				    	 timePicker = new sap.m.TimePicker({
+ 				    		 description: " ",
+ 				    		 fieldWidth: "80%",
+ 				    		 value:taskTimesArr[i],
+ 				    		 valueFormat:"hh:mm",
+ 				    		 displayFormat:"HH:mm",
+ 				    		 minutesStep: 15
+// 				    		 id:timePickerId+i
+ 				    	 }); 
+ 				    	timePicker.attachChange(function(oEvent){
+ 				       			 onLiveChangeTimesInput(this,oEvent);
+ 				       		 });
+ 				       		 description = new sap.m.Text({
+ 				       			 renderWhitespace: true,
+ 				       			 text: " "+taskNamesArr[i]+ "\t"
+ 				       		 });			        		 
+ 				       		 hBox.addItem(timePicker);
+ 				       		 hBox.addItem(description);
+ 				       		 vBox.addItem(hBox);	
+ 				    }
+ 			        var dateStr = this.getDateStr(new Date(UTC));
+ 			        totalHoursText = new sap.m.MessageStrip({
+ 			        	 renderWhitespace:true,
+ 			        	 text: " "+ totalTime.toFixed(2)+" Total Hours for "+dateStr,
+ 			        	 type: sap.ui.core.MessageType.Success
+ 			         });
+ 			        vBox.addItem(totalHoursText);
+ 			        this._Dialog.addContent(vBox);			        	 
+ 			        	 
+ 				   // checks if numbers entered in each input field are valid and also updates total
+ 				   function onLiveChangeTimesInput(timePickerObj,oEvent){
+ 					   var newValue = timePickerObj.getValue();
+ 					   var newDate = datePicker.getDateValue();
+ 				       var maxNumberOfHoursPerDay = 10;
+ 				       if(newValue > maxNumberOfHoursPerDay || newValue < 0){
+ 				           oEvent.getSource().setValueState(sap.ui.core.ValueState.Error);
+ 				       }
+ 				       else{
+ 				       	oEvent.getSource().setValueState(sap.ui.core.ValueState.Success);
+ 				       }
+	 				   var pnlDom = thisDomObj._Dialog.getDomRef();
+	 				   var total = 0;
+	 				   var inputVal = 0;
+	 				   $(pnlDom).find('input').each(function(index, elem){
+	 				    	//first element has date
+	 				    	if(index > 0){
+	 	 				    	inputVal = thisDomObj.getInputFloat($(elem)[0].value);
+		 				        total+= inputVal;        		    		 
+	 				    	}
+	 				     });
+	 				   var dateStr = thisDomObj.getDateStr(newDate);
+	 				   if(total >= 24){
+	 					   totalHoursText.setType(sap.ui.core.MessageType.Error);
+	 				   }else if(total >= 12){
+	 					   totalHoursText.setType(sap.ui.core.MessageType.Warning);
+	 				   }
+	 				   totalHoursText.setText(" "+total.toFixed(2) + " :     Total Hours for " +dateStr);
+ 				   }
+ 				   
+ 				   function onLiveChangeEnterTimesDate(datePickerObj,oEvent){
+ 					  var newDate = datePickerObj.getDateValue();
+  					  thisDomObj._Dialog.removeAllContent();
+	 				  AssignedTaskIDArr = [];
+	 				  //sends date value that represents beginning of any day to enable easy comparison in database
+	 				  var dayBegin = thisDomObj.getStartOfDayUTC(newDate);
+	 				  thisDomObj.getTaskAndTimes(consultantID, dayBegin);
+ 				   } 				         			    		
+	 		    },
+ 		    getDateStr: function(date){
+		        	 var dd = date.getDate();
+		        	 var mm = this.getMonthStr(date.getMonth());
+		        	 var year = date.getFullYear();
 
 		        	 if(dd<10) {
 		        	     dd = '0'+dd
 		        	 } 
 		        	 return dd +" "+ mm + " " + year;		        	 
-		         }
-			         
-			     this._Dialog.open();
-				 
-		    },
+		         },
 		    onSubmitTimes: function(){
-		    	var masterDomObj = this;
+		    	var thisDomObj = this;
 				var consultantID;
 				if(sessionStorage){
 					consultantID = sessionStorage.ConsultantID;
 				}else{
 					consultantID = ConsultantID;
-				}	
-				//query for tasks that are not yet completed
-		    	var taskCompleted = false;
-		    	var query = "/Assigned_Tasks?$expand=TaskDetails,ConsultantDetails&$filter=ConsultantDetails/Consultant_ID%20eq%20"+consultantID+"%20and Task_Completed%20eq%20"+taskCompleted;
-
-			     var oModel =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
-			     oModel.read(query,{success: function(oData){ submitTimes(oData) 
-			 					}, error: function(error){console.log("Error: "+ error);}}		
-			 	 );		    	
+				}    	
 		    
 			 	 var pnlDom = this._Dialog.getDomRef();
 			 	 var inputArr = [];
-			 	 var totalTasks = 0;
 			 	 var num;
 			     $(pnlDom).find('input').each(function(index, elem){
-			    	 	num = masterDomObj.getInputFloat($(elem)[0].value);
-			            inputArr.push(num);  
-			            totalTasks += num;
+				    	 if(index > 0){
+					    	 	num = thisDomObj.getInputFloat($(elem)[0].value);
+					            inputArr.push(num);  	 
+				    	 }
 			        });
-			     var general = inputArr.pop();
-			     totalTasks -= general;
-			 	 function submitTimes(oResults){
-			 		 //TODO Ngoni, improve function, make more efficient by sending through 1 post request with all the data
-		        	 for(var i = 0; (i < oResults.results.length && i < (inputArr.length -1)); i++){
-		        		 if(inputArr[i] > 0){
-			        		 var time = Number(oResults.results[i].Hours_Worked) + inputArr[i];
-				 		    	$.post('EnterTaskTimes', { Assigned_Task_ID:oResults.results[i].Assigned_Task_ID, Hours_Worked:time},function(responseText) {  
-						    		//console.log(responseText);
-					    	});			 
-		        		 }
-		        	 }
-		 		    	$.post('EnterDailyTimes', { Consultant_ID:consultantID, general:general, totalTasks:totalTasks},function(responseText) {
-		 		    		MessageToast.show(responseText);
-			    	});				        	 
-		        	 
-			 	 }  	
+			 	 var resultsString = "";
+		         for(var i = 0; i < AssignedTaskIDArr.length; i++){
+			        	if(inputArr[i] > 0){
+								if(resultsString.length > 0 )
+									resultsString +=",";
+								resultsString +=  AssignedTaskIDArr[i] + ":"+inputArr[i];		 
+			        	}
+		         }
+		         // -1 represents general
+		 		   	$.post('EnterTaskTimes', { userTimes : resultsString, Consultant_ID:consultantID ,dayBeginUTC : this._EnterTimesUTC},function(responseText) {  
+				   		//console.log(responseText);
+		 		   		AssignedTaskIDArr = [];
+		 		   		MessageToast.show(responseText);
+		 		   	});			        	 	        	 
+			 	thisDomObj._Dialog.removeAllContent();
 		        this.onDialogClose();		    	
 		    },
 		    getInputFloat: function(inputVal){
@@ -261,9 +259,8 @@ sap.ui.define([
 				}else{
 					return ConsultantID;
 				}						
-			}			
-			,
-			goToProjects : function(oEvt){
+			},
+			goToProjects : function(selectFirstProject){
 				var thisDomObj = this;
 				var projectsModel = new sap.ui.model.json.JSONModel();
 				var oModel = this.getOwnerComponent().getModel("oModel");
@@ -272,6 +269,140 @@ sap.ui.define([
 				oModel.read(
 						"/Projects?$filter=Project_Deleted%20eq%20false",{
 							success: function(data){ 
+								for(var i=0; i<data.results.length; i++){
+									if(data.results[i].Project_Completed){
+										data.results[i].status = "Completed";
+									}else{
+										data.results[i].status = "In progress";
+									}
+								}
+								projectsModel.setData(data);
+								thisDomObj.getView().setModel(projectsModel,"projectsModel");
+									if(data.results.length > 0){
+										
+										var resultsLocationStr;
+										if(selectFirstProject){
+											resultsLocationStr = "/results/0";
+										}
+										else{
+											resultsLocationStr =  "/results/" + (data.results.length -1);
+											console.log(resultsLocationStr);
+										}
+										var oData = thisDomObj.getView().getModel("projectsModel").getProperty(resultsLocationStr);
+										var projectID = oData.Project_ID;				
+										var projectCompleted = oData.Project_Completed;
+										thisDomObj.selectProjectByID(projectID,projectCompleted);	
+								}
+							},	
+							error: function(){
+								console.log("Error");}
+								}		
+				);
+			
+			},
+			 selectProjectByID : function(projectID,projectCompleted){
+				 var consultantID = this.getConsultantID();
+					this.getRouter()
+					.navTo("DetailAdmin", 
+						{projectId:projectID});
+				//RATINGS CODE
+				//TODO Ngoni: check with Mamba hw to get odata model address
+				var attachModel = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+				var thisObj = this;
+				attachModel.read(
+						"/Ratings_Entrys?$expand=ProjectDetails,ConsultantDetails&$filter=ProjectDetails/Project_ID%20eq%20"+projectID+"%20and%20ConsultantDetails/Consultant_ID%20eq%20"+consultantID,{async:false,success: function(oCreatedEn){ ratingsBtnConfig(oCreatedEn) }, error: function(e){console.log(e);}}		
+						);					
+				function ratingsBtnConfig(oResults){
+					var ratingsBtnConfigModel;
+					//user has already given a rating for the project
+					if(oResults.results.length > 0){
+						ratingsBtnConfigModel = new sap.ui.model.json.JSONModel({
+						    visible: false,
+						    enabled: false
+						});
+					} //project is completed, rating not yet given
+					else if(projectCompleted === true) {
+						ratingsBtnConfigModel = new sap.ui.model.json.JSONModel({
+							    visible: true,
+							    enabled: true
+							});
+					} //project not yet completed
+					else{
+						ratingsBtnConfigModel = new sap.ui.model.json.JSONModel({
+						    visible: true,
+						    enabled: false
+						});
+					}
+					thisObj.getView().setModel(ratingsBtnConfigModel,"ratingsBtnConfig");				
+				}
+				
+				//TODO fix project progress on project view
+				$.post('getProjectProgress',{Project_Id:projectID},function(responseText){
+					var progress = {percVal:0,displayVal:0};
+					progress.percVal = parseFloat(responseText);
+					progress.displayVal = responseText;
+			          var progressModel = new sap.ui.model.json.JSONModel();
+			          progressModel.setData(progress);
+		/*	          console.log(progressModel);*/
+			          thisObj.getView().setModel(progressModel,"progressModel");
+				});				
+				
+			},
+			goToConsultants : function(oEvt){
+				var oModel = this.getOwnerComponent().getModel("oModel");
+				var consultantsModel = new sap.ui.model.json.JSONModel();
+				var thisDomObj = this;
+				//read consultant data
+				oModel.read("/Consultants",{
+							success: function(data){ 
+								consultantsModel.setData(data);
+								thisDomObj.getView().setModel(consultantsModel,"consultantsModel");	
+								if(data.results.length > 0){
+									var oData = thisDomObj.getView().getModel("consultantsModel").getProperty("/results/0");
+									var consultantID = oData.Consultant_ID;				
+									thisDomObj.selectConsultantByID(consultantID);	
+								}
+							},
+								
+							error: function(){
+								console.log("Error");}
+								}		
+				);
+			},
+			selectConsultantByID : function(consultantID){
+				this.getRouter()
+				.navTo("DetailConsultantView", 
+					{consultantId:consultantID});				
+			}
+			,
+			onMasterIconTabFilterSelect: function(oEvent) {
+	            var key =oEvent.getParameters().key;
+	            if(key === 'projectsSelect') {
+	            	var firstProjectSelected = true;
+	              this.goToProjects(firstProjectSelected);
+	            }
+	            else if(key == 'consultantsSelect') {
+	              this.goToConsultants();
+	            };
+	        },	
+			searchProjects : function(oEvt){
+				var thisDomObj = this;
+				var projectsModel = new sap.ui.model.json.JSONModel();
+				var oModel = this.getOwnerComponent().getModel("oModel");
+				var searchString = arguments[0];
+				
+				//read projects
+				oModel.read(
+						"/Projects",{
+							filters: [ new sap.ui.model.Filter({
+								path: "Project_Name",
+								operator: sap.ui.model.FilterOperator.Contains,
+								value1: searchString
+								}) 
+							],
+							
+							success: function(data){
+								//console.log(data);
 								projectsModel.setData(data);
 								thisDomObj.getView().setModel(projectsModel,"projectsModel");
 								if(data.results.length > 0){
@@ -282,66 +413,66 @@ sap.ui.define([
 										var projectID = oData.Project_ID;				
 										var projectCompleted = oData.Project_Completed;
 										thisDomObj.selectProjectByID(projectID,projectCompleted);											 
-									}
-								},
+								}
+							},
 								
 							error: function(){
 								console.log("Error");}
-								}		
+						}		
 				);
 			
 			},
-			 selectProjectByID : function(projectID,projectCompleted){
-				 //console.log("projectCompleted: "+projectCompleted);
-				 var getConsultantID = this.getConsultantID();
-				 var consultantID = this.getConsultantID();
-					this.getRouter()
-					.navTo("DetailAdmin", 
-						{projectId:projectID});
-				//MessageToast.show("Pressed : " + evt.getSource().getTitle());
+			searchProjects : function(oEvt){
+				var thisDomObj = this;
+				var projectsModel = new sap.ui.model.json.JSONModel();
+				var oModel = this.getOwnerComponent().getModel("oModel");
+				var searchString = arguments[0];
 				
-				//RATINGS CODE
-				//TODO Ngoni: check with Mamba hw to get odata model address
-				var attachModel = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
-				//var projectCompleted = false;
-				var thisObj = this;
-				//console.log(projectCompleted);
-				attachModel.read(
-						"/Ratings_Entrys?$expand=ProjectDetails,ConsultantDetails&$filter=ProjectDetails/Project_ID%20eq%20"+projectID+"%20and%20ConsultantDetails/Consultant_ID%20eq%20"+consultantID,{async:false,success: function(oCreatedEn){ ratingsBtnConfig(oCreatedEn) }, error: function(e){console.log(e);}}		
-						);					
-				function ratingsBtnConfig(oResults){
-					var ratingsBtnConfigModel;
-					//user has already given a rating for the project
-					if(oResults.results.length > 0){
-						//console.log("Ratings entered");
-						ratingsBtnConfigModel = new sap.ui.model.json.JSONModel({
-						    visible: false,
-						    enabled: false
-						});
-					} //project is completed, rating not yet given
-					else if(projectCompleted === true) {
-						//console.log("project is completed, rating not yet given");
-						ratingsBtnConfigModel = new sap.ui.model.json.JSONModel({
-							    visible: true,
-							    enabled: true
-							});
-					} //project not yet completed
-					else{
-						//console.log("project not completed");
-						ratingsBtnConfigModel = new sap.ui.model.json.JSONModel({
-						    visible: true,
-						    enabled: false
-						});
-					}
-					thisObj.getView().setModel(ratingsBtnConfigModel,"ratingsBtnConfig");				
-				}
+				//read projects
+				oModel.read(
+						"/Projects",{
+							filters: [ new sap.ui.model.Filter({
+								path: "Project_Name",
+								operator: sap.ui.model.FilterOperator.Contains,
+								value1: searchString
+								}) 
+							],
+							
+							success: function(data){
+								console.log(data);
+								projectsModel.setData(data);
+								thisDomObj.getView().setModel(projectsModel,"projectsModel");
+								if(data.results.length > 0){
+									var firstItem = thisDomObj.getView().byId("projectsList").getItems()[0];
+									//saved projectID in m
+									 //thisDomObj.selectProjectByID(firstItem.getNumber());	
+										var oData = thisDomObj.getView().getModel("projectsModel").getProperty("/results/0");
+										var projectID = oData.Project_ID;				
+										var projectCompleted = oData.Project_Completed;
+										thisDomObj.selectProjectByID(projectID,projectCompleted);											 
+								}
+							},
+								
+							error: function(){
+								console.log("Error");}
+						}		
+				);
+			
 			},
-			goToConsultants : function(oEvt){
+			searchConsultants : function(oEvt){
+				var searchString = arguments[0];
 				var oModel = this.getOwnerComponent().getModel("oModel");
 				var consultantsModel = new sap.ui.model.json.JSONModel();
+				
 				//read consultant data
-				oModel.read("/Consultants",{
-							
+				oModel.read("/Consultants",
+						{
+							filters: [ new sap.ui.model.Filter({
+								path: "Consultant_Name",
+								operator: sap.ui.model.FilterOperator.Contains,
+								value1: searchString
+							}) ],
+						
 							success: function(data){ 
 								consultantsModel.setData(data);
 								//console.log(data);
@@ -352,8 +483,9 @@ sap.ui.define([
 								}		
 				);
 				
-				this.getView().setModel(consultantsModel,"consultantsModel");		
-			},		
+				this.getView().setModel(consultantsModel,"consultantsModel");	
+			
+			},	
 
 			/**
 			 * Convenience method for getting the view model by name in every controller of the application.

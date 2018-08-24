@@ -26,7 +26,7 @@ public class SeleniumTest {
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---LoginView--username-email-inner"))).clear();
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---LoginView--password-inner"))).clear();
 		js.executeScript("alert('Login Test Case 1: Incorrect username and Incorrect password fail')");
-		Thread.sleep(1000);
+		Thread.sleep(1500);
 		driver.switchTo().alert().dismiss();
 		
 		Thread.sleep(200);
@@ -42,7 +42,7 @@ public class SeleniumTest {
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---LoginView--username-email-inner"))).clear();
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---LoginView--password-inner"))).clear();
 		js.executeScript("alert('Login Test Case 2: Correct username and Incorrect password fail')");
-		Thread.sleep(1000);
+		Thread.sleep(1500);
 		driver.switchTo().alert().dismiss();
 		
 		Thread.sleep(200);
@@ -58,7 +58,7 @@ public class SeleniumTest {
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---LoginView--username-email-inner"))).clear();
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---LoginView--password-inner"))).clear();
 		js.executeScript("alert('Login Test Case 3: Incorrect username and Correct fail')");
-		Thread.sleep(1000);
+		Thread.sleep(1500);
 		driver.switchTo().alert().dismiss();
 		
 		Thread.sleep(200);
@@ -74,7 +74,7 @@ public class SeleniumTest {
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---LoginView--username-email-inner"))).clear();
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---LoginView--password-inner"))).clear();
 		js.executeScript("alert('Login Test Case 4: Correct username and Correct password pass')");
-		Thread.sleep(1000);
+		Thread.sleep(1500);
 		driver.switchTo().alert().dismiss();
 		
 		Thread.sleep(200);
@@ -88,13 +88,12 @@ public class SeleniumTest {
 		
 		// Project Test Cases
 		// Project Test Case 1: Create Project
-		js.executeScript("alert('Project Test Case 1: Creating Project')");
-		Thread.sleep(1000);
-		driver.switchTo().alert().dismiss();
-		
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--iconTabBarFilter2"))).click();
+		js.executeScript("alert('Project Test Case 1: Creating Project')");
+		Thread.sleep(1500);
+		driver.switchTo().alert().dismiss();
 //		driver.findElement(By.id("__component0---MasterAdmin--iconTabBarFilter2")).click();
-		Thread.sleep(1000);
+		Thread.sleep(500);
 		
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--addProjectButton"))).click();
 		Thread.sleep(500);
@@ -110,37 +109,48 @@ public class SeleniumTest {
 		Thread.sleep(500);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("submitProjectButton"))).click();
 		
-		Thread.sleep(1000);
+		Thread.sleep(1500);
 		driver.navigate().refresh();
 		
 		// User Test Cases
-		// User Test Case 1: Time
+	/*	// User Test Case 1: Time
 		js.executeScript("alert('Test Case 2: Time Entering')");
-		Thread.sleep(1000);
+		Thread.sleep(1500);
 		driver.switchTo().alert().dismiss();
 		
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--requestUserTimesBtn"))).click();
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("tpGeneral-inner"))).sendKeys("08:00");
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--submitUserTimesBtn"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--submitUserTimesBtn"))).click();*/
 		
 		// User Test Case 2: Ratings
 		js.executeScript("alert('Test Case 2: Ratings')");
-		Thread.sleep(1000);
+		Thread.sleep(2000);
 		driver.switchTo().alert().dismiss();
 //		driver.findElement(By.id("__item2-__component0---MasterAdmin--projectsList-1")).click();
+		Thread.sleep(1500);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__item2-__component0---MasterAdmin--projectsList-1"))).click();
+		Thread.sleep(500);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--rateTeamBtn"))).click();
+		Thread.sleep(500);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--submitRatesButton"))).click();
+		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--closeRatesButton"))).click();
 		
 		
 		
 		// Consultant Test Cases
 		// Consultant Test Case 1: Utilization Dates
+		Thread.sleep(500);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--iconTabBarFilter3"))).click();
+		Thread.sleep(500);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__item3-__component0---MasterAdmin--consultants-0"))).click();
-		
-		
+		Thread.sleep(500);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailConsultantView--iconTabBarFilter2"))).click();
+		Thread.sleep(500);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailConsultantView--utilizationMonthSelect-label"))).click();
+		Thread.sleep(500);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailConsultantView--month2"))).click();
+		Thread.sleep(2000);
 		/*List<WebElement> allElements = driver.findElements(By.xpath("//div[@id='__component0---MasterAdmin--projectsList-listUl']/ul")); 
 		System.out.println(allElements.size());*/
 		/*List<WebElement> optionCount = driver.findElements(By.xpath("//select/option"));
@@ -181,7 +191,7 @@ public class SeleniumTest {
 //		driver.findElement(By.id("__component0---DetailAdmin--iconTabBarFilter2")).click();//Members
 //		driver.findElement(By.id("__component0---DetailAdmin--iconTabBarFilter3")).click();//Tasks
 //		driver.findElement(By.id("__component0---DetailAdmin--iconTabBarFilter4")).click();//Attachments
-//		driver.close();
+		driver.close();
 		
 		
 		

@@ -2,19 +2,28 @@ package com.ConsultantTracker.servlet;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.print.DocFlavor.STRING;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ConsultantTracker.model.Assigned_Task;
+import com.ConsultantTracker.model.Client;
+import com.ConsultantTracker.model.Consultant;
+import com.ConsultantTracker.model.Task;
 
 /**
  * Servlet implementation class assignConsultantToTask
@@ -28,7 +37,6 @@ public class assignConsultantToTask extends HttpServlet {
      */
     public assignConsultantToTask() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -42,39 +50,41 @@ public class assignConsultantToTask extends HttpServlet {
 		String dateAssigned = request.getParameter("dateAssigned");
 		String dueDate = request.getParameter("dueDate");
 
-		LocalDate date = LocalDate.now();
-		java.sql.Date sqlDate = java.sql.Date.valueOf( date );
-		Connection con = (Connection) getServletContext().getAttribute("DBConnection");
-		PreparedStatement ps = null;
-		try {
-			
-			ps = con.prepareStatement("INSERT INTO assigned_task (DATE_ASSIGNED, DUE_DATE, ASSIGNED_HOURS, HOURS_WORKED, LAST_UPDATE, CONSULTANT_CONSULTANT_ID, TASK_TASK_ID) VALUES (?, ?, ?, ?,?,?,?)");
-			ps.setString(1, dateAssigned);
-			ps.setString(2, dueDate);
-			ps.setInt(3, assignedHours);
-			ps.setInt(4, hoursWorked);
-			ps.setDate(5, sqlDate);
-			ps.setInt(6, consultantID);
-			ps.setInt(7, taskID);
-			ps.executeUpdate();
-			//sends success message back if user is stored successfully 
-			String ObjToReturn = "Assigned task succesfully!" ;
-			response.setContentType("text/plain");
-			response.getWriter().write(ObjToReturn);
-			
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
+		EntityManager em = emf.createEntityManager();
 
-		} catch (SQLException e) {
+		Consultant c = em.find(Consultant.class, consultantID);
+		Task t = em.find(Task.class, taskID);
+		
+		Assigned_Task a= new Assigned_Task();
+		
+		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
+		Date DateAssigned = new Date();
+		Date DueDate = new Date();
+		Date lastUpdate = new Date();
+		try {
+			DateAssigned = sdf.parse(dateAssigned);
+			DueDate =sdf.parse(dueDate);
+			lastUpdate = sdf.parse(LocalDate.now().toString());
+		} catch (ParseException e) {
 			e.printStackTrace();
-			//logger.error("Database connection problem");
-			throw new ServletException("DB Connection problem.");
-		}finally{
-			try {
-				if (ps!= null)
-					ps.close();
-			} catch (SQLException e) {
-				//logger.error("SQLException in closing PreparedStatement or ResultSet");;
-			}
 		}
+		
+		a.setDate_Assigned(DateAssigned);
+		a.setDue_Date(DueDate);
+		a.setAssigned_Hours(assignedHours);
+		a.setHours_Worked(hoursWorked);
+		a.setLast_Update(lastUpdate);
+		a.setConsultant(c);
+		a.setTask(t);
+		em.getTransaction().begin();
+		em.persist(a);
+		em.getTransaction().commit();
+
+		String ObjToReturn = "Assigned task succesfully!" ;
+		response.setContentType("text/plain");
+		response.getWriter().write(ObjToReturn);
+			
 	}
 
 	/**

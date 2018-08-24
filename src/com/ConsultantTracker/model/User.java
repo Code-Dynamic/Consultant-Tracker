@@ -9,34 +9,50 @@ import javax.persistence.*;
  * 
  */
 @Entity
-@Table(name="users")
 @NamedQuery(name="User.findAll", query="SELECT u FROM User u")
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private String email;
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="primaryKeyGenerator")
+	int id;
+	
+	@OneToOne
+	@JoinColumn(name = "CONSULTANT_ID")
+	private Consultant consultant_ID;
 
 	private String password;
 
 	public User() {
 	}
 
-
-	public String getEmail() {
-		return this.email;
+	public Consultant getConsultantID() {
+		return consultant_ID;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setConsultantID(Consultant consultant_ID) {
+		this.consultant_ID = consultant_ID;
 	}
 
 	public String getPassword() {
-		return this.password;
+		return password;
 	}
 
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 
 }

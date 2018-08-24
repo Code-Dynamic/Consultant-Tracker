@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   <display-name>Consultant-Tracker</display-name>
   <servlet>
@@ -155,12 +154,62 @@
   </servlet-mapping>
   <servlet>
     <description></description>
-    <display-name>getConsultantUtilization</display-name>
-    <servlet-name>getConsultantUtilization</servlet-name>
-    <servlet-class>com.ConsultantTracker.servlet.getConsultantUtilization</servlet-class>
+    <display-name>GetConsultantUtilization</display-name>
+    <servlet-name>GetConsultantUtilization</servlet-name>
+    <servlet-class>com.ConsultantTracker.servlet.GetConsultantUtilization</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>getConsultantUtilization</servlet-name>
-    <url-pattern>/getConsultantUtilization</url-pattern>
+    <servlet-name>GetConsultantUtilization</servlet-name>
+    <url-pattern>/GetConsultantUtilization</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>GetTimesAndTasks</display-name>
+    <servlet-name>GetTimesAndTasks</servlet-name>
+    <servlet-class>com.ConsultantTracker.servlet.GetTimesAndTasks</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetTimesAndTasks</servlet-name>
+    <url-pattern>/GetTimesAndTasks</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CreateUser</display-name>
+    <servlet-name>CreateUser</servlet-name>
+    <servlet-class>com.ConsultantTracker.servlet.CreateUser</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CreateUser</servlet-name>
+    <url-pattern>/CreateUser</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AddClient</display-name>
+    <servlet-name>AddClient</servlet-name>
+    <servlet-class>com.ConsultantTracker.servlet.AddClient</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddClient</servlet-name>
+    <url-pattern>/AddClient</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CreateClient</display-name>
+    <servlet-name>CreateClient</servlet-name>
+    <servlet-class>com.ConsultantTracker.servlet.CreateClient</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CreateClient</servlet-name>
+    <url-pattern>/CreateClient</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>RemoveTask</display-name>
+    <servlet-name>RemoveTask</servlet-name>
+    <servlet-class>com.ConsultantTracker.servlet.RemoveTask</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RemoveTask</servlet-name>
+    <url-pattern>/RemoveTask</url-pattern>
   </servlet-mapping>
 </web-app>

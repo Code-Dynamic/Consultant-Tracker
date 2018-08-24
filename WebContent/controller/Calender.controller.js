@@ -147,7 +147,21 @@ sap.ui.define([
 //				console.log(projectsModel);
 				this.getView().setModel(tasksModel);	
 			},	
+			handleAppointmentSelect: function (oEvent) {
+				var oAppointment = oEvent.getParameter("appointment");
+				if (oAppointment) {
+					MessageBox.show("Appointment selected: " + oAppointment.getTitle());
+				} else {
+					var aAppointments = oEvent.getParameter("appointments");
+					var sValue = aAppointments.length + " Appointments selected";
+					MessageBox.show(sValue);
+				}
+			},
 
+			handleSelectionFinish: function(oEvent) {
+				var aSelectedKeys = oEvent.getSource().getSelectedKeys();
+				this.getView().byId("PC1").setBuiltInViews(aSelectedKeys);
+			},
 			onNavBack: function(evt){
 
 				var oModel = this.getView().getModel();
@@ -158,6 +172,10 @@ sap.ui.define([
 					.navTo("DetailConsultant",
 							{listId:projectId});
 
+			},
+			toggleDayNamesLine: function (oEvent) {
+				var oPC = this.byId("PC1");
+				oPC.setShowDayNamesLine(!oPC.getShowDayNamesLine());
 			}
 			
 

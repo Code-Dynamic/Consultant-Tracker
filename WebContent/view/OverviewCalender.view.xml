@@ -5,22 +5,40 @@
 			xmlns:semantic="sap.m.semantic" 
 			xmlns:html="http://www.w3.org/1999/xhtml" 
 			controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.OverviewCalender">
-	<semantic:MasterPage id="OverviewCalender" title="Overview" navButtonPress="onNavBack" showNavButton="true">
+			
+	<semantic:MasterPage 
+	id="OverviewCalender" 
+	title="Overview" 
+	navButtonPress="onNavBack" 
+	showNavButton="true">
+	
 		<semantic:customHeaderContent>
+		
 			<ToolbarSpacer/>
-				<Button id="addButton" icon="sap-icon://add" press="handleAddTaskDialog" tooltip="Add"/>
+			
+				<Button 
+				id="addButton" 
+				icon="sap-icon://add" 
+				press="handleAddTaskDialog" 
+				tooltip="Add"/>
+				
 		</semantic:customHeaderContent>
+		
 		<semantic:content>
+		
 	<VBox class="sapUiSmallMargin">
+	
 		<PlanningCalendar
 			id="PC1"
 			rows="{/results}"
-			startDate="{Date_Assigned}"
+			startDate="{ path: 'Date_Assigned',formatter: '.formatter.date'}"
 			appointmentsVisualization="Filled"
 			appointmentSelect="handleAppointmentSelect"
 			showEmptyIntervalHeaders="false"
 			showWeekNumbers="true">
+			
 			<rows>
+			
 				<PlanningCalendarRow
 					icon="sap-icon://employee"
 					title="{ConsultantDetails/Consultant_Name}"
@@ -29,8 +47,8 @@
 					
 							<appointments>
 						<unified:CalendarAppointment
-							startDate="{Date_Assigned}"
-							endDate="{Due_Date}"
+							startDate="{ path: 'Date_Assigned',formatter: '.formatter.date'}"
+							endDate="{ path: 'Due_Date',formatter: '.formatter.date'}"
 							icon="{pic}"
 							title="Desc: {TaskDetails/Description}"
 							text="Assigned Hours: {Assigned_Hours}"

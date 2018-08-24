@@ -11,11 +11,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -32,6 +37,10 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
+import com.ConsultantTracker.model.Attachment;
+import com.ConsultantTracker.model.Client;
+import com.ConsultantTracker.model.Project;
 
 /**
  * Servlet implementation class AddFolder
@@ -104,7 +113,7 @@ public class AddFolder extends HttpServlet {
 				System.out.println(request.getServletContext().getAttribute("FILES_DIR"));
 				String s ="C:\\Users\\steph\\Desktop\\";
 				
-				File file = new File("C:\\Users\\steph\\Desktop\\"+fileItem.getName());
+				File file = new File(fileItem.getName());
 				System.out.println("Absolute Path at server="+file.getAbsolutePath());
 				fileItem.write(file);
 				out.write("File "+fileItem.getName()+ " uploaded successfully.");
@@ -112,43 +121,33 @@ public class AddFolder extends HttpServlet {
 				out.write(fileItem.getName());
 				out.write("<a href=\"AddFolder?fileName="+fileItem.getName()+"\">Download "+fileItem.getName()+"</a>");
 			
-				Connection connection = (Connection) getServletContext().getAttribute("DBConnection"); //establish database connection
-				PreparedStatement statement = null;
-				ResultSet set = null;
+				EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
+				EntityManager em = emf.createEntityManager();
+
+			
+				int p_ID =1;
+				Project p = em.find(Project.class, p_ID);
+				Attachment a = new Attachment();
+				a.setAttachment_Name(fileItem.getName());
+				a.setAttachment_Path(file.getAbsolutePath());
+				a.setAttachment_Project_ID(p);
+				a.setAttachment_Size(fileItem.getSize());
+				a.setAttachment_Type( fileItem.getContentType());
+				
+				SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
+				Date uploadDate = new Date();
 				try {
-					statement = connection.prepareStatement("INSERT INTO attachment" + 
-							"( attachment_Name," + 
-							"attachment_Type," + 
-							"attachment_Size," + 
-							"attachment_Path," + 
-							"attachment_Upload_Date," + 
-							"attachment_Project_ID"+
-							")" + 
-							"VALUES(" + 
-							"?," + 
-							"?," + 
-							"?," + 
-							"?,"  +
-							"?,"  +
-							"?);");
-					statement.setString(1, fileItem.getName());
-//					String[] st = fileItem.getName().split(".");
-					statement.setString(2, fileItem.getContentType());
-					statement.setDouble(3,((fileItem.getSize())));
-					statement.setString(4, file.getAbsolutePath());
-					statement.setString(5,LocalDate.now().toString() );
-					statement.setInt(6, 1);
-					System.out.println(statement.toString());
-					statement.executeUpdate();	// execute sql query
-					
-					statement.close();
-					
-					if(statement != null)
-						statement.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
+					uploadDate = sdf.parse(LocalDate.now().toString());
+				} catch (ParseException e) {
 					e.printStackTrace();
 				}
+				a.setAttachment_Upload_Date(uploadDate);
+				em.getTransaction().begin();
+				em.persist(a);
+				em.getTransaction().commit();
+				
+
+				
 			}
 		} catch (FileUploadException e) {
 			out.write("Exception in uploading file.1");

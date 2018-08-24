@@ -5,18 +5,18 @@
 	xmlns:core="sap.ui.core"
 	xmlns:semantic="sap.m.semantic">
 	
-	
+	 
 		<SelectDialog
-		noDataText="No Consultants Found"
-		title="Select Consultants"
+		noDataText="No Tasks Found"
+		title="Select Tasks"
 		search="handleSearch"
-		confirm="handleCloseRemoveConsultantFromProject"
+		confirm="handleCloseRemoveTask"
 		cancel="onCancel"
-		items="{membersModel>/results}" >
+		items="{tasksModel>/results}" >
 		
 		<StandardListItem
-			title="{membersModel>ConsultantDetails/Consultant_Name} {membersModel>ConsultantDetails/Consultant_Surname}"
-			description="SAP programmer"
+			title="{tasksModel>Name}"
+			description="{tasksModel>Due_Date}"
 			iconDensityAware="false"
 			iconInset="false"
 			type="Active" />

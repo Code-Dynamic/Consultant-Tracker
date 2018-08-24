@@ -4,226 +4,578 @@
 			xmlns:f="sap.ui.layout.form" 
 			xmlns:mvc="sap.ui.core.mvc" 
 			xmlns="sap.m" 
+			xmlns:mc="sap.suite.ui.microchart"
+			xmlns:microchart="sap.suite.ui.microchart"
 			xmlns:html="http://www.w3.org/1999/xhtml" 
 			xmlns:semantic="sap.m.semantic" 
 			controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.DetailAdmin">
-	<semantic:DetailPage id="DetailAdmin" 
-						showNavButton="{device>/system/phone}" 
-						title="Project Information" 
-						busy="{detailView>/busy}" 
-						busyIndicatorDelay="{detailView>/delay}">
-						<semantic:customHeaderContent>
-			<Button press="openOverviewCalender" id="cartIcon" text="Overview" icon="sap-icon://accelerated"/>
-		</semantic:customHeaderContent>
-		<semantic:content>
+	
+	<semantic:DetailPage 
+			id="DetailAdmin" 
+			showNavButton="{device>/system/phone}" 
+			busy="{detailView>/busy}" 
+			busyIndicatorDelay="{detailView>/delay}">
 			
-<!-- <ObjectHeader id="objectHeader" title="{projectsModel>/Project_Name}">
- 			    <statuses>
-			       <ProgressIndicator id="projectProgressId" class="sapUiSmallMarginBottom" percentValue="{progress>/percVal}" displayValue="{progress>/displayVal}%" showValue="true" state="None"/>
+	<semantic:customHeaderContent>
 
-			    </statuses> 
-			</ObjectHeader> -->
-					<ObjectHeader
-							id="oh1"
-							responsive="true"
-							fullScreenOptimized="false"
-							icon="{ProductPicUrl}"
-							iconAlt="{Name}"
-							intro="{projectsModel>/Project_Description}"
-							title="{projectsModel>/Project_Name}"
-							titlePress="handleTitlePress"
-							number="{progressModel>/percVal}"
-							numberUnit="Completed"
-							titleSelectorPress="onPress"
-							showMarkers="true"
-							markFlagged="false"
-							markFavorite="false"
-							numberState="Success"
-							backgroundDesign="Transparent">
-							<attributes>
-								<ObjectAttribute
-									title="ProjectID"
-									text="{projectsModel>/Project_ID}"/>
-								<ObjectAttribute
-									title="Due"
-									text="{projectsModel>/Project_Deadline}"/>
-								<ObjectAttribute
-									title="Client Name"
-									text="{projectsModel>/ClientDetails/Client_Name}"/>
+			
+	</semantic:customHeaderContent>
+	
+	<semantic:content>
+			
+
+	<ObjectHeader id="oh1"
+			responsive="true"
+			fullScreenOptimized="false"
+			icon="{ProductPicUrl}"
+			iconAlt="{Name}"
+			intro="{projectsModel>/Project_Description}"
+			title="{projectsModel>/Project_Name}"
+			titlePress="handleTitlePress"
+			number="{progressModel>/percVal}"
+			numberUnit="Completed"
+			titleSelectorPress="onPress"
+			showMarkers="true"
+			markFlagged="false"
+			markFavorite="false"
+			numberState="Success"
+			backgroundDesign="Transparent">
+			
+			<attributes>
+			
+					<ObjectAttribute
+						title="ProjectID"
+						text="{projectsModel>/Project_ID}"/>
+						
+					<ObjectAttribute
+						title="Due"
+						text="{ path: 
+									'projectsModel>/Project_Deadline',
+									formatter: '.formatter.date'}"/>
+						
+					<ObjectAttribute
+						title="Client Name"
+						text="{projectsModel>/ClientDetails/Client_Name}"/>
 					
-							</attributes>
-							<statuses>
-					 			<ObjectStatus
-									title="Approval"
-									text="Pending"
-									state="Warning"/>
-							</statuses>
-						</ObjectHeader>			
-			<IconTabBar id="iconTabBar" class="sapUiResponsiveContentPadding" expandable="false">
-				<items>
-				<IconTabFilter id="iconTabBarFilter2" icon="sap-icon://group" tooltip="list of tasks" text="Members">
-						<content>
-							<Table id="teamMemberTable"
-		inset="false"
-		items="{membersModel>/results}">
-		<headerToolbar>
-			<Toolbar>
+					</attributes>
+					
+	</ObjectHeader>		
+		
+	<IconTabBar 
+		id="iconTabBar" 
+		class="sapUiResponsiveContentPadding" 
+		expandable="false"
+		select="showMap">
+				
+		<items >
+		
+				<IconTabFilter 
+				id="iconTabBarFilter1"
+				key="key1" 
+				icon="sap-icon://hint" 
+				tooltip="overview dashboard" 
+				text="Dashboard">
+					
+			<content>
+
+			<GenericTile 
+			id="1"
+			class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+			header="Overall progress" 
+			subheader="Current">
+			
+			<TileContent >
+
+			<mc:RadialMicroChart percentage="57" />	
+			
+			</TileContent>
+		
+			</GenericTile>
+			
+			<GenericTile 
+			id="2"
+			class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+			header="Consultants on Project" 
+			subheader="Available" 
+			press="onSelectTab">
+			
+			<TileContent >
+			
+			<NumericContent 
+			value="{projectsModel>/countMembers}" 
+			icon="sap-icon://employee" />
+			
+			</TileContent>
+		
+			</GenericTile>
+			
+			<GenericTile 
+			id="3"
+			class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+			header="Active Tasks" 
+			subheader="in progress"
+			press="onSelectTab">
+			
+			<TileContent >
+			
+			<NumericContent 
+			value="{projectsModel>/countTasks}" 
+			icon="sap-icon://activities"/>
+	
+			</TileContent>
+		
+			</GenericTile>
+			
+			
+			<GenericTile 
+			id="4"
+			class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+			header="Overall hours worked" 
+			subheader="current" >
+			
+			<TileContent 
+			unit="70" 
+			footer="Expected hours">
+			
+			<NumericContent 
+			value="40" 
+			icon="sap-icon://present"/>
+			
+			</TileContent>
+		
+			</GenericTile>
+			
+			<GenericTile 
+			id="5"
+			class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+			header="Notifications" 
+			subheader="new" 
+			press="press">
+			
+			<TileContent 
+			unit="100" 
+			footer="Total messages">
+			
+			<NumericContent 
+			value="3" 
+			icon="sap-icon://notification-2"/>
+			
+			</TileContent>
+		
+			</GenericTile>
+			
+			<GenericTile 
+			id="6"
+			class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+			header="Calender" 
+			subheader="view schedule" 
+			press="openCalender" >
+			
+			<TileContent>
+			
+			<NumericContent 
+			value="{projectsModel>/countTasks}" 
+			icon="sap-icon://accelerated"/>
+			
+			</TileContent>
+		
+			</GenericTile>
+			
+			<GenericTile 
+			id="7"
+			class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
+			header="location to" 
+			subheader="{projectsModel>/ClientDetails/Client_Name}" 
+			press="onSelectTab" >
+			
+			<TileContent>
+			
+			</TileContent>
+		
+			</GenericTile>
+			</content>
+						
+					</IconTabFilter>
+					
+			<IconTabFilter 
+				id="iconTabBarFilter2"
+				key="key2" 
+				icon="sap-icon://group" 
+				tooltip="list of tasks" 
+				text="Members">
+					
 				<content>
-					<Title text="Available Members" level="H2"/>
-					<ToolbarSpacer />
-						<Button icon="sap-icon://delete" text="Team members" press="onDeleteConsultantFromProject"/>
-						<Button icon="sap-icon://add" text="Team member" press="addConsultantToProject"/>
+						
+					<Table 
+						id="teamMemberTable"
+						inset="false"
+						items="{membersModel>/results}">
+		
+						<headerToolbar>
+		
+							<Toolbar>
+			
+								<content>
+				
+									<Title 
+										text="Available Members" 
+										level="H2"/>
+						
+									<ToolbarSpacer />
+					
+						<Button
+							icon="sap-icon://delete" 
+							text="Team member"
+							press="onDeleteConsultantFromProject">
+							
+							<customData>
+							
+							<core:CustomData
+								key="multi"
+								value="true" />
+								
+							<core:CustomData
+								key="remember"
+								value="true" />
+								
+							</customData>
+							
+						</Button>		
+						
+						<Button
+							icon="sap-icon://add" 
+							text="Team member"
+							press="addConsultantToProject">
+							
+							<customData>
+							
+							<core:CustomData
+								key="multi"
+								value="true" />
+								
+							<core:CustomData
+								key="remember"
+								value="true" />
+								
+							</customData>
+							
+						</Button>	
 									
 				</content>
+				
 			</Toolbar>
+			
 		</headerToolbar>
+		
 		<columns>
+		
 			<Column
 				width="12em">
-				<Text text="Name"/>
+				
+				<Text 
+					text="Name"/>
+					
 			</Column>
+			
 			<Column
 				minScreenWidth="Tablet"
 				demandPopin="true">
-				<Text text="Email" />
+				
+				<Text 
+					text="Email" />
+					
 			</Column>
 
 			<Column
 				minScreenWidth="Desktop"
 				demandPopin="true"
 				hAlign="Center">
-				<Text text="Role" />
+				
+				<Text 
+					text="Role" />
+					
 			</Column>
+			
 				</columns>
+				
 		<items>
+		
 			<ColumnListItem>
+			
 				<cells>
+				
 					<Text
 						text="{membersModel>ConsultantDetails/Consultant_Name}" />
+						
 					<Text
 						text="{membersModel>ConsultantDetails/Consultant_email}" />
+						
 					<Text
 						text="Programmer" />
-					
 
 				</cells>
+				
 			</ColumnListItem>
+			
 		</items>
+		
 	</Table>
-						</content>
-					</IconTabFilter>
-					<IconTabFilter id="iconTabBarFilter3" icon="sap-icon://activities" tooltip="{i18n>detailIconTabBarAttachments}" text="Tasks">
-
-		<Table id="idProductsTable"
-		inset="false"
-		items="{tasksModel>/results}">
-		<headerToolbar>
-			<Toolbar>
-				<content>
-					<Title text="Available Tasks" level="H2"/>
-					<ToolbarSpacer />
-															<ToolbarSpacer/>
-							<Button icon="sap-icon://delete" text="Task" press="onDeleteConsultantFromProject"/>
-							<Button icon="sap-icon://add" text="Task" press="onAddTask"/>
-
+	
 				</content>
+				
+	</IconTabFilter>
+	
+	<IconTabFilter 
+			id="iconTabBarFilter3"
+			key="key3" 
+			icon="sap-icon://activities" 
+			tooltip="{i18n>detailIconTabBarAttachments}" 
+			text="Tasks">
+
+		<Table 
+			id="idProductsTable"
+			inset="false"
+			items="{tasksModel>/results}">
+			
+		<headerToolbar>
+		
+			<Toolbar>
+			
+				<content>
+				
+					<Title 
+						text="Available Tasks" 
+						level="H2"/>
+						
+					<ToolbarSpacer />
+					
+						<ToolbarSpacer/>
+						
+							<Button 
+								icon="sap-icon://delete"
+								text="Task"
+								press="onRemoveTaskFromProject"/>
+								
+							<Button 
+								icon="sap-icon://add" 
+								text="Task" 
+								press="onAddTask"/>
+								
+				</content>
+				
 			</Toolbar>
+			
 		</headerToolbar>
+		
 		<columns>
 			<Column
 				width="12em">
 				<Text text="Name"/>
+				
 			</Column>
+			
 			<Column
 				minScreenWidth="Tablet"
 				demandPopin="true">
 				<Text text="Due Date" />
+				
 			</Column>
+			
 			<Column
 				minScreenWidth="Desktop"
 				demandPopin="true"
 				hAlign="End">
 				<Text text="Progress" />
+				
 			</Column>
+			
 			<Column
 				minScreenWidth="Desktop"
 				demandPopin="true"
 				hAlign="Center">
 				<Text text="Feedback" />
+				
 			</Column>
+			
 		</columns>
+		
 		<items>
+		
 			<ColumnListItem>
+			
 				<cells>
+				
 					<ObjectIdentifier
-						title="{tasksModel>TaskDetails/Name}"/>
+						title="{tasksModel>Name}"/>
+						
 					<Text
-						text="{tasksModel>TaskDetails/Due_Date}" />
-					<Text
-						text="10%" />
+						text="{ path: 
+						 			'tasksModel>Due_Date',
+									formatter: '.formatter.date'}"/>
 					
-
+					<ProgressIndicator
+					class="sapUiSmallMarginBottom"
+					percentValue="25"
+					displayValue="25%"
+					showValue="true"
+					state="Warning"
+					displayOnly="true" />		
+				
+				<Text text="Inprogress" />
 				</cells>
+				
 			</ColumnListItem>
+			
 		</items>
+		
 	</Table>
 
 
 					</IconTabFilter>
 					
 					
-					<IconTabFilter id="iconTabBarFilter4" icon="sap-icon://attachment" tooltip="{i18n>detailIconTabBarInfo}" text="Attachments">
+					<IconTabFilter
+						 id="iconTabBarFilter4"
+						 key="key4" 
+						 icon="sap-icon://attachment" 
+						 tooltip="{i18n>detailIconTabBarInfo}" 
+						 text="Attachments">
+						 
 						<content>
+						
 							<la:VerticalLayout>
-								<u:FileUploader id="fileUploader" name="myFileUpload" uploadUrl="AddFolder" tooltip="Upload your file to the local server" uploadComplete="" change="handleValueChange" typeMissmatch="handleTypeMissmatch" style="Emphasized" fileType="txt,jpg" placeholder="Choose a file for Upload...">
+							
+								<u:FileUploader 
+									id="fileUploader" 
+									name="myFileUpload" 
+									uploadUrl="AddFolder" 
+									tooltip="Upload your file to the local server" 
+									uploadComplete="" change="handleValueChange" 
+									typeMissmatch="handleTypeMissmatch" 
+									style="Emphasized" 
+									fileType="txt,jpg" 
+									placeholder="Choose a file for Upload...">
+									
 									<u:parameters>
-										<u:FileUploaderParameter name="param1" value="Foo"/>
-										<u:FileUploaderParameter name="param2" value="bar"/>
+									
+										<u:FileUploaderParameter 
+											name="param1" 
+											value="Foo"/>
+											
+										<u:FileUploaderParameter 
+											name="param2" 
+											value="bar"/>
+											
 									</u:parameters>
+									
 									<u:headerParameters>
-										<u:FileUploaderParameter name="headerParam1" value="Foo"/>
-										<u:FileUploaderParameter name="headerParam2" value="bar"/>
+									
+										<u:FileUploaderParameter 
+											name="headerParam1" 
+											value="Foo"/>
+											
+										<u:FileUploaderParameter 
+											name="headerParam2" 
+											value="bar"/>
+											
 									</u:headerParameters>
+									
 								</u:FileUploader>
-								<Button text="Upload File" press="handleUploadPress"/>
+								
+								<Button 
+									text="Upload File" 
+									press="handleUploadPress"/>
+									
 							</la:VerticalLayout>
 
-							<Table id="idTable" items="{attachment>/results}">
+							<Table 
+								id="idTable" 
+								items="{attachment>/results}">
+								
 								<items>
+								
 									<ColumnListItem>
+									
 										<cells>
-											<Text text="{attachment>Attachment_Name}"/>
-											<Text text="{attachment>Attachment_Upload_Date}"/>
-											<Text text="{attachment>Attachment_Size} B"/>
+										
+											<Text 
+											
+												text="{attachment>Attachment_Name}"/>
+												
+											<Text 
+												text="{ path: 
+						 									'attachment>Attachment_Upload_Date',
+															formatter: '.formatter.date'}"/>
+												
+											<Text 
+												text="{attachment>Attachment_Size} B"/>
+												
 										</cells> 
+										
 									</ColumnListItem>
+									
 								</items>
+								
 								<columns>
+								
 									<Column>
-										<Text text="File Name"/>
+									
+										<Text 
+											text="File Name"/>
+											
 									</Column>
+									
 									<Column>
-										<Text text="Date Uploaded"/>
+									
+										<Text 
+											text="Date Uploaded"/>
+											
 									</Column>
+									
 									<Column>
-										<Text text="Size"/>
+									
+										<Text 
+											text="Size"/>
+											
 									</Column>
 									
 								</columns>
+								
 							</Table>
+							
 						</content>
+						
 					</IconTabFilter>
-
+					<IconTabFilter 
+							id="iconTabBarFilter5" 
+							key="key5"
+							icon="sap-icon://map"
+							tooltip="Maps" 
+							text="Map"
+							>
+	
+							<content id='contentDiv'>
+							
+	
+							 <Button press="DistFromCurrent" text="Show Route"/>
+							 <Button press="HideRoute" text="Hide Route"/>
+							 <Text text="Distance:" id="Distance" />
+								
+							<HBox id="map_canvas" fitContainer="true" justifyContent="Center" alignItems="Center"   />
+	                             
+							</content>
+	
+						</IconTabFilter>
 				</items>
+				
 			</IconTabBar>
+			
 		</semantic:content>
 
-		<semantic:customFooterContent>
-				<Button icon="sap-icon://add" text="Project" press="addProject" id="addProjectButton">
-					<layoutData><OverflowToolbarLayoutData priority="NeverOverflow" /></layoutData>
-				</Button>			
-			<Button id="removeProjectButton" text="Remove Project" icon="sap-icon://delete" press="confirmDeleteProject"/>
-					<Button press="openProjectsOverviewCalender" id="cartIcon1" text="viewAll" icon="sap-icon://accelerated"/>
+		<semantic:customFooterContent>			
+				
 		</semantic:customFooterContent>
+		
 	</semantic:DetailPage>
+	
 </mvc:View>

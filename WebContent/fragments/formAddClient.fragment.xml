@@ -1,0 +1,50 @@
+<core:FragmentDefinition 
+	xmlns="sap.m" 
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:core="sap.ui.core"
+	xmlns:semantic="sap.m.semantic">
+	
+	<Dialog title="Add Client Details">
+	
+		<content>
+			<f:SimpleForm id="SimpleFormChange354"
+			editable="true"
+			layout="ResponsiveGridLayout"
+			
+			labelSpanXL="3"
+			labelSpanL="3"
+			labelSpanM="3"
+			labelSpanS="12"
+			adjustLabelSpan="false"
+			emptySpanXL="4"
+			emptySpanL="4"
+			emptySpanM="4"
+			emptySpanS="0"
+			columnsXL="1"
+			columnsL="1"
+			columnsM="1"
+			singleContainerFullSize="false" >
+			<f:content>
+				<Label text="Name"/>
+				<Input id="c_Name"/>
+				<Label text="Email Address"/>
+				<Input id="c_Email"/>
+				<Label text="Physical Address"/>
+				<TextArea id="c_Address"/>
+				<Label text="Phone Number"/>
+				<Input id="c_Number"/>
+					
+			</f:content>
+		</f:SimpleForm>
+		</content>
+		<beginButton>
+			<Button text="Submit" press="onSubmitClient" id="submitClientButton"/>
+		</beginButton>
+		<endButton>
+			<Button text="Close" press="onClose" id="closeClientModalButton"/>
+
+		</endButton>
+	</Dialog>
+	
+</core:FragmentDefinition>

@@ -7,40 +7,74 @@ displayBlock="true"
 controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.SplitApp"
 >
     
-    <Page showHeader="false" enableScrolling="true">
-     <tnt:ToolHeader>
-        <Button text="Consultant Tracker" type="Transparent" press="onHomePress">
-            <layoutData>
-                <OverflowToolbarLayoutData priority="NeverOverflow"/>
-            </layoutData>
-        </Button>
-        <IconTabHeader id="iconTabHeader" selectedKey="invalidKey" select="onSelectTab" showOverflowSelectList="true" backgroundDesign="Transparent">
-            <layoutData>
-                <OverflowToolbarLayoutData priority="NeverOverflow" shrinkable="true"/>
-            </layoutData>
-        </IconTabHeader>
-        <ToolbarSpacer>
-            <layoutData>
-                <OverflowToolbarLayoutData priority="NeverOverflow" minWidth="16px"/>
-            </layoutData>
-        </ToolbarSpacer>
-        <MenuButton id="splitAppMenuButton" text="UserName" type="Transparent">
-            <layoutData>
-                <OverflowToolbarLayoutData priority="NeverOverflow"/>
-            </layoutData>
-            <menu>
-                <Menu>
-                    <items>
-                        <MenuItem text="Profile"/>
-                        <MenuItem text="Logout"/>
-                    </items>
-                </Menu>
-            </menu>
-        </MenuButton>
-    </tnt:ToolHeader>
+    <Page 
+    showHeader="false" 
+    enableScrolling="true">
     
+     <tnt:ToolHeader>
+
+        <Button 
+        text="Consultant Tracker"
+        type="Transparent" 
+        press="onHomePress">
+
+            <layoutData>
+
+                <OverflowToolbarLayoutData priority="NeverOverflow"/>
+
+            </layoutData>
+
+        </Button>
+        <IconTabHeader 
+        id="iconTabHeader" 
+        selectedKey="invalidKey" 
+        select="onSelectTab" 
+        showOverflowSelectList="true" 
+        backgroundDesign="Transparent">
+
+            <layoutData>
+
+                <OverflowToolbarLayoutData 
+                priority="NeverOverflow" 
+                shrinkable="true"/>
+
+            </layoutData>
+
+        </IconTabHeader>
+
+        <ToolbarSpacer>
+        
+            <layoutData>
+            
+                <OverflowToolbarLayoutData 
+                priority="NeverOverflow"
+                minWidth="16px"/>
+                
+            </layoutData>
+            
+        </ToolbarSpacer>
+        		<Button 
+				press="employeeProfile" 
+				  id="splitAppMenuButton" 
+				 type="Transparent" 
+				icon="sap-icon://personnel-view"/>
+				
+				<Button 
+				press="logout" 
+				id="logout" 
+				 type="Transparent" 
+				text="logout" 
+				icon="sap-icon://log"/>
+				
+
+        
+
+        
+    </tnt:ToolHeader>
  <content>
+ 
  <SplitApp id="idSplitAppControl"/>
+ 
  </content>
 
  </Page>

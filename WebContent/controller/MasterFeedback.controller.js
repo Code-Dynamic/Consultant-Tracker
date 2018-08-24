@@ -11,7 +11,31 @@ sap.ui.define([
     return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.MasterFeedback", {
 
         onInit: function (evt) {
-
+        	var oModel = this.getOwnerComponent().getModel("oModel");
+        	var taskDetailModel = new JSONModel();
+			var consultantID = this.getConsultantID();
+			
+			//read the Project table based on id
+				oModel.read("/Assigned_Tasks", {
+					urlParameters: {
+						"$expand" : "ConsultantDetails",
+						"$expand" : "TaskDetails"
+			        },
+					filters: [ new sap.ui.model.Filter({
+				          path: "ConsultantDetails/Consultant_ID",
+				          operator: sap.ui.model.FilterOperator.EQ,
+				          value1: consultantID
+				     })],
+					  success: function(data){
+						  taskDetailModel.setData(data);
+					  },
+					  error: function(oError) {
+						  alert("error");
+						 }
+					});
+				//set the project detail model
+				this.getView().setModel(taskDetailModel); 
+				console.log(this.getView().getModel());
         },
         onNavBack: function (oEvent) {
             
@@ -46,43 +70,7 @@ sap.ui.define([
 //                })
 //            );
 //            button = 1;
-        	var oModel = this.getOwnerComponent().getModel("oModel");
-        	var taskDetailModel = new JSONModel();
-			var consultantID = this.getConsultantID();
-			
-			//read the Project table based on id
-				oModel.read("/Assigned_Tasks", {
-					urlParameters: {
-						"$expand" : "ConsultantDetails",
-						"$expand" : "TaskDetails"
-			        },
-					filters: [ new sap.ui.model.Filter({
-				          path: "ConsultantDetails/Consultant_ID",
-				          operator: sap.ui.model.FilterOperator.EQ,
-				          value1: consultantID
-				     })],
-					  success: function(data){
-						  taskDetailModel.setData(data);
-//							var results = JSON.stringify(data);
-//							console.log(results);
-//							alert(results);
-					  },
-					  error: function(oError) {
-						  alert("error");
-						 }
-					});
-				//set the project detail model
-				this.getView().setModel(taskDetailModel); 
-				console.log(this.getView().getModel());
-//				var list = this.getView().byId("listFeedback");		
-//	            list.bindItems("/results/",
-//	                new sap.m.StandardListItem({
-//	                    title: "{TaskDetails/Name}",
-//	                    press: "onTaskSelect",
-//	                    type: "Active"
-//	
-//	                })
-//	            );
+        	
         },
         /**
          *@memberOf consultanttracker.Consultant-Tracker_Prototype-1.controller.MasterManager
@@ -145,7 +133,10 @@ sap.ui.define([
             // var feedbackLog = new sap.ui.model.json.JSONModel(selectedData[0]);
             // sap.ui.getCore().setModel(oSelModel, "selModel");
         	var taskID = oEvent.getSource().getBindingContext().getProperty("TaskDetails/Task_ID");
-        	console.log("TaskID: " + taskID);
+        	
+				this.getRouter()
+				.navTo("DetailFeedback", 
+						{taskID:taskID});
         },
         onConsultantSelect: function (oEvent) {
             //var feedBackView = sap.ui.getCore().byId("detailProject");
@@ -166,6 +157,6 @@ sap.ui.define([
             } else if (button == 3) {
                 this.onProjectsSelect(oEvent);
             }
-        },
+        }
     });
 });

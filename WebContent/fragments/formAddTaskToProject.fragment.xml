@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <core:FragmentDefinition
 	xmlns:semantic="sap.m.semantic"
 	xmlns:core="sap.ui.core"
@@ -26,7 +27,7 @@
 			id="SimpleFormAddTask">
 				<f:content>
 					<Label 
-						text="Tasksasd Name"/>
+						text="Task Name"/>
 					<Input 
 						id="t_Name"/>
 					<Label 
@@ -40,17 +41,21 @@
 						width="100%" 
 						displayFormat="long" 
 						valueFormat="yyyy-MM-dd"/>
+						
+					<Label text="Is Billable?"/>
+					<CheckBox id="t_Billable"/>
 				</f:content>
 			</f:SimpleForm>
 		</content>
 		<beginButton>
-			<Button
-				text="Submit"
-				press="onSubmitTask"/>
+			<Button 
+				text="Submit" 
+				press="handleCloseAddTask"/>
+		</beginButton>
+		<endButton>
 			<Button
  				text="Close"
- 				press="handleCloseAddTask"/>
-		</beginButton>
-		<endButton></endButton>
+ 				press="onCancel"/>
+		</endButton>
 	</Dialog>
 </core:FragmentDefinition>

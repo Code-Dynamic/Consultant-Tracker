@@ -5,8 +5,8 @@ controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.Deta
             <Panel id="panel0" class="sapUiResponsiveMargin" height="80%" expanded="true">
                 <content>
                     <ScrollContainer height="100%" width="100%" horizontal="true" vertical="true" focusable="true">
-                        <List showSeparators="Inner" items="{/EntryCollection}">
-                            <FeedListItem sender="{Author}" icon="{AuthorPicUrl}" senderPress="onSenderPress" iconPress="onIconPress" iconDensityAware="false" info="{Type}" timestamp="{Date}" text="{Text}" convertLinksToAnchorTags="All"/>
+                        <List showSeparators="Inner" items="{/results}">
+                            <FeedListItem sender="{ConsultantDetails/Consultant_Name}" icon="{AuthorPicUrl}" senderPress="onSenderPress" iconPress="onIconPress" iconDensityAware="false" info="{Type}" timestamp="{ path: 'Date',formatter: '.formatter.date'}" text="{Message}" convertLinksToAnchorTags="All"/>
                         </List>
                     </ScrollContainer>
                 </content>

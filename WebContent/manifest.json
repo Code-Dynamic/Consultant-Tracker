@@ -140,7 +140,7 @@
 					]
 				},
 				{
-					"pattern": "DetailAdmin/{projectId}",
+					"pattern": "DetailAdmin/{projectId},:consultantId:",
 					"name": "DetailAdmin",
 					"target": [
 						"MasterAdmin",
@@ -172,6 +172,13 @@
 					]
 				},
 				{
+					"name": "Calender",
+					"pattern": "DetailAdmin/{listId}/Calender/{projectId}",
+					"target": [
+						"MasterAdmin","Calender"
+					]
+				},
+				{
 					"name": "OverviewCalender",
 					"pattern": "DetailAdmin/OverviewCalender/{projectId}",
 					"target": [
@@ -191,7 +198,21 @@
 					"target": [
 						"MasterAdmin","ProjectsOverviewCalender"
 					]
-				}
+				},
+				{
+                    "name": "Feedback",
+                    "pattern": "feedback",
+                    "target": [
+                        "MasterFeedback","DetailFeedback"
+                    ]
+                },
+                {
+                    "name": "DetailFeedback",
+                    "pattern": "DetailFeedback/{taskID}",
+                    "target": [
+                        "MasterFeedback","DetailFeedback"
+                    ]
+                }
 			],
 			"targets": {
 				"MasterAdmin": {
@@ -256,7 +277,8 @@
 					"viewLevel": 3,
 					"controlId": "idSplitAppControl",
 					"controlAggregation": "detailPages",
-					"parent": "splitview"
+					"parent": "splitview",
+					"transition": "flip"
 				},
 				"OverviewCalender": {
 					"viewName": "OverviewCalender",

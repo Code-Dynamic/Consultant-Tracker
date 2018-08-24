@@ -244,7 +244,9 @@ sap.ui.define([
 		    	this._ratingsDialog.close();
 		    },
 
-			
+		    onFeedbackPress: function(){
+                this.getRouter().navTo("Feedback");
+	        },
 	
 		/**
 		 * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered

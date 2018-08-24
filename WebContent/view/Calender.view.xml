@@ -5,26 +5,44 @@
 			xmlns:semantic="sap.m.semantic" 
 			xmlns:html="http://www.w3.org/1999/xhtml" 
 			controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.Calender">
-	<semantic:MasterPage id="Calender" title="Schedule Planning CalenderS" navButtonPress="onNavBack" showNavButton="true">
+			
+	<semantic:MasterPage 
+	id="Calender" 
+	title="Schedule Planning Calender" 
+	navButtonPress="onNavBack" 
+	showNavButton="true">
+
+				
 		<semantic:content>
+		
 	<VBox class="sapUiSmallMargin">
+	
 		<PlanningCalendar
 			id="PC1"
 			rows="{/results}"
-			startDate="{Date_Assigned}"
+			
+			builtInViews="Week"
+
 			appointmentsVisualization="Filled"
 			appointmentSelect="handleAppointmentSelect"
 			showEmptyIntervalHeaders="false"
 			showWeekNumbers="true">
+			
 			<toolbarContent>
-				<Title text="{TaskDetails/ProjectDetails/Project_Name} Scheduled Tasks" titleStyle="H4"/>
+			
+				<Title 
+				text="{TaskDetails/ProjectDetails/Project_Name} individual calander view" 
+				titleStyle="H4"/>
+				
 			</toolbarContent>
+			
 			<rows>
 				<PlanningCalendarRow
 					icon="sap-icon://task"
 					title="{TaskDetails/Name}">
 					
 							<appointments>
+							
 						<unified:CalendarAppointment
 							startDate="{Date_Assigned}"
 							endDate="{Due_Date}"
@@ -33,10 +51,15 @@
 							text="Assigned Hours: {Assigned_Hours}"
 							type="{type}"
 							tentative="{tentative}">
+							
 						</unified:CalendarAppointment>
+						
 					</appointments>
+					
 				</PlanningCalendarRow>
+				
 			</rows>
+			
 		</PlanningCalendar>
 		
 	</VBox>

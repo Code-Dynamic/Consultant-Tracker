@@ -25,7 +25,7 @@
 			columnsL="1"
 			columnsM="1"
 			singleContainerFullSize="false" >
-					<f:content>
+			<f:content>
 				<Label text="Name"/>
 				<Input id="p_Name"/>
 				<Label text="Description"/>
@@ -34,8 +34,14 @@
 				<Label text="Start Date"/>
 				<DatePicker valueFormat="yyyy-MM-dd" displayFormat="long" width="100%" id="p_StartDate"/>					
 				<Label text="Deadline"/>
-				<DatePicker valueFormat="yyyy-MM-dd" displayFormat="long" width="100%" id="p_Deadline"/>			
-
+				<DatePicker valueFormat="yyyy-MM-dd" displayFormat="long" width="100%" id="p_Deadline"/>
+				<Label  text="Select a Client for this project" />
+				<Select id="idSelected"
+					forceSelection="false"
+					items="{clientList>/results}">
+					<core:Item key="{clientList>Client_ID}" text="{clientList>Client_Name}" />
+				</Select>
+				
 				<Label text="OnSite"/>
 				<CheckBox id="p_OnSite"/>
 					
