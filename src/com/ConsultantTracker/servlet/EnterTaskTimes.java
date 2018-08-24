@@ -68,7 +68,8 @@ public class EnterTaskTimes extends HttpServlet {
 		
 		java.sql.Date sqlDate = new java.sql.Date(UTC);
 		java.sql.Date today = new java.sql.Date(date.getTime());	
-			
+		
+		// this is a string array
 		String[] taskTimeAndID;
 		ResultSet rs = null;
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
