@@ -133,7 +133,7 @@ public class EnterTaskTimes extends HttpServlet {
 					em.persist(assignedTaskObj);
 					em.getTransaction().commit();
 				}
-				//then update daily time
+				//then update daily time, thats it
 				time.setTime(taskTime);
 				em.getTransaction().begin();
 				em.persist(time);
