@@ -200,14 +200,15 @@ sap.ui.define([
 		var geocoder =new google.maps.Geocoder();
 		var officeAddress = this.getView().getModel('projectsModel').getProperty('/ClientDetails/Client_Address');
 		 directionsRenderer = new google.maps.DirectionsRenderer({
-				map: map
+				map: null
 			});
 		
 		var CurrLocationMarker = new google.maps.Marker();
-		var EpiuseOfficeMarker = new google.maps.Marker();
+		var ClientMarker = new google.maps.Marker();
 		
 		directionsService = new google.maps.DirectionsService;
-
+		var thisPtr = this;
+		
 		//Get user current location
 		if (navigator.geolocation) {
 		     navigator.geolocation.getCurrentPosition(function (position) {
@@ -222,11 +223,10 @@ sap.ui.define([
 		function officeLocation(){
 		 geocoder.geocode( { 'address': officeAddress},function(result,status){
 			 if(status == google.maps.GeocoderStatus.OK){
-				 EpiuseOfficeMarker.setPosition(result[0].geometry.location);
+				 ClientMarker.setPosition(result[0].geometry.location);
 				 epPos[0] = result[0].geometry.location.lat();
 				 epPos[1] = result[0].geometry.location.lng();
-				
-				
+				 thisPtr.DistFromCurrent();
 			 }
 		 });
 		}
@@ -243,8 +243,8 @@ sap.ui.define([
 		infoWindowCurrentLocation.open(map, CurrLocationMarker);
 		
 
-		EpiuseOfficeMarker.setMap(map);
-		infoWindowClient.open(map, EpiuseOfficeMarker);
+		ClientMarker.setMap(map);
+		infoWindowClient.open(map, ClientMarker);
 	    
 		
 		var control = this.getView().byId('front-div');

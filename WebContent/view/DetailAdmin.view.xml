@@ -553,8 +553,9 @@
 							<content id='contentDiv'>
 							
 	
-							 <Button press="DistFromCurrent" text="Show Route"/>
-							 <Button press="HideRoute" text="Hide Route"/>
+							 <HBox>
+								 <Button press="ShowHide" text="Show/Hide Route"/>
+							</HBox>
 							 <Text text="Distance:" id="Distance" />
 								
 							<HBox id="map_canvas" fitContainer="true" justifyContent="Center" alignItems="Center"   />
