@@ -267,7 +267,14 @@ sap.ui.define([
 			if (this._Dialog) {
 				this._Dialog.destroy();
 			}
-		}
+		},
+		//Start---Mobile view code
+        onNavBack: function(oEvent){
+            
+           
+            this.getRouter().navTo("MasterConsultant",{consultantId:this.getConsultantID()});
+        },
+        //End---Mobile view code
 	    
 	});
 

@@ -91,7 +91,13 @@ sap.ui.define([
 
         onIconPress: function(oEvent) {
             MessageToast.show("Clicked on Image: " + oEvent.getSource().getSender());
-        }
+        },
+		//Start---Mobile view code
+        onNavBack: function(oEvent){
+            
+           //go to view depending on which consultant (admin) called it
+            this.getRouter().navTo("MasterAdmin",{consultantId:this.getConsultantID()});
+        },
 
     });
 

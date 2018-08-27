@@ -923,7 +923,15 @@ sap.ui.define([
 				},
 				onAfterRendering: function() {
 						
-				}
+				},
+				//Start---Mobile view code
+                onNavBack: function(oEvent){
+                    
+                    //alert("Detail admin ");
+                    //alert(this.getConsultantID());
+                    this.getRouter().navTo("MasterAdmin",{consultantId:this.getConsultantID()});
+                },
+                //End---Mobile view code
 
 		});
 });

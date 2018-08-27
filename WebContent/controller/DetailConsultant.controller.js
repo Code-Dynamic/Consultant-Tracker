@@ -368,7 +368,14 @@ sap.ui.define([
 				if (this._oQuickView) {
 					this._oQuickView.destroy();
 				}
-			}
+			},
+			//Start---Mobile view code
+            onNavBack: function(oEvent){
+                
+              
+                this.getRouter().navTo("MasterAdmin",{consultantId:this.getConsultantID()});
+            }
+            //End---Mobile view code
 	});
 
 });
