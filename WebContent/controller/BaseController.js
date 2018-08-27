@@ -402,47 +402,14 @@ sap.ui.define([
 							],
 							
 							success: function(data){
-								//console.log(data);
-								projectsModel.setData(data);
-								thisDomObj.getView().setModel(projectsModel,"projectsModel");
-								if(data.results.length > 0){
-									var firstItem = thisDomObj.getView().byId("projectsList").getItems()[0];
-									//saved projectID in m
-									 //thisDomObj.selectProjectByID(firstItem.getNumber());	
-										var oData = thisDomObj.getView().getModel("projectsModel").getProperty("/results/0");
-										var projectID = oData.Project_ID;				
-										var projectCompleted = oData.Project_Completed;
-										thisDomObj.selectProjectByID(projectID,projectCompleted);											 
-								}
-							},
-								
-							error: function(){
-								console.log("Error");}
-						}		
-				);
-			
-			},
-			searchProjects : function(oEvt){
-				var thisDomObj = this;
-				var projectsModel = new sap.ui.model.json.JSONModel();
-				var oModel = this.getOwnerComponent().getModel("oModel");
-				var searchString = arguments[0];
-				
-				//read projects
-				oModel.read(
-						"/Projects",{
-							filters: [ new sap.ui.model.Filter({
-								path: "Project_Name",
-								operator: sap.ui.model.FilterOperator.Contains,
-								value1: searchString
-								}) 
-							],
-							
-							success: function(data){
 								console.log(data);
 								projectsModel.setData(data);
 								thisDomObj.getView().setModel(projectsModel,"projectsModel");
-								if(data.results.length > 0){
+								if(data.results.length == 0){
+									console.log("List empty");
+									thisDomObj.getView().byId("projectsList").setNoDataText("No projects with the phrase \""+searchString+"\"");
+									
+								} else if(data.results.length > 0){
 									var firstItem = thisDomObj.getView().byId("projectsList").getItems()[0];
 									//saved projectID in m
 									 //thisDomObj.selectProjectByID(firstItem.getNumber());	
@@ -460,6 +427,7 @@ sap.ui.define([
 			
 			},
 			searchConsultants : function(oEvt){
+				var thisDomObj = this;
 				var searchString = arguments[0];
 				var oModel = this.getOwnerComponent().getModel("oModel");
 				var consultantsModel = new sap.ui.model.json.JSONModel();
@@ -472,9 +440,18 @@ sap.ui.define([
 								operator: sap.ui.model.FilterOperator.Contains,
 								value1: searchString
 							}) ],
+							filters: [ new sap.ui.model.Filter({
+								path: "Consultant_Surname",
+								operator: sap.ui.model.FilterOperator.Contains,
+								value1: searchString
+							}) ],
 						
-							success: function(data){ 
+							success: function(data){
 								consultantsModel.setData(data);
+									if(data.results.length == 0){
+										console.log("List empty");
+										thisDomObj.getView().byId("consultants").setNoDataText("No consultants with the phrase \""+searchString+"\"");
+									}
 								//console.log(data);
 								},
 								
