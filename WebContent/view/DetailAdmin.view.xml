@@ -59,6 +59,9 @@
 					
 					</attributes>
 					
+					
+					
+					
 	</ObjectHeader>		
 		
 	<IconTabBar 
@@ -68,12 +71,12 @@
 		select="showMap">
 				
 		<items >
-		
+
 				<IconTabFilter 
 				id="iconTabBarFilter1"
 				key="key1" 
 				icon="sap-icon://hint" 
-				tooltip="overview dashboard" 
+				tooltip="Dashboard" 
 				text="Dashboard">
 					
 			<content>
@@ -201,8 +204,8 @@
 				id="iconTabBarFilter2"
 				key="key2" 
 				icon="sap-icon://group" 
-				tooltip="list of tasks" 
-				text="Members">
+				tooltip="Team" 
+				text="Team">
 					
 				<content>
 						
@@ -216,10 +219,6 @@
 							<Toolbar>
 			
 								<content>
-				
-									<Title 
-										text="Available Members" 
-										level="H2"/>
 						
 									<ToolbarSpacer />
 					
@@ -329,7 +328,7 @@
 			id="iconTabBarFilter3"
 			key="key3" 
 			icon="sap-icon://activities" 
-			tooltip="{i18n>detailIconTabBarAttachments}" 
+			tooltip="Tasks" 
 			text="Tasks">
 
 		<Table 
@@ -342,10 +341,6 @@
 			<Toolbar>
 			
 				<content>
-				
-					<Title 
-						text="Available Tasks" 
-						level="H2"/>
 						
 					<ToolbarSpacer />
 					
@@ -438,7 +433,7 @@
 						 id="iconTabBarFilter4"
 						 key="key4" 
 						 icon="sap-icon://attachment" 
-						 tooltip="{i18n>detailIconTabBarInfo}" 
+						 tooltip="Attachments" 
 						 text="Attachments">
 						 
 						<content>
@@ -550,7 +545,7 @@
 							id="iconTabBarFilter5" 
 							key="key5"
 							icon="sap-icon://map"
-							tooltip="Maps" 
+							tooltip="Map" 
 							text="Map"
 							>
 	

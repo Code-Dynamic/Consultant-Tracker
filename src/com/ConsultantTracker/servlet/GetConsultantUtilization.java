@@ -113,7 +113,7 @@ public class GetConsultantUtilization extends HttpServlet {
 
 			Double generalTime = 0.0;
 			Double assignedTaskTime = 0.0;
-			System.out.println("Times: "+times.size());
+			//System.out.println("Times: "+times.size());
 			for(int i =0; i < times.size();i++) {
 				
 				Daily_Times d = times.get(i);

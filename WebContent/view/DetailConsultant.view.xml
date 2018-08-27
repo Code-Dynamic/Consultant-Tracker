@@ -72,7 +72,7 @@
 				id="iconTabBarFilter1"
 				key="key1" 
 				icon="sap-icon://hint" 
-				tooltip="{i18n>detailIconTabBarAttachments}" 
+				tooltip="Dashboard" 
 				text="Dashboard">
 					
 			<content>
@@ -202,8 +202,8 @@
 					id="iconTabBarFilter2"
 					key="key2"  
 					icon="sap-icon://group" 
-					tooltip="{i18n>detailIconTabBarAttachments}" 
-					text="Members">
+					tooltip="Team" 
+					text="Team">
 					
 						<content>
 						
@@ -291,7 +291,7 @@
 					id="iconTabBarFilter3"
 					key="key3" 
 					icon="sap-icon://activities"
-					tooltip="List of tasks" 
+					tooltip="Tasks" 
 					text="Tasks">
 
 		<Table id="idProductsTable"
@@ -430,7 +430,7 @@
 						id="iconTabBarFilter5"
 						key="key5" 
 						icon="sap-icon://map"
-						tooltip="Maps" 
+						tooltip="Map" 
 						text="Map"  >
 
 						<content id='contentDiv'>
