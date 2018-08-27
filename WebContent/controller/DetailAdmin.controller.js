@@ -65,6 +65,7 @@ sap.ui.define([
 						  alert("error");
 						 }
 					});
+			
 //				set the project detail model
 				this.getView().setModel(membersDetailModel,"membersModel"); 
 //
