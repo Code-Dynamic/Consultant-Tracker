@@ -12,6 +12,7 @@
 	
 	<semantic:DetailPage 
 			id="DetailAdmin" 
+			navButtonPress="onNavBack" 
 			showNavButton="{device>/system/phone}" 
 			busy="{detailView>/busy}" 
 			busyIndicatorDelay="{detailView>/delay}">

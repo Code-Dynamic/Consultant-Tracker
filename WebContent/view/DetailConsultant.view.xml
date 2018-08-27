@@ -33,6 +33,8 @@
 		<ObjectHeader
 
 		id="oh1"
+		navButtonPress="onNavBack" 
+		showNavButton="{device>/system/phone}"
 		responsive="true"
 		fullScreenOptimized="false"
 		icon="{ProductPicUrl}"
