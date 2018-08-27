@@ -197,7 +197,7 @@ sap.ui.define([
 			});
 //		console.log('Called initmap');
 		var geocoder =new google.maps.Geocoder();
-		var officeAddress = '46 Ingersol Rd, Lynnwood Glen, Pretoria, 0081';
+		var officeAddress = this.getView().getModel('projectsModel').getProperty('/ClientDetails/Client_Address');
 		 directionsRenderer = new google.maps.DirectionsRenderer({
 				map: map
 			});
@@ -235,7 +235,7 @@ sap.ui.define([
 	         content: "Current Location"
 	     });
 		 var infoWindowClient = new google.maps.InfoWindow({
-	         content: "Epiuse Office"
+	         content: "Client Location"
 	     });
 		 
 		CurrLocationMarker.setMap(map);
@@ -248,6 +248,13 @@ sap.ui.define([
 		
 		var control = this.getView().byId('front-div');
 
+	},
+	ShowHide: function(){
+		var thisPtr = this;
+		if(directionsRenderer.getMap() == null)
+			thisPtr.DistFromCurrent();
+		else
+			thisPtr.HideRoute();
 	},
 	//Hides map Directions
 	HideRoute: function (){
