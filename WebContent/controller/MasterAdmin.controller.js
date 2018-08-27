@@ -503,6 +503,10 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		if (this._oDialog) {
 			this._oDialog.destroy();
 		}
+		
+		if(this._Dialog){
+			this._Dialog.destroy();
+		}
 //		this._oDialog.destroy();
 	},
     
