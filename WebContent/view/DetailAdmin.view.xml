@@ -429,7 +429,7 @@
 					</IconTabFilter>
 					
 					
-					<IconTabFilter
+<!-- 					<IconTabFilter
 						 id="iconTabBarFilter4"
 						 key="key4" 
 						 icon="sap-icon://attachment" 
@@ -540,7 +540,7 @@
 							
 						</content>
 						
-					</IconTabFilter>
+					</IconTabFilter> -->
 					<IconTabFilter 
 							id="iconTabBarFilter5" 
 							key="key5"
