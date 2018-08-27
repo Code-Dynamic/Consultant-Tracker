@@ -438,12 +438,12 @@
 						<content id='contentDiv'>
 						
 
-						 <Button press="DistFromCurrent" text="Show Route"/>
-						 <Button press="HideRoute" text="Hide Route"/>
-						 <Text text="Distance:" id="Distance" />
-							
-						<HBox id="map_canvas" fitContainer="true" justifyContent="Center" alignItems="Center" min-height="200px"  />
-                             
+						 	<HBox>
+								 <Button press="ShowHide" text="Show/Hide Route"/>
+							</HBox>
+							 <Text text="Distance:" id="Distance" />
+								
+							<HBox id="map_canvas" fitContainer="true" justifyContent="Center" alignItems="Center"   />
 						</content>
 
 					</IconTabFilter>

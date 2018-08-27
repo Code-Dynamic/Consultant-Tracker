@@ -80,8 +80,8 @@ sap.ui.define([
 			showMap: function(oEvent) {
 				
 				//Generate map when correct tab selected
-				console.log(oEvent.getParameters().selectedKey);
-				if(!(oEvent.getParameters().selectedKey == "key5" || oEvent.getParameter("id")=="__component0---DetailConsultant--7")){
+			
+				if(!(oEvent.getParameters().selectedKey == "key5" || oEvent.getParameter("id")=="__component0---DetailAdmin--7")){
 					return;
 				}
 				var viewDivId = sap.ui.getCore().byId(this.createId("map_canvas"));
@@ -92,16 +92,17 @@ sap.ui.define([
 					});
 //				console.log('Called initmap');
 				var geocoder =new google.maps.Geocoder();
-				var officeAddress = '46 Ingersol Rd, Lynnwood Glen, Pretoria, 0081';
+				var officeAddress = this.getView().getModel('projectsModel').getProperty('/ClientDetails/Client_Address');
 				 directionsRenderer = new google.maps.DirectionsRenderer({
-						map: map
+						map: null
 					});
 				
 				var CurrLocationMarker = new google.maps.Marker();
-				var EpiuseOfficeMarker = new google.maps.Marker();
+				var ClientMarker = new google.maps.Marker();
 				
 				directionsService = new google.maps.DirectionsService;
-
+				var thisPtr = this;
+				
 				//Get user current location
 				if (navigator.geolocation) {
 				     navigator.geolocation.getCurrentPosition(function (position) {
@@ -116,11 +117,10 @@ sap.ui.define([
 				function officeLocation(){
 				 geocoder.geocode( { 'address': officeAddress},function(result,status){
 					 if(status == google.maps.GeocoderStatus.OK){
-						 EpiuseOfficeMarker.setPosition(result[0].geometry.location);
+						 ClientMarker.setPosition(result[0].geometry.location);
 						 epPos[0] = result[0].geometry.location.lat();
 						 epPos[1] = result[0].geometry.location.lng();
-						
-						
+						 thisPtr.DistFromCurrent();
 					 }
 				 });
 				}
@@ -130,23 +130,32 @@ sap.ui.define([
 			         content: "Current Location"
 			     });
 				 var infoWindowClient = new google.maps.InfoWindow({
-			         content: "Epiuse Office"
+			         content: "Client Location"
 			     });
 				 
 				CurrLocationMarker.setMap(map);
 				infoWindowCurrentLocation.open(map, CurrLocationMarker);
 				
 
-				EpiuseOfficeMarker.setMap(map);
-				infoWindowClient.open(map, EpiuseOfficeMarker);
+				ClientMarker.setMap(map);
+				infoWindowClient.open(map, ClientMarker);
 			    
 				
 				var control = this.getView().byId('front-div');
 
 			},
+			ShowHide: function(){
+				var thisPtr = this;
+				if(directionsRenderer.getMap() == null)
+					thisPtr.DistFromCurrent();
+				else
+					thisPtr.HideRoute();
+			},
+			//Hides map Directions
 			HideRoute: function (){
 				directionsRenderer.setMap(null);
 			},
+			//Calculates distance and route between client and current location
 			DistFromCurrent: function (){
 				directionsRenderer.setMap(map);
 				var req = {
