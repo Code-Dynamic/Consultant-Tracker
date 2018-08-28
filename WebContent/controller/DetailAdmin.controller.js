@@ -440,6 +440,42 @@ sap.ui.define([
 		},
 		//*********************************************************************//
 		//the following functions are to handle functionality in the Members tab
+		addConsultantsViaCSV : function(oEvent){
+			console.log(oEvent);
+//			MessageToast.show(oEvent.getParameters("fileName"));
+			var fU = this.getView().byId("csvUploader");
+			var domRef = fU.getFocusDomRef();
+			var file = domRef.files[0];
+			
+			
+			// Create a File Reader object
+			var reader = new FileReader();
+			var t = this;
+			
+			reader.onload = function(e) {
+			    var strCSV = e.target.result;
+			    var rows = strCSV.split("\n");
+			    
+			    var oDataProjects =   new sap.ui.model.odata.v2.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
+		    	var i;
+			    for (i = 0; i < rows.length; i++) { 
+			    	var _name = rows[i].split(",")[0];
+			    	var _surname = rows[i].split(",")[1];
+			    	var _email = rows[i].split(",")[2];
+			    	var _cell = rows[i].split(",")[3];
+			    	var _admin = "0";
+			    	
+			    	$.post('createConsultant', { 
+						name: _name,
+						surname: _surname,
+						email: _email,
+						cell: _cell,
+						admin: _admin});
+			    }
+			};
+			reader.readAsBinaryString(file);
+			
+		},
 		addConsultantToProject: function(oEvent){
 				
 				this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddConsultanttoProject",this);
