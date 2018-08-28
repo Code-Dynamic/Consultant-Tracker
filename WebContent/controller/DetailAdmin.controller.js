@@ -388,7 +388,7 @@ sap.ui.define([
 
     	$.post('CreateProject', {ID: projectID, Name: _Name ,ClientID: _cilentID,Desc: _Description, Deadl: _Deadline ,StartDate: _StartDate,OnSite:  _OnSite, Project_Creator: this.getConsultantID()},
     		function(responseText) {
-    		MessageToast.show("Project Created Succesfully");
+    		MessageToast.show("Project Edited Succesfully");
     		//ensures that newly created project is selected
     		var selectFirstProject = false;
     		thisDomObj.goToProjects(selectFirstProject);    		
