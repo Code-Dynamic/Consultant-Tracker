@@ -65,7 +65,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		//console.log("Project ID: "+ projectID);
 		//RATINGS CODE
 		//TODO Ngoni: check with Mamba hw to get odata model address
-		var attachModel = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+		var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
 		var projectCompleted =  oData.Project_Completed;
 		var thisObj = this;
 		//console.log(projectCompleted);
@@ -120,7 +120,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
     	var projectID = PROJECT_ID;
     	var query = "/Assignments?$expand=ProjectDetails,ConsultantDetails&$filter=ConsultantDetails/Consultant_ID%20ne%20"+consultantID+"%20and ProjectDetails/Project_ID%20eq%20"+projectID;
 
-	     var oModel =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+	     var oModel =  new sap.ui.model.odata.ODataModel(this.getModelAddress());
 	     oModel.read(query,{success: function(oData){ addMembers(oData) 
 	 					}, error: function(){console.log("Error");}}		
 	 	 );
@@ -261,7 +261,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 
 		}else{
 			console.log("Project Selected--> on select");
-			var oDataProjects =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
+			var oDataProjects =  new sap.ui.model.odata.ODataModel(this.getModelAddress()); 
 			//get selected project id
 			var sOrderId = oEvent.getSource().getSelectedItem().getBindingContext().getProperty("Project_ID");
 			//get model
@@ -317,7 +317,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 			sap.ui.getCore().setModel(oSelModel,"selModel");
 			
 //Start Code to display Attachments
-			var attachModel = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+			var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
 			console.log("Project Id= "+sOrderId);
 			attachModel.read(
 					"/Attachments?$expand=ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ gotAttachments(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
@@ -334,7 +334,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 			
 //End Code to display Attachments
 			//Start code diplay task
-			var attachModel = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+			var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
 			attachModel.read(
 					"/Tasks?$expand=ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
 					);
@@ -367,7 +367,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
     	var projectID = PROJECT_ID;
     	var query = "/Assignments?$expand=ProjectDetails,ConsultantDetails&$filter=ConsultantDetails/Consultant_ID%20ne%20"+consultantID+"%20and ProjectDetails/Project_ID%20eq%20"+projectID;
 
-	     var oModel =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+	     var oModel =  new sap.ui.model.odata.ODataModel(this.getModelAddress());
 	     oModel.read(query,{success: function(oData){ addMembers(oData) 
 	 					}, error: function(){console.log("Error");}}		
 	 	 );
@@ -475,7 +475,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	    	var _email = sap.ui.getCore().byId("c_email").getValue();
 	    	var _Cell = sap.ui.getCore().byId("c_Cell").getValue();
 	    	var t = this;
-	    	var oDataProjects =   new sap.ui.model.odata.v2.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
+	    	var oDataProjects =   new sap.ui.model.odata.v2.ODataModel(this.getModelAddress()); 
 	    	var x=	oDataProjects.createEntry('/Consultants',{
 				properties:{
 					//Client_Details:{},

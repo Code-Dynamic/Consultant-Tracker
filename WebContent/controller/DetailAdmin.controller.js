@@ -456,7 +456,7 @@ sap.ui.define([
 			    var strCSV = e.target.result;
 			    var rows = strCSV.split("\n");
 			    
-			    var oDataProjects =   new sap.ui.model.odata.v2.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
+			    var oDataProjects =   new sap.ui.model.odata.v2.ODataModel(this.getModelAddress()); 
 		    	var i;
 			    for (i = 0; i < rows.length; i++) { 
 			    	var _name = rows[i].split(",")[0];
@@ -751,7 +751,7 @@ sap.ui.define([
 		refreshData : function(oEvent){
 		    	//Begin Refresh PRojects
 		    	var oModel = new sap.ui.model.json.JSONModel();
-				var oDataProjects =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
+				var oDataProjects =  new sap.ui.model.odata.ODataModel(this.getModelAddress()); 
 				var arrProjects = {Projects:[]};
 				var arrConsultants = {Consultants:[]};
 				oDataProjects.read(
@@ -773,7 +773,7 @@ sap.ui.define([
 		    	//End Refresh PRojects
 
 		    	//BEgin refresh get members
-		    	var oDataProjects =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
+		    	var oDataProjects =  new sap.ui.model.odata.ODataModel(this.getModelAddress()); 
 				//get selected project id
 				var sOrderId = sap.ui.getCore().getModel("selModel").getProperty("/Project_ID");
 				//get model
@@ -793,7 +793,7 @@ sap.ui.define([
 		    	//END refresh get members
 		    	
 		    	//Begin Refresh Members
-		    	var attachModel = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+		    	var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
 				attachModel.read(
 						"/Tasks?$expand=ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
 						);
@@ -865,7 +865,7 @@ sap.ui.define([
 					 console.log(oItem);
 //					console.log("TaskID");
 //					console.log(taskID);
-					var attachModel = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+					var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
 					attachModel.read(
 							"/Feedbacks?$expand=TaskDetails&$filter=TaskDetails/Task_ID%20eq%201",{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
 							);
@@ -906,7 +906,7 @@ sap.ui.define([
 		          var TaskIDModel = new sap.ui.model.json.JSONModel();
 		          TaskIDModel.setData(taskID);
 		          sap.ui.getCore().setModel(TaskIDModel,"taskID");
-		          var attachModel = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+		          var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
 					attachModel.read(
 							"/Feedbacks?$expand=TaskDetails&$filter=TaskDetails/Task_ID%20eq%20"+oModel.Task_ID,{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
 							);

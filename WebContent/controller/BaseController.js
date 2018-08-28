@@ -20,6 +20,10 @@ sap.ui.define([
 				return this.getOwnerComponent().getRouter();
 
 			},
+			getModelAddress : function(){
+				//return "http://196.249.14.63:8080/Consultant-Tracker/emplist.svc/";
+				return 'http://localhost:8080/Consultant-Tracker/emplist.svc/';
+			},
 			getStartOfDayUTC: function(date){
 				var x = Date.UTC(date.getFullYear(),date.getMonth(),date.getDate());
 				return x;
@@ -307,7 +311,7 @@ sap.ui.define([
 						{projectId:projectID});
 				//RATINGS CODE
 				//TODO Ngoni: check with Mamba hw to get odata model address
-				var attachModel = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+				var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
 				var thisObj = this;
 				attachModel.read(
 						"/Ratings_Entrys?$expand=ProjectDetails,ConsultantDetails&$filter=ProjectDetails/Project_ID%20eq%20"+projectID+"%20and%20ConsultantDetails/Consultant_ID%20eq%20"+consultantID,{async:false,success: function(oCreatedEn){ ratingsBtnConfig(oCreatedEn) }, error: function(e){console.log(e);}}		
