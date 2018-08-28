@@ -327,6 +327,7 @@ sap.ui.define([
 		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.editProjectDetails",this);
 		this._oDialog.setModel(this.getView().getModel("projectsModel"),"projectsModel");
 		this._oDialog.open();		
+		
 	},
 	addClient: function(){
 		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddClient",this);
@@ -369,7 +370,9 @@ sap.ui.define([
     	var thisDomObj = this;
     	var oModel = this.getView().getModel("projectsModel");
 		var projectID = oModel.oData.Project_ID;
-    	
+		//var officeAddress = this.getView().getModel('projectsModel').getProperty('/ClientDetails');
+		//console.log("TEst");
+		//console.log(officeAddress.Client_ID);
     	var _Name = sap.ui.getCore().byId("EditP_Name").getValue();
     	var _Description = sap.ui.getCore().byId("EditP_Description").getValue();
     	var _Deadline = sap.ui.getCore().byId("EditP_Deadline").getValue();

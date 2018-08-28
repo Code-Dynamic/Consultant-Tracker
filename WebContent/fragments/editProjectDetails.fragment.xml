@@ -42,7 +42,7 @@
 				<Select id="EditP_idSelected"
 					forceSelection="false"
 					items="{clientList>/results}"
-					value="{projectsModel>/Project_Client">
+					selectedKey="{projectsModel>/ClientDetails/Client_ID}">
 					<core:Item key="{clientList>Client_ID}" text="{clientList>Client_Name}" />
 				</Select>			
 
