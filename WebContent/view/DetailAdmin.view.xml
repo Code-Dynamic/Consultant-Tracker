@@ -570,7 +570,9 @@
 		</semantic:content>
 
 		<semantic:customFooterContent>			
-				
+				 <HBox>
+						<Button press="editProjectDetails" icon="sap-icon://edit"/>
+				</HBox>
 		</semantic:customFooterContent>
 		
 	</semantic:DetailPage>

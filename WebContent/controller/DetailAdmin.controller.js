@@ -322,6 +322,12 @@ sap.ui.define([
 		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddProject",this);
 		this._oDialog.open();		
 	},
+	//edit project details
+	editProjectDetails: function(){
+		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.editProjectDetails",this);
+		this._oDialog.setModel(this.getView().getModel("projectsModel"),"projectsModel");
+		this._oDialog.open();		
+	},
 	addClient: function(){
 		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddClient",this);
 		this._oDialog.open();		
@@ -349,6 +355,35 @@ sap.ui.define([
     	}
 
     	$.post('CreateProject', { Name: _Name ,ClientID: _cilentID,Desc: _Description, Deadl: _Deadline ,StartDate: _StartDate,OnSite:  _OnSite, Project_Creator: this.getConsultantID()},
+    		function(responseText) {
+    		MessageToast.show("Project Created Succesfully");
+    		//ensures that newly created project is selected
+    		var selectFirstProject = false;
+    		thisDomObj.goToProjects(selectFirstProject);    		
+    	});
+    	//close model
+		this.onClose();
+    	
+    },
+    onEditProjectSubmit : function(oEvent) {
+    	var thisDomObj = this;
+    	var oModel = this.getView().getModel("projectsModel");
+		var projectID = oModel.oData.Project_ID;
+    	
+    	var _Name = sap.ui.getCore().byId("EditP_Name").getValue();
+    	var _Description = sap.ui.getCore().byId("EditP_Description").getValue();
+    	var _Deadline = sap.ui.getCore().byId("EditP_Deadline").getValue();
+    	var _StartDate = sap.ui.getCore().byId("EditP_StartDate").getValue();
+    	var _cilentID = sap.ui.getCore().byId("EditP_idSelected").getSelectedKey();
+    	var b_OnSite = sap.ui.getCore().byId("EditP_OnSite").getSelected();;
+    	var _OnSite;
+    	if(b_OnSite){
+    		_OnSite = 1;
+    	}else{
+    		_OnSite = 0;
+    	}
+
+    	$.post('CreateProject', {ID: projectID, Name: _Name ,ClientID: _cilentID,Desc: _Description, Deadl: _Deadline ,StartDate: _StartDate,OnSite:  _OnSite, Project_Creator: this.getConsultantID()},
     		function(responseText) {
     		MessageToast.show("Project Created Succesfully");
     		//ensures that newly created project is selected

@@ -27,25 +27,33 @@
 			singleContainerFullSize="false" >
 					<f:content>
 				<Label text="Name"/>
-				<Input id="EP_Name" value="{projectsModel>/Project_Name}"/>
+				<Input id="EditP_Name" value="{projectsModel>/Project_Name}"/>
 				<Label text="Description" />
-				<TextArea id="EP_Description" value="{projectsModel>/Project_Description}"/>
+				<TextArea id="EditP_Description" value="{projectsModel>/Project_Description}"/>
 
 				<Label text="Start Date"/>
-				<DatePicker valueFormat="yyyy-MM-dd" displayFormat="long" width="100%" id="EP_StartDate" value="{ path: 'projectsModel>/Project_StartDate',
+				<DatePicker valueFormat="yyyy-MM-dd" displayFormat="long" width="100%" id="EditP_StartDate" value="{ path: 'projectsModel>/Project_StartDate',
 								formatter: '.formatter.date'}"/>					
 				<Label text="Deadline"/>
-				<DatePicker valueFormat="yyyy-MM-dd" displayFormat="long" width="100%" id="EP_Deadline" value="{ path: 'projectsModel>/Project_Deadline',
-								formatter: '.formatter.date'}"/>			
+				<DatePicker valueFormat="yyyy-MM-dd" displayFormat="long" width="100%" id="EditP_Deadline" value="{ path: 'projectsModel>/Project_Deadline',
+								formatter: '.formatter.date'}"/>
+								
+				<Label  text="Select a Client" />
+				<Select id="EditP_idSelected"
+					forceSelection="false"
+					items="{clientList>/results}"
+					value="{projectsModel>/Project_Client">
+					<core:Item key="{clientList>Client_ID}" text="{clientList>Client_Name}" />
+				</Select>			
 
 				<Label text="OnSite"/>
-				<CheckBox id="EP_OnSite" selected="{projectsModel>/Project_OnSite}"/>
+				<CheckBox id="EditP_OnSite" selected="{projectsModel>/Project_OnSite}"/>
 					
 			</f:content>
 		</f:SimpleForm>
 		</content>
 		<beginButton>
-			<Button text="Submit" press="onProjectEditSubmit" id="EP_submitProjectButton"/>
+			<Button text="Submit" press="onEditProjectSubmit" id="EP_submitProjectButton"/>
 		</beginButton>
 		<endButton>
 			<Button text="Close" press="onClose" id="EP_closeProjectModalButton"/>
