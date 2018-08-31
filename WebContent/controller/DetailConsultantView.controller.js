@@ -155,7 +155,7 @@ sap.ui.define([
 				//console.log(userID);
 		    	var query = "/Ratingss?$expand=ProjectDetails,ConsultantDetails&$filter=ConsultantDetails/Consultant_ID%20eq%20"+userID;
 
-			     var oModel =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+			     var oModel =  new sap.ui.model.odata.ODataModel(this.getModelAddress());
 			     oModel.read(query,{success: function(oData){ setRatingsModel(oData) 
 			 					}, error: function(error){console.log("Error: "+ error.message);}}		
 			 	 );		
@@ -241,7 +241,7 @@ sap.ui.define([
 	    	var _email = sap.ui.getCore().byId("c_email").getValue();
 	    	var _Cell = sap.ui.getCore().byId("c_Cell").getValue();
 	    	var t = this;
-	    	var oDataProjects =   new sap.ui.model.odata.v2.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
+	    	var oDataProjects =   new sap.ui.model.odata.v2.ODataModel(this.getModelAddress()); 
 	    	var x=	oDataProjects.createEntry('/Consultants',{
 				properties:{
 					//Client_Details:{},
@@ -267,7 +267,14 @@ sap.ui.define([
 			if (this._Dialog) {
 				this._Dialog.destroy();
 			}
-		}
+		},
+		//Start---Mobile view code
+        onNavBack: function(oEvent){
+            
+           
+            this.getRouter().navTo("MasterConsultant",{consultantId:this.getConsultantID()});
+        },
+        //End---Mobile view code
 	    
 	});
 

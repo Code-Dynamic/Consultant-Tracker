@@ -119,12 +119,13 @@
 										<Text text="{consultantProjectsModel>ProjectDetails/Project_Description}"/>
 										
 										<ProgressIndicator
+										id="progressBar"
 										class="sapUiSmallMarginBottom"
 										percentValue="70"
 										displayValue="70%"
 										showValue="true"
 										state="Warning"
-										displayOnly="true" />
+										displayOnly="true"/>
 										
 									</cells>
 							

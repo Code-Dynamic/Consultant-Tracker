@@ -34,7 +34,7 @@ sap.ui.define([
 				var consultantID = this.getConsultantID();
 				//this.setSplitAppUserName(consultantID);
 		    	 var query = "/Consultants?$select=Consultant_Name&$filter=Consultant_ID%20eq%20"+consultantID;
-			     var oModel =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+			     var oModel =  new sap.ui.model.odata.ODataModel(this.getModelAddress());
 			     oModel.read(query,{
 			    	success: function(oData){
 			    	 	if(oData.results.length > 0)

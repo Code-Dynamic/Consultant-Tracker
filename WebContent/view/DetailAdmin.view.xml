@@ -12,6 +12,7 @@
 	
 	<semantic:DetailPage 
 			id="DetailAdmin" 
+			navButtonPress="onNavBack" 
 			showNavButton="{device>/system/phone}" 
 			busy="{detailView>/busy}" 
 			busyIndicatorDelay="{detailView>/delay}">
@@ -137,11 +138,11 @@
 			subheader="current" >
 			
 			<TileContent 
-			unit="70" 
+			unit="{tileHoursModel>/expected}" 
 			footer="Expected hours">
 			
 			<NumericContent 
-			value="40" 
+			value="{tileHoursModel>/current}" 
 			icon="sap-icon://present"/>
 			
 			</TileContent>
@@ -410,8 +411,8 @@
 					
 					<ProgressIndicator
 					class="sapUiSmallMarginBottom"
-					percentValue="25"
-					displayValue="25%"
+					percentValue="{tasksModel>progress}"
+					displayValue="{tasksModel>progress} %"
 					showValue="true"
 					state="Warning"
 					displayOnly="true" />		
@@ -429,7 +430,7 @@
 					</IconTabFilter>
 					
 					
-					<IconTabFilter
+<!-- 					<IconTabFilter
 						 id="iconTabBarFilter4"
 						 key="key4" 
 						 icon="sap-icon://attachment" 
@@ -540,7 +541,7 @@
 							
 						</content>
 						
-					</IconTabFilter>
+					</IconTabFilter> -->
 					<IconTabFilter 
 							id="iconTabBarFilter5" 
 							key="key5"
@@ -552,8 +553,9 @@
 							<content id='contentDiv'>
 							
 	
-							 <Button press="DistFromCurrent" text="Show Route"/>
-							 <Button press="HideRoute" text="Hide Route"/>
+							 <HBox>
+								 <Button press="ShowHide" text="Show/Hide Route"/>
+							</HBox>
 							 <Text text="Distance:" id="Distance" />
 								
 							<HBox id="map_canvas" fitContainer="true" justifyContent="Center" alignItems="Center"   />

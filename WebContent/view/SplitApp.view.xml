@@ -60,7 +60,7 @@ controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.Spli
 				icon="sap-icon://personnel-view"/>
 				
 				<Button 
-				press="logout" 
+				press="onLogoutPress" 
 				id="logout" 
 				 type="Transparent" 
 				text="logout" 

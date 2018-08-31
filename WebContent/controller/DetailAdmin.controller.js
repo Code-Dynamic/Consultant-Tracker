@@ -65,8 +65,50 @@ sap.ui.define([
 						  alert("error");
 						 }
 					});
+			
 //				set the project detail model
 				this.getView().setModel(membersDetailModel,"membersModel"); 
+				
+				var progressArray = [];
+				
+				//6
+				//get the progress % of the tasks and put the results in an array
+				//and get the expected hours worked and current
+				var expectedHours =0;
+				var currentHours=0;
+				var progress;
+				var tileHoursModel = new JSONModel();	
+				OModel.read("/Assigned_Tasks", {
+						  success: function(data){
+//							console.log("assigned_Task data: "+data);
+			
+								var results = JSON.stringify(data);
+//								console.log("assigned_Task data: "+results);
+								//console.log(results);
+								
+								var i = data.results.length;
+								
+								for(var x=0; x < i; x++){
+									expectedHours += parseInt(data.results[x].Assigned_Hours, 10) ;
+									currentHours +=  parseInt(data.results[x].Hours_Worked, 10);
+									
+									progress = ((data.results[x].Hours_Worked)/(data.results[x].Assigned_Hours) )* 100;
+									progressArray[x] = progress;
+									
+
+								}
+								
+								data.expected = expectedHours;
+								data.current = currentHours;
+								
+								tileHoursModel.setData(data);
+//								console.log(data);
+						  },
+						  error: function(oError) {
+							  alert("error");
+							 }
+						});
+				this.getView().setModel(tileHoursModel,"tileHoursModel");
 //
 			//3
 			//get all tasks that a client is assigned to for the selected Project (from master)
@@ -87,6 +129,11 @@ sap.ui.define([
 //						 alert(result);
 //						 console.log("tasksModel##" +result);
 						 countTasks = data.results.length;
+						 for(var x=0; x<countTasks; x++){
+							 data.results[x].progress = progressArray[x];
+						 }
+						 
+						 tasksDetailModel.setData(data);
 					  },
 					  error: function(oError) {
 						  alert("error");
@@ -146,7 +193,7 @@ sap.ui.define([
 						 clientDetailModel.setData(data);
 //						 alert(result);
 						 console.log("clientsModel##");
-						 console.log(data);
+//						 console.log(data);
 						 sap.ui.getCore().setModel(clientDetailModel,"clientList");
 //							console.log("Cli##");
 //							console.log(clientDetailModel.oData.results);
@@ -155,7 +202,7 @@ sap.ui.define([
 						  alert("error");
 						 }
 				});
-					
+
 					//end the loading indicator
 					sap.ui.core.BusyIndicator.hide();
 	},
@@ -197,16 +244,17 @@ sap.ui.define([
 			});
 //		console.log('Called initmap');
 		var geocoder =new google.maps.Geocoder();
-		var officeAddress = '46 Ingersol Rd, Lynnwood Glen, Pretoria, 0081';
+		var officeAddress = this.getView().getModel('projectsModel').getProperty('/ClientDetails/Client_Address');
 		 directionsRenderer = new google.maps.DirectionsRenderer({
-				map: map
+				map: null
 			});
 		
 		var CurrLocationMarker = new google.maps.Marker();
-		var EpiuseOfficeMarker = new google.maps.Marker();
+		var ClientMarker = new google.maps.Marker();
 		
 		directionsService = new google.maps.DirectionsService;
-
+		var thisPtr = this;
+		
 		//Get user current location
 		if (navigator.geolocation) {
 		     navigator.geolocation.getCurrentPosition(function (position) {
@@ -221,11 +269,10 @@ sap.ui.define([
 		function officeLocation(){
 		 geocoder.geocode( { 'address': officeAddress},function(result,status){
 			 if(status == google.maps.GeocoderStatus.OK){
-				 EpiuseOfficeMarker.setPosition(result[0].geometry.location);
+				 ClientMarker.setPosition(result[0].geometry.location);
 				 epPos[0] = result[0].geometry.location.lat();
 				 epPos[1] = result[0].geometry.location.lng();
-				
-				
+				 thisPtr.DistFromCurrent();
 			 }
 		 });
 		}
@@ -235,19 +282,26 @@ sap.ui.define([
 	         content: "Current Location"
 	     });
 		 var infoWindowClient = new google.maps.InfoWindow({
-	         content: "Epiuse Office"
+	         content: "Client Location"
 	     });
 		 
 		CurrLocationMarker.setMap(map);
 		infoWindowCurrentLocation.open(map, CurrLocationMarker);
 		
 
-		EpiuseOfficeMarker.setMap(map);
-		infoWindowClient.open(map, EpiuseOfficeMarker);
+		ClientMarker.setMap(map);
+		infoWindowClient.open(map, ClientMarker);
 	    
 		
 		var control = this.getView().byId('front-div');
 
+	},
+	ShowHide: function(){
+		var thisPtr = this;
+		if(directionsRenderer.getMap() == null)
+			thisPtr.DistFromCurrent();
+		else
+			thisPtr.HideRoute();
 	},
 	//Hides map Directions
 	HideRoute: function (){
@@ -915,7 +969,15 @@ sap.ui.define([
 				},
 				onAfterRendering: function() {
 						
-				}
+				},
+				//Start---Mobile view code
+                onNavBack: function(oEvent){
+                    
+                    //alert("Detail admin ");
+                    //alert(this.getConsultantID());
+                    this.getRouter().navTo("MasterAdmin",{consultantId:this.getConsultantID()});
+                },
+                //End---Mobile view code
 
 		});
 });
