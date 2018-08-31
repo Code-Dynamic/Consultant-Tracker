@@ -370,8 +370,8 @@
 
 				<ProgressIndicator
 				class="sapUiSmallMarginBottom"
-				percentValue="25"
-				displayValue="25%"
+				percentValue="{tasksModel>progress}"
+				displayValue="{tasksModel>progress} %"
 				showValue="true"
 				state="Warning"
 				displayOnly="true" />
