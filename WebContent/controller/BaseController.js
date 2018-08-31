@@ -524,68 +524,92 @@ sap.ui.define([
 				}
 			},
 			TestMicrophone: function(){
-				var thisPtr = this;
-				recognition.onresult = function (event) {
-					console.log('onResult');
-//					console.log(event);
-				  for (var i = event.resultIndex; i < event.results.length; ++i) {
-				    if (event.results[i].isFinal) {
-				    	MessageToast.show(event.results[i][0].transcript);
-				    	thisPtr.ProcessVoiceResults(event.results[i][0].transcript);
-				    	recognition.stop();
-				    	reset();
-				    }
-				  }
-				}
-				
-				//Handle error
-				recognition.onerror = function(event){
-				 console.log("onerror", event);
-				}
+                var thisPtr = this;
+                
+                recognition.onresult = function (event) {
+                    console.log('onResult');
+//                    console.log(event);
+                  for (var i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        MessageToast.show(event.results[i][0].transcript);
+                        thisPtr.ProcessVoiceResults(event.results[i][0].transcript);
+                        recognition.stop();
+                        reset();
+                    }
+                  }
+                }
+                
+                //Handle error
+                recognition.onerror = function(event){
+                 console.log("onerror", event);
+                }
 
-				// Housekeeping after success or failed parsing
-				recognition.onend = function(e){ 
-				 console.log("Stopping Recording");
-//				 console.log(recognition);
-//				 recognition.stop();
+                // Housekeeping after success or failed parsing
+                recognition.onend = function(e){
+                 console.log("Stopping Recording");
+//                 console.log(recognition);
+//                 recognition.stop();
 
-				}
-				console.log('start/stop');
-				if (recognizing) {
-					navigator.webkitGetUserMedia({audio:true},function(e){console.log(e);}, function(e) {
-						alert('Error getting audio');
-						console.log(e);
-					});
-					recognition.stop();
-					reset();
-				} else {
-					console.log("starting");
-					recognition.start();
-					recognizing = true;
-				}
-				
-			
-				function reset() {
-					console.log("Resetting");
-					recognizing = false;
-				}
-			},
-			ProcessVoiceResults : function(text){
-				console.log("processing");
-				text = text.toLowerCase();
-				var textArray = text.split(" ");
-				//Test for search
-				if(textArray[0] == "search"){
-					textArray = textArray.slice(1);
-					textArray = textArray.join(" ");
-					console.log(textArray);
-					this.getView().byId("projectSearchField").setValue(textArray);
-					this.searchProjects(textArray);
-//					this.getView().byId("projectSearchField").change();
-				}
-			}
+                }
+                console.log('start/stop');
+                if (recognizing) {
+                    navigator.webkitGetUserMedia({audio:true},function(e){console.log(e);}, function(e) {
+                        alert('Error getting audio');
+                        console.log(e);
+                    });
+                    recognition.stop();
+                    
+                    reset();
+                } else {
+                    var btn = sap.ui.getCore().byId("__button1-img");
+                    btn.setProperty("color","#ef6161");
+                    console.log("starting");
+                    recognition.start();
+                    recognizing = true;
+                }
+                
+            
+                function reset() {
+                    var btn = sap.ui.getCore().byId("__button1-img");
+                    btn.setProperty("color","##cae4fb");
+                    console.log("Resetting");
+                    recognizing = false;
+                }
+            },
+            ProcessVoiceResults : function(text){
+                console.log("processing "+ text);
+                text = text.toLowerCase();
+                var textArray = text.split(" ");
+                //Search projects
+                // accepts syntax "search x","search for x","search project(s) for x","search project(s) x"
+                if(textArray[0] == "search"){
+                    textArray = textArray.slice(1);
+                    if(textArray[0] == "projects" || textArray[0] == "project"){
+                        textArray = textArray.slice(1);
+                    }
+                    if(textArray[0] == "for" )
+                        textArray = textArray.slice(1);
+//                    else    
+//                        textArray = textArray.slice(1);
+                    
+                    textArray = textArray.join(" ");
+                    console.log(textArray);
+                    this.getView().byId("projectSearchField").setValue(textArray);
+                    this.searchProjects(textArray);
+                }
+                else if(textArray[0] == "create" && (textArray[1] == "project" ||textArray[1] == "projects")){
+                    // create project
+                    this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddProject",this);
+                    this._oDialog.open();    
+                }
+                else if(textArray[0] == "create" && (textArray[1] == "consultant" ||textArray[1] == "consultant")){
+                    //create consultant
+                    this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddConsultant",this);
+                    this._Dialog.open();
+                }
+            }
 
-		});
+        });
 
-	}
+    }
 );
