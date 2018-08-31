@@ -76,8 +76,15 @@ sap.ui.define([
 				//and get the expected hours worked and current
 				var expectedHours =0;
 				var currentHours=0;
+				var totalHours =0;
+				var totalWorkedHours =0;
+				var projectProgress;
 				var progress;
+				
+				
 				var tileHoursModel = new JSONModel();	
+				var tileProjectProgressModel = new JSONModel();
+				
 				OModel.read("/Assigned_Tasks", {
 						  success: function(data){
 //							console.log("assigned_Task data: "+data);
@@ -89,27 +96,38 @@ sap.ui.define([
 								var i = data.results.length;
 								
 								for(var x=0; x < i; x++){
+									
+  
 									expectedHours += parseInt(data.results[x].Assigned_Hours, 10) ;
 									currentHours +=  parseInt(data.results[x].Hours_Worked, 10);
 									
 									progress = ((data.results[x].Hours_Worked)/(data.results[x].Assigned_Hours) )* 100;
 									progressArray[x] = progress;
 									
+									totalHours += expectedHours;
+									totalWorkedHours += currentHours;
 
 								}
 								
 								data.expected = expectedHours;
 								data.current = currentHours;
 								
+								//getting overall progress of the project
+								projectProgress = ((totalWorkedHours/totalHours)*100).toFixed(0);
+								var a = parseFloat(projectProgress);
+								data.projectProgress = a;
+								
 								tileHoursModel.setData(data);
-//								console.log(data);
+								tileProjectProgressModel.setData(data);
+								console.log(data);
 						  },
 						  error: function(oError) {
 							  alert("error");
 							 }
 						});
 				this.getView().setModel(tileHoursModel,"tileHoursModel");
-//
+				this.getView().setModel(tileProjectProgressModel,"tileProjectProgressModel");
+
 			//3
 			//get all tasks that a client is assigned to for the selected Project (from master)
 						

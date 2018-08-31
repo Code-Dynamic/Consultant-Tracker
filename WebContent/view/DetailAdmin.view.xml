@@ -90,7 +90,7 @@
 			
 			<TileContent >
 
-			<mc:RadialMicroChart percentage="57" />	
+			<mc:RadialMicroChart percentage="{tileProjectProgressModel>/projectProgress}" />	
 			
 			</TileContent>
 		
