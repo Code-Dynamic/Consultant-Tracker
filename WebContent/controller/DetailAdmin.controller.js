@@ -109,6 +109,7 @@ sap.ui.define([
 
 								}
 								
+								
 								data.expected = expectedHours;
 								data.current = currentHours;
 								
