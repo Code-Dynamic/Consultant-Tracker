@@ -130,7 +130,7 @@ sap.ui.define([
 				//console.log("project completed: "+this.getView().getModel("projectsModel").getPath());
 				//RATINGS CODE
 				//TODO Ngoni: check with Mamba hw to get odata model address
-				var attachModel = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+				var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
 				var thisObj = this;
 				//console.log(projectCompleted);
 				attachModel.read(
@@ -173,7 +173,7 @@ sap.ui.define([
 		    	var projectID = PROJECT_ID;
 		    	var query = "/Assignments?$expand=ProjectDetails,ConsultantDetails&$filter=ConsultantDetails/Consultant_ID%20ne%20"+consultantID+"%20and ProjectDetails/Project_ID%20eq%20"+projectID;
 
-			     var oModel =  new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/');
+			     var oModel =  new sap.ui.model.odata.ODataModel(this.getModelAddress());
 			     oModel.read(query,{success: function(oData){ addMembers(oData) 
 			 					}, error: function(){console.log("Error");}}		
 			 	 );

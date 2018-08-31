@@ -35,8 +35,7 @@
 								<contentMiddle>
 									
 									<SearchField 
-									id="projectSearchField" 
-									showRefreshButton="{= !${device>/support/touch} }" 
+									id="projectSearchField"
 									tooltip="{i18n>masterSearchTooltip}" 
 									width="100%"
 									search="onSearchProject" 
@@ -97,8 +96,7 @@
 							
 								<contentMiddle>
 								<SearchField 
-								id="consultantSearchField" 
-								showRefreshButton="{= !${device>/support/touch} }" 
+								id="consultantSearchField"
 								tooltip="{i18n>masterSearchTooltip}" 
 								width="100%"
 								search="onSearchConsultant" 
@@ -110,7 +108,7 @@
 								
 							</Bar>
 						
-							<List 
+							<List
 							id="consultants"
 							items="{consultantsModel>/results/}">
 							
@@ -144,10 +142,9 @@
 		</semantic:content>
 		
 		<semantic:customFooterContent>
-					
+			<Button press="TestMicrophone" icon="sap-icon://microphone"/>		
 			<MenuButton 
-			text="action menu" 
-			buttonMode="Split" 
+			text="action menu"
 			useDefaultActionOnly="true">
 			
 			<menu>

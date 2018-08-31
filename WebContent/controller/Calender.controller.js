@@ -176,9 +176,15 @@ sap.ui.define([
 			toggleDayNamesLine: function (oEvent) {
 				var oPC = this.byId("PC1");
 				oPC.setShowDayNamesLine(!oPC.getShowDayNamesLine());
-			}
+			},
 			
-
+			//Start---Mobile view code
+            onNavBack: function(oEvent){
+                
+               //changes depending on which view consultand (admin) calls it
+                //this.getRouter().navTo("MasterAdmin",{consultantId:this.getConsultantID()});
+            },
+            //End---Mobile view code
 			
 
 	});

@@ -14,7 +14,7 @@ sap.ui.define([
 //				check if the super user account has been created. If not, then create the superuser account
 				//start the loading indicator
 				sap.ui.core.BusyIndicator.show(100)
-				var oModel2 = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
+				var oModel2 = new sap.ui.model.odata.ODataModel(this.getModelAddress()); 
 				oModel2.read("/Consultants?$filter=Consultant_email eq 'Superuser'", {
 					success: function(data){
 						if (data.results.length == 0){
@@ -41,7 +41,7 @@ sap.ui.define([
 						});
 					},		
 					error: function(oError) {
-						sap.m.MessageToast.show(oError, {
+						sap.m.MessageToast.show(oError.message, {
 							duration: 10000,
 							autoClose: true
 						});
@@ -88,7 +88,7 @@ sap.ui.define([
 			var oModel = this.getOwnerComponent().getModel("oModel");
 			var oConsultantId;
 		    var oConsutlantAdmin;
-			var oModel2 = new sap.ui.model.odata.ODataModel('http://localhost:8080/Consultant-Tracker/emplist.svc/'); 
+			var oModel2 = new sap.ui.model.odata.ODataModel(this.getModelAddress()); 
 			var thisPtr = this;
 			
 			//start the loading indicator
@@ -127,7 +127,7 @@ sap.ui.define([
 					}
 				  },
 				 error: function(oError) {
-					 sap.m.MessageToast.show(oError, {
+					 sap.m.MessageToast.show(oError.message, {
 							duration: 10000,
 						 autoClose: false
 					 });
