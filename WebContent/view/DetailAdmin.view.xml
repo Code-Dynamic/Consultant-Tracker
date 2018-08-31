@@ -138,11 +138,11 @@
 			subheader="current" >
 			
 			<TileContent 
-			unit="70" 
+			unit="{tileHoursModel>/expected}" 
 			footer="Expected hours">
 			
 			<NumericContent 
-			value="40" 
+			value="{tileHoursModel>/current}" 
 			icon="sap-icon://present"/>
 			
 			</TileContent>
@@ -259,32 +259,7 @@
 								
 							</customData>
 							
-						</Button>
-						
-						<la:HorizontalLayout>
-							<u:FileUploader id="csvUploader" 
-							name="myFileUpload" 
-							uploadUrl="AddFolder" 
-							tooltip="Upload your csv file to the local server" 
-							uploadComplete="addConsultantsViaCSV" 
-							change="handleValueChange" 
-							typeMissmatch="handleTypeMissmatch" 
-							style="Emphasized" 
-							fileType="csv" 
-							placeholder="Choose a csv file ..."
-							uploadOnChange="true">
-								<!--<u:parameters>
-									<u:FileUploaderParameter name="param1" value="Foo"/>
-									<u:FileUploaderParameter name="param2" value="bar"/>
-								</u:parameters>
-								<u:headerParameters>
-									<u:FileUploaderParameter name="headerParam1" value="Foo"/>
-									<u:FileUploaderParameter name="headerParam2" value="bar"/>
-								</u:headerParameters>-->
-							</u:FileUploader>
-							
-							<!--<Button text="Upload File" press="handleUploadPress"/>-->
-						</la:HorizontalLayout>
+						</Button>	
 									
 				</content>
 				
@@ -436,8 +411,8 @@
 					
 					<ProgressIndicator
 					class="sapUiSmallMarginBottom"
-					percentValue="25"
-					displayValue="25%"
+					percentValue="{tasksModel>progress}"
+					displayValue="{tasksModel>progress} %"
 					showValue="true"
 					state="Warning"
 					displayOnly="true" />		
@@ -595,9 +570,7 @@
 		</semantic:content>
 
 		<semantic:customFooterContent>			
-				 <HBox>
-						<Button press="editProjectDetails" icon="sap-icon://edit"/>
-				</HBox>
+				
 		</semantic:customFooterContent>
 		
 	</semantic:DetailPage>

@@ -1,4 +1,6 @@
 /*global history */
+var recognizing;
+var recognition;
 sap.ui.define([
 		"sap/ui/core/mvc/Controller",
 
@@ -7,6 +9,13 @@ sap.ui.define([
 		"consultanttracker/Consultant-Tracker_Prototype-1/model/formatter"
 	], function (Controller, History,MessageToast,formatter) {
 		"use strict";
+		var AssignedTaskIDArr = [];
+		var recognition = new webkitSpeechRecognition();
+		recognition.lang = 'en-GB'; 
+//		recognition.interimResults = true;
+		recognizing = false;
+		console.log("initialised");
+		
 		var AssignedTaskIDArr = [];
 		
 		return Controller.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.BaseController", {

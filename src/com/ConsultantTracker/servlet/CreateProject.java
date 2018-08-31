@@ -70,7 +70,7 @@ public class CreateProject extends HttpServlet {
 		int pCreator = Integer.parseInt(request.getParameter("Project_Creator"));
 		
 		String Proj_Deadl = request.getParameter("Deadl");
-		SimpleDateFormat sdf =new SimpleDateFormat("yyy-MM-dd");
+		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
 		Date Deadline = new Date();
 		try {
 			Deadline = sdf.parse(Proj_Deadl);
