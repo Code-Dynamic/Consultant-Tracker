@@ -522,6 +522,67 @@ sap.ui.define([
 				} else {
 					this.getRouter().navTo("master", {}, true);
 				}
+			},
+			TestMicrophone: function(){
+				var thisPtr = this;
+				recognition.onresult = function (event) {
+					console.log('onResult');
+//					console.log(event);
+				  for (var i = event.resultIndex; i < event.results.length; ++i) {
+				    if (event.results[i].isFinal) {
+				    	MessageToast.show(event.results[i][0].transcript);
+				    	thisPtr.ProcessVoiceResults(event.results[i][0].transcript);
+				    	recognition.stop();
+				    	reset();
+				    }
+				  }
+				}
+				
+				//Handle error
+				recognition.onerror = function(event){
+				 console.log("onerror", event);
+				}
+
+				// Housekeeping after success or failed parsing
+				recognition.onend = function(e){ 
+				 console.log("Stopping Recording");
+//				 console.log(recognition);
+//				 recognition.stop();
+
+				}
+				console.log('start/stop');
+				if (recognizing) {
+					navigator.webkitGetUserMedia({audio:true},function(e){console.log(e);}, function(e) {
+						alert('Error getting audio');
+						console.log(e);
+					});
+					recognition.stop();
+					reset();
+				} else {
+					console.log("starting");
+					recognition.start();
+					recognizing = true;
+				}
+				
+			
+				function reset() {
+					console.log("Resetting");
+					recognizing = false;
+				}
+			},
+			ProcessVoiceResults : function(text){
+				console.log("processing");
+				text = text.toLowerCase();
+				var textArray = text.split(" ");
+				//Test for search
+				if(textArray[0] == "search"){
+					textArray = textArray.slice(1);
+					textArray = textArray.join(" ");
+					console.log(textArray);
+					this.getView().byId("projectSearchField").setValue(textArray);
+					this.searchProjects(textArray);
+//					this.getView().byId("projectSearchField").change();
+				}
 			}
 
 		});
