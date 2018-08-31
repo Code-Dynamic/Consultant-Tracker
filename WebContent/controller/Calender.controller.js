@@ -81,7 +81,7 @@ sap.ui.define([
 
 			_onRouteMatched: function(oEvent) {
 				
-				var oModelTemp = new sap.ui.model.odata.v2.ODataModel("http://localhost:8080/Consultant-Tracker/emplist.svc/");
+				var oModelTemp = new sap.ui.model.odata.v2.ODataModel(this.getModelAddress());
 
 			
 				var oArgs = oEvent.getParameter("arguments");
