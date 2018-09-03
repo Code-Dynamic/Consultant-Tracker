@@ -120,7 +120,7 @@ sap.ui.define([
 								
 								tileHoursModel.setData(data);
 								tileProjectProgressModel.setData(data);
-								console.log(data);
+								//console.log(data);
 						  },
 						  error: function(oError) {
 							  alert("error");
@@ -211,7 +211,7 @@ sap.ui.define([
 						 var result = JSON.stringify(data);
 						 clientDetailModel.setData(data);
 //						 alert(result);
-						 console.log("clientsModel##");
+						// console.log("clientsModel##");
 //						 console.log(data);
 						 sap.ui.getCore().setModel(clientDetailModel,"clientList");
 //							console.log("Cli##");

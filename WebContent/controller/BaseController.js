@@ -1,6 +1,7 @@
 /*global history */
 var recognizing;
 var recognition;
+var ConsultantAdmin;
 sap.ui
 		.define(
 				[ "sap/ui/core/mvc/Controller",
@@ -39,7 +40,6 @@ sap.ui
 
 										},
 										getModelAddress : function() {
-											// return
 											// "http://196.249.14.63:8080/Consultant-Tracker/emplist.svc/";
 											return 'http://localhost:8080/Consultant-Tracker/emplist.svc/';
 										},
@@ -388,6 +388,25 @@ sap.ui
 											} else {
 												return ConsultantID;
 											}
+										},
+										isConsultantAdmin: function(){
+											if(sessionStorage){
+												if(sessionStorage.ConsultantAdmin == "true"){
+													return true;
+												} 
+												else{
+													return false;
+												}
+												
+											}else{
+												if(ConsultantAdmin == "true"){
+													return true;
+												} 
+												else{
+													return false;
+												}
+												
+											}						
 										},
 										goToProjects : function(
 												selectFirstProject) {

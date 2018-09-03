@@ -31,11 +31,14 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	},
 	onRouteMatched: function(oEvent){
 		var oArgs = oEvent.getParameter("arguments");
-		
-		if(sessionStorage)
+		if(sessionStorage){
 			sessionStorage.ConsultantID = oArgs.consultantId;
-		else
+			sessionStorage.ConsultantAdmin = true;
+		}
+		else{
+			ConsultantAdmin = true;
 			ConsultantID = oArgs.consultantId;
+		}
 	},
 	onSearchProject: function(oEvent) {
 		
