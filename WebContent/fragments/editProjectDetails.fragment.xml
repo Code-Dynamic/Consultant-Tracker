@@ -32,10 +32,10 @@
 				<TextArea id="EditP_Description" value="{projectsModel>/Project_Description}"/>
 
 				<Label text="Start Date"/>
-				<DatePicker valueFormat="yyyy-MM-dd" displayFormat="long" width="100%" id="EditP_StartDate" value="{ path: 'projectsModel>/Project_StartDate',
+				<DatePicker valueFormat="yyyy-MM-dd" displayFormat="short" width="100%" id="EditP_StartDate" value="{ path: 'projectsModel>/Project_StartDate',
 								formatter: '.formatter.date'}"/>					
 				<Label text="Deadline"/>
-				<DatePicker valueFormat="yyyy-MM-dd" displayFormat="long" width="100%" id="EditP_Deadline" value="{ path: 'projectsModel>/Project_Deadline',
+				<DatePicker valueFormat="yyyy-MM-dd" displayFormat="short" width="100%" id="EditP_Deadline" value="{ path: 'projectsModel>/Project_Deadline',
 								formatter: '.formatter.date'}"/>
 								
 				<Label  text="Select a Client" />

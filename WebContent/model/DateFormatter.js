@@ -18,7 +18,7 @@ sap.ui.define(["sap/ui/base/Object", "sap/ui/core/format/DateFormat"],
 					pattern: "EEEE"
 				}, oProperties.locale);
 				this.dateFormat = DateFormat.getDateInstance({
-					style: "medium"
+					pattern : "YYYY-MM-dd"
 				}, oProperties.locale);
 
 				this.now = oProperties.now;
@@ -41,11 +41,11 @@ sap.ui.define(["sap/ui/base/Object", "sap/ui/core/format/DateFormat"],
 				var iElapsedDays = this._getElapsedDays(oDate);
 				if (iElapsedDays === 0) {
 					return this.timeFormat.format(oDate);
-				} else if (iElapsedDays === 1) {
+				}/* else if (iElapsedDays === 1) {
 					return "Yesterday";
 				} else if (iElapsedDays < 7) {
 					return this.weekdayFormat.format(oDate);
-				} else {
+				} */else {
 					return this.dateFormat.format(oDate);
 				}
 			},
