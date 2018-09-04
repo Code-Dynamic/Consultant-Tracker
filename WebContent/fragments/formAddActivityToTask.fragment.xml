@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<core:FragmentDefinition
+	xmlns:semantic="sap.m.semantic"
+	xmlns:core="sap.ui.core"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:l="sap.ui.layout"
+	xmlns="sap.m">
+	<Dialog 
+		title="Add activity to task">
+		<content>
+			<f:SimpleForm 
+			singleContainerFullSize="false" 
+			columnsM="1" 
+			columnsL="1" 
+			columnsXL="1" 
+			emptySpanS="0" 
+			emptySpanM="4" 
+			emptySpanL="4" 
+			emptySpanXL="4" 
+			adjustLabelSpan="false" 
+			labelSpanS="12" 
+			labelSpanM="3" 
+			labelSpanL="3" 
+			labelSpanXL="3" 
+			layout="ResponsiveGridLayout" 
+			editable="true" 
+			id="SimpleFormAddTask">
+				<f:content>
+					<Label 
+						text="Activity name"/>
+					<Input 
+						id="t_Name"/>
+					<Label 
+						text="Description"/>
+					<TextArea 
+						id="t_Description"/>
+					<Label 
+						text="Activity deadline"/>
+					<DatePicker 
+						id="t_Deadline" 
+						width="100%" 
+						displayFormat="long" 
+						valueFormat="yyyy-MM-dd"/>
+					<Label text="Allocate hours to activity"></Label>
+					<TimePicker
+						id="TP1"
+						value="00:00"
+						valueFormat="HH:mm"
+						displayFormat="HH:mm"
+						change="handleChange"
+						placeholder="allocate hours"/>
+					
+					<Label text="Assign consultant to activity"></Label>	
+					<SelectDialog
+		noDataText="No Consultants Found"
+		title="Select Consultants"
+		search="handleSearch"
+		confirm="handleCloseAddConsultantToProject"
+		cancel="onCancel"
+		items="{consultants>/results}" >
+		
+		<StandardListItem
+			title="{consultants>Consultant_Name} {consultants>Consultant_Surname}"
+			description="{Role}"
+			iconDensityAware="false"
+			iconInset="false"
+			type="Active" />
+
+	</SelectDialog>
+				</f:content>
+			</f:SimpleForm>
+		</content>
+		<beginButton>
+			<Button 
+				text="Submit" 
+				press="handleCloseAddTask"/>
+		</beginButton>
+		<endButton>
+			<Button
+ 				text="Close"
+ 				press="onCancel"/>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>
