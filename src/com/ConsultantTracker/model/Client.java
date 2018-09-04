@@ -25,10 +25,28 @@ public class Client implements Serializable {
 	private String client_Name;
 
 	private String client_PhoneNum;
+	private double client_Latitude;
+	private double client_Longitude;
 
 	public Client() {
 	}
 
+	public double getClient_Latitude() {
+		return this.client_Latitude;
+	}
+
+	public void setClient_Latitude(double client_Latitude) {
+		this.client_Latitude = client_Latitude;
+	}
+	
+	public double getClient_Longitude() {
+		return this.client_Longitude;
+	}
+
+	public void setClient_Longitude(double client_Longitude) {
+		this.client_Longitude = client_Longitude;
+	}
+	
 	public int getClient_ID() {
 		return this.client_ID;
 	}
