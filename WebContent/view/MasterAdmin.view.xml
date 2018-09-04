@@ -144,7 +144,7 @@
 		<semantic:customFooterContent>
 			<Button press="TestMicrophone" icon="sap-icon://microphone"/>		
 			<MenuButton 
-			text="action menu"
+			text="Action Menu"
 			useDefaultActionOnly="true">
 			
 			<menu>
