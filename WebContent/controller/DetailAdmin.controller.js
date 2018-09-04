@@ -556,7 +556,7 @@ sap.ui.define([
 				this._Dialog.setRememberSelections(bRemember);
 
 				
-				this._Dialog.open();
+				this._Dialog.open(); 
 				
 				var arrConsultants;
 				//getConsultants
