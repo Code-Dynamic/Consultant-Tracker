@@ -375,12 +375,37 @@
 							<Button 
 								icon="sap-icon://delete"
 								text="Task"
-								press="onRemoveTaskFromProject"/>
+								press="onRemoveTaskFromProject">
+							<customData>
+							
+							<core:CustomData
+								key="multi"
+								value="true" />
+								
+							<core:CustomData
+								key="remember"
+								value="true" />
+								
+							</customData>
+							</Button>
 								
 							<Button 
 								icon="sap-icon://add" 
 								text="Task" 
-								press="onAddTask"/>
+								press="onAddTask">
+							<customData>
+							
+							<core:CustomData
+								key="multi"
+								value="true" />
+								
+							<core:CustomData
+								key="remember"
+								value="true" />
+								
+							</customData>
+							</Button>
+							
 								
 				</content>
 				
@@ -418,6 +443,13 @@
 				
 			</Column>
 			
+			<Column
+				minScreenWidth="Desktop"
+				demandPopin="true"
+				hAlign="Center">
+				<Text text="Add activity" />
+				
+			</Column>
 		</columns>
 		
 		<items>
@@ -430,9 +462,9 @@
 						title="{tasksModel>Name}"/>
 						
 					<Text
-						text="{ path: 
-						 			'tasksModel>Due_Date',
-									formatter: '.formatter.date'}"/>
+					text="{ path: 
+					 			'tasksModel>Due_Date',
+								formatter: '.formatter.date'}"/>
 					
 					<ProgressIndicator
 					class="sapUiSmallMarginBottom"
@@ -442,7 +474,13 @@
 					state="Warning"
 					displayOnly="true" />		
 				
-				<Text text="Inprogress" />
+					<Text text="Inprogress" />
+							
+					<Button 
+					icon="sap-icon://add-activity"  
+					press="onAddActivity">
+					</Button>
+					
 				</cells>
 				
 			</ColumnListItem>
@@ -596,7 +634,7 @@
 
 		<semantic:customFooterContent>			
 				 <HBox>
-						<Button press="editProjectDetails" icon="sap-icon://edit"/>
+						<Button press="editProjectDetails"  text="Edit project" icon="sap-icon://edit"/>
 				</HBox>
 		</semantic:customFooterContent>
 		
