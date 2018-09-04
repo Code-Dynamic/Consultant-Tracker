@@ -86,6 +86,16 @@ sap.ui.define([
 				var tileProjectProgressModel = new JSONModel();
 				
 				OModel.read("/Assigned_Tasks", {
+					
+					urlParameters: {
+						"$expand" : "TaskDetails",
+						"$expand" : "TaskDetails/ProjectDetails"
+			        },
+					filters: [ new sap.ui.model.Filter({
+				          path: "TaskDetails/ProjectDetails/Project_ID",
+				          operator: sap.ui.model.FilterOperator.EQ,
+				          value1: oArgs.projectId
+				     })],
 						  success: function(data){
 //							console.log("assigned_Task data: "+data);
 			
@@ -705,12 +715,15 @@ sap.ui.define([
 			this._Dialog.setRememberSelections(bRemember);
 
 			this._Dialog.open();
+			
 		},
 		handleCloseRemoveTask: function(oEvent){
+			
 			var oModel = this.getView().getModel("projectsModel");
 	    	var _projectID = oModel.oData.Project_ID;
 			var aContexts = oEvent.getParameter("selectedContexts");
 //			console.log(aContexts);
+			
 			if (aContexts && aContexts.length) {
 				MessageToast.show("You have chosen " + aContexts.map(function(oContext) {
 					console.log("test: "+JSON.stringify(oContext.getObject()));
@@ -728,10 +741,30 @@ sap.ui.define([
 				MessageToast.show("No new item was selected.");
 			}
 			oEvent.getSource().getBinding("items").filter([]);
+			
 		},
 		onAddTask: function(){
 			 this._DialogAddTask = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddTaskToProject", this);
 			 this._DialogAddTask.open();
+		},
+		onAddActivity: function(){
+			console.log("add activity");
+			 this._DialogAddTask = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddActivityToTask", this);
+			 this._DialogAddTask.open();
+		},
+		handleChange: function (oEvent) {
+			var oText = this.byId("T1");
+			var oDTP = oEvent.oSource;
+			var sValue = oEvent.getParameter("value");
+			var bValid = oEvent.getParameter("valid");
+			this._iEvent++;
+			oText.setText("Change - Event " + this._iEvent + ": DateTimePicker " + oDTP.getId() + ":" + sValue);
+
+			if (bValid) {
+				oDTP.setValueState(sap.ui.core.ValueState.None);
+			} else {
+				oDTP.setValueState(sap.ui.core.ValueState.Error);
+			}
 		},
 		handleCloseAddTask: function(oEvent){
 //			console.log("Start creating task");
