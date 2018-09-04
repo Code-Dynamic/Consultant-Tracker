@@ -71,8 +71,7 @@
  		<semantic:customFooterContent>
 			
 			<MenuButton 
-			text="action menu" 
-			buttonMode="Split" 
+			text="Action Menu"
 			useDefaultActionOnly="true">
 			
 			<menu>

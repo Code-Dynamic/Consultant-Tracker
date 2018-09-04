@@ -231,13 +231,20 @@ sap.ui.define([
 			},
 			onNavBack: function(evt){
 				var oModel = this.getView().getModel();
-				console.log(oModel);
+				//console.log(oModel);
 				
 				var projectId = oModel.oData.results[0].TaskDetails.ProjectDetails.Project_ID;
 //				make provision for when there is no data
-				this.getRouter()
-					.navTo("DetailAdmin",
-							{projectId:projectId});
+				
+				
+				  
+	        	if(this.isConsultantAdmin()){
+	               //this.getRouter().navTo("MasterAdmin",{consultantId:this.getConsultantID()});
+	                this.getRouter().navTo("DetailAdmin",{projectId:projectId});
+	        	}else{
+	                this.getRouter().navTo("DetailConsultant",{projectId:projectId});
+
+	        	}
 			}
 			
 

@@ -31,11 +31,14 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	},
 	onRouteMatched: function(oEvent){
 		var oArgs = oEvent.getParameter("arguments");
-		
-		if(sessionStorage)
+		if(sessionStorage){
 			sessionStorage.ConsultantID = oArgs.consultantId;
-		else
+			sessionStorage.ConsultantAdmin = true;
+		}
+		else{
+			ConsultantAdmin = true;
 			ConsultantID = oArgs.consultantId;
+		}
 	},
 	onSearchProject: function(oEvent) {
 		
@@ -424,7 +427,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
     	var _PhysicalAddress = sap.ui.getCore().byId("c_Address").getValue();
     	var _Number = sap.ui.getCore().byId("c_Number").getValue();
     	
-    	$.post('AddClient', { Name: _Name ,EmailAddress: _EmailAddress,PhysicalAddress: _PhysicalAddress, Number: _Number},
+    	$.post('AddClient', { Name: _Name ,EmailAddress: _EmailAddress,PhysicalAddress: _PhysicalAddress, Number: _Number, Latitude:-25.780221, Longitude: 28.277232},
         		function(responseText) {  
       				MessageToast.show("client submitted Succesfully");
     				console.log(responseText);
@@ -498,7 +501,138 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	    	this.onClose();
 
 	    },
-	onClose: function () {
+	    addConsultantsViaCSV : function(){
+//	    	console.log("CSV function in MasterAdmin");
+	    	
+//			console.log(oEvent);
+//			MessageToast.show(oEvent.getParameters("fileName"));
+			var fU = sap.ui.getCore().byId("csvUploader");
+//			console.log("csvUploader");
+			var domRef = fU.getFocusDomRef();
+			var file = domRef.files[0];
+			
+			if (this._Dialog) {
+				this._Dialog.destroy();
+			}
+			
+			// Create a File Reader object
+			var reader = new FileReader();
+			var t = this;
+			
+			reader.onload = function(e) {
+			    var strCSV = e.target.result;
+			    var rows = strCSV.split("\n");
+
+			    var oDataProjects =   new sap.ui.model.odata.v2.ODataModel(t.getModelAddress()); 
+		    	var i;
+			    for (i = 1; i < rows.length; i++) { 
+			    	var _name = (rows[i].split(",")[0]).trim();              
+			    	var _surname = (rows[i].split(",")[1]).trim();           
+			    	var _email = (rows[i].split(",")[2]).trim();             
+			    	var _cell = (rows[i].split(",")[3]).trim();              
+			    	var _admin = "0";
+			    	
+			    	$.post('createConsultant', { 
+						name: _name,
+						surname: _surname,
+						email: _email,
+						cell: _cell,
+						admin: _admin }, 
+						function(responseText) {
+//							console.log("At adding User Equivalent: "+responseText);
+							$.post('CreateUser', 
+									{password:"default", conID:responseText}
+							);
+						}
+					);
+			    }
+			    MessageToast.show((rows.length-1)+" Consultants, succesfully added.");
+			};
+			reader.readAsBinaryString(file);
+			
+		},
+		addProjectsViaCSV : function(){
+			var fU = sap.ui.getCore().byId("csvUploader");
+//			console.log("csvUploader");
+			var domRef = fU.getFocusDomRef();
+			var file = domRef.files[0];
+			
+			if (this._oDialog) {
+				this._oDialog.destroy();
+			}
+			
+			// Create a File Reader object
+			var reader = new FileReader();
+			var t = this;
+			
+			reader.onload = function(e) {
+			    var strCSV = e.target.result;
+			    var rows = strCSV.split("\n");
+			    
+			    var oDataProjects =   new sap.ui.model.odata.v2.ODataModel(t.getModelAddress()); 
+		    	var i;
+			    for (i = 1; i < rows.length; i++) { 
+			    	var _Name = (rows[i].split(",")[0]).trim();
+			    	var _Description = (rows[i].split(",")[1]).trim();
+			    	var _StartDate = (rows[i].split(",")[2]).trim();
+			    	var _Deadline = (rows[i].split(",")[3]).trim();
+			    	var _OnSite = (rows[i].split(",")[4]).trim();
+			    	var _cilentID = (rows[i].split(",")[5]).trim();
+			    	
+			    	$.post('CreateProject', { 
+			    		Name: _Name ,
+			    		ClientID: _cilentID,
+			    		Desc: _Description, 
+			    		Deadl: _Deadline ,
+			    		StartDate: _StartDate,
+			    		OnSite:  _OnSite, 
+			    		Project_Creator: t.getConsultantID()
+			    	});
+			    }
+			    MessageToast.show((rows.length-1)+" Projects, succesfully added.");
+			};
+			reader.readAsBinaryString(file);
+		},
+		addClientsViaCSV : function(){
+			var fU = sap.ui.getCore().byId("csvUploader");
+//			console.log("csvUploader");
+			var domRef = fU.getFocusDomRef();
+			var file = domRef.files[0];
+			
+			if (this._oDialog) {
+				this._oDialog.destroy();
+			}
+			
+			// Create a File Reader object
+			var reader = new FileReader();
+			var t = this;
+			
+			reader.onload = function(e) {
+			    var strCSV = e.target.result;
+			    var rows = strCSV.split("\n");
+			    
+			    var oDataProjects =   new sap.ui.model.odata.v2.ODataModel(t.getModelAddress());
+		    	var i;
+			    for (i = 1; i < rows.length; i++) { 
+			    	var _Name = (rows[i].split(",")[0]).trim();
+			    	var _Email = (rows[i].split(",")[1]).trim();
+			    	var _Cell = (rows[i].split(",")[2]).trim();
+			    	var _Address = (rows[i].split(",")[3]).trim();
+			    	var _Latitude = (rows[i].split(",")[4]).trim();
+			    	var _Longitude = (rows[i].split(",")[5]).trim();
+			    	
+			    	$.post('AddClient', { Name: _Name ,EmailAddress: _Email,PhysicalAddress: _Address, Number: _Cell, Latitude:_Latitude, Longitude:_Longitude},
+			        		function(responseText) {  
+//			      				MessageToast.show("client submitted Succesfully");
+//			    				console.log(responseText);
+			        		}
+			    	);
+			    }
+			    MessageToast.show((rows.length-1)+" Clients, succesfully added.");
+			};
+			reader.readAsBinaryString(file);
+		},
+		onClose: function () {
 //		console.log("on close button");
 		if (this._oDialog) {
 			this._oDialog.destroy();
@@ -509,11 +643,12 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		}
 //		this._oDialog.destroy();
 	},
-    
+	
 	/**
 	 * Called when the Controller is destroyed. Use this one to free resources and finalize activities.
 	 * @memberOf splitapp.master
 	 */
+
 //	onExit: function() {
 
 //	}

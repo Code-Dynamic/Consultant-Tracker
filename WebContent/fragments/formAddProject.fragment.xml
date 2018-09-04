@@ -1,5 +1,6 @@
 <core:FragmentDefinition 
 	xmlns="sap.m" 
+	xmlns:u="sap.ui.unified"
 	xmlns:l="sap.ui.layout"
 	xmlns:f="sap.ui.layout.form"
 	xmlns:core="sap.ui.core"
@@ -45,6 +46,22 @@
 				<Label text="OnSite"/>
 				<CheckBox id="p_OnSite"/>
 					
+				<Label text="Use a CSV file instead"/>
+				<l:VerticalLayout>
+					<u:FileUploader 
+						id="csvUploader"
+						name="myFileUpload" 
+						uploadUrl="AddFolder" 
+						tooltip="Upload your csv file to the local server"
+						change="handleValueChange" 
+						typeMissmatch="handleTypeMissmatch" 
+						style="Emphasized" 
+						fileType="csv" 
+						placeholder="Choose a csv file ..."
+						uploadOnChange="true">
+					</u:FileUploader>
+					<Button text="Upload File" press="addProjectsViaCSV"/>
+				</l:VerticalLayout>
 			</f:content>
 		</f:SimpleForm>
 		</content>

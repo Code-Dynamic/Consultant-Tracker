@@ -120,7 +120,7 @@ sap.ui.define([
 								
 								tileHoursModel.setData(data);
 								tileProjectProgressModel.setData(data);
-								console.log(data);
+								//console.log(data);
 						  },
 						  error: function(oError) {
 							  alert("error");
@@ -211,7 +211,7 @@ sap.ui.define([
 						 var result = JSON.stringify(data);
 						 clientDetailModel.setData(data);
 //						 alert(result);
-						 console.log("clientsModel##");
+						// console.log("clientsModel##");
 //						 console.log(data);
 						 sap.ui.getCore().setModel(clientDetailModel,"clientList");
 //							console.log("Cli##");
@@ -506,7 +506,7 @@ sap.ui.define([
 		//*********************************************************************//
 		//the following functions are to handle functionality in the Members tab
 		addConsultantsViaCSV : function(oEvent){
-			console.log(oEvent);
+//			console.log(oEvent);
 //			MessageToast.show(oEvent.getParameters("fileName"));
 			var fU = this.getView().byId("csvUploader");
 			var domRef = fU.getFocusDomRef();
@@ -623,7 +623,7 @@ sap.ui.define([
 								assignment: assignmentID},
 								function(data) {  
 								var array = data.split(';');
-								console.log(data);
+//								console.log(data);
 								thisView.updateMembersList(projectID);
 							});
 							return oContext.getObject().Assignment_ID; 
@@ -710,7 +710,7 @@ sap.ui.define([
 			var oModel = this.getView().getModel("projectsModel");
 	    	var _projectID = oModel.oData.Project_ID;
 			var aContexts = oEvent.getParameter("selectedContexts");
-			console.log(aContexts);
+//			console.log(aContexts);
 			if (aContexts && aContexts.length) {
 				MessageToast.show("You have chosen " + aContexts.map(function(oContext) {
 					console.log("test: "+JSON.stringify(oContext.getObject()));
@@ -734,7 +734,7 @@ sap.ui.define([
 			 this._DialogAddTask.open();
 		},
 		handleCloseAddTask: function(oEvent){
-			console.log("Start creating task");
+//			console.log("Start creating task");
 			
 	    	var _Name = sap.ui.getCore().byId("t_Name").getValue();
 	    	var _Description = sap.ui.getCore().byId("t_Description").getValue();
@@ -764,7 +764,7 @@ sap.ui.define([
   					 var result = JSON.stringify(data);
   					 tasksDetailModel.setData(data);
 
-  					 console.log("tasksModel##task" +result);
+//  					 console.log("tasksModel##task" +result);
   				  },
   				  error: function(oError) {
   					  alert("error");

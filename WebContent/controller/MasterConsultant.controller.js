@@ -44,7 +44,8 @@ sap.ui.define([
 				//TODO Ngoni discuss with Mamba:_onRouteMatched f() not called when reloading
 			},
 			_onRouteMatched: function(oEvent){
-				//console.log("route matched");
+				sessionStorage.ConsultantAdmin = false;
+				this.ConsultantAdmin = false;
 				var oArgs = oEvent.getParameter("arguments");
 				var consultantID = this.setConsultantID(oArgs.consultantId);
 				this.setAssignmentsModel(consultantID);

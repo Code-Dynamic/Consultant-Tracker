@@ -1,6 +1,7 @@
 package com.ConsultantTracker.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -54,7 +55,9 @@ public class createConsultant extends HttpServlet {
 		em.persist(c);
 		em.getTransaction().commit();
 		
-	
+		em.refresh(c);
+		PrintWriter out = response.getWriter();
+		out.write(String.valueOf(c.getConsultant_ID()));
 	
 	}
 	

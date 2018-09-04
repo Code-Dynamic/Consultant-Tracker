@@ -181,8 +181,12 @@ sap.ui.define([
 			//Start---Mobile view code
             onNavBack: function(oEvent){
                 
-               //changes depending on which view consultand (admin) calls it
-                //this.getRouter().navTo("MasterAdmin",{consultantId:this.getConsultantID()});
+            	if(this.isConsultantAdmin()){
+                    this.getRouter().navTo("MasterAdmin",{consultantId:this.getConsultantID()});
+            	}else{
+                    this.getRouter().navTo("MasterConsultant",{consultantId:this.getConsultantID()});
+
+            	}
             },
             //End---Mobile view code
 			

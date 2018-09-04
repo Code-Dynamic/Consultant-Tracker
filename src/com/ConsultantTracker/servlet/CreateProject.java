@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.ConsultantTracker.model.Client;
 import com.ConsultantTracker.model.Consultant;
 import com.ConsultantTracker.model.Project;
+import com.gargoylesoftware.htmlunit.javascript.host.Console;
 
 //import static java.lang.System.out;
 /**
@@ -70,10 +71,15 @@ public class CreateProject extends HttpServlet {
 		int pCreator = Integer.parseInt(request.getParameter("Project_Creator"));
 		
 		String Proj_Deadl = request.getParameter("Deadl");
+		String Proj_StartDate = request.getParameter("StartDate");
+		
+		System.out.println(Proj_StartDate);
 		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
 		Date Deadline = new Date();
+		Date StartDate = new Date();
 		try {
 			Deadline = sdf.parse(Proj_Deadl);
+			StartDate = sdf.parse(Proj_StartDate);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -86,6 +92,7 @@ public class CreateProject extends HttpServlet {
 		if(client != null) {
 			p.setProject_Name(proj_Name);
 			p.setProject_Deadline(Deadline);
+			p.setProject_StartDate(StartDate);
 			p.setProject_Deleted(false);
 			p.setProject_Description(Proj_Desc);
 			p.setClient_ID(client);
