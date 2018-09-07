@@ -27,7 +27,6 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		var oRouter = this.getRouter();
 		oRouter.getRoute("MasterAdmin").attachMatched(this.onRouteMatched, this);
 		this.checkDeviceTypeAndDisplayProjects();
-
 	},
 	checkDeviceTypeAndDisplayProjects: function(){
 		var selectFirstProject = true;

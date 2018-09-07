@@ -1,0 +1,54 @@
+<core:FragmentDefinition
+	xmlns:semantic="sap.m.semantic"
+	xmlns:core="sap.ui.core"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:l="sap.ui.layout"
+	xmlns="sap.m">
+	<Dialog 
+		title="Show Tasks">
+
+		<content>
+
+							<List id="taskList"
+								items="{path:'tasksModel>/results/',
+										sorter:{
+											path: 'Due_Date',
+            								descending: false
+            								}
+            							}"
+								>
+								
+								<items >
+								
+									<ObjectListItem
+										title="{tasksModel>TaskDetails/Name}"
+										type="Active">
+										
+										<firstStatus>
+										
+											<ObjectStatus text="{tasksModel>TaskDetails/Description}" />
+											
+										</firstStatus>
+										
+										<attributes>
+										
+											<ObjectAttribute text="Due: { path: 'tasksModel>Due_Date',formatter: '.formatter.date'}" />
+											
+										</attributes>
+										
+									</ObjectListItem>
+									
+								</items>
+								
+							</List>
+
+				
+		</content>
+
+		<Button
+ 				text="Close"
+ 				press="handleCloseShowTasks"/>
+
+</Dialog>
+ 	
+</core:FragmentDefinition>

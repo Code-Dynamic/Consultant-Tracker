@@ -843,124 +843,219 @@ sap.ui
 														"master", {}, true);
 											}
 										},
-										TestMicrophone : function() {
-											var thisPtr = this;
+													TestMicrophone: function(){
+				var thisPtr = this;
+				
+				recognition.onresult = function (event) {
+					console.log('onResult');
+//					console.log(event);
+				  for (var i = event.resultIndex; i < event.results.length; ++i) {
+				    if (event.results[i].isFinal) {
+				    	MessageToast.show(event.results[i][0].transcript);
+				    	thisPtr.ProcessVoiceResults(event.results[i][0].transcript);
+				    	recognition.stop();
+				    	reset();
+				    }
+				  }
+				}
+				
+				//Handle error
+				recognition.onerror = function(event){
+				 console.log("onerror", event);
+				}
 
-											recognition.onresult = function(
-													event) {
-												// console.log('onResult');
-												// console.log(event);
-												for (var i = event.resultIndex; i < event.results.length; ++i) {
-													if (event.results[i].isFinal) {
-														MessageToast
-																.show(event.results[i][0].transcript);
-														thisPtr
-																.ProcessVoiceResults(event.results[i][0].transcript);
-														recognition.stop();
-														reset();
-													}
-												}
-											}
+				// Housekeeping after success or failed parsing
+				recognition.onend = function(e){ 
+				 console.log("Stopping Recording");
+				 reset();
 
-											// Handle error
-											recognition.onerror = function(
-													event) {
-												// console.log("onerror",
-												// event);
-											}
-
-											// Housekeeping after success or
-											// failed parsing
-											recognition.onend = function(e) {
-												// console.log("Stopping
-												// Recording");
-												// console.log(recognition);
-												// recognition.stop();
-
-											}
-											// console.log('start/stop');
-											if (recognizing) {
-												navigator
-														.webkitGetUserMedia(
-																{
-																	audio : true
-																},
-																function(e) {/* console.log(e); */
-																},
-																function(e) {
-																	alert('Error getting audio');
-																	// console.log(e);
-																});
-												recognition.stop();
-
-												reset();
-											} else {
-												var btn = sap.ui.getCore()
-														.byId("__button1-img");
-												btn.setProperty("color",
-														"#ef6161");
-												// console.log("starting");
-												recognition.start();
-												recognizing = true;
-											}
-
-											function reset() {
-												var btn = sap.ui.getCore()
-														.byId("__button1-img");
-												btn.setProperty("color",
-														"##cae4fb");
-												// console.log("Resetting");
-												recognizing = false;
-											}
+				}
+				console.log('start/stop');
+				if (recognizing) {
+					navigator.webkitGetUserMedia({audio:true},function(e){console.log(e);}, function(e) {
+						alert('Error getting audio');
+						console.log(e);
+					});
+					recognition.stop();
+					reset();
+				} else {
+					var btn = sap.ui.getCore().byId("__button1-img");
+					btn.setProperty("color","#ef6161");
+					console.log("starting");
+					recognition.start();
+					recognizing = true;
+				}
+				
+			
+				function reset() {
+					var btn = sap.ui.getCore().byId("__button1-img");
+					btn.setProperty("color","##cae4fb");
+					console.log("Resetting");
+					recognizing = false;
+				}
+			},
+			ProcessVoiceResults : function(text){
+				
+				text = text.toLowerCase();
+				var textArray = text.split(" ");
+				console.log("processing "+ textArray);
+				//Search projects
+				// accepts syntax "search x","search for x","search project(s) for x","search project(s) x"
+				if(textArray[0] == "search"){
+					
+					textArray = textArray.slice(1);
+					if(textArray[0] == "projects" || textArray[0] == "project"){
+						textArray = textArray.slice(1);
+					}
+					
+					if(textArray[0] == "for" )
+						textArray = textArray.slice(1);
+//					else	
+//						textArray = textArray.slice(1);
+					
+					textArray = textArray.join(" ");
+					console.log(textArray);
+					this.getView().byId("projectSearchField").setValue(textArray);
+					this.searchProjects(textArray);
+					
+				}
+				// create project command
+				else if(textArray[0] == "create" && (textArray[1] == "project" ||textArray[1] == "projects")){
+					
+					this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddProject",this);
+					this._oDialog.open();	
+				}
+				
+				//create consultant command
+				else if(textArray[0] == "create" && (textArray[1] == "consultant" ||textArray[1] == "consultant")){
+					
+					this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddConsultant",this);
+					this._Dialog.open();
+				}
+				
+				//Show relvant item commands (Tasks Due)
+				else if(textArray[0] == "show" || textArray[0]=="my"){
+				
+					console.log("Show if trigger");
+					textArray = textArray.slice(1);
+					
+					if(textArray[0] == "my")
+						textArray = textArray.slice(1);
+					
+					if(textArray[0] == "tasks" || textArray[0] == "task"){
+						// show my tasks by due date
+						
+						var date = new Date().toISOString().substr(0,10);
+						
+						//cater for missinterpretations of speech
+						if(textArray[1] == "due" || textArray[1] == "do" || textArray[1] == "dew" ){
+//							console.log("Checking due date");
+							
+							if(textArray[2] == "for" || textArray[2] == "by" )
+								textArray = textArray.slice(3);
+							else
+								textArray = textArray.slice(2);
+							if(textArray[0] == "the" )
+								textArray = textArray.slice(1);
+							
+							if(textArray[1] == "of"){
+								textArray[1] = textArray[2];
+								textArray = textArray.slice();
+								textArray[2] = null;
+							}
+							
+//							console.log("Start date processing on "+textArray);
+							
+							var months = [
+							    'January', 'February', 'March', 'April', 'May',
+							    'June', 'July', 'August', 'September',
+							    'October', 'November', 'December'
+							    ];
+							
+							var month = months.indexOf(textArray[1]);
+							textArray[0] =textArray[0].replace(/(st|nd|rd|th)/, "");
+							if(textArray.length <= 2 ||textArray[2]==null )
+								textArray[2] = (new Date()).getFullYear();
+						
+//							console.log(textArray);
+							date = new Date(textArray.join("-")).toISOString().substr(0,10);
+							console.log("date " +date);
+							
+						}
+						
+						var thisPtr = this;
+						var tasksModel =  new sap.ui.model.json.JSONModel();
+						
+						//admin sees all current tasks
+						console.log("Consultant Admin "+sessionStorage.ConsultantAdmin);
+						if(sessionStorage.ConsultantAdmin){
+							var oModel = this.getOwnerComponent().getModel("oModel");
+							this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.showTasks",this);
+							
+							oModel.read(
+									"/Tasks", {
+										filters: [ new sap.ui.model.Filter({
+											urlparameters:{"$select": "Due_Date"},
+									          path: "Due_Date",
+									          operator: sap.ui.model.FilterOperator.LE,
+									          value1: date
+									     })],
+										Sorter: [ new sap.ui.model.Sorter("Due_Date",false)],
+										success: function(data){ 
+	//										console.log(data);
+											tasksModel.setData(data);
+											thisPtr._Dialog.setModel(tasksModel,"tasksModel");
+											thisPtr._Dialog.open();
+	
+										},	
+										error: function(){
+											console.log("Error reading model for Tasks");}
+											}		
+							);
+						}else{
+							//consultant sees all their assigned tasks
+							var oModel = this.getOwnerComponent().getModel("oModel");
+							this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.showAssignedTasks",this);
+							console.log(date);
+							var dateFilter = new sap.ui.model.Filter("Due_Date",sap.ui.model.FilterOperator.LT,date);
+							var consFilter =  new sap.ui.model.Filter("ConsultantDetails/Consultant_ID",sap.ui.model.FilterOperator.EQ,thisPtr.getConsultantID());
+						
+							var oFilter =new Array(new sap.ui.model.Filter({filters:[dateFilter,consFilter],and:true}));
+							oModel.read(
+									"/Assigned_Tasks", {
+										urlParameters:{
+											"$expand":"TaskDetails,ConsultantDetails"
 										},
-										ProcessVoiceResults : function(text) {
-											// console.log("processing "+ text);
-											text = text.toLowerCase();
-											var textArray = text.split(" ");
-											// Search projects
-											// accepts syntax "search x","search
-											// for x","search project(s) for
-											// x","search project(s) x"
-											if (textArray[0] == "search") {
-												textArray = textArray.slice(1);
-												if (textArray[0] == "projects"
-														|| textArray[0] == "project") {
-													textArray = textArray
-															.slice(1);
-												}
-												if (textArray[0] == "for")
-													textArray = textArray
-															.slice(1);
-												// else
-												// textArray =
-												// textArray.slice(1);
+										filters:[new sap.ui.model.Filter("Due_Date",sap.ui.model.FilterOperator.LT,date),
+											new sap.ui.model.Filter("ConsultantDetails/Consultant_ID",sap.ui.model.FilterOperator.EQ,thisPtr.getConsultantID())],
+										Sorter: [ new sap.ui.model.Sorter("Due_Date",false)],
+										success: function(data){ 
+//											console.log(data.results);
+											tasksModel.setData(data);
+											thisPtr._Dialog.setModel(tasksModel,"tasksModel");
+											thisPtr._Dialog.open();
+	
+										},	
+										error: function(){
+											console.log("Error reading model for Tasks");}
+											}		
+							);
+							
+						}
 
-												textArray = textArray.join(" ");
-												// console.log(textArray);
-												this.getView().byId(
-														"projectSearchField")
-														.setValue(textArray);
-												this.searchProjects(textArray);
-											} else if (textArray[0] == "create"
-													&& (textArray[1] == "project" || textArray[1] == "projects")) {
-												// create project
-												this._oDialog = sap.ui
-														.xmlfragment(
-																"consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddProject",
-																this);
-												this._oDialog.open();
-											} else if (textArray[0] == "create"
-													&& (textArray[1] == "consultant" || textArray[1] == "consultant")) {
-												// create consultant
-												this._Dialog = sap.ui
-														.xmlfragment(
-																"consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddConsultant",
-																this);
-												this._Dialog.open();
-											}
-										}
-										
+					}
+						
+						
+					
+				}
+			},
+			handleCloseShowTasks: function(oEvent){
+//				console.log("Close show tasks");
+//				console.log(oEvent);
+				this._Dialog.destroy();	
+			},
+		    
 
-									});
+		});
 
 				});

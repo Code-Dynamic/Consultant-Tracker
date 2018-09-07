@@ -69,7 +69,7 @@
 		</semantic:content>
 		
  		<semantic:customFooterContent>
-			
+			<Button press="TestMicrophone" icon="sap-icon://microphone"/>
 			<MenuButton 
 			text="Action Menu"
 			useDefaultActionOnly="true">
