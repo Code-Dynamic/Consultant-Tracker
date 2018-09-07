@@ -1,6 +1,7 @@
 <core:FragmentDefinition 
 	xmlns="sap.m" 
 	xmlns:l="sap.ui.layout"
+	xmlns:u="sap.ui.unified"
 	xmlns:f="sap.ui.layout.form"
 	xmlns:core="sap.ui.core"
 	xmlns:semantic="sap.m.semantic">
@@ -34,6 +35,23 @@
 				<TextArea id="c_Address"/>
 				<Label text="Phone Number"/>
 				<Input id="c_Number"/>
+				
+				<Label text="Use a CSV file instead"/>
+				<l:VerticalLayout>
+					<u:FileUploader 
+						id="csvUploader"
+						name="myFileUpload" 
+						uploadUrl="AddFolder" 
+						tooltip="Upload your csv file to the local server"
+						change="handleValueChange" 
+						typeMissmatch="handleTypeMissmatch" 
+						style="Emphasized" 
+						fileType="csv" 
+						placeholder="Choose a csv file ..."
+						uploadOnChange="true">
+					</u:FileUploader>
+					<Button text="Upload File" press="addClientsViaCSV"/>
+				</l:VerticalLayout>
 					
 			</f:content>
 		</f:SimpleForm>

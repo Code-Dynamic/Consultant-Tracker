@@ -81,7 +81,7 @@ sap.ui.define([
 
 			_onRouteMatched: function(oEvent) {
 				
-				var oModelTemp = new sap.ui.model.odata.v2.ODataModel("http://localhost:8080/Consultant-Tracker/emplist.svc/");
+				var oModelTemp = new sap.ui.model.odata.v2.ODataModel(this.getModelAddress());
 
 			
 				var oArgs = oEvent.getParameter("arguments");
@@ -181,8 +181,12 @@ sap.ui.define([
 			//Start---Mobile view code
             onNavBack: function(oEvent){
                 
-               //changes depending on which view consultand (admin) calls it
-                //this.getRouter().navTo("MasterAdmin",{consultantId:this.getConsultantID()});
+            	if(this.isConsultantAdmin()){
+                    this.getRouter().navTo("MasterAdmin",{consultantId:this.getConsultantID()});
+            	}else{
+                    this.getRouter().navTo("MasterConsultant",{consultantId:this.getConsultantID()});
+
+            	}
             },
             //End---Mobile view code
 			

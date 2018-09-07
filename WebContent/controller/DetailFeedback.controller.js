@@ -95,8 +95,13 @@ sap.ui.define([
 		//Start---Mobile view code
         onNavBack: function(oEvent){
             
-           //go to view depending on which consultant (admin) called it
-            this.getRouter().navTo("MasterAdmin",{consultantId:this.getConsultantID()});
+        	  
+        	if(this.isConsultantAdmin()){
+                this.getRouter().navTo("MasterAdmin",{consultantId:this.getConsultantID()});
+        	}else{
+                this.getRouter().navTo("MasterConsultant",{consultantId:this.getConsultantID()});
+
+        	}
         },
 
     });

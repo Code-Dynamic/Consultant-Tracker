@@ -27,6 +27,7 @@ sap.ui.define([
 				//getting id from the URL
 				//console.log("function called");
 				//this.printOnPage();
+				this.setDeviceType();
 				if(sessionStorage){
 					if (sessionStorage.getItem("ConsultantID") !== null) {
 						this.onReloadPageSetup();
@@ -44,7 +45,8 @@ sap.ui.define([
 				//TODO Ngoni discuss with Mamba:_onRouteMatched f() not called when reloading
 			},
 			_onRouteMatched: function(oEvent){
-				//console.log("route matched");
+				sessionStorage.ConsultantAdmin = false;
+				this.ConsultantAdmin = false;
 				var oArgs = oEvent.getParameter("arguments");
 				var consultantID = this.setConsultantID(oArgs.consultantId);
 				this.setAssignmentsModel(consultantID);
@@ -80,9 +82,12 @@ sap.ui.define([
 						 var oData = JSON.stringify(data);
 						 assignmentsModel.setData(data);
 						 //console.log(data);
-						 if(data.results.length > 0)
-							 thisObj.selectFirstProject();
-
+						 if(!thisObj.isDeviceMobile()){
+							 console.log("device is not Mobile");
+							 if(data.results.length > 0){
+								 thisObj.selectFirstProject();		 
+							 }
+						 }
 					  },
 					 error: function(oError) {
 						  alert("error");

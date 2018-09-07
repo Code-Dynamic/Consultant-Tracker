@@ -13,7 +13,7 @@ sap.ui.define([
 			onInit: function() {
 //				check if the super user account has been created. If not, then create the superuser account
 				//start the loading indicator
-				sap.ui.core.BusyIndicator.show(100)
+				sap.ui.core.BusyIndicator.show(100);
 				var oModel2 = new sap.ui.model.odata.ODataModel(this.getModelAddress()); 
 				oModel2.read("/Consultants?$filter=Consultant_email eq 'Superuser'", {
 					success: function(data){
