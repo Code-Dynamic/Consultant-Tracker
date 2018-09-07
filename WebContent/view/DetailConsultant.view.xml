@@ -21,7 +21,11 @@
 		   xmlns:personal="sap.uxap.sample.SharedBlocks.personal"
 		   xmlns:employment="sap.uxap.sample.SharedBlocks.employment">
 			
-		<semantic:DetailPage>
+	<semantic:DetailPage 
+			navButtonPress="onNavBack" 
+			showNavButton="{device>/system/phone}" 
+			busy="{detailView>/busy}" 
+			busyIndicatorDelay="{detailView>/delay}">
 
 		<semantic:customHeaderContent>
 			

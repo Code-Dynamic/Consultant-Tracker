@@ -27,6 +27,7 @@ sap.ui.define([
 				//getting id from the URL
 				//console.log("function called");
 				//this.printOnPage();
+				this.setDeviceType();
 				if(sessionStorage){
 					if (sessionStorage.getItem("ConsultantID") !== null) {
 						this.onReloadPageSetup();
@@ -81,9 +82,12 @@ sap.ui.define([
 						 var oData = JSON.stringify(data);
 						 assignmentsModel.setData(data);
 						 //console.log(data);
-						 if(data.results.length > 0)
-							 thisObj.selectFirstProject();
-
+						 if(!thisObj.isDeviceMobile()){
+							 console.log("device is not Mobile");
+							 if(data.results.length > 0){
+								 thisObj.selectFirstProject();		 
+							 }
+						 }
 					  },
 					 error: function(oError) {
 						  alert("error");

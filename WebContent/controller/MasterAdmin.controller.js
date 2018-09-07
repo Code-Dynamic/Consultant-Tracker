@@ -25,9 +25,18 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	 */
 	onInit: function() {
 		var oRouter = this.getRouter();
-		oRouter.getRoute("MasterAdmin").attachMatched(this.onRouteMatched, this);		
+		oRouter.getRoute("MasterAdmin").attachMatched(this.onRouteMatched, this);
+		this.checkDeviceTypeAndDisplayProjects();
+
+	},
+	checkDeviceTypeAndDisplayProjects: function(){
 		var selectFirstProject = true;
-		this.goToProjects(selectFirstProject);
+		this.setDeviceType();
+		if(this.isDeviceMobile()){
+			 this.goToProjects();
+		} else{
+			this.goToProjects(selectFirstProject);
+		}
 	},
 	onRouteMatched: function(oEvent){
 		var oArgs = oEvent.getParameter("arguments");
