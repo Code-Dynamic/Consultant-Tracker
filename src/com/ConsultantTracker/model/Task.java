@@ -25,8 +25,17 @@ public class Task implements Serializable {
 	private String Name;
 	private String Description;
 	private Project project;
-	private boolean billable; 
+	private boolean billable;
+	private boolean completed;
 	
+	public boolean isCompleted() {
+		return completed;
+	}
+
+	public void setCompleted(boolean completed) {
+		this.completed = completed;
+	}
+
 	public boolean getBillable() {
 		return billable;
 	}

@@ -212,4 +212,5 @@
     <servlet-name>RemoveTask</servlet-name>
     <url-pattern>/RemoveTask</url-pattern>
   </servlet-mapping>
+
 </web-app>
