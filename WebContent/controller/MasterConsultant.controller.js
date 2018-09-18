@@ -69,15 +69,15 @@ sap.ui.define([
 
 				oModel.read("/Assignments", {
 					urlParameters: {
-			            "$expand" : "ConsultantDetails",
-			            "$expand" : "ProjectDetails"
+			            "$expand" : "ConsultantDetails,ProjectDetails"
 			        },
 					filters: [ new sap.ui.model.Filter({
 				          path: "ConsultantDetails/Consultant_ID",
 				          operator: sap.ui.model.FilterOperator.EQ,
 
-				          value1: consultantID
+				          value1: thisObj.getConsultantID()
 				     })],
+					async:false,
 					success: function(data){
 						 var oData = JSON.stringify(data);
 						 assignmentsModel.setData(data);
@@ -90,7 +90,8 @@ sap.ui.define([
 						 }
 					  },
 					 error: function(oError) {
-						  alert("error");
+						  console.log("Error");
+						  console.log(oError);
 					 	}
 					});
 				
