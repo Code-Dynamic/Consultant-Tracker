@@ -32,11 +32,20 @@ public class Assigned_Task implements Serializable {
 	private Date due_Date;
 	@Temporal(TemporalType.DATE)
 	private Date date_Completed;
+	private String Description;
 	
 	public Assigned_Task() {
 		
 	}
 	
+	public String getDescription() {
+		return Description;
+	}
+	
+ 	public void setDescription(String description) {
+		Description = description;
+	}
+ 	
 	public Date getDate_Assigned() {
 		return date_Assigned;
 	}

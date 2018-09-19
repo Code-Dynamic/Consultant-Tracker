@@ -49,6 +49,7 @@ public class assignConsultantToTask extends HttpServlet {
 		int consultantID = Integer.parseInt(request.getParameter("consultantID"));
 		String dateAssigned = request.getParameter("dateAssigned");
 		String dueDate = request.getParameter("dueDate");
+		String description = request.getParameter("description");
 
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
 		EntityManager em = emf.createEntityManager();
@@ -70,6 +71,7 @@ public class assignConsultantToTask extends HttpServlet {
 			e.printStackTrace();
 		}
 		
+		a.setDescription(description);
 		a.setDate_Assigned(DateAssigned);
 		a.setDue_Date(DueDate);
 		a.setAssigned_Hours(assignedHours);

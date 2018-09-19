@@ -61,6 +61,7 @@ sap.ui.define([
 //							console.log(results);
 //							alert(results);
 							countMembers = data.results.length;
+							sap.ui.getCore().setModel(membersDetailModel,"membersModel");
 					  },
 					  error: function(oError) {
 						  alert("error");
@@ -68,7 +69,7 @@ sap.ui.define([
 					});
 			
 //				set the project detail model
-				this.getView().setModel(membersDetailModel,"membersModel"); 
+//				this.getView().setModel(membersDetailModel,"membersModel"); 
 				
 				var progressArray = [];
 				
@@ -264,7 +265,7 @@ sap.ui.define([
 	showMap: function(oEvent) {
 		
 		//Generate map when correct tab selected
-		console.log(oEvent.getParameters().selectedKey);
+//		console.log(oEvent.getParameters().selectedKey);
 		if(!(oEvent.getParameters().selectedKey == "key5" || oEvent.getParameter("id")=="__component0---DetailAdmin--7")){
 			return;
 		}
@@ -747,13 +748,14 @@ sap.ui.define([
 			
 		},
 		onAddTask: function(){
-			 this._DialogAddTask = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddTaskToProject", this);
+			this._DialogAddTask = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddTaskToProject", this);
 			 this._DialogAddTask.open();
 		},
-		onAddActivity: function(){
-			console.log("add activity");
-			 this._DialogAddTask = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddActivityToTask", this);
-			 this._DialogAddTask.open();
+		onAddActivity: function(oEvent){
+			var sPath = oEvent.getSource().getBindingContext("tasksModel").getObject();
+			this.taskIDSelected = sPath.Task_ID;
+			this._DialogAddActivity = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddActivityToTask", this);
+			this._DialogAddActivity.open();
 		},
 		handleChange: function (oEvent) {
 			var oText = this.byId("T1");
@@ -809,133 +811,163 @@ sap.ui.define([
   		
   			thisView.getView().setModel(tasksDetailModel,"tasksModel");
 		},
+		handleCloseAddActivity: function(){
+			var Consultant_ID = sap.ui.getCore().byId("consultantSelected").getSelectedKey();
+			var _AssignedHours = sap.ui.getCore().byId("allocatedHours").getValue();
+			var _DateAssigned = sap.ui.getCore().byId("AT_dateAssigned").getValue();
+			var _DueDate = sap.ui.getCore().byId("AT_Deadline").getValue();
+	    	var _Description = sap.ui.getCore().byId("AT_Description").getValue();
+	    	
+//	    	console.log("Adding activity: "+_AssignedHours);
+			//var dueDate = sap.ui.getCore().byId("consultantSelected").getSelectedKey();
+//			console.log("add Assigned Task ID = "+ this.taskIDSelected);
+	    	/*console.log("Consultant_ID "+Consultant_ID);
+	    	console.log("_AssignedHours "+_AssignedHours);
+	    	console.log("_Description "+_Description);
+	    	console.log("_DueDate "+_DueDate);*/
+			$.post('assignConsultantToTask', { 
+				dateAssigned:_DateAssigned, 
+				dueDate:_DueDate, 
+				assignedHours: _AssignedHours, 
+				hoursWorked:0, 
+				consultantID:Consultant_ID, 
+				taskID:this.taskIDSelected, 
+				description:_Description},function(responseText) {
+				// var array = responseText.split(';');
+				console.log("Added activity: "+_AssignedHours);
+//				console.log("Returned from assign consultants");
+//				console.log(responseText);		
+			});
+			this._DialogAddActivity.destroy();
+		},
 		//Task tabs functions ends here
 		//*********************************************************************//
 		confirmDeleteProject: function(){
-					this._Dialog = sap.ui.xmlfragment("consultant-tracker.fragments.confirmDelete",this);
-					this._Dialog.open();
+			this._Dialog = sap.ui.xmlfragment("consultant-tracker.fragments.confirmDelete",this);
+			this._Dialog.open();
 
 		},
 		confirmRemoveConsultant: function(){
-				this._Dialog = sap.ui.xmlfragment("consultant-tracker.fragments.confirmRemove",this);
-				this._Dialog.open();
+			this._Dialog = sap.ui.xmlfragment("consultant-tracker.fragments.confirmRemove",this);
+			this._Dialog.open();
 
 		},
 		onCancel : function() {
-						if(this._Dialog){
-					          this._Dialog.destroy();	
-						}
-		      
-		                
-		                if(this._Dialog2){
-		                    this._Dialog2.destroy(); 	
-		                }
-		       
-		                
-		                if(this._DialogAddTask){
-		                	this._DialogAddTask.destroy();
-		                }
-		                	
+			if(this._Dialog){
+		          this._Dialog.destroy();	
+			}
+            
+            if(this._Dialog2){
+                this._Dialog2.destroy(); 	
+            }
+            
+            if(this._DialogAddTask){
+            	this._DialogAddTask.destroy();
+            }
+            
+            if(this._DialogAddActivity){
+            	this._DialogAddActivity.destroy();
+            }
 		 },
 		 onRemove: function(oEvent){
-				var _projectID = sap.ui.getCore().getModel("groupMember").getProperty("/Consultants");
-				var Assignment_ID = sap.ui.getCore().byId("idRemoveCon").getSelectedKey();
-				
-				
+			var _projectID = sap.ui.getCore().getModel("groupMember").getProperty("/Consultants");
+			var Assignment_ID = sap.ui.getCore().byId("idRemoveCon").getSelectedKey();
+			
+			
 //				$.post('UnassignConsultant', { assignment: 10},function(responseText) {  
 //					// var array = responseText.split(';');
 //					console.log(responseText);
 //				});
-				console.log("Assignment_ID" + _projectID);
+			console.log("Assignment_ID" + _projectID);
 
 		},
 		refreshData : function(oEvent){
-		    	//Begin Refresh PRojects
-		    	var oModel = new sap.ui.model.json.JSONModel();
-				var oDataProjects =  new sap.ui.model.odata.ODataModel(this.getModelAddress()); 
-				var arrProjects = {Projects:[]};
-				var arrConsultants = {Consultants:[]};
-				oDataProjects.read(
-						"/Projects?$expand=ClientDetails&$filter=Project_Deleted%20eq%20false",{success: function(oCreatedEn){ GotProjects(oCreatedEn) }, error: function(){console.log("Error");}}		
-				);
-				
+	    	//Begin Refresh PRojects
+	    	var oModel = new sap.ui.model.json.JSONModel();
+			var oDataProjects =  new sap.ui.model.odata.ODataModel(this.getModelAddress()); 
+			var arrProjects = {Projects:[]};
+			var arrConsultants = {Consultants:[]};
+			oDataProjects.read(
+					"/Projects?$expand=ClientDetails&$filter=Project_Deleted%20eq%20false",{success: function(oCreatedEn){ GotProjects(oCreatedEn) }, error: function(){console.log("Error");}}		
+			);
+			
 //				$.post('getProjects',function(responseText){
 //					console.log("servlet responded");
-				function GotProjects(oCreatedEn){
+			function GotProjects(oCreatedEn){
 //					arrProjects = {Projects:[]};
 //					var array = responseText.split(';');
-					//array.forEach(createProjectObj);
-							
-					oModel.setData(oCreatedEn);
-					console.log(oCreatedEn);
-					sap.ui.getCore().setModel(oModel);
-					app.to("detailPage");
-				}
-		    	//End Refresh PRojects
+				//array.forEach(createProjectObj);
+						
+				oModel.setData(oCreatedEn);
+				console.log(oCreatedEn);
+				sap.ui.getCore().setModel(oModel);
+				app.to("detailPage");
+			}
+	    	//End Refresh PRojects
 
-		    	//BEgin refresh get members
-		    	var oDataProjects =  new sap.ui.model.odata.ODataModel(this.getModelAddress()); 
-				//get selected project id
-				var sOrderId = sap.ui.getCore().getModel("selModel").getProperty("/Project_ID");
-				//get model
-				var oData = sap.ui.getCore().getModel().getProperty("/results");
+	    	//BEgin refresh get members
+	    	var oDataProjects =  new sap.ui.model.odata.ODataModel(this.getModelAddress()); 
+			//get selected project id
+			var sOrderId = sap.ui.getCore().getModel("selModel").getProperty("/Project_ID");
+			//get model
+			var oData = sap.ui.getCore().getModel().getProperty("/results");
+			
+			oDataProjects.read(
+					"/Assignments?$expand=ConsultantDetails,ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ GotMembers(oCreatedEn) }, error: function(){console.log("Error");}}		
+					);
+	    	function GotMembers(Members){
+				console.log(Members);
+				var oModel = new sap.ui.model.json.JSONModel();
+				oModel.setData(Members);
+				//console.log(JSON.parse(JSON.stringify(arrConsultants)));
+				sap.ui.getCore().setModel(oModel,"groupMember");
+				app.to("detailPage");
+			}
+	    	//END refresh get members
+	    	
+	    	//Begin Refresh Members
+	    	var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
+			attachModel.read(
+					"/Tasks?$expand=ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
+					);
+			
+			function gotTasks(tasks){
+				console.log(tasks);
+				var oModel = new sap.ui.model.json.JSONModel();
+				oModel.setData(tasks);
 				
-				oDataProjects.read(
-						"/Assignments?$expand=ConsultantDetails,ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ GotMembers(oCreatedEn) }, error: function(){console.log("Error");}}		
-						);
-		    	function GotMembers(Members){
-					console.log(Members);
-					var oModel = new sap.ui.model.json.JSONModel();
-					oModel.setData(Members);
-					//console.log(JSON.parse(JSON.stringify(arrConsultants)));
-					sap.ui.getCore().setModel(oModel,"groupMember");
-					app.to("detailPage");
-				}
-		    	//END refresh get members
-		    	
-		    	//Begin Refresh Members
-		    	var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
-				attachModel.read(
-						"/Tasks?$expand=ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
-						);
+				sap.ui.getCore().setModel(oModel,"tasks");
+				app.to("detailPage");
+			}
+	    	//END Refresh Members
+
+
 				
-				function gotTasks(tasks){
-					console.log(tasks);
-					var oModel = new sap.ui.model.json.JSONModel();
-					oModel.setData(tasks);
-					
-					sap.ui.getCore().setModel(oModel,"tasks");
-					app.to("detailPage");
+			function createProjectObj(stringVal){
+				var array = stringVal.split(',');
+				var location;
+				
+				if(array[4]=="0"){
+					location = "No";
+				}else{
+					location = "Yes";
 				}
-		    	//END Refresh Members
-
-
-					
-				function createProjectObj(stringVal){
-					var array = stringVal.split(',');
-					var location;
-					
-					if(array[4]=="0"){
-						location = "No";
-					}else{
-						location = "Yes";
-					}
-					var projectObj = {
-					 Project_ID: array[5],
-				     Project_Name : array[0],
-				     Project_DEscription : array[1],
-				     Client_ID : array[2],
-				     Project_Deadline : array[3],
-				     Project_OnSite : location
-					};
-			    	arrProjects.Projects.push((projectObj));
+				var projectObj = {
+				 Project_ID: array[5],
+			     Project_Name : array[0],
+			     Project_DEscription : array[1],
+			     Client_ID : array[2],
+			     Project_Deadline : array[3],
+			     Project_OnSite : location
+				};
+		    	arrProjects.Projects.push((projectObj));
 //			    		console.log(arrProjects);
-			    		
-				}
-				
-				
+		    		
+			}
+			
+			
 
-				
+			
 //				oModel.setData();
 //				sap.ui.getCore().setModel(oModel);
 //				app.to("detailPage");	

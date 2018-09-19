@@ -26,54 +26,46 @@
 			editable="true" 
 			id="SimpleFormAddTask">
 				<f:content>
-					<Label 
-						text="Activity name"/>
-					<Input 
-						id="t_Name"/>
-					<Label 
-						text="Description"/>
-					<TextArea 
-						id="t_Description"/>
-					<Label 
-						text="Activity deadline"/>
+					<Label text="Activity description"/>
+					<TextArea id="AT_Description"/>
+					
+					<Label text="Activity deadline"/>
 					<DatePicker 
-						id="t_Deadline" 
+						id="AT_dateAssigned" 
 						width="100%" 
 						displayFormat="long" 
 						valueFormat="yyyy-MM-dd"/>
+						
+					<Label text="Activity deadline"></Label>
+					<DatePicker 
+						id="AT_Deadline" 
+						width="100%" 
+						displayFormat="long" 
+						valueFormat="yyyy-MM-dd"/>
+						
 					<Label text="Allocate hours to activity"></Label>
 					<TimePicker
-						id="TP1"
-						value="00:00"
-						valueFormat="HH:mm"
-						displayFormat="HH:mm"
-						change="handleChange"
+						id="allocatedHours"
+						value="00"
+						valueFormat="HH"
+						displayFormat="HH"
 						placeholder="allocate hours"/>
-					
-					<Label text="Assign consultant to activity"></Label>	
-					<SelectDialog
-		noDataText="No Consultants Found"
-		title="Select Consultants"
-		search="handleSearch"
-		confirm="handleCloseAddConsultantToProject"
-		cancel="onCancel"
-		items="{consultants>/results}" >
-		
-		<StandardListItem
-			title="{consultants>Consultant_Name} {consultants>Consultant_Surname}"
-			description="{Role}"
-			iconDensityAware="false"
-			iconInset="false"
-			type="Active" />
-
-	</SelectDialog>
+						
+					<Label text="Assign consultant to activity"></Label>
+				 	
+				 	<Select id="consultantSelected"
+						forceSelection="false"
+						items="{membersModel>/results}">
+	
+						<core:Item key="{membersModel>ConsultantDetails/Consultant_ID}" text="{membersModel>ConsultantDetails/Consultant_Name} {membersModel>ConsultantDetails/Consultant_Surname}" />
+					</Select>
 				</f:content>
 			</f:SimpleForm>
 		</content>
 		<beginButton>
 			<Button 
 				text="Submit" 
-				press="handleCloseAddTask"/>
+				press="handleCloseAddActivity"/>
 		</beginButton>
 		<endButton>
 			<Button
