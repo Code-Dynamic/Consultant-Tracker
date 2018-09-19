@@ -66,50 +66,21 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		
 		//NB as a manager you can view all projects under you
 		var projectID = oData.Project_ID;
-		
+		//console.log(projectID);
 		this.getRouter().navTo("DetailAdmin", 
 		{projectId:projectID});
 		
-		//TODO Ngoni: consult Mamba, save project ID in model instead of using global
 		PROJECT_ID = projectID;
 		var consultantID = this.getConsultantID();		
 		//console.log("Project ID: "+ projectID);
 		//RATINGS CODE
-		//TODO Ngoni: check with Mamba hw to get odata model address
 		var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
 		var projectCompleted =  oData.Project_Completed;
 		var thisObj = this;
 		//console.log(projectCompleted);
 		attachModel.read(
-				"/Ratings_Entrys?$expand=ProjectDetails,ConsultantDetails&$filter=ProjectDetails/Project_ID%20eq%20"+projectID+"%20and%20ConsultantDetails/Consultant_ID%20eq%20"+consultantID,{async:false,success: function(oCreatedEn){ ratingsBtnConfig(oCreatedEn) }, error: function(e){console.log(e);}}		
+				"/Ratings_Entrys?$expand=ProjectDetails,ConsultantDetails&$filter=ProjectDetails/Project_ID%20eq%20"+projectID+"%20and%20ConsultantDetails/Consultant_ID%20eq%20"+consultantID,{async:false,success: function(oCreatedEn){ thisObj.ratingsBtnConfig(oCreatedEn,projectCompleted) }, error: function(e){console.log(e);}}		
 				);					
-		function ratingsBtnConfig(oResults){
-			var ratingsBtnConfigModel;
-			//user has already given a rating for the project
-			if(oResults.results.length > 0){
-				//console.log("Ratings entered");
-				ratingsBtnConfigModel = new sap.ui.model.json.JSONModel({
-				    visible: false,
-				    enabled: false
-				});
-			} //project is completed, rating not yet given
-			else if(projectCompleted === true) {
-				//console.log("project is completed, rating not yet given");
-				ratingsBtnConfigModel = new sap.ui.model.json.JSONModel({
-					    visible: true,
-					    enabled: true
-					});
-			} //project not yet completed
-			else{
-				//console.log("project not completed");
-				ratingsBtnConfigModel = new sap.ui.model.json.JSONModel({
-				    visible: true,
-				    enabled: false
-				});
-			}
-			thisObj.setModel(ratingsBtnConfigModel,"ratingsBtnConfig");
-			
-		}
 		
 		//TODO fix project progress
 		$.post('getProjectProgress',{Project_Id:projectID},function(responseText){
@@ -122,84 +93,6 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	          thisObj.getView().setModel(progressModel,"progressModel");
 		});
 	},
-	onRateTeam: function(){
-    	this._ratingsDialog = this.byId("ratingsDialog");
-    	var dialog = this._ratingsDialog;
-    	dialog.setEscapeHandler(this.onDialogPressEscape);
-    	var consultantID = this.getConsultantID();
-    	//var projectID = sap.ui.getCore().getModel("selModel").getProperty("/Project_ID");
-    	var projectID = PROJECT_ID;
-    	var query = "/Assignments?$expand=ProjectDetails,ConsultantDetails&$filter=ConsultantDetails/Consultant_ID%20ne%20"+consultantID+"%20and ProjectDetails/Project_ID%20eq%20"+projectID;
-
-	     var oModel =  new sap.ui.model.odata.ODataModel(this.getModelAddress());
-	     oModel.read(query,{success: function(oData){ addMembers(oData) 
-	 					}, error: function(){console.log("Error");}}		
-	 	 );
-	 	 var totalHoursText;
-	 	 	 RatingIndicatorArr = [];	
-	         //return all consultants
-	         function  addMembers(oResults) {
-	        	 RatingResults = oResults;
-	        	 var ratingInd ="";
-	        	 var user = "";
-	        	 var vBox = new sap.m.VBox();
-	        	 var hBox;
-	        	 for(var i = 0; i < oResults.results.length; i++){
-	        		 hBox = new sap.m.HBox({
-	        			 alignItems:sap.m.FlexAlignItems.Center
-	        			 })
-	        		 ratingInd = new sap.m.RatingIndicator();
-	        		 RatingIndicatorArr.push(ratingInd);
-	        		 user = new sap.m.Text({
-	        			 renderWhitespace: true,
-	        			 text:"\t"+ oResults.results[i].ConsultantDetails.Consultant_Name
-	        		 });
-	        		 hBox.addItem(ratingInd);
-	        		 hBox.addItem(user);
-	        		 vBox.addItem(hBox);
-	        	 }
-	        	 RatingsErrTxt = new sap.m.Text({
-        			 renderWhitespace: true,
-        			 text:""
-        		 });
-	        	 vBox.addItem(RatingsErrTxt);
-	        	 dialog.addContent(vBox);
-	         }
-    	
-    	dialog.open();
-	},
-	onSubmitRates: function(){
-		var detailDom = this;
-		var projectID = PROJECT_ID;
-		var consultantID = this.getConsultantID();
-    	var resultsString = "";
-	 	for(var i = 0; (i < RatingResults.results.length); i++){
-	 		var rate = RatingIndicatorArr[i].getValue();
-	 		if(rate === 0){
-	 			RatingsErrTxt.setText("Please give each member a rating of at least 1 star");
-	 			return;
-	 		}
-	 		if(resultsString.length > 0 )
-	 			resultsString +=",";
-	 		resultsString +=  RatingResults.results[i].ConsultantDetails.Consultant_ID + ":"+rate;
-	 	}
-	 	//console.log(resultsString);
-	    	$.post('EnterConsultantRatings', { ratingResults:resultsString, projectID:projectID, consultantID: consultantID},function(responseText) {  
-	    		//var array = responseText.split(';');
-	    		MessageToast.show(responseText);
-	    	    detailDom.onRatingsDialogClose();
-					var ratingsBtnConfigModel = new sap.ui.model.json.JSONModel({
-					    visible: false,
-					    enabled: false
-					});
-				sap.ui.getCore().setModel(ratingsBtnConfigModel,"ratingsBtnConfig");
-    	});			
-
-    },
-    onRatingsDialogClose: function(){
-    	this._ratingsDialog.removeAllContent();
-    	this._ratingsDialog.close();
-    },
 	 onConsultantListItemPress: function(evt){
 		
 		
@@ -368,52 +261,6 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	addProject: function(){
 		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddProject",this);
 		this._oDialog.open();		
-	},
-	onRateTeam: function(){
-    	this._ratingsDialog = this.byId("ratingsDialog");
-    	var dialog = this._ratingsDialog;
-    	dialog.setEscapeHandler(this.onDialogPressEscape);
-    	var consultantID = this.getConsultantID();
-    	//var projectID = sap.ui.getCore().getModel("selModel").getProperty("/Project_ID");
-    	var projectID = PROJECT_ID;
-    	var query = "/Assignments?$expand=ProjectDetails,ConsultantDetails&$filter=ConsultantDetails/Consultant_ID%20ne%20"+consultantID+"%20and ProjectDetails/Project_ID%20eq%20"+projectID;
-
-	     var oModel =  new sap.ui.model.odata.ODataModel(this.getModelAddress());
-	     oModel.read(query,{success: function(oData){ addMembers(oData) 
-	 					}, error: function(){console.log("Error");}}		
-	 	 );
-	 	 var totalHoursText;
-	 	 	 RatingIndicatorArr = [];	
-	         //return all consultants
-	         function  addMembers(oResults) {
-	        	 RatingResults = oResults;
-	        	 var ratingInd ="";
-	        	 var user = "";
-	        	 var vBox = new sap.m.VBox();
-	        	 var hBox;
-	        	 for(var i = 0; i < oResults.results.length; i++){
-	        		 hBox = new sap.m.HBox({
-	        			 alignItems:sap.m.FlexAlignItems.Center
-	        			 })
-	        		 ratingInd = new sap.m.RatingIndicator();
-	        		 RatingIndicatorArr.push(ratingInd);
-	        		 user = new sap.m.Text({
-	        			 renderWhitespace: true,
-	        			 text:"\t"+ oResults.results[i].ConsultantDetails.Consultant_Name
-	        		 });
-	        		 hBox.addItem(ratingInd);
-	        		 hBox.addItem(user);
-	        		 vBox.addItem(hBox);
-	        	 }
-	        	 RatingsErrTxt = new sap.m.Text({
-        			 renderWhitespace: true,
-        			 text:""
-        		 });
-	        	 vBox.addItem(RatingsErrTxt);
-	        	 dialog.addContent(vBox);
-	         }
-    	
-    	dialog.open();
 	},
 	confirmDeleteProject: function(){
 //		console.log("removing projects");

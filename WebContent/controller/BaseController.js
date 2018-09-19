@@ -559,7 +559,83 @@ sap.ui
 										ratingsBtnDisabled: function(){
 											RatingsBtn.setEnabled(false);
 											RatingsBtn.setVisible(false);	
+										},	
+										onRateTeam: function(){
+											console.log("being called here!");
+									    	this._ratingsDialog = this.byId("ratingsDialog");
+									    	var dialog = this._ratingsDialog;
+									    	//console.log(dialog);
+									    	dialog.setEscapeHandler(this.onDialogPressEscape);
+									    	var consultantID = this.getConsultantID();
+									    	var oModel = this.getView().getModel("projectsModel");
+											var projectID = oModel.oData.Project_ID;
+									    	var query = "/Assignments?$expand=ProjectDetails,ConsultantDetails&$filter=ConsultantDetails/Consultant_ID%20ne%20"+consultantID+"%20and ProjectDetails/Project_ID%20eq%20"+projectID;
+										     var oModel =  new sap.ui.model.odata.ODataModel(this.getModelAddress());
+										     oModel.read(query,{success: function(oData){ addMembers(oData) 
+										 					}, error: function(){console.log("Error");}}		
+										 	 );
+										 	 var totalHoursText;
+										 	 	 RatingIndicatorArr = [];	
+										         //return all consultants
+										         function  addMembers(oResults) {
+										        	 RatingResults = oResults;
+										        	 var ratingInd ="";
+										        	 var user = "";
+										        	 var vBox = new sap.m.VBox();
+										        	 var hBox;
+										        	 for(var i = 0; i < oResults.results.length; i++){
+										        		 hBox = new sap.m.HBox({
+										        			 alignItems:sap.m.FlexAlignItems.Center
+										        			 })
+										        		 ratingInd = new sap.m.RatingIndicator();
+										        		 RatingIndicatorArr.push(ratingInd);
+										        		 user = new sap.m.Text({
+										        			 renderWhitespace: true,
+										        			 text:"\t"+ oResults.results[i].ConsultantDetails.Consultant_Name
+										        		 });
+										        		 hBox.addItem(ratingInd);
+										        		 hBox.addItem(user);
+										        		 vBox.addItem(hBox);
+										        	 }
+										        	 RatingsErrTxt = new sap.m.Text({
+									        			 renderWhitespace: true,
+									        			 text:""
+									        		 });
+										        	 vBox.addItem(RatingsErrTxt);
+										        	 dialog.addContent(vBox);
+										         }
+									    	
+									    	dialog.open();
 										},
+										onSubmitRates: function(){
+											var detailDom = this;
+									    	var oModel = this.getView().getModel("projectsModel");
+											var projectID = oModel.oData.Project_ID;
+											var consultantID = this.getConsultantID();
+									    	var resultsString = "";
+										 	for(var i = 0; (i < RatingResults.results.length); i++){
+										 		var rate = RatingIndicatorArr[i].getValue();
+										 		if(rate === 0){
+										 			RatingsErrTxt.setText("Please give each member a rating of at least 1 star");
+										 			return;
+										 		}
+										 		if(resultsString.length > 0 )
+										 			resultsString +=",";
+										 		resultsString +=  RatingResults.results[i].ConsultantDetails.Consultant_ID + ":"+rate;
+										 	}
+										 	//console.log(resultsString);
+										    	$.post('EnterConsultantRatings', { ratingResults:resultsString, projectID:projectID, consultantID: consultantID},function(responseText) {  
+										    		//var array = responseText.split(';');
+										    		MessageToast.show(responseText);
+										    	    detailDom.onRatingsDialogClose();
+										    	    detailDom.ratingsBtnDisabled();
+									    	});			
+
+									    },
+									    onRatingsDialogClose: function(){
+									    	this._ratingsDialog.removeAllContent();
+									    	this._ratingsDialog.close();
+									    },
 										goToConsultants : function(oEvt) {
 											var oModel = this
 													.getOwnerComponent()
