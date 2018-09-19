@@ -176,7 +176,8 @@ sap.ui.define([
 			},
 			
 			onRouteMatched: function(oEvent) {
-				
+				//gets reference to ratings button and saves it in global so that it is accessible in base controller
+				this.setRatingsBtnRef();
 //				///set model for detail page
 				var oModel = this.getOwnerComponent().getModel("oModel");
 				var projectsDetailModel = new JSONModel();
@@ -274,7 +275,9 @@ sap.ui.define([
 							
 							
 			},
-
+			setRatingsBtnRef : function(){
+				RatingsBtn = this.getView().byId("rateTeamBtn");
+			},
 			handleMemberRatingDialog: function (oEvent) {
 				
 				//get id of selected list item(consultantId)

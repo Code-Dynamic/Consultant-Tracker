@@ -632,12 +632,40 @@
 			
 		</semantic:content>
 
-		<semantic:customFooterContent>			
+		<semantic:customFooterContent>	
+				  <HBox>
+						<Button						
+						id="rateTeamBtn" 
+ 						text="Team Member Rating" 
+ 						icon="sap-icon://favorite" 
+ 						press="onRateTeam" 
+ 						enabled="false" 
+ 						visible="false" />
+				 </HBox>					
 				 <HBox>
 						<Button press="editProjectDetails"  text="Edit project" icon="sap-icon://edit"/>
 				</HBox>
 		</semantic:customFooterContent>
 		
 	</semantic:DetailPage>
+	<Dialog 
+		title="Rate Team Members" 
+		id="ratingsDialog">
 	
+		<beginButton>
+		
+		<Button 
+			text="Submit" 
+			press="onSubmitRates" 
+			id="submitRatesButton"/>
+		</beginButton>
+		
+		<endButton>
+		<Button 
+			text="Close" 
+			press="onRatingsDialogClose" 
+			id="closeRatesButton"/>
+		</endButton>
+		
+	</Dialog>
 </mvc:View>

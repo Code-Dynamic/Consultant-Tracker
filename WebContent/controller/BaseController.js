@@ -20,6 +20,9 @@ sap.ui
 					// console.log("initialised");
 
 					var AssignedTaskIDArr = [];
+					var RatingIndicatorArr;
+					var RatingResults;
+					var RatingsErrTxt;
 
 					return Controller
 							.extend(
@@ -554,14 +557,16 @@ sap.ui
 														RatingsBtn.setEnabled(false);
 														RatingsBtn.setVisible(true);
 													}
+													console.log("Kondo");
 											 }
+											 else
+												 console.log("It is late");
 										}, 
 										ratingsBtnDisabled: function(){
 											RatingsBtn.setEnabled(false);
 											RatingsBtn.setVisible(false);	
 										},	
 										onRateTeam: function(){
-											console.log("being called here!");
 									    	this._ratingsDialog = this.byId("ratingsDialog");
 									    	var dialog = this._ratingsDialog;
 									    	//console.log(dialog);

@@ -79,15 +79,6 @@
 				<Menu itemSelected="onMenuAction">
 				
 					<items>
-						<MenuItem
-						id="rateTeamBtn"  
-						text="team member rating" 
-						icon="sap-icon://favorite"
-						press="onRateTeam"
-						enabled="{ratingsBtnConfig>/enabled}" 
-				 		visible="{ratingsBtnConfig>/visible}">
-						</MenuItem>
-						
 						<MenuItem 
 						id="requestUserTimesBtn" 
 						text="time entry" 
@@ -109,7 +100,7 @@
 				 
 		</semantic:customFooterContent>		
 	</semantic:MasterPage>
-<!-- TODO Ngoni, use fragments instead -->
+
 <!-- 	Dialog for user to add times			 -->
  	<Dialog 
  	title="Task Times" 
@@ -132,27 +123,6 @@
 			
 		</endButton>
 		
-	</Dialog>	
-<!-- 	Dialog for user to add times			 -->					
-	<Dialog 
-	title="Rate Team Members" 
-	id="ratingsDialog">
-
-		<beginButton>
-		
-			<Button 
-			text="Submit"
-			press="onSubmitRates" />
-			 
-		</beginButton>
-		
-		<endButton>
-		
-			<Button 
-			text="Close" 
-			press="onRatingsDialogClose" />
-			
-		</endButton>
 	</Dialog>	
 	
 </mvc:View>

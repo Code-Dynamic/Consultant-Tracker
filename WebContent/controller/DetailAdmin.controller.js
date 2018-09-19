@@ -29,7 +29,8 @@ sap.ui.define([
 		oRouter.getRoute("DetailAdmin").attachMatched(this.onRouteMatched, this);
 	},
 	onRouteMatched: function(oEvent) {
-		
+		//gets reference to ratings button and saves it in global so that it is accessible in base controller
+		this.setRatingsBtnRef();
 //		///set model for detail page
 		OModel = this.getOwnerComponent().getModel("oModel");
 		var projectsDetailModel = new JSONModel();
@@ -235,7 +236,9 @@ sap.ui.define([
 					//end the loading indicator
 					sap.ui.core.BusyIndicator.hide();
 	},
-
+	setRatingsBtnRef : function(){
+		RatingsBtn = this.getView().byId("rateTeamBtn");
+	},
 	onSelectTab: function(oEvent){
 		
 		

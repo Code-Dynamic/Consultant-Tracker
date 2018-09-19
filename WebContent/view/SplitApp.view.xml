@@ -63,7 +63,7 @@ controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.Spli
 				press="onLogoutPress" 
 				id="logout" 
 				 type="Transparent" 
-				text="logout" 
+				text="Logout" 
 				icon="sap-icon://log"/>
 				
 

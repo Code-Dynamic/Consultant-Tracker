@@ -135,7 +135,7 @@ sap.ui.define([
 				var thisObj = this;
 				//console.log(projectCompleted);
 				attachModel.read(
-						"/Ratings_Entrys?$expand=ProjectDetails,ConsultantDetails&$filter=ProjectDetails/Project_ID%20eq%20"+projectID+"%20and%20ConsultantDetails/Consultant_ID%20eq%20"+consultantID,{async:false,success: function(oCreatedEn){ thisObj.ratingsBtnConfig(oCreatedEn) }, error: function(e){console.log(e);}}		
+						"/Ratings_Entrys?$expand=ProjectDetails,ConsultantDetails&$filter=ProjectDetails/Project_ID%20eq%20"+projectID+"%20and%20ConsultantDetails/Consultant_ID%20eq%20"+consultantID,{async:false,success: function(oCreatedEn){ thisObj.ratingsBtnConfig(oCreatedEn,projectCompleted) }, error: function(e){console.log(e);}}		
 						);								
 			},
 
