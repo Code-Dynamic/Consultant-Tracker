@@ -3,6 +3,7 @@ var recognizing;
 var recognition;
 var ConsultantAdmin;
 var DeviceIsMobile;
+var RatingsBtn = false;
 sap.ui
 		.define(
 				[ "sap/ui/core/mvc/Controller",
@@ -495,8 +496,6 @@ sap.ui
 														projectId : projectID
 													});
 											// RATINGS CODE
-											// TODO Ngoni: check with Mamba hw
-											// to get odata model address
 											var attachModel = new sap.ui.model.odata.ODataModel(
 													this.getModelAddress());
 											var thisObj = this;
@@ -510,42 +509,12 @@ sap.ui
 																async : false,
 																success : function(
 																		oCreatedEn) {
-																	ratingsBtnConfig(oCreatedEn)
+																	thisObj.ratingsBtnConfig(oCreatedEn,projectCompleted)
 																},
 																error : function(
 																		e) {/* console.log(e); */
 																}
 															});
-											function ratingsBtnConfig(oResults) {
-												var ratingsBtnConfigModel;
-												// user has already given a
-												// rating for the project
-												if (oResults.results.length > 0) {
-													ratingsBtnConfigModel = new sap.ui.model.json.JSONModel(
-															{
-																visible : false,
-																enabled : false
-															});
-												} // project is completed,
-													// rating not yet given
-												else if (projectCompleted === true) {
-													ratingsBtnConfigModel = new sap.ui.model.json.JSONModel(
-															{
-																visible : true,
-																enabled : true
-															});
-												} // project not yet completed
-												else {
-													ratingsBtnConfigModel = new sap.ui.model.json.JSONModel(
-															{
-																visible : true,
-																enabled : false
-															});
-												}
-												thisObj.getView().setModel(
-														ratingsBtnConfigModel,
-														"ratingsBtnConfig");
-											}
 
 											// TODO fix project progress on
 											// project view
@@ -573,6 +542,25 @@ sap.ui
 																				"progressModel");
 															});
 
+										},
+										 ratingsBtnConfig : function(oResults,projectCompleted){
+											 if(RatingsBtn){
+													if(oResults.results.length > 0){
+														this.ratingsBtnDisabled();
+													} //project is completed, rating not yet given
+													else if(projectCompleted === true) {
+														RatingsBtn.setEnabled(true);
+														RatingsBtn.setVisible(true);
+													} //project not yet completed
+													else{
+														RatingsBtn.setEnabled(false);
+														RatingsBtn.setVisible(true);
+													}
+											 }
+										}, 
+										ratingsBtnDisabled: function(){
+											RatingsBtn.setEnabled(false);
+											RatingsBtn.setVisible(false);	
 										},
 										goToConsultants : function(oEvt) {
 											var oModel = this
