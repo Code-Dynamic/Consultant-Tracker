@@ -50,7 +50,10 @@
 						placeholder="Choose a csv file ..."
 						uploadOnChange="true">
 					</u:FileUploader>
-					<Button text="Upload File" press="addClientsViaCSV"/>
+					<Button 
+					id="clientUploadButton"
+					text="Upload File" 
+					press="addClientsViaCSV"/>
 				</l:VerticalLayout>
 					
 			</f:content>

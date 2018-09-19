@@ -117,6 +117,7 @@ sap.ui.define([
 									sap.ui.core.BusyIndicator.hide();
 								}
 								else{
+									sap.ui.core.BusyIndicator.hide();
 									if (oConsutlantAdmin == 1)
 										thisPtr.getRouter().navTo("MasterAdmin", {consultantId: oConsultantId});
 									else

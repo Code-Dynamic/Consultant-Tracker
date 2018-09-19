@@ -1,0 +1,69 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<Popover
+		title="Action Menu"
+		showHeader="false"
+		placement="Top" >
+		
+		<Toolbar>
+			<Button
+			width="100%"
+			icon="sap-icon://add" 
+			text="add client" 
+			press="addClient" 
+			id="addClientButton">
+			</Button>
+		</Toolbar>
+		
+		<Toolbar>
+			<Button 		
+			width="100%"	
+			icon="sap-icon://add" 
+			text="add project" 
+			press="addProject" 
+			id="addProjectButton">
+			</Button>
+		</Toolbar>
+		
+		<Toolbar>	
+			<Button 
+			width="100%"			
+			icon="sap-icon://add" 
+			text="add consultant" 
+			press="addConsultant" 
+			id="addConsultantButton">
+			</Button>
+		</Toolbar>
+		
+		<Toolbar>	
+			<Button
+			width="100%" 
+			id="removeProjectButton" 
+			text="remove project" 
+			icon="sap-icon://delete" 
+			press="confirmDeleteProject">			
+			</Button>
+		</Toolbar>
+		
+		<Toolbar>	
+			<Button 
+			width="100%"
+			id="requestUserTimesBtn" 
+			text="time entry" 
+			icon="sap-icon://time-entry-request" 
+			press="onRequestUserTimes">
+			</Button>
+		</Toolbar>
+		
+		<Toolbar>
+			<Button
+			width="100%"
+			text="communication" 
+	 		id="feedBackAdminBtn" 
+			icon="sap-icon://notification-2" 
+			press="onFeedbackPress">
+			</Button>
+		</Toolbar>
+	</Popover>
+</core:FragmentDefinition>

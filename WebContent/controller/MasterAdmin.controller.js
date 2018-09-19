@@ -497,7 +497,20 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 			this._Dialog.destroy();
 		}
 //		this._oDialog.destroy();
-	},
+		},
+		onOpenPopover: function (oEvent) {
+
+			// create popover
+			if (!this._oPopover) {
+				/*this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.Popover",this);
+				this._oDialog.open();*/
+				this._oPopover = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.Popover", this);
+//				this._oPopover.open();
+				this.getView().addDependent(this._oPopover);
+			}
+
+			this._oPopover.openBy(oEvent.getSource());
+		}
 	
 	/**
 	 * Called when the Controller is destroyed. Use this one to free resources and finalize activities.

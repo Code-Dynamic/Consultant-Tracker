@@ -69,7 +69,7 @@ sap.ui.define([
 					});
 			
 //				set the project detail model
-//				this.getView().setModel(membersDetailModel,"membersModel"); 
+				this.getView().setModel(membersDetailModel,"membersModel"); 
 				
 				var progressArray = [];
 				
