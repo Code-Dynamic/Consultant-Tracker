@@ -515,8 +515,6 @@ sap.ui
 																		e) {/* console.log(e); */
 																}
 															});
-
-											// TODO fix project progress on
 											// project view
 											$.post(
 															'getProjectProgress',
