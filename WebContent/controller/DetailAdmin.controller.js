@@ -117,7 +117,7 @@ sap.ui.define([
 //								var prev = cur;
 //								
 //								for(var x=0; x < i; x++){
-//
+// 
 //									cur = data.results[x].TaskDetails.Task_ID;
 //									
 //										if(prev == cur){
