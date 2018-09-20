@@ -548,7 +548,7 @@ sap.ui
 											 if(RatingsBtn){
 													if(oResults.results.length > 0){
 														this.ratingsBtnDisabled();
-													} //project is completed, rating not yet given
+		 											} //project is completed, rating not yet given
 													else if(projectCompleted === true) {
 														RatingsBtn.setEnabled(true);
 														RatingsBtn.setVisible(true);
