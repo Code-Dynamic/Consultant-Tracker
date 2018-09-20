@@ -11,7 +11,7 @@
 	
 		<content>
 	<Table 
-			
+			 
 			items="{assignedTasksModel>/results}"
 			mode= "SingleSelectMaster"
 			noDataText="No activities are assigned to the selected task.">
