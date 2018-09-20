@@ -112,7 +112,7 @@ sap.ui.define([
 //								console.log("TaskDetail: "+data.results[0].TaskDetails.Task_ID);
 //								var i = data.results.length;
 //								var k = 0;
-//								var j =0;
+//								var j =0; 
 //								var cur = data.results[0].TaskDetails.Task_ID;
 //								var prev = cur;
 //								
