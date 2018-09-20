@@ -557,10 +557,9 @@ sap.ui
 														RatingsBtn.setEnabled(false);
 														RatingsBtn.setVisible(true);
 													}
-													console.log("Kondo");
+										
 											 }
-											 else
-												 console.log("It is late");
+										
 										}, 
 										ratingsBtnDisabled: function(){
 											RatingsBtn.setEnabled(false);

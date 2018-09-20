@@ -9,7 +9,7 @@
 		<Toolbar>
 			<Button
 			width="100%"
-			icon="sap-icon://add" 
+			icon="sap-icon://business-card" 
 			text="add client" 
 			press="addClient" 
 			id="addClientButton">
@@ -19,7 +19,7 @@
 		<Toolbar>
 			<Button 		
 			width="100%"	
-			icon="sap-icon://add" 
+			icon="sap-icon://folder" 
 			text="add project" 
 			press="addProject" 
 			id="addProjectButton">
@@ -29,7 +29,7 @@
 		<Toolbar>	
 			<Button 
 			width="100%"			
-			icon="sap-icon://add" 
+			icon="sap-icon://employee" 
 			text="add consultant" 
 			press="addConsultant" 
 			id="addConsultantButton">
@@ -41,7 +41,7 @@
 			width="100%" 
 			id="removeProjectButton" 
 			text="remove project" 
-			icon="sap-icon://delete" 
+			icon="sap-icon://folder" 
 			press="confirmDeleteProject">			
 			</Button>
 		</Toolbar>

@@ -15,6 +15,7 @@ sap.ui.define([
 	"use strict";
 	var OModel;
 	var thisView;
+	var taskId;
 	return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.DetailAdmin", {
 
 /**
@@ -72,6 +73,8 @@ sap.ui.define([
 				this.getView().setModel(membersDetailModel,"membersModel"); 
 				
 				var progressArray = [];
+				var assignedHoursArray = [];
+				var workedHoursArray = [];
 				
 				//6
 				//get the progress % of the tasks and put the results in an array
@@ -83,6 +86,11 @@ sap.ui.define([
 				var projectProgress;
 				var progress;
 				
+				for(var p=0; p<100; p++){
+					progressArray[p] = 0;
+					assignedHoursArray[p] =0;
+					workedHoursArray[p] =0;
+				}
 				
 				var tileHoursModel = new JSONModel();	
 				var tileProjectProgressModel = new JSONModel();
@@ -99,26 +107,46 @@ sap.ui.define([
 				          value1: oArgs.projectId
 				     })],
 						  success: function(data){
-//							console.log("assigned_Task data: "+data);
-			
 								var results = JSON.stringify(data);
-//								console.log("assigned_Task data: "+results);
-								//console.log(results);
-								
+//								TODO IS TIME ENTERED ON TASK OR ASSIGNED TASK  j 
 								var i = data.results.length;
+								var k = 0;
+								var j =0;
+								var cur = data.results[0].TaskDetails.Task_ID;
+								var prev = cur;
 								
 								for(var x=0; x < i; x++){
-									
-  
-									expectedHours += parseInt(data.results[x].Assigned_Hours, 10) ;
-									currentHours +=  parseInt(data.results[x].Hours_Worked, 10);
-									
-									progress = ((data.results[x].Hours_Worked)/(data.results[x].Assigned_Hours) )* 100;
-									progressArray[x] = progress;
-									
-									totalHours += expectedHours;
-									totalWorkedHours += currentHours;
 
+									cur = data.results[x].TaskDetails.Task_ID;
+									
+										if(prev == cur){
+
+										expectedHours += parseInt(data.results[x].Assigned_Hours, 10) ;
+										currentHours +=  parseInt(data.results[x].Hours_Worked, 10);
+										
+										assignedHoursArray[j] = assignedHoursArray[j]+parseInt(data.results[x].Assigned_Hours, 10);
+										workedHoursArray[j] = workedHoursArray[j]+parseInt(data.results[x].Hours_Worked, 10);
+										
+										progress = ((data.results[x].Hours_Worked)/(data.results[x].Assigned_Hours) )* 100;
+
+										totalHours += expectedHours;
+										totalWorkedHours += currentHours;
+										
+									}else{
+										prev = cur;
+										j++;
+										expectedHours += parseInt(data.results[x].Assigned_Hours, 10) ;
+										currentHours +=  parseInt(data.results[x].Hours_Worked, 10);
+
+										assignedHoursArray[j] = assignedHoursArray[j]+parseInt(data.results[x].Assigned_Hours, 10);
+										workedHoursArray[j] = workedHoursArray[j]+parseInt(data.results[x].Hours_Worked, 10);
+										
+										progress = ((data.results[x].Hours_Worked)/(data.results[x].Assigned_Hours) )* 100;
+
+										totalHours += expectedHours;
+										totalWorkedHours += currentHours;
+									}
+									
 								}
 								
 								
@@ -132,7 +160,7 @@ sap.ui.define([
 								
 								tileHoursModel.setData(data);
 								tileProjectProgressModel.setData(data);
-								//console.log(data);
+						 
 						  },
 						  error: function(oError) {
 							  alert("error");
@@ -155,16 +183,17 @@ sap.ui.define([
 				          value1: oArgs.projectId
 				     })],
 					  success: function(data){
-						 var result = JSON.stringify(data);
-						 tasksDetailModel.setData(data);
-//						 alert(result);
-//						 console.log("tasksModel##" +result);
-						 countTasks = data.results.length;
-						 for(var x=0; x<countTasks; x++){
-							 data.results[x].progress = progressArray[x];
-						 }
-						 
-						 tasksDetailModel.setData(data);
+						
+							 var result = JSON.stringify(data);
+							 tasksDetailModel.setData(data);
+							 countTasks = data.results.length;
+							 
+							 for(var x=0; x<countTasks; x++){
+								 progressArray[x] = ((workedHoursArray[x]/assignedHoursArray[x])*100);
+								 data.results[x].progress = parseInt(progressArray[x]);
+							}
+							 
+							 tasksDetailModel.setData(data);
 					  },
 					  error: function(oError) {
 						  alert("error");
@@ -240,6 +269,116 @@ sap.ui.define([
 	setRatingsBtnRef : function(){
 		RatingsBtn = this.getView().byId("rateTeamBtn");
 	},
+	rowSelect: function(oEvent){
+
+		var oSelectedItem = oEvent.getParameter("listItem").getId();
+		console.log("selected item: "+oSelectedItem);
+		var tableId = oSelectedItem[oSelectedItem.length-1];
+		console.log("id: "+tableId);
+		
+		OModel.read("/Tasks", {
+
+			filters: [ 
+				new sap.ui.model.Filter({
+		          path: "ProjectDetails/Project_ID",
+		          operator: sap.ui.model.FilterOperator.EQ,
+		          value1: this.oProjectId
+		     })],
+			  success: function(data){
+
+//				loop to find the corresponding task as selected by the checkbox
+//				loop to the corresponding task from the table
+
+					taskId = parseInt(data.results[tableId].Task_ID);
+
+					//get all substaskes of the selected task.
+					//put the query inside because could not access taskID
+					OModel.read("/Assigned_Tasks", {
+						urlParameters: {
+							"$expand" : "TaskDetails"
+				        },
+						filters: [ 
+							new sap.ui.model.Filter({
+					          path: "TaskDetails/Task_ID",
+					          operator: sap.ui.model.FilterOperator.EQ,
+					          value1: taskId
+					     })],
+						  success: function(data){
+
+//							loop to find the corresponding task as selected by the checkbox
+//							loop to the corresponding task from the table
+							var countAssignedTasks = data.results.length;
+
+							//calculating each assigned task progress//not stored in the database
+							for(var q=0; q<countAssignedTasks; q++){
+								
+								var A = parseInt(data.results[q].Hours_Worked);
+								var B = parseInt(data.results[q].Assigned_Hours);
+								
+								data.results[q].progress = parseInt((A/B)*100);
+							}
+							assignedTasksModel.setData(data);
+						  },
+						  error: function(oError) {
+							  alert("Error");
+							 }
+						});
+
+			  },
+			  error: function(oError) {
+				  alert("Error");
+				 }
+			});
+
+		var assignedTasksModel = new JSONModel();
+	
+
+		this.getView().setModel(assignedTasksModel,"assignedTasksModel");
+		 //open the dialog
+		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAssignedTasks",this);
+		this._oDialog.setModel(this.getView().getModel("assignedTasksModel"),"assignedTasksModel");
+		this._oDialog.open();	
+	},
+		
+	onChangeCheckbox:function(oEvent){
+		//getting selected item on table
+		var oSelectedListItem = oEvent.getSource().getParent().setSelected(true)
+		var oSelectedRow =  oEvent.getSource().getParent().getId();
+		
+        var value = oEvent.getSource().getSelected();
+        if(value === true){
+        	//disable check-box action
+            var completed = oEvent.getSource().setEnabled(false);
+            
+        }
+
+        var tableId = oSelectedRow[oSelectedRow.length-1];
+        
+        //-----------------------------//
+		OModel.read("/Assigned_Tasks", {
+			urlParameters: {
+				"$expand" : "TaskDetails"
+	        },
+			filters: [ 
+				new sap.ui.model.Filter({
+		          path: "TaskDetails/Task_ID",
+		          operator: sap.ui.model.FilterOperator.EQ,
+		          value1: taskId
+		     })],
+			  success: function(data){
+				  
+				  //to get the ID of the assigned task that is marked as completed
+				  var assignedTaskId = data.results[tableId].Assigned_Task_ID;
+
+			  },
+			  error: function(oError) {
+				  alert("Error");
+				 }
+			});
+        //----------------------------//
+
+    },
+
 	onSelectTab: function(oEvent){
 		
 		

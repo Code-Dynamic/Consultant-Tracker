@@ -358,9 +358,11 @@
 			text="Tasks">
 
 		<Table 
-			id="idProductsTable"
-			inset="false"
-			items="{tasksModel>/results}">
+			id="idTasksTable"
+			items="{tasksModel>/results}"
+			selectionChange = "rowSelect"
+			mode= "SingleSelectMaster"
+			noDataText="No tasks available for the selected project.">
 			
 		<headerToolbar>
 		
@@ -417,45 +419,34 @@
 			<Column
 				width="12em">
 				<Text text="Name"/>
-				
 			</Column>
 			
 			<Column
 				minScreenWidth="Tablet"
 				demandPopin="true">
 				<Text text="Due Date" />
-				
 			</Column>
 			
 			<Column
 				minScreenWidth="Desktop"
 				demandPopin="true"
 				hAlign="End">
-				<Text text="Progress" />
-				
+				<Text text="Progress" />	
 			</Column>
 			
 			<Column
 				minScreenWidth="Desktop"
 				demandPopin="true"
 				hAlign="Center">
-				<Text text="Feedback" />
-				
+				<Text text="Status" />				
 			</Column>
-			
-			<Column
-				minScreenWidth="Desktop"
-				demandPopin="true"
-				hAlign="Center">
-				<Text text="Add activity" />
-				
-			</Column>
+						
 		</columns>
 		
 		<items>
 		
 			<ColumnListItem>
-			
+			 
 				<cells>
 				
 					<ObjectIdentifier
@@ -474,12 +465,7 @@
 					state="Warning"
 					displayOnly="true" />		
 				
-					<Text text="Inprogress" />
-							
-					<Button 
-					icon="sap-icon://add-activity"  
-					press="onAddActivity">
-					</Button>
+					<Text text="In progress {tasksModel>Task_ID}" />
 					
 				</cells>
 				
@@ -492,6 +478,7 @@
 
 					</IconTabFilter>
 					
+						
 					
 <!-- 					<IconTabFilter
 						 id="iconTabBarFilter4"
