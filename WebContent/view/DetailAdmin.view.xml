@@ -224,6 +224,7 @@
 									<ToolbarSpacer />
 					
 						<Button
+							id="delete_team_member"
 							icon="sap-icon://delete" 
 							text="Team member"
 							press="onDeleteConsultantFromProject">
@@ -243,6 +244,7 @@
 						</Button>		
 						
 						<Button
+							id="add_team_member"
 							icon="sap-icon://add" 
 							text="Team member"
 							press="addConsultantToProject">
@@ -440,6 +442,13 @@
 				hAlign="Center">
 				<Text text="Status" />				
 			</Column>
+			
+			<Column
+				minScreenWidth="Desktop"
+				demandPopin="true"
+				hAlign="Center">
+				<Text text="Add activity" />				
+			</Column>
 						
 		</columns>
 		
@@ -467,6 +476,11 @@
 				
 					<Text text="In progress {tasksModel>Task_ID}" />
 					
+					<Button 
+					id="addActivityButton"
+					icon="sap-icon://add-activity"  
+					press="onAddActivity">
+					</Button>	
 				</cells>
 				
 			</ColumnListItem>

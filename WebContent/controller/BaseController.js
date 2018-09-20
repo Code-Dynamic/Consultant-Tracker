@@ -428,6 +428,11 @@ sap.ui
 										goToProjects : function(selectFirstProject) {
 											//if no argument is passed to function, a project is not opened
 											var numArguments = arguments.length;
+/*											if(numArguments){
+												if(oOdata.length == 0){
+													numArguments = 0;
+												}
+											}*/
 											//console.log(numArguments);
 											var thisDomObj = this;
 											var projectsModel = new sap.ui.model.json.JSONModel();
@@ -457,7 +462,7 @@ sap.ui
 																					projectsModel,
 																					"projectsModel");
 																	if (data.results.length > 0) {
-
+																			console.log("coming here");
 																		var resultsLocationStr;
 																		if (selectFirstProject) {
 																			resultsLocationStr = "/results/0";

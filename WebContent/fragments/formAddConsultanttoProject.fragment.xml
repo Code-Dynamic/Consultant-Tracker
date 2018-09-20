@@ -13,13 +13,13 @@
 		cancel="onCancel"
 		items="{consultants>/results}" >
 		
-		<StandardListItem
-			title="{consultants>Consultant_Name} {consultants>Consultant_Surname}"
-			description="{Role}"
-			iconDensityAware="false"
-			iconInset="false"
-			type="Active" />
+			<StandardListItem
+				title="{consultants>Consultant_Name} {consultants>Consultant_Surname}"
+				description="{Role}"
+				iconDensityAware="false"
+				iconInset="false"
+				type="Active" />
 
-	</SelectDialog>
+		</SelectDialog>
 
 </core:FragmentDefinition>

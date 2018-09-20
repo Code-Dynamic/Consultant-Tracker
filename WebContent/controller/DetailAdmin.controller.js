@@ -164,6 +164,7 @@ sap.ui.define([
 						 
 						  },
 						  error: function(oError) {
+							  alert(oError.error);
 							  alert("error");
 							 }
 						});

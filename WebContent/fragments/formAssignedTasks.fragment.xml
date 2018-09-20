@@ -26,10 +26,10 @@
 					
 					<ToolbarSpacer/>
 						
-					<Button 
+<!-- 					<Button 
 					icon="sap-icon://add-activity"  
 					press="onAddActivity">
-					</Button>	
+					</Button>	 -->
 								
 				</content>
 				

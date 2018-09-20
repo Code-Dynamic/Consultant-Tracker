@@ -22,7 +22,7 @@ public class SeleniumTest {
 //		UserCases.testCases(driver);
 //		ConsultantCases.testCases(driver);		
 
-//		driver.close();
+		driver.close();
 		
 	}
 }
