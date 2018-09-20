@@ -1,0 +1,130 @@
+<core:FragmentDefinition 
+	xmlns="sap.m" 
+	xmlns:u="sap.ui.unified"
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+	xmlns:core="sap.ui.core"
+	xmlns:semantic="sap.m.semantic">
+	
+	
+	<Dialog title="{assignedTasksModel/results[0]/TaskDetails/Name}">
+	
+		<content>
+	<Table 
+			
+			items="{assignedTasksModel>/results}"
+			mode= "SingleSelectMaster"
+			noDataText="No activities are assigned to the selected task.">
+			
+		<headerToolbar>
+		
+			<Toolbar>
+			
+				<content>
+						
+					<ToolbarSpacer/>
+					
+					<ToolbarSpacer/>
+						
+					<Button 
+					icon="sap-icon://add-activity"  
+					press="onAddActivity">
+					</Button>	
+								
+				</content>
+				
+			</Toolbar>
+			
+		</headerToolbar>
+		
+		<columns>
+			<Column
+				width="12em">
+				<Text text="Description"/>
+			</Column>
+			
+			<Column
+				minScreenWidth="Tablet"
+				demandPopin="true">
+				<Text text="Due Date" />
+			</Column>
+			
+			<Column
+				minScreenWidth="Desktop"
+				demandPopin="true"
+				hAlign="End">
+				<Text text="Progress" />	
+			</Column>
+			
+			<Column
+				minScreenWidth="Desktop"
+				demandPopin="true"
+				hAlign="Center">
+				<Text text="Allocated  time" />				
+			</Column>
+			
+			<Column
+				minScreenWidth="Desktop"
+				demandPopin="true"
+				hAlign="Center">
+				<Text text="Completed" />				
+			</Column>
+				
+		</columns>
+		
+		<items>
+		
+			<ColumnListItem>
+			 
+				<cells>
+				
+					<ObjectIdentifier
+						title="{assignedTasksModel>Name}"/>
+						
+					<Text
+					text="{ path: 
+					 			'assignedTasksModel>Due_Date',
+								formatter: '.formatter.date'}"/>
+					
+					<ProgressIndicator
+					class="sapUiSmallMarginBottom"
+					percentValue="{assignedTasksModel>progress}"
+					displayValue="{assignedTasksModel>progress} %"
+					showValue="true"
+					state="Warning"
+					displayOnly="true" />		
+				
+					<Text text="{assignedTasksModel>Assigned_Hours}" />
+					
+					<CheckBox valueState="Error"  select ="onChangeCheckbox" enabled="true" selected="false" />
+					
+				</cells>
+				
+			</ColumnListItem>
+			
+		</items>
+		
+	</Table>
+	
+		
+		</content>
+		
+		<beginButton>
+		
+			<Button 
+			text="Submit" 
+			press="onSubmitConsultant"/>
+			
+		</beginButton>
+		
+		<endButton>
+		
+			<Button 
+			text="Close" 
+			press="onClose"/>
+			
+		</endButton>
+		
+	</Dialog>
+	
+</core:FragmentDefinition>
