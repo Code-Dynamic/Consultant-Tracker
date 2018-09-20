@@ -504,7 +504,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 			if (!this._oPopover) {
 				/*this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.Popover",this);
 				this._oDialog.open();*/
-				this._oPopover = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.Popover", this);
+				this._oPopover = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.popoverMenu", this);
 //				this._oPopover.open();
 				this.getView().addDependent(this._oPopover);
 			}
