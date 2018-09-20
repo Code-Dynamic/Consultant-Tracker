@@ -922,7 +922,7 @@ sap.ui
 					recognition.stop();
 					reset();
 				} else {
-					var btn = sap.ui.getCore().byId("__button1-img");
+					var btn = sap.ui.getCore().byId("__component0---MasterAdmin--microphoneButton-img");
 					btn.setProperty("color","#ef6161");
 					console.log("starting");
 					recognition.start();
@@ -931,7 +931,7 @@ sap.ui
 				
 			
 				function reset() {
-					var btn = sap.ui.getCore().byId("__button1-img");
+					var btn = sap.ui.getCore().byId("__component0---MasterAdmin--microphoneButton-img");
 					btn.setProperty("color","##cae4fb");
 					console.log("Resetting");
 					recognizing = false;

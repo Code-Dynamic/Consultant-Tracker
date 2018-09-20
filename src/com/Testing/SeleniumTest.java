@@ -1,5 +1,6 @@
 package com.Testing;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -15,6 +16,7 @@ public class SeleniumTest {
 		driver.get("http://localhost:8080/Consultant-Tracker/#/MasterAdmin/1435");
 		driver.navigate().refresh();
 			
+		((JavascriptExecutor)driver).executeScript("showToast();");
 //		LoginCases.testCases(driver);
 //		ProjectCases.testCases(driver);
 //		UserCases.testCases(driver);

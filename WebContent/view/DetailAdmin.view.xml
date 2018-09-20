@@ -617,7 +617,10 @@
 							
 	
 							 <HBox>
-								 <Button press="ShowHide" text="Show/Hide Route"/>
+								 <Button 
+								 id="show_hide_route_button"
+								 press="ShowHide"
+								 text="Show/Hide Route"/>
 							</HBox>
 							 <Text text="Distance:" id="Distance" />
 								

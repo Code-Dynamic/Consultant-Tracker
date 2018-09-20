@@ -143,7 +143,10 @@
 		</semantic:content>
 		
 		<semantic:customFooterContent>
-			<Button press="TestMicrophone" icon="sap-icon://microphone"/>
+			<Button 
+			id="microphoneButton"
+			press="TestMicrophone"
+			icon="sap-icon://microphone"/>
 			
 			<l:VerticalLayout>
 				<l:content>
