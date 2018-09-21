@@ -12,10 +12,14 @@ public class MapTestingCases {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		
 		//Testing project without client assigned
-		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__item2-__component0---MasterAdmin--projectsList-1-content"))).click();
-		Thread.sleep(500);
+		Thread.sleep(1000);
+//		__item2-__component0---MasterAdmin--projectsList-1-content
+//		__component0---MasterAdmin--projectObjectListItem-__component0---MasterAdmin--projectsList-0-content
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--projectObjectListItem-__component0---MasterAdmin--projectsList-0-content"))).click();
+		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--iconTabBarFilter5"))).click();
+		Thread.sleep(2000);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--show_hide_route_button"))).click();
 		Thread.sleep(2000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--show_hide_route_button"))).click();
 		Thread.sleep(2000);
@@ -23,16 +27,17 @@ public class MapTestingCases {
 		Thread.sleep(2000);
 		
 		//Testing project without client assigned
-		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__item2-__component0---MasterAdmin--projectsList-2-content"))).click();
-		Thread.sleep(500);
+		Thread.sleep(1000);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--projectObjectListItem-__component0---MasterAdmin--projectsList-1-content"))).click();
+		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--iconTabBarFilter5"))).click();
 		Thread.sleep(2000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--show_hide_route_button"))).click();
 		Thread.sleep(2000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--show_hide_route_button"))).click();
 		Thread.sleep(2000);
-		
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--show_hide_route_button"))).click();
+		Thread.sleep(2000);
 		
 	}
 }

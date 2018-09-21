@@ -22,7 +22,7 @@ public class Interface_Demo {
 		WebDriverWait wait = new WebDriverWait(driver, 10);
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		
-		//Select 2nd Project
+		/*//Select 2nd Project
 		Thread.sleep(700);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__item2-__component0---MasterAdmin--projectsList-1-content"))).click();
 		Thread.sleep(500);
@@ -57,7 +57,11 @@ public class Interface_Demo {
 		Thread.sleep(700);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeActivityFrag"))).sendKeys("03");
 		Thread.sleep(500);	
-		action.sendKeys(Keys.ESCAPE).perform();
+		action.sendKeys(Keys.ESCAPE).perform();*/
+		
+		ProjectCases.testCases(driver);
+		ConsultantCases.testCases(driver);
+		
 		
 		driver.close();
 		

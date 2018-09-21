@@ -17,7 +17,7 @@ public class SeleniumTest {
 //		driver.navigate().refresh();
 			
 //		LoginCases.testCases(driver);
-		CSV_TestingCases.testCases(driver);
+//		CSV_TestingCases.testCases(driver);
 		MapTestingCases.testCases(driver);
 //		ProjectCases.testCases(driver);
 //		UserCases.testCases(driver);

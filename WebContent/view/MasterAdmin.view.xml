@@ -51,9 +51,11 @@
 							<List id="projectsList"
 								items="{projectsModel>/results/}">
 								
-								<items>
+								<items
+									id="projectListItems">
 								
 									<ObjectListItem
+										id="projectObjectListItem"
 										title="{projectsModel>Project_Name}"
 										type="Active"
 										press="onProjectListItemPress">
@@ -116,6 +118,7 @@
 								<items>
 								
 									<ObjectListItem
+										id="consultantObjectListItem"
 										title="{consultantsModel>Consultant_Name} {consultantsModel>Consultant_Surname}"
 										type="Active"
 										press="onConsultantListItemPress">

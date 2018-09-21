@@ -120,6 +120,7 @@
 		<endButton>
 		
 			<Button 
+			id="closeAssignedTasks"
 			text="Close" 
 			press="onClose"/>
 			
