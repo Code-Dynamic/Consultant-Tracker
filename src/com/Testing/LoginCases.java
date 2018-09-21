@@ -13,7 +13,7 @@ public class LoginCases {
 	public static void testCases(WebDriver driver) throws InterruptedException {
 		WebDriverWait wait = new WebDriverWait(driver, 20);
 		JavascriptExecutor js = (JavascriptExecutor) driver;
-		
+	
 		/*// Login Test Case 1
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---LoginView--username-email-inner"))).clear();
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---LoginView--password-inner"))).clear();

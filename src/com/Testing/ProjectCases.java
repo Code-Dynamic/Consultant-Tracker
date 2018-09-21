@@ -12,7 +12,7 @@ public class ProjectCases {
 	public static void testCases(WebDriver driver) throws InterruptedException {
 		WebDriverWait wait = new WebDriverWait(driver, 10);
 		JavascriptExecutor js = (JavascriptExecutor) driver;
-		
+
 		//Show Map Of Client
 //		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--iconTabBarFilter5"))).click();
 		
