@@ -466,6 +466,18 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 			    var strCSV = e.target.result;
 			    var rows = strCSV.split("\n");
 			    
+			    console.log("Length file: "+rows[0].split(",").length);
+			    //Test errors
+			    if(strCSV.length == 0){
+			    	MessageToast.show("Error! The CSV File is empty");
+			    	return;
+			    }
+			    else if(rows[0].split(",").length != 6){
+			    	MessageToast.show("Error! The CSV File has a wrong format");
+			    	return;
+			    }
+			    	
+			    
 			    var oDataProjects =   new sap.ui.model.odata.v2.ODataModel(t.getModelAddress());
 		    	var i;
 			    for (i = 1; i < rows.length; i++) { 

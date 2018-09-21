@@ -29,7 +29,7 @@
 					<Label text="Activity description"/>
 					<TextArea id="AT_Description"/>
 					
-					<Label text="Activity deadline"/>
+					<Label text="Activity startdate"/>
 					<DatePicker 
 						id="AT_dateAssigned" 
 						width="100%" 

@@ -11,14 +11,34 @@ public class CSV_TestingCases {
 		WebDriverWait wait = new WebDriverWait(driver, 20);
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		
-		//Add Clients Via CSV
+		//Add Empty  Via CSV
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--popover_buttonId"))).click();
+		Thread.sleep(500);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("addClientButton"))).click();
+		Thread.sleep(500);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("csvUploader-fu"))).sendKeys("C:\\COS301-Testing\\empty_clients.csv");
+		Thread.sleep(500);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("clientUploadButton"))).click();
+//		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeClientModalButton"))).click();
+		
+		//Add CSV with Wrong Format
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--popover_buttonId"))).click();
+		Thread.sleep(500);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("addClientButton"))).click();
+		Thread.sleep(500);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("csvUploader-fu"))).sendKeys("C:\\COS301-Testing\\wrongFormat_clients.csv");
+		Thread.sleep(500);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("clientUploadButton"))).click();
+//		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeClientModalButton"))).click();
+				
+		//Add Working  Via CSV
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--popover_buttonId"))).click();
 		Thread.sleep(500);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("addClientButton"))).click();
 		Thread.sleep(500);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("csvUploader-fu"))).sendKeys("C:\\COS301-Testing\\clients.csv");
 		Thread.sleep(500);
-//				wait.until(ExpectedConditions.elementToBeClickable(By.id("clientUploadButton"))).click();
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeClientModalButton"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("clientUploadButton"))).click();
+//		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeClientModalButton"))).click();
 	}
 }
