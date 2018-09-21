@@ -16,6 +16,7 @@ sap.ui.define([
 	var OModel;
 	var thisView;
 	var taskId;
+	var projectId;
 	return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.DetailAdmin", {
 
 /**
@@ -39,6 +40,9 @@ sap.ui.define([
 		var oArgs, oView;
 		oArgs = oEvent.getParameter("arguments");
 		
+		///
+		projectId = oArgs.projectId
+		
 		//variables for counting members and tasks on a project
 		var countMembers;
 		var countTasks;
@@ -48,7 +52,8 @@ sap.ui.define([
 			var membersDetailModel = new JSONModel();	
 			OModel.read("/Assignments", {
 				urlParameters: {
-					"$expand" : "ProjectDetails,ConsultantDetails"
+					"$expand" : "ProjectDetails",
+					"$expand" : "ConsultantDetails"
 		        },
 				filters: [ new sap.ui.model.Filter({
 			          path: "ProjectDetails/Project_ID",
@@ -98,69 +103,76 @@ sap.ui.define([
 				OModel.read("/Assigned_Tasks", {
 					
 					urlParameters: {
-						"$expand" : "TaskDetails,TaskDetails/ProjectDetails"
-			        },
+						"$expand" : "TaskDetails",
+						"$expand" : "TaskDetails/ProjectDetails"
+					},
 					filters: [ new sap.ui.model.Filter({
 				          path: "TaskDetails/ProjectDetails/Project_ID",
 				          operator: sap.ui.model.FilterOperator.EQ,
 				          value1: oArgs.projectId
 				     })],
 						  success: function(data){
-////							  console.log("Test 1::::");
-//								var results = JSON.stringify(data);
-////								TODO IS TIME ENTERED ON TASK OR ASSIGNED TASK  j 
-//								console.log("TaskDetail: "+data.results[0].TaskDetails.Task_ID);
-//								var i = data.results.length;
-//								var k = 0;
-//								var j =0; 
-//								var cur = data.results[0].TaskDetails.Task_ID;
-//								var prev = cur;
-//								
-//								for(var x=0; x < i; x++){
-// 
-//									cur = data.results[x].TaskDetails.Task_ID;
-//									
-//										if(prev == cur){
-//
-//										expectedHours += parseInt(data.results[x].Assigned_Hours, 10) ;
-//										currentHours +=  parseInt(data.results[x].Hours_Worked, 10);
-//										
-//										assignedHoursArray[j] = assignedHoursArray[j]+parseInt(data.results[x].Assigned_Hours, 10);
-//										workedHoursArray[j] = workedHoursArray[j]+parseInt(data.results[x].Hours_Worked, 10);
-//										
-//										progress = ((data.results[x].Hours_Worked)/(data.results[x].Assigned_Hours) )* 100;
-//
-//										totalHours += expectedHours;
-//										totalWorkedHours += currentHours;
-//										
-//									}else{
-//										prev = cur;
-//										j++;
-//										expectedHours += parseInt(data.results[x].Assigned_Hours, 10) ;
-//										currentHours +=  parseInt(data.results[x].Hours_Worked, 10);
-//
-//										assignedHoursArray[j] = assignedHoursArray[j]+parseInt(data.results[x].Assigned_Hours, 10);
-//										workedHoursArray[j] = workedHoursArray[j]+parseInt(data.results[x].Hours_Worked, 10);
-//										
-//										progress = ((data.results[x].Hours_Worked)/(data.results[x].Assigned_Hours) )* 100;
-//
-//										totalHours += expectedHours;
-//										totalWorkedHours += currentHours;
-//									}
-//									
-//								}
-//								
-//								
-//								data.expected = expectedHours;
-//								data.current = currentHours;
-//								
-//								//getting overall progress of the project
-//								projectProgress = ((totalWorkedHours/totalHours)*100).toFixed(0);
-//								var a = parseFloat(projectProgress);
-//								data.projectProgress = a;
-//								
-//								tileHoursModel.setData(data);
-//								tileProjectProgressModel.setData(data);
+							  console.log("Test 1::::");
+								var results = JSON.stringify(data);
+								if(data.results == null){
+									
+								}else{
+//									TODO IS TIME ENTERED ON TASK OR ASSIGNED TASK  j 
+									console.log("TaskDetail 1: "+results);
+									console.log("TaskDetail 2: "+data.results);
+									var i = data.results.length;
+									var k = 0;
+									var j =0; 
+									var cur = data.results[0].TaskDetails.Task_ID;
+									var prev = cur;
+									
+									for(var x=0; x < i; x++){
+	 
+										cur = data.results[x].TaskDetails.Task_ID;
+											console.log("cur : prev "+cur+" : "+prev);
+											if(prev == cur){
+
+											expectedHours += parseInt(data.results[x].Assigned_Hours, 10) ;
+											currentHours +=  parseInt(data.results[x].Hours_Worked, 10);
+											console.log("ASSIGN : Worked "+expectedHours+" : "+currentHours);
+											assignedHoursArray[j] = assignedHoursArray[j]+expectedHours;
+											workedHoursArray[j] = workedHoursArray[j]+currentHours;
+											
+											progress = ((data.results[x].Hours_Worked)/(data.results[x].Assigned_Hours) )* 100;
+
+											totalHours += expectedHours;
+											totalWorkedHours += currentHours;
+											
+										}else{
+											prev = cur;
+											j++;
+											expectedHours += parseInt(data.results[x].Assigned_Hours, 10) ;
+											currentHours +=  parseInt(data.results[x].Hours_Worked, 10);
+
+											assignedHoursArray[j] = assignedHoursArray[j]+parseInt(data.results[x].Assigned_Hours, 10);
+											workedHoursArray[j] = workedHoursArray[j]+parseInt(data.results[x].Hours_Worked, 10);
+											
+											progress = ((data.results[x].Hours_Worked)/(data.results[x].Assigned_Hours) )* 100;
+
+											totalHours += expectedHours;
+											totalWorkedHours += currentHours;
+										}
+										
+									}
+									
+									
+									data.expected = expectedHours;
+									data.current = currentHours;
+									
+									//getting overall progress of the project
+									projectProgress = ((totalWorkedHours/totalHours)*100).toFixed(0);
+									var a = parseFloat(projectProgress);
+									data.projectProgress = a;
+									
+									tileHoursModel.setData(data);
+									tileProjectProgressModel.setData(data);
+								}
+								////////////////////////////////////////////end else
 						 
 						  },
 						  error: function(oError) {
@@ -209,7 +221,7 @@ sap.ui.define([
 				//read the Project table based on id
 					OModel.read("/Projects("+oArgs.projectId+")", {
 						urlParameters: {
-				            "$expand" : "ClientDetails",
+				            "$expand" : "ClientDetails"
 				        },
 						  success: function(data){
 							  data.countMembers = countMembers;
@@ -280,12 +292,14 @@ sap.ui.define([
 		console.log("id: "+tableId);
 		
 		OModel.read("/Tasks", {
-
+			urlParameters: {
+	            "$expand" : "ProjectDetails"
+	        },
 			filters: [ 
 				new sap.ui.model.Filter({
 		          path: "ProjectDetails/Project_ID",
 		          operator: sap.ui.model.FilterOperator.EQ,
-		          value1: this.oProjectId
+		          value1: projectId
 		     })],
 			  success: function(data){
 

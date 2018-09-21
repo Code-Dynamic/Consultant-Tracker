@@ -474,7 +474,7 @@
 					state="Warning"
 					displayOnly="true" />		
 				
-					<Text text="In progress {tasksModel>Task_ID}" />
+					<Text text="In progress " />
 					
 					<Button 
 					id="addActivityButton"

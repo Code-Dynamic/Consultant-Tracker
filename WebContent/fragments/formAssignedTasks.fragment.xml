@@ -79,7 +79,7 @@
 				<cells>
 				
 					<ObjectIdentifier
-						title="{assignedTasksModel>Name}"/>
+						title="{assignedTasksModel>Description}"/>
 						
 					<Text
 					text="{ path: 
