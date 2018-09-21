@@ -2,6 +2,7 @@ package com.Testing;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -11,7 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Map_CSV_Demo {
 	public static void main(String[] args) throws InterruptedException {
-		System.setProperty("webdriver.chrome.driver","C:\\Users\\hulis\\Downloads\\Compressed\\Testing\\chromedriver_win32\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver","C:\\COS301-Testing\\chromedriver.exe");
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("--start-maximized");
 		
@@ -34,10 +35,10 @@ public class Map_CSV_Demo {
 		Thread.sleep(500);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("addClientButton"))).click();
 		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("csvUploader-fu"))).sendKeys("C:\\Users\\hulis\\Desktop\\clients.csv");
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("csvUploader-fu"))).sendKeys("C:\\COS301-Testing\\clients.csv");
 		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("clientUploadButton"))).click();
-		
+//		wait.until(ExpectedConditions.elementToBeClickable(By.id("clientUploadButton"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeClientModalButton"))).click();
 
 		//Add Consultants Via CSV
 		Thread.sleep(500);
@@ -45,10 +46,10 @@ public class Map_CSV_Demo {
 		Thread.sleep(500);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("addConsultantButton"))).click();
 		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("csvUploader-fu"))).sendKeys("C:\\Users\\hulis\\Desktop\\consultants.csv");
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("csvUploader-fu"))).sendKeys("C:\\COS301-Testing\\consultants.csv");
 		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("consultantUploadButton"))).click();
-		
+//		wait.until(ExpectedConditions.elementToBeClickable(By.id("consultantUploadButton"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeConsultantButton"))).click();
 		
 		//Add Projects Via CSV
 		Thread.sleep(500);
@@ -56,10 +57,13 @@ public class Map_CSV_Demo {
 		Thread.sleep(500);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("addProjectButton"))).click();
 		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("csvUploader-fu"))).sendKeys("C:\\Users\\hulis\\Desktop\\projects.csv");
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("csvUploader-fu"))).sendKeys("C:\\COS301-Testing\\projects.csv");
 		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("projectUploadButton"))).click();
+//		wait.until(ExpectedConditions.elementToBeClickable(By.id("projectUploadButton"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeProjectModalButton"))).click();
 		Thread.sleep(500);
 		driver.navigate().refresh();
+		
+		driver.close();
 	}
 }

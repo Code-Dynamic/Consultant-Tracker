@@ -12,7 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Interface_Demo {
 	public static void main(String[] args) throws InterruptedException {
-		System.setProperty("webdriver.chrome.driver","C:\\Users\\hulis\\Downloads\\Compressed\\Testing\\chromedriver_win32\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver","C:\\COS301-Testing\\chromedriver.exe");
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("--start-maximized");
 		
@@ -38,7 +38,7 @@ public class Interface_Demo {
 		Thread.sleep(500);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__item4-__clone1-selectMulti-CbBg"))).click();
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__item4-__clone4-selectMulti-CbBg"))).click();
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__dialog0-ok"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__dialog0-cancel"))).click();
 		Thread.sleep(1000);
 		
 		//Select Tasks
@@ -60,5 +60,6 @@ public class Interface_Demo {
 		action.sendKeys(Keys.ESCAPE).perform();
 		
 		driver.close();
+		
 	}
 }
