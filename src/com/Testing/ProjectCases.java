@@ -83,48 +83,48 @@ public class ProjectCases {
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--iconTabBarFilter2"))).click();
 		
 		//Select 2nd Project
-		Thread.sleep(700);
+		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--projectObjectListItem-__component0---MasterAdmin--projectsList-1-content"))).click();
-		Thread.sleep(500);
+		Thread.sleep(800);
 		//Select Dashboard
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--iconTabBarFilter1"))).click();
-		Thread.sleep(1000);
+		Thread.sleep(1500);
 		
 		//Select Consultants on Project
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--2"))).click();
-		Thread.sleep(1000);
+		Thread.sleep(1500);
 		//Select Add Team Member and add 2nd and 4th consultant
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--add_team_member"))).click();
-		Thread.sleep(700);
+		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__item5-__clone1-selectMulti-CbBg"))).click();
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__item5-__clone4-selectMulti-CbBg"))).click();
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__dialog0-cancel"))).click();
-		Thread.sleep(1000);
+		Thread.sleep(1500);
 		
 		//Select Tasks
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--iconTabBarFilter3"))).click();
-		Thread.sleep(1000);
+		Thread.sleep(1500);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--addActivityButton-__component0---DetailAdmin--idTasksTable-0"))).click();
-		Thread.sleep(1000);
+		Thread.sleep(1500);
 		//Fill add activity to task
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("AT_Description-inner"))).sendKeys("Pay the person for food ");
-		Thread.sleep(700);
+		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("AT_dateAssigned-inner"))).sendKeys("2018-07-20");
-		Thread.sleep(700);
+		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("AT_Deadline-inner"))).sendKeys("2018-07-20");
-		Thread.sleep(700);
+		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("allocatedHours-inner"))).sendKeys("03");
-		Thread.sleep(700);
+		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeActivityFrag"))).sendKeys("03");
-		Thread.sleep(500);	
+		Thread.sleep(800);	
 		action.sendKeys(Keys.ESCAPE).perform();
 //		__item1-__component0---DetailAdmin--idTasksTable-0-sub
-		Thread.sleep(700);
+		/*Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__item1-__component0---DetailAdmin--idTasksTable-0-sub"))).click();
-		Thread.sleep(500);
+		Thread.sleep(800);
 //		closeAssignedTasks
-		Thread.sleep(700);
+		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeAssignedTasks"))).click();
-		Thread.sleep(500);
+		Thread.sleep(800);*/
 	}
 }
