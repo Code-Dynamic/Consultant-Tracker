@@ -76,6 +76,7 @@
 		<beginButton>
 		
 			<Button 
+			id="submitConsultantButton"
 			text="Submit" 
 			press="onSubmitConsultant"/>
 			
@@ -83,7 +84,8 @@
 		
 		<endButton>
 		
-			<Button 
+			<Button
+			id="closeConsultantButton"
 			text="Close" 
 			press="onClose"/>
 			
