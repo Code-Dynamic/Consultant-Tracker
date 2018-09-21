@@ -14,7 +14,7 @@ public class UserCases {
 		// User Test Cases
 	/*	// User Test Case 1: Time
 		js.executeScript("alert('Test Case 2: Time Entering')");
-		Thread.sleep(1500);
+		Thread.sleep(1700);
 		driver.switchTo().alert().dismiss();
 		
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--requestUserTimesBtn"))).click();
@@ -26,11 +26,11 @@ public class UserCases {
 		Thread.sleep(2000);
 		driver.switchTo().alert().dismiss();
 //					driver.findElement(By.id("__item2-__component0---MasterAdmin--projectsList-1")).click();
-		Thread.sleep(1500);
+		Thread.sleep(1700);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__item2-__component0---MasterAdmin--projectsList-1"))).click();
-		Thread.sleep(500);
+		Thread.sleep(700);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--rateTeamBtn"))).click();
-		Thread.sleep(500);
+		Thread.sleep(700);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--submitRatesButton"))).click();
 		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--closeRatesButton"))).click();

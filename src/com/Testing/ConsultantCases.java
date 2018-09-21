@@ -13,15 +13,15 @@ public class ConsultantCases {
 		
 		// Consultant Test Cases
 		// Consultant Test Case 1: Utilization Dates
-		Thread.sleep(500);
+		Thread.sleep(700);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--iconTabBarFilter3"))).click();
-		Thread.sleep(500);
+		Thread.sleep(700);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__item3-__component0---MasterAdmin--consultants-0"))).click();
-		Thread.sleep(500);
+		Thread.sleep(700);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailConsultantView--iconTabBarFilter2"))).click();
-		Thread.sleep(500);
+		Thread.sleep(700);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailConsultantView--utilizationMonthSelect-label"))).click();
-		Thread.sleep(500);
+		Thread.sleep(700);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailConsultantView--month2"))).click();
 		Thread.sleep(2000);
 		/*List<WebElement> allElements = driver.findElements(By.xpath("//div[@id='__component0---MasterAdmin--projectsList-listUl']/ul")); 

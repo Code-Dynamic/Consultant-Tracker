@@ -23,47 +23,48 @@ public class Map_CSV_Demo {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		
 		//Show Map Of Client
+		Thread.sleep(2500);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--iconTabBarFilter5"))).click();
 		Thread.sleep(2000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--show_hide_route_button"))).click();
 		Thread.sleep(2000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--show_hide_route_button"))).click();
-		Thread.sleep(2000);
+		Thread.sleep(2500);
 		
 		//Add Clients Via CSV
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--popover_buttonId"))).click();
-		Thread.sleep(500);
+		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("addClientButton"))).click();
-		Thread.sleep(500);
+		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("csvUploader-fu"))).sendKeys("C:\\COS301-Testing\\clients.csv");
-		Thread.sleep(500);
-//		wait.until(ExpectedConditions.elementToBeClickable(By.id("clientUploadButton"))).click();
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeClientModalButton"))).click();
+		Thread.sleep(1000);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("clientUploadButton"))).click();
+//		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeClientModalButton"))).click();
 
 		//Add Consultants Via CSV
-		Thread.sleep(500);
+		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--popover_buttonId"))).click();
-		Thread.sleep(500);
+		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("addConsultantButton"))).click();
-		Thread.sleep(500);
+		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("csvUploader-fu"))).sendKeys("C:\\COS301-Testing\\consultants.csv");
-		Thread.sleep(500);
-//		wait.until(ExpectedConditions.elementToBeClickable(By.id("consultantUploadButton"))).click();
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeConsultantButton"))).click();
+		Thread.sleep(1000);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("consultantUploadButton"))).click();
+//		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeConsultantButton"))).click();
 		
 		//Add Projects Via CSV
-		Thread.sleep(500);
+		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--popover_buttonId"))).click();
-		Thread.sleep(500);
+		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("addProjectButton"))).click();
-		Thread.sleep(500);
+		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("csvUploader-fu"))).sendKeys("C:\\COS301-Testing\\projects.csv");
-		Thread.sleep(500);
-//		wait.until(ExpectedConditions.elementToBeClickable(By.id("projectUploadButton"))).click();
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeProjectModalButton"))).click();
-		Thread.sleep(500);
+		Thread.sleep(1000);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("projectUploadButton"))).click();
+//		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeProjectModalButton"))).click();
+		Thread.sleep(1000);
 		driver.navigate().refresh();
-		
+		Thread.sleep(5000);
 		driver.close();
 	}
 }

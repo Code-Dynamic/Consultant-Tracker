@@ -23,7 +23,7 @@ public class Interface_Demo {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		
 		//Select 2nd Project
-		Thread.sleep(500);
+		Thread.sleep(700);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__item2-__component0---MasterAdmin--projectsList-1-content"))).click();
 		Thread.sleep(500);
 		//Select Dashboard
@@ -35,7 +35,7 @@ public class Interface_Demo {
 		Thread.sleep(1000);
 		//Select Add Team Member and add 2nd and 4th consultant
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--add_team_member"))).click();
-		Thread.sleep(500);
+		Thread.sleep(700);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__item4-__clone1-selectMulti-CbBg"))).click();
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__item4-__clone4-selectMulti-CbBg"))).click();
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__dialog0-cancel"))).click();
@@ -48,13 +48,13 @@ public class Interface_Demo {
 		Thread.sleep(1000);
 		//Fill add activity to task
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("AT_Description-inner"))).sendKeys("Pay the person for food ");
-		Thread.sleep(500);
+		Thread.sleep(700);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("AT_dateAssigned-inner"))).sendKeys("2018-07-20");
-		Thread.sleep(500);
+		Thread.sleep(700);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("AT_Deadline-inner"))).sendKeys("2018-07-20");
-		Thread.sleep(500);
+		Thread.sleep(700);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("allocatedHours-inner"))).sendKeys("03");
-		Thread.sleep(500);
+		Thread.sleep(700);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeActivityFrag"))).sendKeys("03");
 		Thread.sleep(500);	
 		action.sendKeys(Keys.ESCAPE).perform();
