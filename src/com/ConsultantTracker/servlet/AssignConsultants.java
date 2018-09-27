@@ -6,6 +6,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -21,6 +24,7 @@ import com.ConsultantTracker.model.Assignment;
 import com.ConsultantTracker.model.Client;
 import com.ConsultantTracker.model.Consultant;
 import com.ConsultantTracker.model.Project;
+import com.ConsultantTracker.model.Ratings;
 
 /**
  * Servlet implementation class AssignConsultants
@@ -51,10 +55,20 @@ public class AssignConsultants extends HttpServlet {
 		Consultant c = em.find(Consultant.class, Integer.parseInt(consultantID));
 		a.setConsultant1(c);
 		a.setProject(p);
-
+		
+		Ratings initEntry = new Ratings();
+		initEntry.setConsultant(c);
+		initEntry.setProject(p);
+		Date date = new Date();
+		LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		int currentYear = localDate.getYear();
+		initEntry.setYear(currentYear);
+		
 		em.getTransaction().begin();
 		em.persist(a);
+		em.persist(initEntry);
 		em.getTransaction().commit();
+		
 			
 	}
 

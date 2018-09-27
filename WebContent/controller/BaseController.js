@@ -462,7 +462,6 @@ sap.ui
 																					projectsModel,
 																					"projectsModel");
 																	if (data.results.length > 0) {
-																			console.log("coming here");
 																		var resultsLocationStr;
 																		if (selectFirstProject) {
 																			resultsLocationStr = "/results/0";
@@ -556,20 +555,24 @@ sap.ui
 		 											} //project is completed, rating not yet given
 													else if(projectCompleted === true) {
 														RatingsBtn.setEnabled(true);
-														RatingsBtn.setVisible(true);
+														this.showRatingsBtn();
 													} //project not yet completed
-													else{
+													else {
 														RatingsBtn.setEnabled(false);
-														RatingsBtn.setVisible(true);
+														this.showRatingsBtn();
 													}
-										
 											 }
-										
 										}, 
 										ratingsBtnDisabled: function(){
 											RatingsBtn.setEnabled(false);
-											RatingsBtn.setVisible(false);	
-										},	
+											RatingsBtn.setText("Ratings Entered");
+											RatingsBtn.setIcon("sap-icon://complete");	
+										},	 
+										showRatingsBtn: function(){
+											RatingsBtn.setVisible(true);
+											RatingsBtn.setText("Rate Team");
+											RatingsBtn.setIcon("sap-icon://favorite");	
+										},
 										onRateTeam: function(){
 									    	this._ratingsDialog = this.byId("ratingsDialog");
 									    	var dialog = this._ratingsDialog;

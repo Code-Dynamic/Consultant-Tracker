@@ -19,7 +19,30 @@ sap.ui.define([
 				
 				//geting id from the URL
 				var oRouter = this.getRouter();
-				oRouter.getRoute("DetailConsultantView").attachMatched(this._onRouteMatched, this);				
+				oRouter.getRoute("DetailConsultantView").attachMatched(this._onRouteMatched, this);		
+				
+	            // try to load sap.suite.ui.commons for using ChartContainer
+	            // sap.suite.ui.commons is available in sapui5-sdk-dist but not in demokit
+/*	            var libraries = sap.ui.getVersionInfo().libraries || [];
+	            var bSuiteAvailable = libraries.some(function(lib){
+	                return lib.name.indexOf("sap.suite.ui.commons") > -1;
+	            });
+	            if (bSuiteAvailable) {*/
+	                jQuery.sap.require("sap/suite/ui/commons/ChartContainer");
+	                var vizframe = this.byId("oVizFrame");
+	                var oChartContainerContent = new sap.suite.ui.commons.ChartContainerContent({
+	                    icon : "sap-icon://pie-chart",
+	                    title : "vizFrame Pie Chart Sample",
+	                    content : [ vizframe ]
+	                });
+	                var oChartContainer = new sap.suite.ui.commons.ChartContainer({
+	                    content : [ oChartContainerContent ]
+	                });
+	                oChartContainer.setShowFullScreen(true);
+	                oChartContainer.setAutoAdjustHeight(true);
+	                oChartContainer.setShowZoom(false);
+	                this.byId('chartFixFlex').setFlexContent(oChartContainer); 
+	            /*}*/
 			
 			},
 			onAfterRendering: function(){

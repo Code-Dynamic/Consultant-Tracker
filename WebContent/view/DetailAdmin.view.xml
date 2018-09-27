@@ -636,14 +636,14 @@
 				  <HBox>
 						<Button						
 						id="rateTeamBtn" 
- 						text="Team Member Rating" 
+ 						text="Team Ratings" 
  						icon="sap-icon://favorite" 
  						press="onRateTeam" 
  						enabled="false" 
  						visible="false" />
 				 </HBox>					
 				 <HBox>
-						<Button press="editProjectDetails"  text="Edit project" icon="sap-icon://edit"/>
+						<Button press="editProjectDetails"  text="Edit Project" icon="sap-icon://edit"/>
 				</HBox>
 		</semantic:customFooterContent>
 		

@@ -46,7 +46,7 @@ sap.ui.define([
 		//variables for counting members and tasks on a project
 		var countMembers;
 		var countTasks;
-		console.log("Console log test1");
+		//console.log("Console log test1");
 			//2
 			//get Team members for the selected Project (from master)
 			var membersDetailModel = new JSONModel();	
@@ -112,14 +112,14 @@ sap.ui.define([
 				          value1: oArgs.projectId
 				     })],
 						  success: function(data){
-							  console.log("Test 1::::");
+							  //console.log("Test 1::::");
 								var results = JSON.stringify(data);
 								if(data.results == null){
 									
 								}else{
 //									TODO IS TIME ENTERED ON TASK OR ASSIGNED TASK  j 
-									console.log("TaskDetail 1: "+results);
-									console.log("TaskDetail 2: "+data.results);
+									//console.log("TaskDetail 1: "+results);
+									//console.log("TaskDetail 2: "+data.results);
 									var i = data.results.length;
 									var k = 0;
 									var j =0; 
@@ -129,12 +129,12 @@ sap.ui.define([
 									for(var x=0; x < i; x++){
 	 
 										cur = data.results[x].TaskDetails.Task_ID;
-											console.log("cur : prev "+cur+" : "+prev);
+											//console.log("cur : prev "+cur+" : "+prev);
 											if(prev == cur){
 
 											expectedHours += parseInt(data.results[x].Assigned_Hours, 10) ;
 											currentHours +=  parseInt(data.results[x].Hours_Worked, 10);
-											console.log("ASSIGN : Worked "+expectedHours+" : "+currentHours);
+											//console.log("ASSIGN : Worked "+expectedHours+" : "+currentHours);
 											assignedHoursArray[j] = assignedHoursArray[j]+expectedHours;
 											workedHoursArray[j] = workedHoursArray[j]+currentHours;
 											
@@ -180,7 +180,7 @@ sap.ui.define([
 							  alert("error");
 							 }
 						});
-				console.log("Console log test2");
+				//console.log("Console log test2");
 				this.getView().setModel(tileHoursModel,"tileHoursModel");
 				this.getView().setModel(tileProjectProgressModel,"tileProjectProgressModel");
 
