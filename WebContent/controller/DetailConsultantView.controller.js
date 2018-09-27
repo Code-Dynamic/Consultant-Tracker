@@ -177,9 +177,9 @@ sap.ui.define([
 						if(resultsLen > 0)
 							avgRating = totalRating /numRatingsWithVotes;
 						if(numRatingsWithVotes == 1)
-							oData.avgRating = avgRating + "% ("+numRatingsWithVotes+ " Project)";
+							oData.avgRating = parseInt(avgRating + "% ("+numRatingsWithVotes+ " Project)");
 						else
-							oData.avgRating = avgRating + "% ("+numRatingsWithVotes+ " Projects)";
+							oData.avgRating = parseInt(avgRating + "% ("+numRatingsWithVotes+ " Projects)");
 						oModel.setData(oData);
 						thisObj.getView().setModel(oModel,"ratings");
 					}	    

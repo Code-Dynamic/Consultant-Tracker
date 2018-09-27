@@ -45,10 +45,6 @@
 			<attributes>
 			
 					<ObjectAttribute
-						title="ProjectID"
-						text="{projectsModel>/Project_ID}"/>
-						
-					<ObjectAttribute
 						title="Due"
 						text="{ path: 
 									'projectsModel>/Project_Deadline',

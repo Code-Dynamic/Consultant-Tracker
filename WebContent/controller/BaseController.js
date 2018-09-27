@@ -45,7 +45,7 @@ sap.ui
 
 										},
 										getModelAddress : function() {
-											//return "http://196.249.11.54:8080/Consultant-Tracker/emplist.svc/";
+											//return "http://196.249.12.186:8080/Consultant-Tracker/emplist.svc/";
 											return 'http://localhost:8080/Consultant-Tracker/emplist.svc/';
 										},
 										setDeviceType: function(){
