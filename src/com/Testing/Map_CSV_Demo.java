@@ -38,8 +38,8 @@ public class Map_CSV_Demo {
 		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("csvUploader-fu"))).sendKeys("C:\\COS301-Testing\\clients.csv");
 		Thread.sleep(1000);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("clientUploadButton"))).click();
-//		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeClientModalButton"))).click();
+//		wait.until(ExpectedConditions.elementToBeClickable(By.id("clientUploadButton"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeClientModalButton"))).click();
 
 		//Add Consultants Via CSV
 		Thread.sleep(1000);
@@ -49,8 +49,8 @@ public class Map_CSV_Demo {
 		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("csvUploader-fu"))).sendKeys("C:\\COS301-Testing\\consultants.csv");
 		Thread.sleep(1000);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("consultantUploadButton"))).click();
-//		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeConsultantButton"))).click();
+//		wait.until(ExpectedConditions.elementToBeClickable(By.id("consultantUploadButton"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeConsultantButton"))).click();
 		
 		//Add Projects Via CSV
 		Thread.sleep(1000);
@@ -60,8 +60,8 @@ public class Map_CSV_Demo {
 		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("csvUploader-fu"))).sendKeys("C:\\COS301-Testing\\projects.csv");
 		Thread.sleep(1000);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("projectUploadButton"))).click();
-//		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeProjectModalButton"))).click();
+//		wait.until(ExpectedConditions.elementToBeClickable(By.id("projectUploadButton"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeProjectModalButton"))).click();
 		Thread.sleep(1000);
 		driver.navigate().refresh();
 		Thread.sleep(5000);

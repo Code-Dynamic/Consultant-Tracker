@@ -28,7 +28,7 @@ public class MapTestingCases {
 		
 		//Testing project without client assigned
 		Thread.sleep(1000);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--projectObjectListItem-__component0---MasterAdmin--projectsList-1-content"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--projectObjectListItem-__component0---MasterAdmin--projectsList-3-content"))).click();
 		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--iconTabBarFilter5"))).click();
 		Thread.sleep(2000);
