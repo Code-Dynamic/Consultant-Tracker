@@ -186,72 +186,70 @@
  										width="10%"/>
  										
 									</OverflowToolbar>		
-							<la:FixFlex id='chartFixFlex' minFlexSize="250px">
-        					<!--Below is the setting panel -->
-        					<la:fixContent>
-        					      					
-							<!-- <HBox 
-							justifyContent="sap.m.FlexJustifyContent.Center"> -->	
-							 </la:fixContent>
-       						 <la:flexContent>								
-						        <viz:VizFrame 
-						        id="oVizFrame" 
-						        busy="false" 
-						        busyIndicatorDelay="1000" 
-						        visible="true" 
-						        uiConfig="{ 'applicationSet': 'fiori' }" 
-						        vizType="pie"
-						        height="100%"
-						        width="100%"
-						        vizProperties="{ title: {visible:'false'}, plotArea:{dataLabel:{visible:'true'}} }" 
-						        legendVisible="true">
-									
-									<viz:dataset>
-									
-										<viz.data:FlattenedDataset 
-										data="{utilization>/utilization}">
+							<la:FixFlex id='chartFixFlex' 
+							height="80vh"
+							minFlexSize="250px">
+        						<la:fixContent>
+							 	</la:fixContent>
+							 	
+       						 	<la:flexContent>								
+							        <viz:VizFrame 
+							        id="oVizFrame" 
+							        busy="false" 
+							        busyIndicatorDelay="1000" 
+							        visible="true" 
+							        uiConfig="{ 'applicationSet': 'fiori' }" 
+							        vizType="pie"
+							        height="100%"
+							        width="100%"
+							        vizProperties="{ title: {visible:'false'}, plotArea:{dataLabel:{visible:'true'}} }" 
+							        legendVisible="true">
 										
-											<viz.data:dimensions>
+										<viz:dataset>
+										
+											<viz.data:FlattenedDataset 
+											data="{utilization>/utilization}">
 											
-												<viz.data:DimensionDefinition 
-												name="category" 
-												value="{category}"/>
+												<viz.data:dimensions>
 												
-											</viz.data:dimensions>
-											
-											<viz.data:measures>
-											
-												<viz.data:MeasureDefinition 
-												group="1"
-												name="hours" 
-												value="{hours}"/>
+													<viz.data:DimensionDefinition 
+													name="category" 
+													value="{category}"/>
+													
+												</viz.data:dimensions>
 												
-											</viz.data:measures>
+												<viz.data:measures>
+												
+													<viz.data:MeasureDefinition 
+													group="1"
+													name="hours" 
+													value="{hours}"/>
+													
+												</viz.data:measures>
+												
+											</viz.data:FlattenedDataset>
 											
-										</viz.data:FlattenedDataset>
+										</viz:dataset>
+										<!-- sap.viz.ui5.data.Dataset -->
 										
-									</viz:dataset>
-									<!-- sap.viz.ui5.data.Dataset -->
-									
-									<viz:feeds>
-									
-										<viz.feeds:FeedItem 
-										id="value1" 
-										uid="size" 
-										type="Measure" 
-										values="hours"/>
+										<viz:feeds>
 										
-										<viz.feeds:FeedItem 
-										uid="color" 
-										type="Dimension" 
-										values="category"/>
+											<viz.feeds:FeedItem 
+											id="value1" 
+											uid="size" 
+											type="Measure" 
+											values="hours"/>
+											
+											<viz.feeds:FeedItem 
+											uid="color" 
+											type="Dimension" 
+											values="category"/>
+											
+										</viz:feeds>
 										
-									</viz:feeds>
-									
-								</viz:VizFrame>	
-							</la:flexContent>
+									</viz:VizFrame>	
+								</la:flexContent>
 							</la:FixFlex>
-							<!-- </HBox> -->
 							
 						</content>	
 							
