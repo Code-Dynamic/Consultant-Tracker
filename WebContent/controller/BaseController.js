@@ -769,48 +769,30 @@ sap.ui
 													.getOwnerComponent()
 													.getModel("oModel");
 											var consultantsModel = new sap.ui.model.json.JSONModel();
-
+											var filters = [];
+											filters = [new sap.ui.model.Filter("Consultant_Name", sap.ui.model.FilterOperator.Contains, searchString),
+													   new sap.ui.model.Filter("Consultant_Surname", sap.ui.model.FilterOperator.Contains, searchString)];
+											
 											// read consultant data
-											oModel
-													.read(
-															"/Consultants",
-															{
-																filters : [ new sap.ui.model.Filter(
-																		{
-																			path : "Consultant_Name",
-																			operator : sap.ui.model.FilterOperator.Contains,
-																			value1 : searchString
-																		}) ],
-																filters : [ new sap.ui.model.Filter(
-																		{
-																			path : "Consultant_Surname",
-																			operator : sap.ui.model.FilterOperator.Contains,
-																			value1 : searchString
-																		}) ],
-
-																success : function(
-																		data) {
-																	consultantsModel
-																			.setData(data);
-																	if (data.results.length == 0) {
-																		// console.log("List
-																		// empty");
-																		thisDomObj
-																				.getView()
-																				.byId(
-																						"consultants")
-																				.setNoDataText(
-																						"No consultants with the phrase \""
-																								+ searchString
-																								+ "\"");
-																	}
-																	// console.log(data);
-																},
-
-																error : function() {
-																	// console.log("Error");
-																}
-															});
+											oModel.read("/Consultants",
+												{
+													filters: [new sap.ui.model.Filter(filters, false)],
+													success : function(data) {
+														consultantsModel.setData(data);
+														if (data.results.length == 0) {
+															// console.log("List
+															// empty");
+															thisDomObj.getView().byId("consultants")
+																.setNoDataText("No consultants with the phrase \""
+																		+ searchString
+																		+ "\"");
+														}
+														// console.log(data);
+													},
+													error : function() {
+														// console.log("Error");
+													}
+												});
 
 											this.getView().setModel(
 													consultantsModel,
