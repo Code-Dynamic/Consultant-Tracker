@@ -11,10 +11,10 @@
 		search="handleSearch"
 		confirm="handleCloseAddConsultantToProject"
 		cancel="onCancel"
-		items="{consultants>/results}" >
+		items="{unassignedConsultantsModel>/results}" >
 		
 			<StandardListItem
-				title="{consultants>Consultant_Name} {consultants>Consultant_Surname}"
+				title="{unassignedConsultantsModel>Consultant_Name} {unassignedConsultantsModel>Consultant_Surname}"
 				description="{Role}"
 				iconDensityAware="false"
 				iconInset="false"

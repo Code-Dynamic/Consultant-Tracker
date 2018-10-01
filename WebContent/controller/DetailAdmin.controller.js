@@ -35,251 +35,270 @@ sap.ui.define([
 		this.setRatingsBtnRef();
 //		///set model for detail page
 		OModel = this.getOwnerComponent().getModel("oModel");
-		var projectsDetailModel = new JSONModel();
 		
 		var oArgs, oView;
 		oArgs = oEvent.getParameter("arguments");
-		
-		///
-		projectId = oArgs.projectId
-		
+		var projectId = oArgs.projectId;
+		 
 		//variables for counting members and tasks on a project
-		var countMembers;
+		
 		var countTasks;
-		//console.log("Console log test1");
-			//2
-			//get Team members for the selected Project (from master)
-			var membersDetailModel = new JSONModel();	
-			OModel.read("/Assignments", {
-				urlParameters: {
-					"$expand" : "ProjectDetails",
-					"$expand" : "ConsultantDetails"
-		        },
-				filters: [ new sap.ui.model.Filter({
-			          path: "ProjectDetails/Project_ID",
-			          operator: sap.ui.model.FilterOperator.EQ,
-			          value1: oArgs.projectId
-			     })],
-					  success: function(data){
-						   membersDetailModel.setData(data);
-							var results = JSON.stringify(data);
-//							console.log(results);
-//							alert(results);
-							countMembers = data.results.length;
-							sap.ui.getCore().setModel(membersDetailModel,"membersModel");
-					  },
-					  error: function(oError) {
-						  alert("error");
-						 }
-					});
-			
-//				set the project detail model
-				this.getView().setModel(membersDetailModel,"membersModel"); 
-				
-				var progressArray = [];
-				var assignedHoursArray = [];
-				var workedHoursArray = [];
-				
-				//6
-				//get the progress % of the tasks and put the results in an array
-				//and get the expected hours worked and current
-				var expectedHours =0;
-				var currentHours=0;
-				var totalHours =0;
-				var totalWorkedHours =0;
-				var projectProgress;
-				var progress;
-				
-				for(var p=0; p<100; p++){
-					progressArray[p] = 0;
-					assignedHoursArray[p] =0;
-					workedHoursArray[p] =0;
-				}
-				
-				var tileHoursModel = new JSONModel();	
-				var tileProjectProgressModel = new JSONModel();
-				
-
-				OModel.read("/Assigned_Tasks", {
-					
-					urlParameters: {
-						"$expand" : "TaskDetails",
-						"$expand" : "TaskDetails/ProjectDetails"
-					},
-					filters: [ new sap.ui.model.Filter({
-				          path: "TaskDetails/ProjectDetails/Project_ID",
-				          operator: sap.ui.model.FilterOperator.EQ,
-				          value1: oArgs.projectId
-				     })],
-						  success: function(data){
-							  //console.log("Test 1::::");
-								var results = JSON.stringify(data);
-								if(data.results == null){
-									
-								}else{
-//									TODO IS TIME ENTERED ON TASK OR ASSIGNED TASK  j 
-									//console.log("TaskDetail 1: "+results);
-									//console.log("TaskDetail 2: "+data.results);
-									var i = data.results.length;
-									var k = 0;
-									var j =0; 
-									var cur = data.results[0].TaskDetails.Task_ID;
-									var prev = cur;
-									
-									for(var x=0; x < i; x++){
-	 
-										cur = data.results[x].TaskDetails.Task_ID;
-											//console.log("cur : prev "+cur+" : "+prev);
-											if(prev == cur){
-
-											expectedHours += parseInt(data.results[x].Assigned_Hours, 10) ;
-											currentHours +=  parseInt(data.results[x].Hours_Worked, 10);
-											//console.log("ASSIGN : Worked "+expectedHours+" : "+currentHours);
-											assignedHoursArray[j] = assignedHoursArray[j]+expectedHours;
-											workedHoursArray[j] = workedHoursArray[j]+currentHours;
-											
-											progress = ((data.results[x].Hours_Worked)/(data.results[x].Assigned_Hours) )* 100;
-
-											totalHours += expectedHours;
-											totalWorkedHours += currentHours;
-											
-										}else{
-											prev = cur;
-											j++;
-											expectedHours += parseInt(data.results[x].Assigned_Hours, 10) ;
-											currentHours +=  parseInt(data.results[x].Hours_Worked, 10);
-
-											assignedHoursArray[j] = assignedHoursArray[j]+parseInt(data.results[x].Assigned_Hours, 10);
-											workedHoursArray[j] = workedHoursArray[j]+parseInt(data.results[x].Hours_Worked, 10);
-											
-											progress = ((data.results[x].Hours_Worked)/(data.results[x].Assigned_Hours) )* 100;
-
-											totalHours += expectedHours;
-											totalWorkedHours += currentHours;
-										}
-										
-									}
-									
-									
-									data.expected = expectedHours;
-									data.current = currentHours;
-									
-									//getting overall progress of the project
-									projectProgress = ((totalWorkedHours/totalHours)*100).toFixed(0);
-									var a = parseFloat(projectProgress);
-									data.projectProgress = a;
-									
-									tileHoursModel.setData(data);
-									tileProjectProgressModel.setData(data);
-								}
-								////////////////////////////////////////////end else
-						 
-						  },
-						  error: function(oError) {
-							  alert(oError.error);
-							  alert("error");
-							 }
-						});
-				//console.log("Console log test2");
-				this.getView().setModel(tileHoursModel,"tileHoursModel");
-				this.getView().setModel(tileProjectProgressModel,"tileProjectProgressModel");
-
-			//3
-			//get all tasks that a client is assigned to for the selected Project (from master)
+		var progressArray = [];
+		var assignedHoursArray = [];
+		var workedHoursArray = [];
+		
+		this.setMembersModel(projectId);
+		this.setAssignedTaskModel(projectId, progressArray, assignedHoursArray, workedHoursArray);
+		this.setTaskModel(projectId, countTasks, progressArray, assignedHoursArray, workedHoursArray);
+		this.setProjectsModel(projectId, countTasks);
+		this.setConsultantsModel(projectId);
+		this.setClientsModel(projectId);
+		
+		sap.ui.core.BusyIndicator.hide();
+	},
+	setMembersModel: function(projectId){
+		var membersDetailModel = new JSONModel();
+		var consultantsID = [];
+		OModel.read("/Assignments", {
+			urlParameters: {
+				"$expand" : "ProjectDetails",
+				"$expand" : "ConsultantDetails"
+	        },
+			filters: [ new sap.ui.model.Filter({
+		          path: "ProjectDetails/Project_ID",
+		          operator: sap.ui.model.FilterOperator.EQ,
+		          value1: projectId
+		     })],
+				  success: function(data){
+					   membersDetailModel.setData(data);
+					   var filters = [];
+						var countMembers = data.results.length;
+						sap.ui.getCore().setModel(membersDetailModel,"membersModel");
 						
-				//get consultant_ID, tasks that the consultant is 
-				//assigned to
-				var tasksDetailModel = new JSONModel();
-				OModel.read("/Tasks", {
-					filters: [ 
-						new sap.ui.model.Filter({
-				          path: "ProjectDetails/Project_ID",
-				          operator: sap.ui.model.FilterOperator.EQ,
-				          value1: oArgs.projectId
-				     })],
-					  success: function(data){
+						for(var i=0; i<countMembers;i++){
+							consultantsID[i] = data.results[i].ConsultantDetails.Consultant_ID;
+//							console.log("Value: "+consultantsID[i]);
+							filters[i] = new sap.ui.model.Filter("Consultant_ID", sap.ui.model.FilterOperator.NE, consultantsID[i]);
+						}
 						
-							 var result = JSON.stringify(data);
-							 tasksDetailModel.setData(data);
-							 countTasks = data.results.length;
-							 
-							 for(var x=0; x<countTasks; x++){
-								 progressArray[x] = ((workedHoursArray[x]/assignedHoursArray[x])*100);
-								 data.results[x].progress = parseInt(progressArray[x]);
-							}
-							 
-							 tasksDetailModel.setData(data);
-					  },
-					  error: function(oError) {
-						  alert("error");
-						 }
-					});
-			
-				this.getView().setModel(tasksDetailModel,"tasksModel");
-				
-				//1
-				//read the Project table based on id
-					OModel.read("/Projects("+oArgs.projectId+")", {
-						urlParameters: {
-				            "$expand" : "ClientDetails"
-				        },
-						  success: function(data){
-							  data.countMembers = countMembers;
-							  data.countTasks = countTasks;
-							  projectsDetailModel.setData(data);
-//								var results = JSON.stringify(data);
-//								console.log(results);
-//								alert(results);
-						  },
-						  error: function(oError) {
-							  alert("error");
-							 }
+						console.log("Consultants: "+consultantsID);
+						console.log(filters);
+						//7
+						var unassignedConsultantsModel = new JSONModel();	
+						OModel.read("/Consultants", {
+							filters: [new sap.ui.model.Filter(filters, true)],
+							success: function(data){
+								unassignedConsultantsModel.setData(data);
+								sap.ui.getCore().setModel(unassignedConsultantsModel,"unassignedConsultantsModel");
+								console.log("Unassigned Consultants");
+								console.log(data);
+							  },
+							  error: function(oError) {
+								  alert("error");
+							  }
 						});
-					//set the project detail model
-					this.getView().setModel(projectsDetailModel,"projectsModel"); 
-//					
-					
-				//4
-				//get Team members for the selected Project (from master)
-				var consultantsDetailModel = new JSONModel();	
-				OModel.read("/Consultants", {
-						  success: function(data){
-							  consultantsDetailModel.setData(data);
-								var results = JSON.stringify(data);
-								//console.log(results);
-								//console.log(data);
-//								alert(results);
-						  },
-						  error: function(oError) {
-							  alert("error");
-							 }
-						});
-//					set the project detail model
-					this.getView().setModel(consultantsDetailModel,"consultants");
-					
-				
-				//5
-				//
-					
-				var clientDetailModel = new JSONModel();
-				OModel.read("/Clients", {
-					  success: function(data){
-						 var result = JSON.stringify(data);
-						 clientDetailModel.setData(data);
-//						 alert(result);
-						// console.log("clientsModel##");
-//						 console.log(data);
-						 sap.ui.getCore().setModel(clientDetailModel,"clientList");
-//							console.log("Cli##");
-//							console.log(clientDetailModel.oData.results);
-					  },
-					  error: function(oError) {
-						  alert("error");
-						 }
+				  },
+				  error: function(oError) {
+					  alert("error");
+					 }
 				});
+		
+//				set the project detail model
+			this.getView().setModel(membersDetailModel,"membersModel"); 
+	},
+	setAssignedTaskModel: function(projectId, progressArray, assignedHoursArray, workedHoursArray){
+//		var progressArray = [];
+//		var assignedHoursArray = [];
+//		var workedHoursArray = [];
+		
+		//6
+		//get the progress % of the tasks and put the results in an array
+		//and get the expected hours worked and current
+		var expectedHours =0;
+		var currentHours=0;
+		var totalHours =0;
+		var totalWorkedHours =0;
+		var projectProgress;
+		var progress;
+		
+		for(var p=0; p<100; p++){
+			progressArray[p] = 0;
+			assignedHoursArray[p] =0;
+			workedHoursArray[p] =0;
+		}
+		
+		var tileHoursModel = new JSONModel();	
+		var tileProjectProgressModel = new JSONModel();
+		
+		//2
+		OModel.read("/Assigned_Tasks", {
+		
+			urlParameters: {
+				"$expand" : "TaskDetails",
+				"$expand" : "TaskDetails/ProjectDetails"
+			},
+			filters: [ new sap.ui.model.Filter({
+		          path: "TaskDetails/ProjectDetails/Project_ID",
+		          operator: sap.ui.model.FilterOperator.EQ,
+		          value1: projectId
+		     })],
+		     success: function(data){
+			  //console.log("Test 1::::");
+				var results = JSON.stringify(data);
+				if(data.results == null){
+					
+				}else{
+//								TODO IS TIME ENTERED ON TASK OR ASSIGNED TASK  j 
+					//console.log("TaskDetail 1: "+results);
+					//console.log("TaskDetail 2: "+data.results);
+					var i = data.results.length;
+					var k = 0;
+					var j =0; 
+					var cur = data.results[0].TaskDetails.Task_ID;
+					var prev = cur;
+					
+					for(var x=0; x < i; x++){
 
-					//end the loading indicator
-					sap.ui.core.BusyIndicator.hide();
+						cur = data.results[x].TaskDetails.Task_ID;
+							//console.log("cur : prev "+cur+" : "+prev);
+							if(prev == cur){
+
+							expectedHours += parseInt(data.results[x].Assigned_Hours, 10) ;
+							currentHours +=  parseInt(data.results[x].Hours_Worked, 10);
+							//console.log("ASSIGN : Worked "+expectedHours+" : "+currentHours);
+							assignedHoursArray[j] = assignedHoursArray[j]+expectedHours;
+							workedHoursArray[j] = workedHoursArray[j]+currentHours;
+							
+							progress = ((data.results[x].Hours_Worked)/(data.results[x].Assigned_Hours) )* 100;
+
+							totalHours += expectedHours;
+							totalWorkedHours += currentHours;
+							
+						}else{
+							prev = cur;
+							j++;
+							expectedHours += parseInt(data.results[x].Assigned_Hours, 10) ;
+							currentHours +=  parseInt(data.results[x].Hours_Worked, 10);
+
+							assignedHoursArray[j] = assignedHoursArray[j]+parseInt(data.results[x].Assigned_Hours, 10);
+							workedHoursArray[j] = workedHoursArray[j]+parseInt(data.results[x].Hours_Worked, 10);
+							
+							progress = ((data.results[x].Hours_Worked)/(data.results[x].Assigned_Hours) )* 100;
+
+							totalHours += expectedHours;
+							totalWorkedHours += currentHours;
+						}
+						
+					}
+					
+					
+					data.expected = expectedHours;
+					data.current = currentHours;
+					
+					//getting overall progress of the project
+					projectProgress = ((totalWorkedHours/totalHours)*100).toFixed(0);
+					var a = parseFloat(projectProgress);
+					data.projectProgress = a;
+					
+					tileHoursModel.setData(data);
+					tileProjectProgressModel.setData(data);
+				}
+				////////////////////////////////////////////end else
+		 
+		     },
+		     error: function(oError) {
+				  alert(oError.error);
+				  alert("error");
+			 }
+		});
+		//console.log("Console log test2");
+		this.getView().setModel(tileHoursModel,"tileHoursModel");
+		this.getView().setModel(tileProjectProgressModel,"tileProjectProgressModel");
+	},
+	setTaskModel: function(projectId, countTasks, progressArray, assignedHoursArray, workedHoursArray){
+		var tasksDetailModel = new JSONModel();
+		OModel.read("/Tasks", {
+			filters: [ 
+				new sap.ui.model.Filter({
+		          path: "ProjectDetails/Project_ID",
+		          operator: sap.ui.model.FilterOperator.EQ,
+		          value1: projectId
+		     })],
+			 success: function(data){	
+				var result = JSON.stringify(data);
+				tasksDetailModel.setData(data);
+				countTasks = data.results.length;
+					 
+				for(var x=0; x<countTasks; x++){
+					progressArray[x] = ((workedHoursArray[x]/assignedHoursArray[x])*100);
+					data.results[x].progress = parseInt(progressArray[x]);
+				}
+					 
+				tasksDetailModel.setData(data);
+			 },
+			 error: function(oError) {
+				  alert("error");
+			 }
+		});
+		
+		this.getView().setModel(tasksDetailModel,"tasksModel");
+	},
+	setProjectsModel: function(projectId, countTasks){
+		var projectsDetailModel = new JSONModel();
+		OModel.read("/Projects("+projectId+")", {
+			urlParameters: {
+	            "$expand" : "ClientDetails"
+	        },
+			  success: function(data){
+//				  data.countMembers = countMembers;
+				  data.countTasks = countTasks;
+				  projectsDetailModel.setData(data);
+//					var results = JSON.stringify(data);
+//					console.log(results);
+//					alert(results);
+			  },
+			  error: function(oError) {
+				  alert("error");
+				 }
+			});
+		//set the project detail model
+		this.getView().setModel(projectsDetailModel,"projectsModel"); 
+	},
+	setConsultantsModel: function(){
+		var consultantsDetailModel = new JSONModel();	
+		OModel.read("/Consultants", {
+			  success: function(data){
+				  consultantsDetailModel.setData(data);
+//					var results = JSON.stringify(data);
+					console.log("All Consultants");
+					console.log(data);
+					
+//						alert(results);
+			  },
+			  error: function(oError) {
+				  alert("error");
+				 }
+			});
+//			set the project detail model
+		this.getView().setModel(consultantsDetailModel,"consultants");
+	},
+	setClientsModel: function(){
+		var clientDetailModel = new JSONModel();
+		OModel.read("/Clients", {
+			  success: function(data){
+				 var result = JSON.stringify(data);
+				 clientDetailModel.setData(data);
+//				 alert(result);
+				// console.log("clientsModel##");
+//				 console.log(data);
+				 sap.ui.getCore().setModel(clientDetailModel,"clientList");
+//					console.log("Cli##");
+//					console.log(clientDetailModel.oData.results);
+			  },
+			  error: function(oError) {
+				  alert("error");
+				 }
+		});
 	},
 	setRatingsBtnRef : function(){
 		RatingsBtn = this.getView().byId("rateTeamBtn");
@@ -822,7 +841,8 @@ sap.ui.define([
 							}, function(data) {  
 								var array = data.split(';');
 								console.log("In handleCloseAddConsultantToProject: "+data);
-								thisView.updateMembersList(projectID);
+//								thisView.updateMembersList(projectID);
+								thisView.setMembersModel(projectID);
 							}
 						);
 						return oContext.getObject().Consultant_Name;
