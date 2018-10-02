@@ -26,7 +26,7 @@ sap.ui.define([
 			onAfterRendering: function(){
 				//sets utilization selects to current year and month
 				this.setUpUtilizationOptions();
-
+	
 				
 			},
 			setupUtilizationChartContainer: function(){
@@ -61,41 +61,28 @@ sap.ui.define([
 //				///set model for detail page
 				var oModel = this.getOwnerComponent().getModel("oModel");
 				var projectsDetailModel = new JSONModel();
-				
 				var consultantsDetailModel = new JSONModel();
-				
 				var oArgs, oView;
 				oArgs = oEvent.getParameter("arguments");
-				
-//				console.log("test");
 				//1
 				//read the Project table based on id
 					oModel.read("/Consultants("+oArgs.consultantId+")", {
 						  success: function(data){
 							  consultantsDetailModel.setData(data);
-//								var results = JSON.stringify(data);
-//								console.log(results);
-//								alert(results);
 						  },
 						  error: function(oError) {
 							  console.log("Consultants error: "+ oError.message);
-							 }
-						});
+						  }
+					});
 					//set the project detail model
 					this.getView().setModel(consultantsDetailModel,"consultantsModel"); 
-					
 					
 					//2
 					//getting projects that the selected consultant is working on
 					var consultantProjectsModel = new JSONModel();
-					
-//					console.log("ConsultantId: "+oArgs.consultantId);
-					
-					//
 					oModel.read("/Assignments", {
 						urlParameters: {
-				            "$expand" : "ConsultantDetails",
-				            "$expand" : "ProjectDetails"
+				            "$expand" : "ConsultantDetails, ProjectDetails"
 				        },
 						filters: [ new sap.ui.model.Filter({
 					          path: "ConsultantDetails/Consultant_ID",
@@ -103,17 +90,13 @@ sap.ui.define([
 					          value1: oArgs.consultantId
 					     })],
 						success: function(data){
-							
 							 var oData = JSON.stringify(data);
-
 							consultantProjectsModel.setData(data);				
-
 						  },
 						 error: function(oError) {
 							 console.log("Assignments Model: "+ oError.message);
 						 	}
-						});
-
+					});
 					this.getView().setModel(consultantProjectsModel,"consultantProjectsModel");
 					
 					//UTILIZATION CODE
@@ -143,63 +126,73 @@ sap.ui.define([
 				return month[num];		
 			},
 			getUtilization: function(c_ID, monthVal, yearVal, thisObj){
-					var date = new Date();
-					var year = date.getFullYear();
-					var monthNum = date.getMonth();
-					if(monthNum == 0){
-						monthNum = 11;
-					}
-					var prevMonth = this.getMonthStr(monthNum -1);				
-			    	$.post('GetConsultantUtilization', { Consultant_ID:c_ID ,month:monthVal, year:yearVal},function(responseText) {  
-			    		var hoursArr = responseText.split(',');
-			  		  var oModel = new sap.ui.model.json.JSONModel({
-						  utilization: [{
-						    "category": "Assigned Tasks",
-						    "hours": parseInt(hoursArr[0])
-						}, {
-						    "category": "General",
-						    "hours": parseInt(hoursArr[1])
-						}, {
-						    "category": "Unnaccounted",
-						    "hours": parseInt(hoursArr[2])
-						}],"prevMonthUtilization": parseInt(hoursArr[3]),
-						"prevMonth": prevMonth
-						});
-			  		thisObj.getView().setModel(oModel,"utilization");	
+				var date = new Date();
+				var year = date.getFullYear();
+				var monthNum = date.getMonth();
+				if(monthNum == 0){
+					monthNum = 11;
+				}
+				var prevMonth = this.getMonthStr(monthNum -1);				
+		    	$.post('GetConsultantUtilization', { Consultant_ID:c_ID ,month:monthVal, year:yearVal},function(responseText) {  
+		    		var hoursArr = responseText.split(',');
+		  		  	var oModel = new sap.ui.model.json.JSONModel({
+					  utilization: [{
+					    "category": "Assigned Tasks",
+					    "hours": parseInt(hoursArr[0])
+					  }, {
+					    "category": "General",
+					    "hours": parseInt(hoursArr[1])
+					  }, {
+					    "category": "Unnaccounted",
+					    "hours": parseInt(hoursArr[2])
+					  }],"prevMonthUtilization": parseInt(hoursArr[3]),
+					  "prevMonth": prevMonth
+		  		  	});
+		  		  	thisObj.getView().setModel(oModel,"utilization");	
 				});			
 			},
 			setUpRating: function(userID,thisObj){
-				//console.log(userID);
-		    	var query = "/Ratingss?$expand=ProjectDetails,ConsultantDetails&$filter=ConsultantDetails/Consultant_ID%20eq%20"+userID;
-
-			     var oModel =  new sap.ui.model.odata.ODataModel(this.getModelAddress());
-			     oModel.read(query,{success: function(oData){ setRatingsModel(oData) 
-			 					}, error: function(error){console.log("Error: "+ error.message);}}		
-			 	 );		
-			     
-			    	function setRatingsModel(oData){
-						var oModel = new sap.ui.model.json.JSONModel();
-						var totalRating = 0;
-						var resultsLen = oData.results.length;
-						var numRatingsWithVotes = 0;
-						for(var i = 0; i < resultsLen; i++){
-							oData.results[i].Rating = parseFloat(oData.results[i].Rating);
-							//only add rating if there are some votes
-							if(oData.results[i].Rating > 0){
-								totalRating += oData.results[i].Rating;
-								numRatingsWithVotes++;
-							}
+				//console.log(userID);	
+				var oModel = this.getOwnerComponent().getModel("oModel");
+				 oModel.read( "/Ratingss", {
+					 urlParameters:{
+						"$expand": "ProjectDetails, ConsultantDetails"
+					 },
+					 filters: [ new sap.ui.model.Filter({
+						 path: "ConsultantDetails/Consultant_ID",
+						 operator: sap.ui.model.FilterOperator.EQ,
+						 value1: userID
+				     })],			
+					success: function(oData){
+						setRatingsModel(oData)  
+					}, 
+					error: function(error){
+						console.log("Error: "+ error.message);
+					}
+				 });
+		    	function setRatingsModel(oData){
+					var oModel = new sap.ui.model.json.JSONModel();
+					var totalRating = 0;
+					var resultsLen = oData.results.length;
+					var numRatingsWithVotes = 0;
+					for(var i = 0; i < resultsLen; i++){
+						oData.results[i].Rating = parseFloat(oData.results[i].Rating);
+						//only add rating if there are some votes
+						if(oData.results[i].Rating > 0){
+							totalRating += oData.results[i].Rating;
+							numRatingsWithVotes++;
 						}
-						var avgRating = 0;
-						if(resultsLen > 0)
-							avgRating = totalRating /numRatingsWithVotes;
-						if(numRatingsWithVotes == 1)
-							oData.avgRating = parseInt(avgRating + "% ("+numRatingsWithVotes+ " Project)");
-						else
-							oData.avgRating = parseInt(avgRating + "% ("+numRatingsWithVotes+ " Projects)");
-						oModel.setData(oData);
-						thisObj.getView().setModel(oModel,"ratings");
-					}	    
+					}
+					var avgRating = 0;
+					if(resultsLen > 0)
+						avgRating = totalRating /numRatingsWithVotes;
+					if(numRatingsWithVotes == 1)
+						oData.avgRating = parseInt(avgRating + "% ("+numRatingsWithVotes+ " Project)");
+					else
+						oData.avgRating = parseInt(avgRating + "% ("+numRatingsWithVotes+ " Projects)");
+					oModel.setData(oData);
+					thisObj.getView().setModel(oModel,"ratings");
+				}	    
 			    	
 			},
 			onUtilizationMonthChange: function(oEvent){

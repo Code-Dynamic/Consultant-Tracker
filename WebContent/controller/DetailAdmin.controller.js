@@ -61,8 +61,7 @@ sap.ui.define([
 		var consultantsID = [];
 		OModel.read("/Assignments", {
 			urlParameters: {
-				"$expand" : "ProjectDetails",
-				"$expand" : "ConsultantDetails"
+				"$expand" : "ProjectDetails, ConsultantDetails"
 	        },
 			filters: [ new sap.ui.model.Filter({
 		          path: "ProjectDetails/Project_ID",
@@ -74,15 +73,15 @@ sap.ui.define([
 					   var filters = [];
 						var countMembers = data.results.length;
 						sap.ui.getCore().setModel(membersDetailModel,"membersModel");
-						
+
 						for(var i=0; i<countMembers;i++){
 							consultantsID[i] = data.results[i].ConsultantDetails.Consultant_ID;
 //							console.log("Value: "+consultantsID[i]);
 							filters[i] = new sap.ui.model.Filter("Consultant_ID", sap.ui.model.FilterOperator.NE, consultantsID[i]);
 						}
 						
-						console.log("Consultants: "+consultantsID);
-						console.log(filters);
+//						console.log("Consultants: "+consultantsID);
+//						console.log(filters);
 						//7
 						var unassignedConsultantsModel = new JSONModel();	
 						OModel.read("/Consultants", {
@@ -270,8 +269,8 @@ sap.ui.define([
 			  success: function(data){
 				  consultantsDetailModel.setData(data);
 //					var results = JSON.stringify(data);
-					console.log("All Consultants");
-					console.log(data);
+//					console.log("All Consultants");
+//					console.log(data);
 					
 //						alert(results);
 			  },
@@ -296,7 +295,8 @@ sap.ui.define([
 //					console.log(clientDetailModel.oData.results);
 			  },
 			  error: function(oError) {
-				  alert("error");
+//				  alert("error");
+				  console.log("Error");
 				 }
 		});
 	},
@@ -856,8 +856,7 @@ sap.ui.define([
 			var membersDetailModel = new JSONModel();	
 			OModel.read("/Assignments", {
 				urlParameters: {
-					"$expand" : "ProjectDetails",
-					"$expand" : "ConsultantDetails"
+					"$expand" : "ProjectDetails, ConsultantDetails"
 		        },
 				filters: [ new sap.ui.model.Filter({
 			          path: "ProjectDetails/Project_ID",
@@ -1060,13 +1059,29 @@ sap.ui.define([
 		refreshData : function(oEvent){
 	    	//Begin Refresh PRojects
 	    	var oModel = new sap.ui.model.json.JSONModel();
-			var oDataProjects =  new sap.ui.model.odata.ODataModel(this.getModelAddress()); 
+//			var oDataProjects =  new sap.ui.model.odata.ODataModel(this.getModelAddress()); 
 			var arrProjects = {Projects:[]};
 			var arrConsultants = {Consultants:[]};
-			oDataProjects.read(
-					"/Projects?$expand=ClientDetails&$filter=Project_Deleted%20eq%20false",{success: function(oCreatedEn){ GotProjects(oCreatedEn) }, error: function(){console.log("Error");}}		
-			);
-			
+//			oDataProjects.read(
+//					"/Projects?$expand=ClientDetails&$filter=Project_Deleted%20eq%20false",{success: function(oCreatedEn){ GotProjects(oCreatedEn) }, error: function(){console.log("Error");}}		
+//			);
+			var model = this.getOwnerComponent().getModel("oModel");
+			model.read( "/Projects", {
+				filters: [ new sap.ui.model.Filter({
+					urlparameters:{
+						"$expand": "ClientDetails"
+					},
+			          path: "Project_Deleted",
+			          operator: sap.ui.model.FilterOperator.EQ,
+			          value1: "false"
+			     })],			
+					success: function(oCreatedEn){
+						GotProjects(oCreatedEn) 
+					}, 
+					error: function(){
+						console.log("Error");
+					}
+			});
 //				$.post('getProjects',function(responseText){
 //					console.log("servlet responded");
 			function GotProjects(oCreatedEn){
@@ -1082,15 +1097,36 @@ sap.ui.define([
 	    	//End Refresh PRojects
 
 	    	//BEgin refresh get members
-	    	var oDataProjects =  new sap.ui.model.odata.ODataModel(this.getModelAddress()); 
+//	    	var oDataProjects =  new sap.ui.model.odata.ODataModel(this.getModelAddress()); 
 			//get selected project id
 			var sOrderId = sap.ui.getCore().getModel("selModel").getProperty("/Project_ID");
 			//get model
 			var oData = sap.ui.getCore().getModel().getProperty("/results");
 			
-			oDataProjects.read(
-					"/Assignments?$expand=ConsultantDetails,ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ GotMembers(oCreatedEn) }, error: function(){console.log("Error");}}		
-					);
+//			oDataProjects.read(
+//					"/Assignments?$expand=ConsultantDetails,ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ GotMembers(oCreatedEn) }, error: function(){console.log("Error");}}		
+//					);
+			model = this.getOwnerComponent().getModel("oModel");
+			model.read( "/Assignments", {
+				filters: [ new sap.ui.model.Filter({
+					urlParameters:{
+						"$expand": "ConsultantDetails, ProjectDetails"
+					},
+			          path: "ProjectDetails/Project_ID",
+			          operator: sap.ui.model.FilterOperator.EQ,
+			          value1: sOrderId
+			     })],
+				async:false,
+				success: function(oCreatedEn){
+					GotMembers(oCreatedEn) 
+				}, 
+				error: function(){
+					sap.m.MessageToast.show('Failed to extract project details', {
+						duration: 5000,
+						autoClose: true
+					 });
+				}
+			});		
 	    	function GotMembers(Members){
 				console.log(Members);
 				var oModel = new sap.ui.model.json.JSONModel();
@@ -1102,11 +1138,31 @@ sap.ui.define([
 	    	//END refresh get members
 	    	
 	    	//Begin Refresh Members
-	    	var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
-			attachModel.read(
-					"/Tasks?$expand=ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
-					);
-			
+//	    	var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
+//			attachModel.read(
+//					"/Tasks?$expand=ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
+//					);
+			var oModel = this.getOwnerComponent().getModel("oModel");
+			oModel.read( "/Assignments", {
+				filters: [ new sap.ui.model.Filter({
+					urlParameters:{
+						"$expand": "ConsultantDetails, ProjectDetails"
+					},
+			          path: "ProjectDetails/Project_ID",
+			          operator: sap.ui.model.FilterOperator.EQ,
+			          value1: sOrderId
+			     })],
+				async:false,
+				success: function(oCreatedEn){
+					gotTasks(oCreatedEn) 
+				}, 
+				error: function(){
+					sap.m.MessageToast.show('Failed to extract project details', {
+						duration: 5000,
+						autoClose: true
+					 });
+				}
+			});		
 			function gotTasks(tasks){
 				console.log(tasks);
 				var oModel = new sap.ui.model.json.JSONModel();
@@ -1174,10 +1230,32 @@ sap.ui.define([
 					 console.log(oItem);
 //					console.log("TaskID");
 //					console.log(taskID);
-					var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
-					attachModel.read(
-							"/Feedbacks?$expand=TaskDetails&$filter=TaskDetails/Task_ID%20eq%201",{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
-							);
+//					var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
+//					attachModel.read(
+//							"/Feedbacks?$expand=TaskDetails&$filter=TaskDetails/Task_ID%20eq%201",{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
+//							);
+					 var oModel = this.getOwnerComponent().getModel("oModel");
+					 oModel.read("/Feedbacks", {
+							urlParameters: {
+								"$expand" : "TaskDetails"
+					        },
+			  				filters: [new sap.ui.model.Filter({
+			  			          path: "TaskDetails/Task_ID",
+			  			          operator: sap.ui.model.FilterOperator.EQ,
+			  			          value1: 1
+			  			    })],
+			  			    async:false,
+			  			     
+			  				success: function(oCreatedEn){
+			  					 gotTasks(oCreatedEn) 	
+			  				  },
+			  				error: function(oError) {
+			  					sap.m.MessageToast.show("Error in getting attachments", {
+									duration: 5000,
+									autoClose: true
+								 });
+			  				}
+			  			});
 					
 					function gotTasks(tasks){
 						console.log(tasks);
@@ -1216,10 +1294,31 @@ sap.ui.define([
 		          TaskIDModel.setData(taskID);
 		          sap.ui.getCore().setModel(TaskIDModel,"taskID");
 		          var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
-					attachModel.read(
-							"/Feedbacks?$expand=TaskDetails&$filter=TaskDetails/Task_ID%20eq%20"+oModel.Task_ID,{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
-							);
-					
+//					attachModel.read(
+//							"/Feedbacks?$expand=TaskDetails&$filter=TaskDetails/Task_ID%20eq%20"+oModel.Task_ID,{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
+//							);
+		          var oModel = this.getOwnerComponent().getModel("oModel");
+		          oModel.read("/Feedbacks", {
+					urlParameters: {
+						"$expand" : "TaskDetails"
+			        },
+	  				filters: [ 
+	  					new sap.ui.model.Filter({
+	  			          path: "TaskDetails/Task_ID",
+	  			          operator: sap.ui.model.FilterOperator.EQ,
+	  			          value1: oModel.Task_ID
+	  			     })],
+	  			     async:false,
+	  			     success: function(oCreatedEn){
+	  			    	 gotTasks(oCreatedEn) 
+	  			     }, 
+	  			     error: function(){
+	  			    	 sap.m.MessageToast.show("Error in getting attachments", {
+	  			    		 duration: 5000,
+	  			    		 autoClose: true
+						 });
+	  			     }
+		          });
 					function gotTasks(tasks){
 						console.log(tasks);
 						var oModel = new sap.ui.model.json.JSONModel();
@@ -1229,28 +1328,11 @@ sap.ui.define([
 						app.to("detailPage");
 					}
 		        },
-		        getFeedback: function(oEvent){
-				 //console.log("Oevent");
-//				var myE = oEvent;
-//				var myE2 = oEvent.getSource().getParent();
-//				var myE3 = oEvent.getSource().getParent().getParent();
-//				console.log(myE);
-//				console.log(myE2);
-//				console.log(myE3);
-				 //console.log(oEvent.getSource().getParent().getParent());
-//				//Get feed back 
-//				 var oSelectedItem = oEvent.getSource().getParent().getParent().getParameter("listItem");
-//		         var oModel = oSelectedItem.getBindingContext("tasks").getObject();
-//		         console.log(oModel.Task_ID);
-		         
-				
-				
-				
-				 this._Dialog = sap.ui.xmlfragment("consultant-tracker.fragments.feedback", this);
-				 this._Dialog.open();
+		    getFeedback: function(oEvent){
+		    	this._Dialog = sap.ui.xmlfragment("consultant-tracker.fragments.feedback", this);
+				this._Dialog.open();
 			},
 			onFeedback : function(){
-				
 			},
 			progress: function(){
 				 sap.m.MessageToast.show("Progress triggered");

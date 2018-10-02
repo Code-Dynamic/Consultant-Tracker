@@ -32,18 +32,25 @@ sap.ui.define([
 			onAfterRendering: function() {
 				var thisDomObj =  this;
 				var consultantID = this.getConsultantID();
-				//this.setSplitAppUserName(consultantID);
-		    	 var query = "/Consultants?$select=Consultant_Name&$filter=Consultant_ID%20eq%20"+consultantID;
-			     var oModel =  new sap.ui.model.odata.ODataModel(this.getModelAddress());
-			     oModel.read(query,{
+				var oModel = this.getOwnerComponent().getModel("oModel");
+				oModel.read( "/Consultants", {
+					filters: [ new sap.ui.model.Filter({
+						urlparameters:{"$select": "Consultant_Name"},
+				          path: "Consultant_ID",
+				          operator: sap.ui.model.FilterOperator.EQ,
+				          value1: consultantID
+				     })],
 			    	success: function(oData){
 			    	 	if(oData.results.length > 0)
 			    	 		thisDomObj.getView().byId("splitAppMenuButton").setText(oData.results[0].Consultant_Name);
 			 		}, 
-			 		error: function(){
-			 			console.log("Error");
+			 		error: function(oError){
+						sap.m.MessageToast.show('Unable to extract user name', {
+							duration: 5000,
+							autoClose: true
+						 });
 			 		}
-			 	});								
+			 	});										
 			},
 			onLogoutPress: function(){
 				if (sessionStorage){

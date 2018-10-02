@@ -1,5 +1,6 @@
 package com.ConsultantTracker.servlet;
 
+import java.io.Console;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -18,26 +19,21 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.ConsultantTracker.model.Consultant;
+import com.ConsultantTracker.model.User_Type;
 
 //import org.apache.log4j.Logger;
 
-@WebServlet("/createConsultant" )
-public class createConsultant extends HttpServlet {
+@WebServlet("/CreateConsultant" )
+public class CreateConsultant extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-
-	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("Entereed create consultant servlet");
+		System.out.println("in here");
 		String name = request.getParameter("name");
 		String surname = request.getParameter("surname");
 		String email = request.getParameter("email");
 		String cell = request.getParameter("cell");
-		String adminStr = request.getParameter("admin");
-		Boolean admin = false;
-		if(adminStr.equals("1")) {
-			admin = true;
-		}
+		int adminPriv = Integer.parseInt(request.getParameter("admin"));
 		
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
 		EntityManager em = emf.createEntityManager();
@@ -45,20 +41,24 @@ public class createConsultant extends HttpServlet {
 		Consultant c = new Consultant();
 		c.setConsultant_Name(name);
 		c.setConsultant_Surname(surname);
-		c.setConsultant_email(email);
+		c.setConsultant_Email(email);
 		c.setConsultant_Cell(cell);
-		int ad =0;
-		if(admin)
-			ad =1;
-		c.setConsultant_Admin(ad);
-		em.getTransaction().begin();
-		em.persist(c);
-		em.getTransaction().commit();
-		
-		em.refresh(c);
-		PrintWriter out = response.getWriter();
-		out.write(String.valueOf(c.getConsultant_ID()));
-	
+//		Consultant c = em.find(Consultant.class, Integer.parseInt(consultant));
+		User_Type usrType = em.find(User_Type.class, adminPriv);
+		if (usrType != null) {
+			System.out.println("Admin: " + adminPriv);
+			c.setConsultant_Priviledge(usrType);
+			em.getTransaction().begin();
+			em.persist(c);
+			em.getTransaction().commit();	
+			
+			em.refresh(c);
+			PrintWriter out = response.getWriter();
+			out.write(String.valueOf(c.getConsultant_ID()));
+		}
+		else {
+			throw new ServletException("Invalid");
+		}
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

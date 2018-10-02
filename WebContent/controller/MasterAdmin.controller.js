@@ -78,9 +78,30 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		var projectCompleted =  oData.Project_Completed;
 		var thisObj = this;
 		//console.log(projectCompleted);
-		attachModel.read(
-				"/Ratings_Entrys?$expand=ProjectDetails,ConsultantDetails&$filter=ProjectDetails/Project_ID%20eq%20"+projectID+"%20and%20ConsultantDetails/Consultant_ID%20eq%20"+consultantID,{async:false,success: function(oCreatedEn){ thisObj.ratingsBtnConfig(oCreatedEn,projectCompleted) }, error: function(e){console.log(e);}}		
-				);					
+//		attachModel.read(
+//				"/Ratings_Entrys?$expand=ProjectDetails,ConsultantDetails&$filter=ProjectDetails/Project_ID%20eq%20"+projectID+"%20and%20ConsultantDetails/Consultant_ID%20eq%20"+consultantID,{async:false,success: function(oCreatedEn){ thisObj.ratingsBtnConfig(oCreatedEn,projectCompleted) }, error: function(e){console.log(e);}}		
+//				);					
+		var oModel = this.getOwnerComponent().getModel("oModel");
+		oModel.read( "/Ratings_Entrys", {
+			urlparameters:{
+				"$expand": "ProjectDetails, ConsultantDetails"
+			},
+			filters: [ new sap.ui.model.Filter({
+		        path: "ProjectDetails/Project_ID",
+		        operator: sap.ui.model.FilterOperator.EQ,
+		        value1: projectID,
+		        path:"ConsultantDetails/Consultant_ID",
+		        operator: sap.ui.model.FilterOperator.EQ,
+		        value1: consultantID
+		     })],
+	    	async:false,
+	    	success: function(oCreatedEn){ 
+	    		thisObj.ratingsBtnConfig(oCreatedEn,projectCompleted) 
+	    	}, 
+	    	error: function(error){
+	    		console.log(e);
+	    	}
+	    });
 		
 		//TODO fix project progress
 		$.post('getProjectProgress',{Project_Id:projectID},function(responseText){
@@ -99,24 +120,16 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		var sPath = evt.getSource().getBindingContext("consultantsModel").getPath();
 		var oData = this.getView().getModel("consultantsModel").getProperty(sPath);
 		//NB as a manager you can view all projects under you
-//		var oProjectId = evt.getSource().getBindingContext("projectsModel").getProperty("projectsModel>/Project_ID");
-//		var model = evt.getSource("projectsModel");
-//		console.log(oData.Project_ID);
-		var oConsultantId = oData.Consultant_ID;
-		
-		this.getRouter()
-			.navTo("DetailConsultantView", 
-				{consultantId:oConsultantId});
-//		console.log(sListId);
-	/*	MessageToast.show("Pressed : " + evt.getSource().getTitle());*/
-		
+		var oConsultantId =  oData.ConsultantDetails.Consultant_ID;
+		this.getRouter().navTo("DetailConsultantView",{consultantId:oConsultantId});
+	/*	MessageToast.show("Pressed : " + evt.getSource().getTitle());*/	
 	},
-	onPressButton: function(evt){
-		
+	onPressButton: function(evt){	
 	},
-	onSearch: function(evt){
 	
+	onSearch: function(evt){
 	},
+	
 	onSelectionChange: function (oEvent) {
 		//the selected item could be found via the "item" parameter of "selectionChange" event
 		sap.m.MessageToast.show("oEvent.getParameter('item').getText(): " + oEvent.getParameter("item").getText() + " selected");
@@ -165,15 +178,33 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 
 		}else{
 			console.log("Project Selected--> on select");
-			var oDataProjects =  new sap.ui.model.odata.ODataModel(this.getModelAddress()); 
+//			var oDataProjects =  new sap.ui.model.odata.ODataModel(this.getModelAddress()); 
 			//get selected project id
 			var sOrderId = oEvent.getSource().getSelectedItem().getBindingContext().getProperty("Project_ID");
 			//get model
 			var oData = sap.ui.getCore().getModel().getProperty("/results");
 			
-			oDataProjects.read(
-					"/Assignments?$expand=ConsultantDetails,ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ GotMembers(oCreatedEn) }, error: function(){console.log("Error");}}		
-					);
+//			oDataProjects.read(
+//					"/Assignments?$expand=ConsultantDetails,ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ GotMembers(oCreatedEn) }, error: function(){console.log("Error");}}		
+//					);
+			var oModel = this.getOwnerComponent().getModel("oModel");
+			oModel.read( "/Assignments", {
+				urlParameters:{
+					"$expand": "ConsultantDetails,ProjectDetails"
+				},
+				filters: [ new sap.ui.model.Filter({
+			        path: "ProjectDetails/Project_ID",
+			        operator: sap.ui.model.FilterOperator.EQ,
+			        value1: sOrderId
+			     })],
+		    	async:false,
+		    	success: function(oCreatedEn){
+		    		GotMembers(oCreatedEn) 
+		    	},
+		    	error: function(){
+		    		console.log("Error");
+		    	}
+		 	});
 			//get the specific project selected data 
 //			$.post('getProjectConsultants',{ projectID: sOrderId},function(responseText){
 //				console.log("servlet getProjectConsultants responded");
@@ -221,11 +252,29 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 			sap.ui.getCore().setModel(oSelModel,"selModel");
 			
 //Start Code to display Attachments
-			var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
+//			var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
 			console.log("Project Id= "+sOrderId);
-			attachModel.read(
-					"/Attachments?$expand=ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ gotAttachments(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
-					);
+//			attachModel.read(
+//					"/Attachments?$expand=ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ gotAttachments(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
+//					);
+			var oModel = this.getOwnerComponent().getModel("oModel");
+			oModel.read( "/Attachments", {
+				urlParameters:{
+					"$expand": "ProjectDetails"
+				},
+				filters: [ new sap.ui.model.Filter({
+			        path: "ProjectDetails/Project_ID",
+			        operator: sap.ui.model.FilterOperator.EQ,
+			        value1: sOrderId
+			     })],
+		    	async:false,
+		    	success: function(oCreatedEn){
+		    		gotAttachments(oCreatedEn) 
+		    	},
+		    	error: function(){
+		    		console.log("Error");
+		    	}
+		 	});
 			
 			function gotAttachments(attach){
 				console.log(attach);
@@ -238,10 +287,28 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 			
 //End Code to display Attachments
 			//Start code diplay task
-			var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
-			attachModel.read(
-					"/Tasks?$expand=ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
-					);
+//			var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
+//			attachModel.read(
+//					"/Tasks?$expand=ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
+//					);
+			var oModel = this.getOwnerComponent().getModel("oModel");
+			oModel.read( "/Tasks", {
+				urlParameters:{
+					"$expand": "ProjectDetails"
+				},
+				filters: [ new sap.ui.model.Filter({
+			        path: "ProjectDetails/Project_ID",
+			        operator: sap.ui.model.FilterOperator.EQ,
+			        value1: sOrderId
+			    })],
+		    	async:false,
+		    	success: function(oCreatedEn){
+		    		gotTasks(oCreatedEn) 
+		    	},
+		    	error: function(){
+		    		console.log("Error");
+		    	}
+		 	});
 			
 			function gotTasks(tasks){
 				console.log(tasks);
@@ -308,8 +375,8 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	    		_OnSite = 0;
 	    	}
 
-	    	$.post('CreateProject', { Name: _Name ,ClientID: _cilentID,Desc: _Description, Deadl: _Deadline ,StartDate: _StartDate,OnSite:  _OnSite, Project_Creator: this.getConsultantID()},
-	    		function(responseText) {
+	    	$.post('CreateProject', { Name: _Name ,ClientID: _cilentID,Desc: _Description, Deadl: _Deadline,StartDate: _StartDate,OnSite:  _OnSite, Project_Creator: this.getConsultantID()},
+	    	function(responseText) {
 	    		MessageToast.show("project submitted Succesfully");
 	    		//ensures that newly created project is selected
 	    		var selectFirstProject = false;
@@ -317,7 +384,6 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	    	});
 	    	//close model
 			this.onClose();
-	    	
 	    },
 	    onSubmitConsultant : function() {
 	    	var thisDomObj = this;
@@ -330,37 +396,80 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	    	
 	    	var _Name = sap.ui.getCore().byId("c_Name").getValue();
 	    	var _Surname = sap.ui.getCore().byId("c_Surname").getValue();
-	    	var _email = sap.ui.getCore().byId("c_email").getValue();
+	    	var _Email = sap.ui.getCore().byId("c_email").getValue();
 	    	var _Cell = sap.ui.getCore().byId("c_Cell").getValue();
 	    	var t = this;
 	    	var oDataProjects =   new sap.ui.model.odata.v2.ODataModel(this.getModelAddress()); 
-	    	var x=	oDataProjects.createEntry('/Consultants',{
-				properties:{
-					//Client_Details:{},
-					Consultant_Admin:0,
-					Consultant_Cell: _Cell,
-					Consultant_Name: _Name,
-					Consultant_Surname: _Surname,
-					Consultant_email:_email},
-					async:false,
-				created:function(){
-					MessageToast.show("Consultant submitted Succesfully");
-					thisDomObj.goToConsultants();
-					oDataProjects.submitChanges({async:false});
-					},
-				sucesss: function(){ console.log(("posting Project(sucess) It Worked!!")); }
-				, error:function(){console.log("Error in posting Project");}
-	    	});
+	    	var oModel = this.getOwnerComponent().getModel("oModel");
+	    	var _Privilege;
+	    	var _teamID;
 	    	
+	    	oModel.read( "/Consultants", {
+				urlParameters: {
+					"$expand" : "User_TypeDetails"
+				},
+				filters: [ new sap.ui.model.Filter({
+			          path: "Consultant_ID",
+			          operator: sap.ui.model.FilterOperator.EQ,
+			          value1: thisDomObj.getConsultantID()
+			     })],
+		    	success: function(oData){
+		    	 	if(oData.results.length > 0){
+		    	 		if (oData.results[0].User_TypeDetails.User_Type_Id == 100)
+		    	 			_Privilege = 200;
+		    	 		else if (oData.results[0].User_TypeDetails.User_Type_Id == 200)
+		    	 			_Privilege = 300;
+		    	 		//create a team of consultants with the group leader
+	    	    		oModel.read ("/Teams",{
+	    		    		urlParameters: {
+	    						"$expand" : "ConsultantDetails"
+	    					},
+	    					filters: [ new sap.ui.model.Filter({
+	    				          path: "ConsultantDetails/Consultant_ID",
+	    				          operator: sap.ui.model.FilterOperator.EQ,
+	    				          value1: thisDomObj.getConsultantID()
+	    				     })],
+	    				     success:function(data){
+	    				    	if (data.results.length == 0){
+	    				    		$.post('CreateTeam',
+	    				    			{leaderID: thisDomObj.getConsultantID()},
+	    				    			function(response){
+	    				    				_teamID = response;
+	    				    			}
+	    				    		);
+	    				    	}
+	    				    	else{
+	    				    		_teamID = data.results[0].Team_ID;
+	    				    	}
+	    				    	console.log(_teamID);
+	    				    	//create consultant
+	    		        	 	$.post('CreateConsultant', { 
+	    		    				name: _Name,
+	    		    				surname: _Surname,
+	    		    				email: _Email,
+	    		    				cell: _Cell,
+	    		    				admin: _Privilege}, 
+	    		    				function(responseText) {
+	    		    					$.post('AssignConsultantToTeam',{consultantID:responseText, teamID: _teamID});
+//		    		    					console.log("At adding User Equivalent: "+responseText);
+	    		    					$.post('CreateUser', {conID:responseText},
+	    		    						function(response){
+	    		    							console.log("password" + response)
+	    		    							thisDomObj.goToConsultants();
+	    		    					});
+	    		    				});
+	    				     }
+	    		    	});
+		    	 	}
+		    	}
+	    	});
+
+		    MessageToast.show("Consultant succesfully added.");
 	    	//close model
 	    	this.onClose();
 
 	    },
 	    addConsultantsViaCSV : function(){
-//	    	console.log("CSV function in MasterAdmin");
-	    	
-//			console.log(oEvent);
-//			MessageToast.show(oEvent.getParameters("fileName"));
 			var fU = sap.ui.getCore().byId("csvUploader");
 //			console.log("csvUploader");
 			var domRef = fU.getFocusDomRef();
@@ -372,35 +481,83 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 			
 			// Create a File Reader object
 			var reader = new FileReader();
-			var t = this;
+			var thisDomObj = this;
+	    	var oModel = this.getOwnerComponent().getModel("oModel");
 			
 			reader.onload = function(e) {
 			    var strCSV = e.target.result;
 			    var rows = strCSV.split("\n");
 
-			    var oDataProjects =   new sap.ui.model.odata.v2.ODataModel(t.getModelAddress()); 
+//			    var oDataProjects =   new sap.ui.model.odata.v2.ODataModel(t.getModelAddress()); 
 		    	var i;
-			    for (i = 1; i < rows.length; i++) { 
-			    	var _name = (rows[i].split(",")[0]).trim();              
-			    	var _surname = (rows[i].split(",")[1]).trim();           
-			    	var _email = (rows[i].split(",")[2]).trim();             
-			    	var _cell = (rows[i].split(",")[3]).trim();              
-			    	var _admin = "0";
-			    	
-			    	$.post('createConsultant', { 
-						name: _name,
-						surname: _surname,
-						email: _email,
-						cell: _cell,
-						admin: _admin }, 
-						function(responseText) {
-//							console.log("At adding User Equivalent: "+responseText);
-							$.post('CreateUser', 
-									{password:"default", conID:responseText}
-							);
-						}
-					);
-			    }
+		    	var _Privilege;
+		    	var _teamID;
+		    	oModel.read( "/Consultants", {
+					urlParameters: {
+						"$expand" : "User_TypeDetails"
+					},
+					filters: [ new sap.ui.model.Filter({
+				          path: "Consultant_ID",
+				          operator: sap.ui.model.FilterOperator.EQ,
+				          value1: thisDomObj.getConsultantID()
+				     })],
+			    	success: function(oData){
+			    	 	if(oData.results.length > 0){
+			    	 		if (oData.results[0].User_TypeDetails.User_Type_Id == 100)
+			    	 			_Privilege = 200;
+			    	 		else if (oData.results[0].User_TypeDetails.User_Type_Id == 200)
+			    	 			_Privilege = 300;
+
+			    	 		//create a team of consultants with the group leader
+		    	    		oModel.read ("/Teams",{
+		    		    		urlParameters: {
+		    						"$expand" : "ConsultantDetails"
+		    					},
+		    					filters: [ new sap.ui.model.Filter({
+		    				          path: "ConsultantDetails/Consultant_ID",
+		    				          operator: sap.ui.model.FilterOperator.EQ,
+		    				          value1: thisDomObj.getConsultantID()
+		    				     })],
+		    				     success:function(data){
+		    				    	if (data.results.length == 0){
+		    				    		$.post('CreateTeam',
+		    				    				{leaderID: thisDomObj.getConsultantID()},
+		    				    				function(response){
+		    				    					_teamID = response;
+		    							});
+		    				    	}
+		    				    	else{
+		    				    		_teamID = data.results[0].Team_ID;
+		    				    	}
+		    				    	console.log("What am l: "+_Privilege);
+		    				    	console.log(_teamID);
+		    				    	//create consultant
+		    				    	 for (i = 1; i < rows.length; i++) { 
+		    						    	var _name = (rows[i].split(",")[0]).trim();              
+		    						    	var _surname = (rows[i].split(",")[1]).trim();           
+		    						    	var _email = (rows[i].split(",")[2]).trim();             
+		    						    	var _cell = (rows[i].split(",")[3]).trim();
+		    						    	$.post('CreateConsultant', { 
+		    									name: _name,
+		    									surname: _surname,
+		    									email: _email,
+		    									cell: _cell,
+		    									admin: _Privilege}, 
+				    		    				function(responseText) {
+				    		    					$.post('AssignConsultantToTeam',{consultantID:responseText, teamID: _teamID});
+//					    		    					console.log("At adding User Equivalent: "+responseText);
+				    		    					$.post('CreateUser', {conID:responseText},
+				    		    						function(response){
+				    		    							console.log("password" + response)
+				    		    							thisDomObj.goToConsultants();
+				    		    					});
+				    		    				});
+		    						    }
+		    				     }
+		    		    	});
+			    	 	}
+			    	}
+		    	});
 			    MessageToast.show((rows.length-1)+" Consultants, succesfully added.");
 			};
 			reader.readAsBinaryString(file);

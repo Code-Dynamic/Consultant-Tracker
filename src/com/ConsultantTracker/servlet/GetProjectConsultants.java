@@ -26,19 +26,19 @@ import com.ConsultantTracker.model.Project;
 
 
 /**
- * Servlet implementation class getProjects
+ * Servlet implementation class GetProjects
  * 
  * returns string in the form 'Project_Name','Project_Description','Client_Name','Project_Deadline,'Project_OnSite'
  */
 //Replaced with Odata Service
-@WebServlet("/getProjectConsultants")
-public class getProjectConsultants extends HttpServlet {
+@WebServlet("/GetProjectConsultants")
+public class GetProjectConsultants extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public getProjectConsultants() {
+    public GetProjectConsultants() {
         super();
     }
 
@@ -69,8 +69,8 @@ public class getProjectConsultants extends HttpServlet {
 							ObjToReturn +=";";
 						Consultant c = consultantList.get(i).getConsultant();
 						 ObjToReturn +=c.getConsultant_ID() +','+c.getConsultant_Name()+','+
-								 c.getConsultant_Surname()+','+c.getConsultant_email()+','+
-								 c.getConsultant_Cell()+','+c.getConsultant_Admin();
+								 c.getConsultant_Surname()+','+c.getConsultant_Email()+','+
+								 c.getConsultant_Cell()+','+c.getConsultant_Priviledge();
 						 
 //					 
 					 if(proj_ID != null)

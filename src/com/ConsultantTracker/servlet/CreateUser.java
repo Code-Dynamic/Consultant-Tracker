@@ -38,7 +38,7 @@ public class CreateUser extends HttpServlet {
     //for creating a new user based on the consultant details
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Entered create user servlet");
-		String password = request.getParameter("password");
+		String password = "default";
 		String consultantID = request.getParameter("conID");
 
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
@@ -47,7 +47,7 @@ public class CreateUser extends HttpServlet {
 		User newUser = new User();
 		Consultant consultant = em.find(Consultant.class, Integer.parseInt(consultantID));
 		if (consultant != null)
-			newUser.setConsultantID(consultant);
+			newUser.setConsultant_ID(consultant);
 		else
 			System.out.println("COuldn't find the consultant ID");
 		newUser.setPassword(password);

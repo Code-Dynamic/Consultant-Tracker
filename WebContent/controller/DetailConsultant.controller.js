@@ -195,8 +195,7 @@ sap.ui.define([
 					var membersDetailModel = new JSONModel();	
 					oModel.read("/Assignments", {
 						urlParameters: {
-							"$expand" : "ProjectDetails",
-							"$expand" : "ConsultantDetails"
+							"$expand" : "ProjectDetails,ConsultantDetails"
 				        },
 						filters: [ new sap.ui.model.Filter({
 					          path: "ProjectDetails/Project_ID",
@@ -224,15 +223,13 @@ sap.ui.define([
 						var tasksDetailModel = new JSONModel();
 						oModel.read("/Assigned_Tasks", {
 							urlParameters: {
-					            "$expand" : "ConsultantDetails",
-					            "$expand" : "TaskDetails",
-					            "$expand" : "TaskDetails/ProjectDetails"
+					            "$expand" : "ConsultantDetails, TaskDetails, TaskDetails/ProjectDetails"
 					        },
 							filters: [ new sap.ui.model.Filter({
 						          path: "ConsultantDetails/Consultant_ID",
 						          operator: sap.ui.model.FilterOperator.EQ,
 						          value1: oArgs.consultantId
-						     }) ,new sap.ui.model.Filter({
+						     }),new sap.ui.model.Filter({
 						          path: "TaskDetails/ProjectDetails/Project_ID",
 						          operator: sap.ui.model.FilterOperator.EQ,
 						          value1: oArgs.listId
