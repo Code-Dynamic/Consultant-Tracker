@@ -537,31 +537,74 @@ sap.ui.define([
 			// read consultant data
 			var dialog = new sap.m.BusyDialog();
 			dialog.open();	
-			oModel.read( "/Team_Entitys", {
-				urlParameters:{
-					"$expand": "TeamDetails/ConsultantDetails",
-					"$expand": "ConsultantDetails"
+			oModel.read("/Consultants",{
+				urlParameters :{
+					"$expand" : "User_TypeDetails"
 				},
-			    filters: [ new sap.ui.model.Filter({
-				        path: "TeamDetails/ConsultantDetails/Consultant_ID",
-				        operator: sap.ui.model.FilterOperator.EQ,
-				        value1:consultantID
+				filters: [ new sap.ui.model.Filter({
+			        path: "Consultant_ID",
+			        operator: sap.ui.model.FilterOperator.EQ,
+			        value1:consultantID  
 				})],
-				success: function(data){ 
-					consultantsModel.setData(data);
-					thisDomObj.getView().setModel(consultantsModel,"consultantsModel");	
-					if(data.results.length > 0){
-						var oData = thisDomObj.getView().getModel("consultantsModel").getProperty("/results/0/ConsultantDetails");
-						var consultantID = oData.Consultant_ID;				
-						thisDomObj.selectConsultantByID(consultantID);	
+				success: function(odata){
+					console.log(odata.results);
+					if (odata.results[0].User_TypeDetails.User_Type_Id == 100){
+						oModel.read( "/Consultants", {
+							urlParameters: {
+								"$expand" : "User_TypeDetails"
+							},
+							filters: [ new sap.ui.model.Filter({
+						        path: "User_TypeDetails/User_Type_Id",
+						        operator: sap.ui.model.FilterOperator.NE,
+						        value1:100 
+							})],
+							success: function(data){ 
+								consultantsModel.setData(data);
+								thisDomObj.getView().setModel(consultantsModel,"consultantsModel");	
+								if(data.results.length > 0){
+									var oData = thisDomObj.getView().getModel("consultantsModel").getProperty("/results/0/");
+									var consultantID = oData.Consultant_ID;				
+									thisDomObj.selectConsultantByID(consultantID);	
+								}
+								dialog.close();
+							},
+					    	error: function(){
+					    		dialog.close();
+					    		console.log("Error");
+					    	}
+					 	});
+					}else{
+						oModel.read( "/Team_Entitys", {
+							urlParameters:{
+								"$expand": "TeamDetails/ConsultantDetails",
+								"$expand": "ConsultantDetails"
+							},
+						    filters: [ new sap.ui.model.Filter({
+							        path: "TeamDetails/ConsultantDetails/Consultant_ID",
+							        operator: sap.ui.model.FilterOperator.EQ,
+							        value1:consultantID
+							})],
+							success: function(data){ 
+								consultantsModel.setData(data);
+								thisDomObj.getView().setModel(consultantsModel,"consultantsModel");	
+								if(data.results.length > 0){
+									var oData = thisDomObj.getView().getModel("consultantsModel").getProperty("/results/0/ConsultantDetails");
+									var consultantID = oData.Consultant_ID;				
+									thisDomObj.selectConsultantByID(consultantID);	
+								}
+								dialog.close();
+							},
+					    	error: function(){
+					    		dialog.close();
+					    		console.log("Error");
+					    	}
+					 	});
 					}
-					dialog.close();
 				},
-		    	error: function(){
-		    		dialog.close();
-		    		console.log("Error");
-		    	}
-		 	});
+				error: function(error){
+					console.log("failed to read data");
+				}
+			});
 		},
 		selectConsultantByID : function(consultantID) {
 			this.getRouter().navTo("DetailConsultantView",{

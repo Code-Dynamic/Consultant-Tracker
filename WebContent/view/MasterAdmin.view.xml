@@ -119,14 +119,15 @@
 								
 									<ObjectListItem
 										id="consultantObjectListItem"
-										title="{consultantsModel>ConsultantDetails/Consultant_Name} {consultantsModel>ConsultantDetails/Consultant_Surname}"
+										title="{consultantsModel>ConsultantDetails/Consultant_Name} {consultantsModel>ConsultantDetails/Consultant_Surname} 
+											   {consultantsModel>Consultant_Name} {consultantsModel>Consultant_Surname}"
 										type="Active"
 										press="onConsultantListItemPress">
 									
 										<attributes>
 										
 											<ObjectAttribute text="{consultantsModel>ConsultantDetails/Consultant_Cell}" />
-											
+											<ObjectAttribute text="{consultantsModel>Consultant_Cell}" />
 										</attributes>
 										
 								</ObjectListItem>

@@ -115,13 +115,33 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		});
 	},
 	 onConsultantListItemPress: function(evt){
-		
-		
+		var oModel = this.getOwnerComponent().getModel("oModel");
+		var consultantID =  this.getConsultantID();
 		var sPath = evt.getSource().getBindingContext("consultantsModel").getPath();
 		var oData = this.getView().getModel("consultantsModel").getProperty(sPath);
 		//NB as a manager you can view all projects under you
-		var oConsultantId =  oData.ConsultantDetails.Consultant_ID;
-		this.getRouter().navTo("DetailConsultantView",{consultantId:oConsultantId});
+		var oConsultantId;
+		var thisObj = this;
+		oModel.read("/Consultants",{
+			urlParameters :{
+				"$expand" : "User_TypeDetails"
+			},
+			filters: [ new sap.ui.model.Filter({
+		        path: "Consultant_ID",
+		        operator: sap.ui.model.FilterOperator.EQ,
+		        value1:consultantID  
+			})],
+			success: function(data){
+				if (data.results[0].User_TypeDetails.User_Type_Id == 100)
+					oConsultantId =  oData.Consultant_ID;
+				else
+					oConsultantId = oData.ConsultantDetails.Consultant_ID;
+				thisObj.getRouter().navTo("DetailConsultantView",{consultantId:oConsultantId});
+			},
+			error: function(error){
+				sap.m.MessageToast.show('Unable to read selected consultant');
+			}
+		});
 	/*	MessageToast.show("Pressed : " + evt.getSource().getTitle());*/	
 	},
 	onPressButton: function(evt){	
