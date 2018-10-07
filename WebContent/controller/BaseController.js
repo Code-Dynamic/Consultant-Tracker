@@ -802,18 +802,40 @@ sap.ui.define([
 		//Search projects
 		// accepts syntax "search x","search for x","search project(s) for x","search project(s) x"
 		if(textArray[0] == "search"){
+			
+			var whoToSearch ='p';
 			textArray = textArray.slice(1);
 			if(textArray[0] == "projects" || textArray[0] == "project"){
 				textArray = textArray.slice(1);
+				whoToSearch ='p';
+			}
+			if(textArray[0] == "consultants" || textArray[0] == "consultant"){
+				textArray = textArray.slice(1);
+				whoToSearch ='c';
 			}
 			if(textArray[0] == "for" )
 				textArray = textArray.slice(1);
-//					else	
-//						textArray = textArray.slice(1);
+//			else	
+//				textArray = textArray.slice(1);
+			
 			textArray = textArray.join(" ");
 			console.log(textArray);
-			this.getView().byId("projectSearchField").setValue(textArray);
-			this.searchProjects(textArray);
+			if(whoToSearch =='p'){
+				
+				this.getView().byId("iconTabBar").setSelectedKey("projectsSelect");
+				
+				this.getView().byId("projectSearchField").setValue(textArray);
+				this.searchProjects(textArray);
+				
+			}else if(whoToSearch =='c'){
+				
+				this.getView().byId("iconTabBar").setSelectedKey("consultantsSelect");
+				
+				this.getView().byId("consultantSearchField").setValue(textArray);
+				this.searchConsultants(textArray);
+			}
+				
+			
 		}
 		// create project command
 		else if(textArray[0] == "create" && (textArray[1] == "project" ||textArray[1] == "projects")){
