@@ -56,20 +56,19 @@
 								
 									<ObjectListItem
 										id="projectObjectListItem"
-										title="{projectsModel>Project_Name}"
+										title="{projectsModel>ProjectDetails/Project_Name} {projectsModel>Project_Name}"
 										type="Active"
 										press="onProjectListItemPress">
 										
 										<firstStatus>
 										
-											<ObjectStatus text="{projectsModel>status}" />
+											<ObjectStatus text="{projectsModel>ProjectDetails/status}" />
 											
 										</firstStatus>
 										
 										<attributes>
-										
 											<ObjectAttribute text="{ path: 'projectsModel>Project_Deadline',formatter: '.formatter.date'}" />
-											
+											<ObjectAttribute text="{ path: 'projectsModel>ProjectDetails/Project_Deadline',formatter: '.formatter.date'}" />
 										</attributes>
 										
 									</ObjectListItem>

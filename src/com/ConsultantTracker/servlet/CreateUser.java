@@ -1,10 +1,14 @@
 package com.ConsultantTracker.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.seleniumhq.jetty9.server.ResponseWriter;
 
 import java.io.IOException;
 import javax.persistence.EntityManager;
@@ -17,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ConsultantTracker.model.Consultant;
 import com.ConsultantTracker.model.User;
+import com.ConsultantTracker.util.GeneratePassword;
 
 /**
  * Servlet implementation class CreateUser
@@ -37,8 +42,8 @@ public class CreateUser extends HttpServlet {
 	 */
     //for creating a new user based on the consultant details
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("Entered create user servlet");
-		String password = "default";
+		GeneratePassword generatePassword = new GeneratePassword();
+		String password = generatePassword.generatePassword(5);
 		String consultantID = request.getParameter("conID");
 
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
@@ -49,12 +54,16 @@ public class CreateUser extends HttpServlet {
 		if (consultant != null)
 			newUser.setConsultant_ID(consultant);
 		else
-			System.out.println("COuldn't find the consultant ID");
+			System.out.println("Couldn't find the consultant ID");
 		newUser.setPassword(password);
 		
 		em.getTransaction().begin();
 		em.persist(newUser);
 		em.getTransaction().commit();
+		
+		em.refresh(newUser);
+		PrintWriter out = response.getWriter();
+		out.write(String.valueOf(newUser.getPassword()));
 	}
 
 	/**

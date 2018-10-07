@@ -262,4 +262,14 @@
     <servlet-name>AssignConsultantToTeam</servlet-name>
     <url-pattern>/AssignConsultantToTeam</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>MailingServlet</display-name>
+    <servlet-name>MailingServlet</servlet-name>
+    <servlet-class>com.ConsultantTracker.servlet.MailingServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MailingServlet</servlet-name>
+    <url-pattern>/MailingServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

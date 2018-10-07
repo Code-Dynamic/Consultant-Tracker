@@ -46,9 +46,7 @@
 			
 					<ObjectAttribute
 						title="Due"
-						text="{ path: 
-									'projectsModel>/Project_Deadline',
-									formatter: '.formatter.date'}"/>
+						text="{ path:'projectsModel>/Project_Deadline',formatter: '.formatter.date'}"/>
 						
 					<ObjectAttribute
 						title="Client Name"

@@ -63,13 +63,9 @@ sap.ui.define([
 			
 			$.post('GetPasswordHash', {password:password},
 			function(response){
-				console.log(response);
 				password = response;
 			});
-//			console.log(this.getHash(password));
-//			this.getHash(password).then(password => {
-//			    console.log(password);
-//			  });
+			
 			var filters = [];
 			//start the loading indicator
 			sap.ui.core.BusyIndicator.show(0)
@@ -92,7 +88,6 @@ sap.ui.define([
 						sap.ui.core.BusyIndicator.hide();
 					}							
 					else{
-						console.log(password);
 						var oConsultantId = data.results[0].Consultant_ID;
 					    var oConsutlantAdmin = data.results[0].Consultant_Priviledge;
 					    filters = [new sap.ui.model.Filter("ConsultantDetails/Consultant_ID", sap.ui.model.FilterOperator.EQ, oConsultantId),

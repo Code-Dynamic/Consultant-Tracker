@@ -47,6 +47,31 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 			ConsultantAdmin = true;
 			ConsultantID = oArgs.consultantId;
 		}
+		var oModel = this.getOwnerComponent().getModel("oModel");
+		var thisObj = this;
+		oModel.read( "/Users", {
+			urlParameters:{
+				"$expand": "ConsultantDetails"
+			},
+			filters: [ new sap.ui.model.Filter({
+		          path: "ConsultantDetails/Consultant_ID",
+		          operator: sap.ui.model.FilterOperator.EQ,
+		          value1: oArgs.consultantId
+		     })],
+	    	success: function(data){
+	    	 	if(data.results.length > 0 && !data.results[0].Completed){
+	    	 		var consultantModel = new sap.ui.model.json.JSONModel();
+	    	 		consultantModel.setData(data);
+	    	 		thisObj._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.updateUserDetails",thisObj);
+	    	 		thisObj._oDialog.setModel(consultantModel,"consultantModel");
+	    	 		console.log(consultantModel);
+	    	 		thisObj._Dialog.open();
+	    	 	}
+	 		}, 
+	 		error: function(oError){
+				sap.m.MessageToast.show('Unable to extract user details');
+	 		}
+	 	});	
 	},
 	onSearchProject: function(oEvent) {
 		
@@ -65,11 +90,15 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		var oData = this.getView().getModel("projectsModel").getProperty(sPath);
 		
 		//NB as a manager you can view all projects under you
-		var projectID = oData.Project_ID;
+		console.log(oData);
+		var projectID;
+		if (oData.ProjectDetails != null)
+			projectID = oData.ProjectDetails.Project_ID;
+		else
+			projectID = oData.Project_ID;
 		//console.log(projectID);
-		this.getRouter().navTo("DetailAdmin", 
-		{projectId:projectID});
-		
+		this.getRouter().navTo("DetailAdmin", {projectId:projectID});
+
 		PROJECT_ID = projectID;
 		var consultantID = this.getConsultantID();		
 		//console.log("Project ID: "+ projectID);
@@ -104,7 +133,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	    });
 		
 		//TODO fix project progress
-		$.post('getProjectProgress',{Project_Id:projectID},function(responseText){
+		$.post('GetProjectProgress',{Project_Id:projectID},function(responseText){
 			var progress = {percVal:0,displayVal:0};
 			progress.percVal = parseFloat(responseText);
 			progress.displayVal = responseText;
@@ -115,33 +144,16 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		});
 	},
 	 onConsultantListItemPress: function(evt){
-		var oModel = this.getOwnerComponent().getModel("oModel");
-		var consultantID =  this.getConsultantID();
 		var sPath = evt.getSource().getBindingContext("consultantsModel").getPath();
 		var oData = this.getView().getModel("consultantsModel").getProperty(sPath);
 		//NB as a manager you can view all projects under you
 		var oConsultantId;
 		var thisObj = this;
-		oModel.read("/Consultants",{
-			urlParameters :{
-				"$expand" : "User_TypeDetails"
-			},
-			filters: [ new sap.ui.model.Filter({
-		        path: "Consultant_ID",
-		        operator: sap.ui.model.FilterOperator.EQ,
-		        value1:consultantID  
-			})],
-			success: function(data){
-				if (data.results[0].User_TypeDetails.User_Type_Id == 100)
-					oConsultantId =  oData.Consultant_ID;
-				else
-					oConsultantId = oData.ConsultantDetails.Consultant_ID;
-				thisObj.getRouter().navTo("DetailConsultantView",{consultantId:oConsultantId});
-			},
-			error: function(error){
-				sap.m.MessageToast.show('Unable to read selected consultant');
-			}
-		});
+		if (oData.User_TypeDetails != null)
+			oConsultantId =  oData.Consultant_ID;
+		else
+			oConsultantId = oData.ConsultantDetails.Consultant_ID;
+		thisObj.getRouter().navTo("DetailConsultantView",{consultantId:oConsultantId});
 	/*	MessageToast.show("Pressed : " + evt.getSource().getTitle());*/	
 	},
 	onPressButton: function(evt){	
@@ -419,7 +431,6 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	    	var _Email = sap.ui.getCore().byId("c_email").getValue();
 	    	var _Cell = sap.ui.getCore().byId("c_Cell").getValue();
 	    	var t = this;
-	    	var oDataProjects =   new sap.ui.model.odata.v2.ODataModel(this.getModelAddress()); 
 	    	var oModel = this.getOwnerComponent().getModel("oModel");
 	    	var _Privilege;
 	    	var _teamID;
@@ -463,28 +474,35 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	    				    	}
 	    				    	console.log(_teamID);
 	    				    	//create consultant
-	    		        	 	$.post('CreateConsultant', { 
-	    		    				name: _Name,
-	    		    				surname: _Surname,
-	    		    				email: _Email,
-	    		    				cell: _Cell,
-	    		    				admin: _Privilege}, 
+	    				    	$.post('CreateConsultant', { 
+									name: _Name,
+									surname: _Surname,
+									email: _Email,
+									cell: _Cell,
+									admin: _Privilege}, 
 	    		    				function(responseText) {
 	    		    					$.post('AssignConsultantToTeam',{consultantID:responseText, teamID: _teamID});
 //		    		    					console.log("At adding User Equivalent: "+responseText);
 	    		    					$.post('CreateUser', {conID:responseText},
 	    		    						function(response){
-	    		    							console.log("password" + response)
 	    		    							thisDomObj.goToConsultants();
+	    		    							$.post('MailingServlet',{name:_Name, emailAddress: _Email }, function(response){
+	    	    		    						console.log("success");
+	    	    		    					});
+	    		    							 MessageToast.show("Consultant succesfully added.");
 	    		    					});
-	    		    				});
-	    				     }
+								});
+	    				     },
+	    					error: function(){
+	    						 MessageToast.show("Failed to extract team details");
+	    					}
 	    		    	});
 		    	 	}
+		    	},
+		    	error: function(){
+		    		 MessageToast.show("Failed to extract consultant details");
 		    	}
 	    	});
-
-		    MessageToast.show("Consultant succesfully added.");
 	    	//close model
 	    	this.onClose();
 

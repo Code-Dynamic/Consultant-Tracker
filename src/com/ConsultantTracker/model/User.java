@@ -26,7 +26,8 @@ public class User implements Serializable {
 	private Consultant consultant_ID;
 
 	private String password;
-
+	private boolean completed;
+	
 	public User() {
 	}
 
@@ -65,5 +66,13 @@ public class User implements Serializable {
 			error.printStackTrace();
 		}
 		return null;
+	}
+
+	public boolean isCompleted() {
+		return completed;
+	}
+
+	public void setCompleted(boolean completed) {
+		this.completed = completed;
 	}
 }

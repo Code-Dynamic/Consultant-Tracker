@@ -68,39 +68,37 @@ sap.ui.define([
 		          operator: sap.ui.model.FilterOperator.EQ,
 		          value1: projectId
 		     })],
-				  success: function(data){
-					   membersDetailModel.setData(data);
-					   var filters = [];
-						var countMembers = data.results.length;
-						sap.ui.getCore().setModel(membersDetailModel,"membersModel");
+			  success: function(data){
+				   membersDetailModel.setData(data);
+				   var filters = [];
+					var countMembers = data.results.length;
+					sap.ui.getCore().setModel(membersDetailModel,"membersModel");
 
-						for(var i=0; i<countMembers;i++){
-							consultantsID[i] = data.results[i].ConsultantDetails.Consultant_ID;
+					for(var i=0; i<countMembers;i++){
+						consultantsID[i] = data.results[i].ConsultantDetails.Consultant_ID;
 //							console.log("Value: "+consultantsID[i]);
-							filters[i] = new sap.ui.model.Filter("Consultant_ID", sap.ui.model.FilterOperator.NE, consultantsID[i]);
-						}
-						
+						filters[i] = new sap.ui.model.Filter("Consultant_ID", sap.ui.model.FilterOperator.NE, consultantsID[i]);
+					}
+					
 //						console.log("Consultants: "+consultantsID);
 //						console.log(filters);
-						//7
-						var unassignedConsultantsModel = new JSONModel();	
-						OModel.read("/Consultants", {
-							filters: [new sap.ui.model.Filter(filters, true)],
-							success: function(data){
-								unassignedConsultantsModel.setData(data);
-								sap.ui.getCore().setModel(unassignedConsultantsModel,"unassignedConsultantsModel");
-								console.log("Unassigned Consultants");
-								console.log(data);
-							  },
-							  error: function(oError) {
-								  alert("error");
-							  }
-						});
-				  },
-				  error: function(oError) {
-					  alert("error");
-					 }
-				});
+					//7
+					var unassignedConsultantsModel = new JSONModel();	
+					OModel.read("/Consultants", {
+						filters: [new sap.ui.model.Filter(filters, true)],
+						success: function(data){
+							unassignedConsultantsModel.setData(data);
+							sap.ui.getCore().setModel(unassignedConsultantsModel,"unassignedConsultantsModel");
+						  },
+						  error: function(oError) {
+							  alert("error");
+						  }
+					});
+			  },
+			  error: function(oError) {
+				  alert("error");
+				 }
+			});
 		
 //				set the project detail model
 			this.getView().setModel(membersDetailModel,"membersModel"); 
