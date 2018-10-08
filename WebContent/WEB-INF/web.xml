@@ -272,4 +272,14 @@
     <servlet-name>MailingServlet</servlet-name>
     <url-pattern>/MailingServlet</url-pattern>
   </servlet-mapping>
+   <servlet>
+    <description></description>
+    <display-name>EmailNotificationAddedToTeam</display-name>
+    <servlet-name>EmailNotificationAddedToTeam</servlet-name>
+    <servlet-class>com.ConsultantTracker.servlet.EmailNotificationAddedToTeam</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EmailNotificationAddedToTeam</servlet-name>
+    <url-pattern>/EmailNotificationAddedToTeam</url-pattern>
+  </servlet-mapping>
 </web-app>

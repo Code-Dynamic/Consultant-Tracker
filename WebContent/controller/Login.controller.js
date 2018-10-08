@@ -22,6 +22,11 @@ sap.ui.define([
 					view.setVisible(true);
 					dialog.close();
 				});
+				
+				
+				/*$.post('EmailNotificationAddedToTeam',{newTeamMemberName:"Ben", emailAddress: "johandewaal18@gmail.com", currentUserName: "Johan" }, function(response){
+					console.log("success");
+				});*/
 			},
 
 		/**
