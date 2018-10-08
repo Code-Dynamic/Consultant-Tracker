@@ -489,7 +489,7 @@ sap.ui.define([
 		if(this.pKey ==  1){
 			
 		}else if (this.pKey == "__component0---DetailAdmin--2"){
-			
+	 		
 			this.getView().byId("iconTabBar").setSelectedKey("key2");
 			
 		}else if (this.pKey == "__component0---DetailAdmin--3"){
