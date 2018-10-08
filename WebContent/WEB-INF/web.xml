@@ -282,4 +282,34 @@
     <servlet-name>EmailNotificationAddedToTeam</servlet-name>
     <url-pattern>/EmailNotificationAddedToTeam</url-pattern>
   </servlet-mapping>
+   <servlet>
+    <description></description>
+    <display-name>EmailNotificationRemovedFromTeam</display-name>
+    <servlet-name>EmailNotificationRemovedFromTeam</servlet-name>
+    <servlet-class>com.ConsultantTracker.servlet.EmailNotificationRemovedFromTeam</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EmailNotificationRemovedFromTeam</servlet-name>
+    <url-pattern>/EmailNotificationRemovedFromTeam</url-pattern>
+  </servlet-mapping>
+   <servlet>
+    <description></description>
+    <display-name>EmailNotificationAddedToTask</display-name>
+    <servlet-name>EmailNotificationAddedToTask</servlet-name>
+    <servlet-class>com.ConsultantTracker.servlet.EmailNotificationAddedToTask</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EmailNotificationAddedToTask</servlet-name>
+    <url-pattern>/EmailNotificationAddedToTask</url-pattern>
+  </servlet-mapping>
+   <servlet>
+    <description></description>
+    <display-name>EmailNotificationRemoveFromTask</display-name>
+    <servlet-name>EmailNotificationRemoveFromTask</servlet-name>
+    <servlet-class>com.ConsultantTracker.servlet.EmailNotificationRemoveFromTask</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EmailNotificationRemoveFromTask</servlet-name>
+    <url-pattern>/EmailNotificationRemoveFromTask</url-pattern>
+  </servlet-mapping>
 </web-app>

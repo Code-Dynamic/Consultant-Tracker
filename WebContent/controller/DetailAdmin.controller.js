@@ -1197,6 +1197,7 @@ sap.ui.define([
 			var _DateAssigned = sap.ui.getCore().byId("AT_dateAssigned").getValue();
 			var _DueDate = sap.ui.getCore().byId("AT_Deadline").getValue();
 	    	var _Description = sap.ui.getCore().byId("AT_Description").getValue();
+	    	var thisObj = this;
 	    	
 //	    	console.log("Adding activity: "+_AssignedHours);
 			//var dueDate = sap.ui.getCore().byId("consultantSelected").getSelectedKey();
@@ -1212,7 +1213,76 @@ sap.ui.define([
 				hoursWorked:0, 
 				consultantID:Consultant_ID, 
 				taskID:this.taskIDSelected, 
-				description:_Description},function(responseText) {
+				description:_Description,
+				succes:function(data){
+                    
+					var oModel = thisObj.getView().getModel("projectsModel");
+					var projectID = oModel.oData.Project_ID;
+                    var memberAddedToTask;
+                    var currentUserName;
+                    var newMemberEmail;
+                    
+                    
+                    //var newMemberFilterID = new sap.ui.model.Filter("Consultant_ID", sap.ui.model.FilterOperator.EQ, consultantID);
+                    //var currentUserFilterID = new sap.ui.model.Filter("Consultant_ID", sap.ui.model.FilterOperator.EQ, thisObj.getConsultantID());
+                    
+                    OModel.read("/Consultants", {
+                        filters: [
+                              new sap.ui.model.Filter({
+                                path: "Consultant_ID",
+                                operator: sap.ui.model.FilterOperator.EQ,
+                                value1: Consultant_ID
+                           })],
+                        success: function(data){
+                            memberAddedToTask = data.results[0].Consultant_Name;
+                            //console.log( newMemberName);
+                            
+                            OModel.read("/Consultants", {
+                                filters: [
+                                      new sap.ui.model.Filter({
+                                        path: "Consultant_ID",
+                                        operator: sap.ui.model.FilterOperator.EQ,
+                                        value1: thisObj.getConsultantID()
+                                   })],
+                                success: function(data){
+                                    currentUserName = data.results[0].Consultant_Name;
+                                    //console.log( currentUserName);
+                                    OModel.read("/Projects", {
+                                        filters: [
+                                              new sap.ui.model.Filter({
+                                                path: "Project_ID",
+                                                operator: sap.ui.model.FilterOperator.EQ,
+                                                value1: projectID
+                                           })],
+                                        success: function(data){
+                                            var projectName = data.results[0].Project_Name;
+                                            //console.log(currentUserName);
+                                            $.post('EmailNotificationAddedToTask',{newTaskMemberName:memberAddedToTask, emailAddress: "johandewaal18@gmail.com", currentUserName: currentUserName, projectName: projectName }, function(response){
+                                                console.log("success");
+                                            });
+                                          },
+                                          error: function(oError) {
+                                              console.log("couldnt get consultant");
+                                          }
+                                    });
+                                  },
+                                  error: function(oError) {
+                                      console.log("couldnt get consultant");
+                                  }
+                            });
+                          },
+                          error: function(oError) {
+                              console.log("couldnt get consultant");
+                          }
+                    });
+                    
+                    
+                    
+                    
+                    
+                }
+			
+			},function(responseText) {
 				// var array = responseText.split(';');
 				console.log("Added activity: "+_AssignedHours);
 //				console.log("Returned from assign consultants");
