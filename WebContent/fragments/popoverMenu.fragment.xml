@@ -42,7 +42,7 @@
 			id="removeProjectButton" 
 			text="remove project" 
 			icon="sap-icon://folder" 
-			press="confirmDeleteProject">			
+			press="removeProject">			
 			</Button>
 		</Toolbar>
 		

@@ -46,7 +46,9 @@
 			
 					<ObjectAttribute
 						title="Due"
-						text="{ path:'projectsModel>/Project_Deadline',formatter: '.formatter.date'}"/>
+						text="{ path: 
+									'projectsModel>/Project_Deadline',
+									formatter: '.formatter.date'}"/>
 						
 					<ObjectAttribute
 						title="Client Name"
@@ -117,7 +119,7 @@
 			<TileContent >
 			
 			<NumericContent 
-			value="{projectsModel>/countTasks}" 
+			value="{countTaskModel>/countTasks}" 
 			icon="sap-icon://activities"/>
 	
 			</TileContent>
@@ -172,7 +174,7 @@
 			<TileContent>
 			
 			<NumericContent 
-			value="{projectsModel>/countTasks}" 
+			value="{tileAssignedTasksModel>/countAssignedTasks}" 
 			icon="sap-icon://accelerated"/>
 			
 			</TileContent>

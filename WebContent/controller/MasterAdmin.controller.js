@@ -15,7 +15,7 @@ var PROJECT_ID;
 var RatingIndicatorArr;
 var RatingResults;
 var RatingsErrTxt;
-
+var consultantId;
 return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.MasterAdmin", {
 
 	/**
@@ -23,6 +23,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	 * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
 	 * @memberOf splitapp.master
 	 */
+	
 	onInit: function() {
 		var oRouter = this.getRouter();
 		oRouter.getRoute("MasterAdmin").attachMatched(this.onRouteMatched, this);
@@ -39,6 +40,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	},
 	onRouteMatched: function(oEvent){
 		var oArgs = oEvent.getParameter("arguments");
+		consultantId = oArgs.consultantId; 
 		if(sessionStorage){
 			sessionStorage.ConsultantID = oArgs.consultantId;
 			sessionStorage.ConsultantAdmin = true;
@@ -96,9 +98,14 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 			projectID = oData.ProjectDetails.Project_ID;
 		else
 			projectID = oData.Project_ID;
-		//console.log(projectID);
-		this.getRouter().navTo("DetailAdmin", {projectId:projectID});
+			
+		var consultantId = this.getConsultantID();
+		console.log("in MasterAdmin ID:" +consultantId);
 
+		
+		this.getRouter().navTo("DetailAdmin", 
+		{projectId:projectID,consultantId: consultantId});
+		
 		PROJECT_ID = projectID;
 		var consultantID = this.getConsultantID();		
 		//console.log("Project ID: "+ projectID);
@@ -144,6 +151,8 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		});
 	},
 	 onConsultantListItemPress: function(evt){
+		
+		
 		var sPath = evt.getSource().getBindingContext("consultantsModel").getPath();
 		var oData = this.getView().getModel("consultantsModel").getProperty(sPath);
 		//NB as a manager you can view all projects under you

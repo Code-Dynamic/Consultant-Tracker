@@ -49,26 +49,27 @@
 							</Bar>
 							
 							<List id="projectsList"
-								items="{projectsModel>/results/}">
+								items="{projectsModel>/results}">
 								
 								<items
 									id="projectListItems">
 								
 									<ObjectListItem
 										id="projectObjectListItem"
-										title="{projectsModel>ProjectDetails/Project_Name} {projectsModel>Project_Name}"
+										title="{projectsModel>Project_Name}"
 										type="Active"
 										press="onProjectListItemPress">
 										
 										<firstStatus>
 										
-											<ObjectStatus text="{projectsModel>ProjectDetails/status}" />
+											<ObjectStatus text="{projectsModel>status}" />
 											
 										</firstStatus>
 										
 										<attributes>
+										
 											<ObjectAttribute text="{ path: 'projectsModel>Project_Deadline',formatter: '.formatter.date'}" />
-											<ObjectAttribute text="{ path: 'projectsModel>ProjectDetails/Project_Deadline',formatter: '.formatter.date'}" />
+											
 										</attributes>
 										
 									</ObjectListItem>
@@ -118,15 +119,14 @@
 								
 									<ObjectListItem
 										id="consultantObjectListItem"
-										title="{consultantsModel>ConsultantDetails/Consultant_Name} {consultantsModel>ConsultantDetails/Consultant_Surname} 
-											   {consultantsModel>Consultant_Name} {consultantsModel>Consultant_Surname}"
+										title="{consultantsModel>Consultant_Name} {consultantsModel>Consultant_Surname}"
 										type="Active"
 										press="onConsultantListItemPress">
 									
 										<attributes>
 										
-											<ObjectAttribute text="{consultantsModel>ConsultantDetails/Consultant_Cell}" />
 											<ObjectAttribute text="{consultantsModel>Consultant_Cell}" />
+											
 										</attributes>
 										
 								</ObjectListItem>

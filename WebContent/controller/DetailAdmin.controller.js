@@ -17,6 +17,10 @@ sap.ui.define([
 	var thisView;
 	var taskId;
 	var projectId;
+	var consultantId;
+	var countMembers;
+	var countTasks;
+	var countAssignedTasks;
 	return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.DetailAdmin", {
 
 /**
@@ -35,11 +39,14 @@ sap.ui.define([
 		this.setRatingsBtnRef();
 //		///set model for detail page
 		OModel = this.getOwnerComponent().getModel("oModel");
+		var projectsDetailModel = new JSONModel();
 		
 		var oArgs, oView;
 		oArgs = oEvent.getParameter("arguments");
-		var projectId = oArgs.projectId;
-		 
+		consultantId = oArgs.consultantId;
+		projectId = oArgs.projectId;
+		console.log("onRouteMahed consultant id: "+consultantId)
+		console.log("onRouteMahed project id: "+projectId)
 		//variables for counting members and tasks on a project
 		
 		var countTasks;
@@ -56,12 +63,20 @@ sap.ui.define([
 		
 		sap.ui.core.BusyIndicator.hide();
 	},
+	
 	setMembersModel: function(projectId){
 		var membersDetailModel = new JSONModel();
 		var consultantsID = [];
+		
+		
+		console.log("in setMembersModel Cid: "+consultantId)
+		console.log("in setMembersModel Pid: "+projectId)
+		
+		
 		OModel.read("/Assignments", {
 			urlParameters: {
-				"$expand" : "ProjectDetails, ConsultantDetails"
+				"$expand" : "ProjectDetails",
+				"$expand" : "ConsultantDetails"
 	        },
 			filters: [ new sap.ui.model.Filter({
 		          path: "ProjectDetails/Project_ID",
@@ -71,7 +86,7 @@ sap.ui.define([
 			  success: function(data){
 				   membersDetailModel.setData(data);
 				   var filters = [];
-					var countMembers = data.results.length;
+					countMembers = data.results.length;
 					sap.ui.getCore().setModel(membersDetailModel,"membersModel");
 
 					for(var i=0; i<countMembers;i++){
@@ -126,83 +141,118 @@ sap.ui.define([
 		
 		var tileHoursModel = new JSONModel();	
 		var tileProjectProgressModel = new JSONModel();
-		
+		var titleAssignedTasksModel = new JSONModel();
+		var tileTasksModel = new JSONModel();		
+		console.log("consultant id: "+consultantId);
+		console.log("project id: "+projectId);
 		//2
 		OModel.read("/Assigned_Tasks", {
 		
 			urlParameters: {
 				"$expand" : "TaskDetails",
-				"$expand" : "TaskDetails/ProjectDetails"
+				"$expand" : "TaskDetails/ProjectDetails",
+				"$expand" : "ConsultantDetails"
+					
 			},
 			filters: [ new sap.ui.model.Filter({
 		          path: "TaskDetails/ProjectDetails/Project_ID",
 		          operator: sap.ui.model.FilterOperator.EQ,
 		          value1: projectId
-		     })],
-		     success: function(data){
-			  //console.log("Test 1::::");
-				var results = JSON.stringify(data);
-				if(data.results == null){
-					
-				}else{
-//								TODO IS TIME ENTERED ON TASK OR ASSIGNED TASK  j 
-					//console.log("TaskDetail 1: "+results);
-					//console.log("TaskDetail 2: "+data.results);
-					var i = data.results.length;
-					var k = 0;
-					var j =0; 
-					var cur = data.results[0].TaskDetails.Task_ID;
-					var prev = cur;
-					
-					for(var x=0; x < i; x++){
-
-						cur = data.results[x].TaskDetails.Task_ID;
-							//console.log("cur : prev "+cur+" : "+prev);
-							if(prev == cur){
-
-							expectedHours += parseInt(data.results[x].Assigned_Hours, 10) ;
-							currentHours +=  parseInt(data.results[x].Hours_Worked, 10);
-							//console.log("ASSIGN : Worked "+expectedHours+" : "+currentHours);
-							assignedHoursArray[j] = assignedHoursArray[j]+expectedHours;
-							workedHoursArray[j] = workedHoursArray[j]+currentHours;
+		     }), 
+		     new sap.ui.model.Filter({
+				path: "ConsultantDetails/Consultant_ID",
+				operator: sap.ui.model.FilterOperator.EQ,
+				value1: consultantId
+			})],
+			success: function(data){
+//				  console.log("Test 1::::");
+					var results = JSON.stringify(data);
+					if(data.results == null){
+						
+					}else{
+//						TODO IS TIME ENTERED ON TASK OR ASSIGNED TASK  j 
+//						console.log("TaskDetail 1: "+results);
+//						console.log("TaskDetail 2: "+data.results);
+						var i = data.results.length;
+//						countTasks = data.results.length;
+						countAssignedTasks = data.results.length;
+						console.log("length: "+i);
+						if(i != 0){
+							var k = 0;
+							var j =0; 
+							var cur = data.results[0].TaskDetails.Task_ID;
+							var prev = cur;
 							
-							progress = ((data.results[x].Hours_Worked)/(data.results[x].Assigned_Hours) )* 100;
+							for(var x=0; x < i; x++){
 
-							totalHours += expectedHours;
-							totalWorkedHours += currentHours;
+								cur = data.results[x].TaskDetails.Task_ID;
+//								console.log("Task ID: "+cur);
+//									console.log("cur : prev "+cur+" : "+prev);
+									if(prev == cur){
+
+									expectedHours += parseInt(data.results[x].Assigned_Hours, 10) ;
+									currentHours +=  parseInt(data.results[x].Hours_Worked, 10);
+//									console.log("ASSIGN : Worked "+expectedHours+" : "+currentHours);
+									assignedHoursArray[j] = expectedHours;
+									workedHoursArray[j] =currentHours;
+									
+									progress = ((data.results[x].Hours_Worked)/(data.results[x].Assigned_Hours) )* 100;
+
+									totalHours += expectedHours;
+									totalWorkedHours += currentHours;
+									
+								}else{
+									prev = cur;
+//									console.log("2Task ID: "+cur);
+									j++;
+									expectedHours += parseInt(data.results[x].Assigned_Hours, 10) ;
+									currentHours +=  parseInt(data.results[x].Hours_Worked, 10);
+
+									assignedHoursArray[j] = parseInt(data.results[x].Assigned_Hours, 10);
+									workedHoursArray[j] = parseInt(data.results[x].Hours_Worked, 10);
+									
+									progress = ((data.results[x].Hours_Worked)/(data.results[x].Assigned_Hours) )* 100;
+
+									totalHours += expectedHours;
+									totalWorkedHours += currentHours;
+								}
+								
+							}
 							
+							
+							data.expected = expectedHours;
+							data.current = currentHours;
+							data.countAssignedTasks = countAssignedTasks;
+							
+							//getting overall progress of the project
+							projectProgress = ((totalWorkedHours/totalHours)*100).toFixed(0);
+							var a = parseFloat(projectProgress);
+							console.log("what is a: "+a);
+							if( a <= 100){
+								data.projectProgress = a;
+									
+							}else{
+								data.projectProgress = 100;
+								
+							}
+							
+							tileHoursModel.setData(data);
+							tileProjectProgressModel.setData(data);
+							titleAssignedTasksModel.setData(data);
 						}else{
-							prev = cur;
-							j++;
-							expectedHours += parseInt(data.results[x].Assigned_Hours, 10) ;
-							currentHours +=  parseInt(data.results[x].Hours_Worked, 10);
-
-							assignedHoursArray[j] = assignedHoursArray[j]+parseInt(data.results[x].Assigned_Hours, 10);
-							workedHoursArray[j] = workedHoursArray[j]+parseInt(data.results[x].Hours_Worked, 10);
 							
-							progress = ((data.results[x].Hours_Worked)/(data.results[x].Assigned_Hours) )* 100;
-
-							totalHours += expectedHours;
-							totalWorkedHours += currentHours;
+							console.log("what is a:2 "+a);
+							data.projectProgress = 0;
+							tileProjectProgressModel.setData(data);										
 						}
 						
+						
 					}
-					
-					
-					data.expected = expectedHours;
-					data.current = currentHours;
-					
-					//getting overall progress of the project
-					projectProgress = ((totalWorkedHours/totalHours)*100).toFixed(0);
-					var a = parseFloat(projectProgress);
-					data.projectProgress = a;
-					
-					tileHoursModel.setData(data);
-					tileProjectProgressModel.setData(data);
-				}
-				////////////////////////////////////////////end else
-		 
-		     },
+					////////////////////////////////////////////end else
+			 
+			  }	
+			
+			,
 		     error: function(oError) {
 				  alert(oError.error);
 				  alert("error");
@@ -211,9 +261,11 @@ sap.ui.define([
 		//console.log("Console log test2");
 		this.getView().setModel(tileHoursModel,"tileHoursModel");
 		this.getView().setModel(tileProjectProgressModel,"tileProjectProgressModel");
+		this.getView().setModel(titleAssignedTasksModel,"tileAssignedTasksModel");
 	},
 	setTaskModel: function(projectId, countTasks, progressArray, assignedHoursArray, workedHoursArray){
 		var tasksDetailModel = new JSONModel();
+		var countTasksModel = new JSONModel();
 		OModel.read("/Tasks", {
 			filters: [ 
 				new sap.ui.model.Filter({
@@ -222,16 +274,23 @@ sap.ui.define([
 		          value1: projectId
 		     })],
 			 success: function(data){	
-				var result = JSON.stringify(data);
-				tasksDetailModel.setData(data);
-				countTasks = data.results.length;
-					 
-				for(var x=0; x<countTasks; x++){
-					progressArray[x] = ((workedHoursArray[x]/assignedHoursArray[x])*100);
-					data.results[x].progress = parseInt(progressArray[x]);
-				}
-					 
-				tasksDetailModel.setData(data);
+				 
+				  countTasks = data.results.length;
+				  data.countTasks = countTasks;
+				  console.log("countTasks: "+countTasks);
+				  tasksDetailModel.setData(data);
+				  countTasksModel.setData(data);
+				 
+//				var result = JSON.stringify(data);
+//				tasksDetailModel.setData(data);
+//				countTasks = data.results.length;
+//					 
+//				for(var x=0; x<countTasks; x++){
+//					progressArray[x] = ((workedHoursArray[x]/assignedHoursArray[x])*100);
+//					data.results[x].progress = parseInt(progressArray[x]);
+//				}
+//					 
+//				tasksDetailModel.setData(data);
 			 },
 			 error: function(oError) {
 				  alert("error");
@@ -239,6 +298,7 @@ sap.ui.define([
 		});
 		
 		this.getView().setModel(tasksDetailModel,"tasksModel");
+		this.getView().setModel(countTasksModel,"countTaskModel"); 
 	},
 	setProjectsModel: function(projectId, countTasks){
 		var projectsDetailModel = new JSONModel();
@@ -304,9 +364,9 @@ sap.ui.define([
 	rowSelect: function(oEvent){
 
 		var oSelectedItem = oEvent.getParameter("listItem").getId();
-		console.log("selected item: "+oSelectedItem);
+//		console.log("selected item: "+oSelectedItem);
 		var tableId = oSelectedItem[oSelectedItem.length-1];
-		console.log("id: "+tableId);
+		console.log("project id: "+projectId);
 		
 		OModel.read("/Tasks", {
 			urlParameters: {
@@ -316,7 +376,7 @@ sap.ui.define([
 				new sap.ui.model.Filter({
 		          path: "ProjectDetails/Project_ID",
 		          operator: sap.ui.model.FilterOperator.EQ,
-		          value1: projectId
+		          value1: parseInt(projectId)
 		     })],
 			  success: function(data){
 
@@ -329,13 +389,19 @@ sap.ui.define([
 					//put the query inside because could not access taskID
 					OModel.read("/Assigned_Tasks", {
 						urlParameters: {
-							"$expand" : "TaskDetails"
+							"$expand" : "TaskDetails",
+							"$expand" : "ConsultantDetails"
 				        },
 						filters: [ 
 							new sap.ui.model.Filter({
 					          path: "TaskDetails/Task_ID",
 					          operator: sap.ui.model.FilterOperator.EQ,
 					          value1: taskId
+					     }),
+					     new sap.ui.model.Filter({
+					          path: "ConsultantDetails/Consultant_ID",
+					          operator: sap.ui.model.FilterOperator.EQ,
+					          value1: consultantId
 					     })],
 						  success: function(data){
 
@@ -368,6 +434,7 @@ sap.ui.define([
 	
 
 		this.getView().setModel(assignedTasksModel,"assignedTasksModel");
+
 		 //open the dialog
 		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAssignedTasks",this);
 		this._oDialog.setModel(this.getView().getModel("assignedTasksModel"),"assignedTasksModel");
@@ -579,7 +646,11 @@ sap.ui.define([
 		this._oDialog.open();		
 	},
 	onClose: function () {
+	
+		console.log("onclose fragment");
+		
 		if (this._oDialog) {
+			console.log("destroy fragment");
 			this._oDialog.destroy();
 		}
 	},
@@ -1331,6 +1402,7 @@ sap.ui.define([
 				this._Dialog.open();
 			},
 			onFeedback : function(){
+				
 			},
 			progress: function(){
 				 sap.m.MessageToast.show("Progress triggered");
@@ -1362,10 +1434,11 @@ sap.ui.define([
 				//console.log(oModel);
 
 				//get Project_ID to pass to the calender view
+				console.log("toCalender CID: "+consultantId);
 				var oListId = oModel.oData.Project_ID;
 				this.getRouter()
 					.navTo("Calender", 
-						{listId:oListId, projectId:oListId});
+						{listId:oListId, projectId:oListId, consultantId:consultantId});
 
 			},
 			handleUploadPress: function(oEvent) {

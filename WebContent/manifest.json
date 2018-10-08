@@ -173,7 +173,7 @@
 				},
 				{
 					"name": "Calender",
-					"pattern": "DetailAdmin/{listId}/Calender/{projectId}",
+					"pattern": "DetailAdmin/{listId}/Calender/{projectId},:consultantId:",
 					"target": [
 						"MasterAdmin","Calender"
 					]
