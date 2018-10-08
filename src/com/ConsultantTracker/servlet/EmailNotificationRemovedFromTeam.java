@@ -33,6 +33,7 @@ public class EmailNotificationRemovedFromTeam  extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		final String username = "codedynamiccos301@gmail.com";
 		final String password = "codeDynamic6";
+		
 
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
@@ -51,15 +52,16 @@ public class EmailNotificationRemovedFromTeam  extends HttpServlet {
 			String removedTeamMemberName = request.getParameter("removedTeamMemberName");
 			String emailAddress = request.getParameter("emailAddress");
 			String currentUserName = request.getParameter("currentUserName");
+			String projectName = request.getParameter("projectName");
 			
 			GeneratePassword generatePassword = new GeneratePassword();
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress("codedynamiccos301@gmail.com"));
 			message.setRecipients(Message.RecipientType.TO,
 				InternetAddress.parse(emailAddress));
-			message.setSubject("You have been to a team");
+			message.setSubject("You have been to removed from team");
 			message.setText("Dear " + removedTeamMemberName +
-					"\n\n You have been removed from a team by "+ currentUserName +".\n\n");
+					"\n\n You have been removed from Project '"+projectName+"' team by "+ currentUserName +".\n\n");
 					
 			Transport.send(message);
 			System.out.println("Email successfully sent to: " + emailAddress);

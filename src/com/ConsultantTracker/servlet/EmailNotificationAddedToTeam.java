@@ -51,15 +51,16 @@ public class EmailNotificationAddedToTeam  extends HttpServlet{
 			String newTeamMemberName = request.getParameter("newTeamMemberName");
 			String emailAddress = request.getParameter("emailAddress");
 			String currentUserName = request.getParameter("currentUserName");
+			String projectName = request.getParameter("projectName");
 			
 			GeneratePassword generatePassword = new GeneratePassword();
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress("codedynamiccos301@gmail.com"));
 			message.setRecipients(Message.RecipientType.TO,
 				InternetAddress.parse(emailAddress));
-			message.setSubject("You have been to a team");
+			message.setSubject("You have been added to a team");
 			message.setText("Dear " + newTeamMemberName +
-					"\n\n You have been added to a team by "+ currentUserName +".\n\n");
+					"\n\n You have been added to Project '"+projectName+"' team by "+ currentUserName +".\n\n");
 					
 			Transport.send(message);
 			System.out.println("Email successfully sent to: " + emailAddress);

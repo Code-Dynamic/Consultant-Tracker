@@ -878,7 +878,9 @@ sap.ui.define([
 							var assignmentID=oContext.getObject().Assignment_ID;
 							
 							$.post('UnassignConsultant', { 
-								assignment: assignmentID},
+								assignment: assignmentID
+								
+							},
 								function(data) {  
 								var array = data.split(';');
 //								console.log(data);
@@ -897,6 +899,8 @@ sap.ui.define([
 		handleCloseAddConsultantToProject: function(oEvent) {
 			var aContexts = oEvent.getParameter("selectedContexts");
 			var oModel = this.getView().getModel("projectsModel");
+			var thisObj = this;
+			
 			
 			if (aContexts && aContexts.length) {
 				aContexts.map(
@@ -906,7 +910,73 @@ sap.ui.define([
 						
 						$.post('AssignConsultants', { 
 							project: projectID,
-							consultant: consultantID
+							consultant: consultantID,
+							succes:function(data){
+                                
+                                
+                                var newMemberName;
+                                var currentUserName;
+                                var newMemberEmail;
+                                
+                                
+                                //var newMemberFilterID = new sap.ui.model.Filter("Consultant_ID", sap.ui.model.FilterOperator.EQ, consultantID);
+                                //var currentUserFilterID = new sap.ui.model.Filter("Consultant_ID", sap.ui.model.FilterOperator.EQ, thisObj.getConsultantID());
+                                
+                                OModel.read("/Consultants", {
+                                    filters: [
+                                          new sap.ui.model.Filter({
+                                            path: "Consultant_ID",
+                                            operator: sap.ui.model.FilterOperator.EQ,
+                                            value1: consultantID
+                                       })],
+                                    success: function(data){
+                                        newMemberName = data.results[0].Consultant_Name;
+                                        //console.log( newMemberName);
+                                        
+                                        OModel.read("/Consultants", {
+                                            filters: [
+                                                  new sap.ui.model.Filter({
+                                                    path: "Consultant_ID",
+                                                    operator: sap.ui.model.FilterOperator.EQ,
+                                                    value1: thisObj.getConsultantID()
+                                               })],
+                                            success: function(data){
+                                                currentUserName = data.results[0].Consultant_Name;
+                                                //console.log( currentUserName);
+                                                OModel.read("/Projects", {
+                                                    filters: [
+                                                          new sap.ui.model.Filter({
+                                                            path: "Project_ID",
+                                                            operator: sap.ui.model.FilterOperator.EQ,
+                                                            value1: projectID
+                                                       })],
+                                                    success: function(data){
+                                                        var projectName = data.results[0].Project_Name;
+                                                        //console.log(currentUserName);
+                                                        $.post('EmailNotificationAddedToTeam',{newTeamMemberName:newMemberName, emailAddress: "johandewaal18@gmail.com", currentUserName: currentUserName, projectName: projectName }, function(response){
+                                                            console.log("success");
+                                                        });
+                                                      },
+                                                      error: function(oError) {
+                                                          console.log("couldnt get consultant");
+                                                      }
+                                                });
+                                              },
+                                              error: function(oError) {
+                                                  console.log("couldnt get consultant");
+                                              }
+                                        });
+                                      },
+                                      error: function(oError) {
+                                          console.log("couldnt get consultant");
+                                      }
+                                });
+                                
+                                
+                                
+                                
+                                
+                            }
 							}, function(data) {  
 								var array = data.split(';');
 								console.log("In handleCloseAddConsultantToProject: "+data);
