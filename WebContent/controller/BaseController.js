@@ -886,7 +886,11 @@ sap.ui.define([
 				this.getView().byId("iconTabBar").setSelectedKey("projectsSelect");
 				
 				this.getView().byId("projectSearchField").setValue(textArray);
-				this.searchProjects(textArray, view);
+				if(sessionStorage.ConsultantAdmin)
+					this.searchProjects(textArray, "Admin");
+				else
+					this.searchProjects(textArray, "Consultant");
+						
 				
 			}else if(whoToSearch =='c'){
 				

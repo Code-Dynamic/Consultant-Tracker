@@ -114,11 +114,11 @@ sap.ui.define([
 									sap.ui.core.BusyIndicator.hide();
 									if (oConsutlantAdmin == 100 || oConsutlantAdmin == 200){
 										thisPtr.getRouter().navTo("MasterAdmin", {consultantId: oConsultantId});
-										thisPtr.view = "Admin";
+//										thisPtr.view = "Admin";
 									}
 									else{
 										thisPtr.getRouter().navTo("MasterConsultant", {consultantId: oConsultantId});
-										thisPtr.view = "Consultant";
+//										thisPtr.view = "Consultant";
 									}
 								}
 							}
