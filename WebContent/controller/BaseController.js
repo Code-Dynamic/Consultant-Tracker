@@ -343,6 +343,7 @@ sap.ui.define([
 							data.results[i].status = "In progress";
 						}
 					}
+					
 					projectsModel.setData(data);
 					thisDomObj.getView().setModel(projectsModel,"projectsModel");
 					if (data.results.length > 0) {
