@@ -209,7 +209,7 @@ sap.ui.define([
 								   countMembers = data.results.length;
 							  },
 							  error: function(oError) {
-								  alert("error");
+								  conosle.log("error");
 								 }
 							});
 //						set the project detail model
@@ -237,13 +237,13 @@ sap.ui.define([
 							  success: function(data){
 								 var result = JSON.stringify(data);
 								 tasksDetailModel.setData(data);
-//								 alert(result);
+//								 conosle.log(result);
 //								 console.log("tasksModel" +result);
 								 countTasks = data.results.length;
 									
 							  },
 							  error: function(oError) {
-								  alert("error");
+								  conosle.log("error");
 								 }
 							});
 						
@@ -261,10 +261,10 @@ sap.ui.define([
 									   projectsDetailModel.setData(data);
 //										var results = JSON.stringify(data);
 //										console.log(results);
-//										alert(results);
+//										conosle.log(results);
 								  },
 								  error: function(oError) {
-									  alert("error");
+									  conosle.log("error");
 									 }
 								});
 							//set the project detail model
@@ -301,11 +301,11 @@ sap.ui.define([
 					  success: function(data){
 						 var result = JSON.stringify(data);
 						 consultantDetailModel.setData(data);
-//						 alert(result);
+//						 conosle.log(result);
 						 console.log("oModel" +result);
 					  },
 					  error: function(oError) {
-						  alert("error");
+						  conosle.log("error");
 						 }
 					});
 				
@@ -334,7 +334,7 @@ sap.ui.define([
 			},
 			
 			onPressed: function(oEvent){
-				alert("hello world");
+				conosle.log("hello world");
 			},
 			onSubmit: function () {
 //				if (this._oDialog) {

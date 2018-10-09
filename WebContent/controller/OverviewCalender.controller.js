@@ -42,11 +42,11 @@ sap.ui.define([
 //					  success: function(data){
 //						 var result = JSON.stringify(data);
 //						 tasksModel.setData(data);
-//						 alert(result);
+//						 console.log(result);
 //						 console.log(result);
 //					  },
 //					  error: function(oError) {
-//						  alert("error");
+//						  console.log("error");
 //						 }
 //					});
 //				
@@ -108,11 +108,11 @@ sap.ui.define([
 //					  success: function(data){
 //						 var result = JSON.stringify(data);
 //						 tasksModel.setData(data);
-////						 alert(result);
+////						 console.log(result);
 //						 console.log(result);
 //					  },
 //					  error: function(oError) {
-//						  alert("error");
+//						  console.log("error");
 //						 }
 //					});
 //				
@@ -123,9 +123,7 @@ sap.ui.define([
 				//assigned to
 				oModel.read("/Assigned_Tasks", {
 					urlParameters: {
-			            "$expand" : "ConsultantDetails",
-			            "$expand" : "TaskDetails",
-			            "$expand" : "TaskDetails/ProjectDetails"
+			            "$expand" : "ConsultantDetails,TaskDetails,TaskDetails/ProjectDetails"
 			        },
 					filters: [ new sap.ui.model.Filter({
 				          path: "ConsultantDetails/Consultant_ID",
@@ -139,11 +137,11 @@ sap.ui.define([
 					  success: function(data){
 						 var result = JSON.stringify(data);
 						 tasksModel.setData(data);
-//						 alert(result);
+//						 console.log(result);
 //						 console.log(result);
 					  },
 					  error: function(oError) {
-						  alert("error");
+						  console.log("error");
 						 }
 					});
 				

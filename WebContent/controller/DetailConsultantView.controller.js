@@ -226,7 +226,7 @@ sap.ui.define([
 			},
 			
 			onPressed: function(oEvent){
-				alert("hello world");
+				console.log("hello world");
 			},
 			onExit: function () {
 				if (this._oQuickView) {

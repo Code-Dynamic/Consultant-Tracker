@@ -38,8 +38,7 @@ sap.ui.define([
 				//assigned to
 				oModel.read("/Assigned_Tasks", {
 					urlParameters: {
-			            "$expand" : "ConsultantDetails",
-			            "$expand" : "TaskDetails"
+			            "$expand" : "ConsultantDetails,TaskDetails"
 			        },
 					filters: [ new sap.ui.model.Filter({
 				          path: "ConsultantDetails/Consultant_ID",
@@ -56,7 +55,7 @@ sap.ui.define([
 						 console.log("results: "+result);
 					  },
 					  error: function(oError) {
-						  alert("error");
+						  console.log("error");
 						 }
 					});
 				

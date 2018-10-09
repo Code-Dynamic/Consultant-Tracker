@@ -18,8 +18,7 @@ sap.ui.define([
 			//read the Project table based on id
 				oModel.read("/Assigned_Tasks", {
 					urlParameters: {
-						"$expand" : "ConsultantDetails",
-						"$expand" : "TaskDetails"
+						"$expand" : "ConsultantDetails,TaskDetails"
 			        },
 					filters: [ new sap.ui.model.Filter({
 				          path: "ConsultantDetails/Consultant_ID",
@@ -30,7 +29,7 @@ sap.ui.define([
 						  taskDetailModel.setData(data);
 					  },
 					  error: function(oError) {
-						  alert("error");
+						  console.log("error");
 						 }
 					});
 				//set the project detail model

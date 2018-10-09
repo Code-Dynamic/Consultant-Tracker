@@ -576,8 +576,7 @@ sap.ui.define([
 					}else{
 						oModel.read( "/Team_Entitys", {
 							urlParameters:{
-								"$expand": "TeamDetails/ConsultantDetails",
-								"$expand": "ConsultantDetails"
+								"$expand": "TeamDetails/ConsultantDetails,ConsultantDetails"
 							},
 						    filters: [ new sap.ui.model.Filter({
 							        path: "TeamDetails/ConsultantDetails/Consultant_ID",
@@ -776,7 +775,7 @@ sap.ui.define([
 			console.log('start/stop');
 			if (recognizing) {
 				navigator.webkitGetUserMedia({audio:true},function(e){console.log(e);}, function(e) {
-					alert('Error getting audio');
+					console.log('Error getting audio');
 					console.log(e);
 				});
 				recognition.stop();

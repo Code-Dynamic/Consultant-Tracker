@@ -75,8 +75,7 @@ sap.ui.define([
 		
 		OModel.read("/Assignments", {
 			urlParameters: {
-				"$expand" : "ProjectDetails",
-				"$expand" : "ConsultantDetails"
+				"$expand" : "ProjectDetails,ConsultantDetails"
 	        },
 			filters: [ new sap.ui.model.Filter({
 		          path: "ProjectDetails/Project_ID",
@@ -106,12 +105,12 @@ sap.ui.define([
 							sap.ui.getCore().setModel(unassignedConsultantsModel,"unassignedConsultantsModel");
 						  },
 						  error: function(oError) {
-							  alert("error");
+							  console.log("error");
 						  }
 					});
 			  },
 			  error: function(oError) {
-				  alert("error");
+				  console.log("error");
 				 }
 			});
 		
@@ -142,16 +141,16 @@ sap.ui.define([
 		var tileHoursModel = new JSONModel();	
 		var tileProjectProgressModel = new JSONModel();
 		var titleAssignedTasksModel = new JSONModel();
-		var tileTasksModel = new JSONModel();		
+		var tileTasksModel = new JSONModel();	
+		var consultantId = this.getConsultantID();
 		console.log("consultant id: "+consultantId);
 		console.log("project id: "+projectId);
+
 		//2
 		OModel.read("/Assigned_Tasks", {
 		
 			urlParameters: {
-				"$expand" : "TaskDetails",
-				"$expand" : "TaskDetails/ProjectDetails",
-				"$expand" : "ConsultantDetails"
+				"$expand" : "TaskDetails,TaskDetails/ProjectDetails,ConsultantDetails"
 					
 			},
 			filters: [ new sap.ui.model.Filter({
@@ -254,8 +253,8 @@ sap.ui.define([
 			
 			,
 		     error: function(oError) {
-				  alert(oError.error);
-				  alert("error");
+				  console.log(oError.error);
+				  console.log("error");
 			 }
 		});
 		//console.log("Console log test2");
@@ -293,7 +292,7 @@ sap.ui.define([
 //				tasksDetailModel.setData(data);
 			 },
 			 error: function(oError) {
-				  alert("error");
+				  console.log("error");
 			 }
 		});
 		
@@ -312,10 +311,10 @@ sap.ui.define([
 				  projectsDetailModel.setData(data);
 //					var results = JSON.stringify(data);
 //					console.log(results);
-//					alert(results);
+//					console.log(results);
 			  },
 			  error: function(oError) {
-				  alert("error");
+				  console.log("error");
 				 }
 			});
 		//set the project detail model
@@ -330,10 +329,10 @@ sap.ui.define([
 //					console.log("All Consultants");
 //					console.log(data);
 					
-//						alert(results);
+//						console.log(results);
 			  },
 			  error: function(oError) {
-				  alert("error");
+				  console.log("error");
 				 }
 			});
 //			set the project detail model
@@ -345,7 +344,7 @@ sap.ui.define([
 			  success: function(data){
 				 var result = JSON.stringify(data);
 				 clientDetailModel.setData(data);
-//				 alert(result);
+//				 console.log(result);
 				// console.log("clientsModel##");
 //				 console.log(data);
 				 sap.ui.getCore().setModel(clientDetailModel,"clientList");
@@ -353,7 +352,7 @@ sap.ui.define([
 //					console.log(clientDetailModel.oData.results);
 			  },
 			  error: function(oError) {
-//				  alert("error");
+//				  console.log("error");
 				  console.log("Error");
 				 }
 		});
@@ -389,8 +388,7 @@ sap.ui.define([
 					//put the query inside because could not access taskID
 					OModel.read("/Assigned_Tasks", {
 						urlParameters: {
-							"$expand" : "TaskDetails",
-							"$expand" : "ConsultantDetails"
+							"$expand" : "TaskDetails,ConsultantDetails"
 				        },
 						filters: [ 
 							new sap.ui.model.Filter({
@@ -420,13 +418,13 @@ sap.ui.define([
 							assignedTasksModel.setData(data);
 						  },
 						  error: function(oError) {
-							  alert("Error");
+							  console.log("Error");
 							 }
 						});
 
 			  },
 			  error: function(oError) {
-				  alert("Error");
+				  console.log("Error");
 				 }
 			});
 
@@ -473,7 +471,7 @@ sap.ui.define([
 
 			  },
 			  error: function(oError) {
-				  alert("Error");
+				  console.log("Error");
 				 }
 			});
         //----------------------------//
@@ -1073,7 +1071,7 @@ sap.ui.define([
 							var results = JSON.stringify(data);
 					  },
 					  error: function(oError) {
-						  alert("error");
+						  console.log("error");
 						 }
 					});
 			thisView.getView().setModel(membersDetailModel,"membersModel"); 
@@ -1185,7 +1183,7 @@ sap.ui.define([
 //  					 console.log("tasksModel##task" +result);
   				  },
   				  error: function(oError) {
-  					  alert("error");
+  					  console.log("error");
   					 }
   				});
   		
@@ -1669,8 +1667,8 @@ sap.ui.define([
 				//Start---Mobile view code
                 onNavBack: function(oEvent){
                     
-                    //alert("Detail admin ");
-                    //alert(this.getConsultantID());
+                    //console.log("Detail admin ");
+                    //console.log(this.getConsultantID());
                     this.getRouter().navTo("MasterAdmin",{consultantId:this.getConsultantID()});
                 },
                 //End---Mobile view code

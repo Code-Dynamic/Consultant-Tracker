@@ -25,11 +25,11 @@ sap.ui.define([
 					  success: function(data){
 						 var result = JSON.stringify(data);
 						 overviewModel.setData(data);
-//						 alert(result);
+//						 console.log(result);
 //						 console.log("tasksModel" +oArgs.projectId);
 					  },
 					  error: function(oError) {
-						  alert("error");
+						  console.log("error");
 						 }
 					});
 				
