@@ -53,13 +53,24 @@ public class EmailNotificationAddedToTask extends HttpServlet{
 			String currentUserName = request.getParameter("currentUserName");
 			String projectName = request.getParameter("projectName");
 			
+			String taskDescription = request.getParameter("taskDescription");
+			String dueDate = request.getParameter("dueDate");
+			String dateAssigned = request.getParameter("dateAssigned");
+			String assignedHours = request.getParameter("assignedHours"); 
+			
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress("codedynamiccos301@gmail.com"));
 			message.setRecipients(Message.RecipientType.TO,
 				InternetAddress.parse(emailAddress));
 			message.setSubject("You have been added to a task");
 			message.setText("Dear " + newTaskMemberName +
-					"\n\n You have been added to a task in Project '"+projectName+"' by "+ currentUserName +".\n\n");
+					"\n\nYou have been added to a task in Project '"+projectName+"' by "+ currentUserName +".\n\n"+
+					"Date Assigned: "+ dateAssigned +" \n"+
+					"Date Due: "+ dueDate +" \n"+
+					"Assigned hours:  "+ assignedHours +" \n"+
+					"Task Description:  \n"+ taskDescription +" \n"
+					
+					);
 					
 			Transport.send(message);
 			System.out.println("Email successfully sent to: " + emailAddress);
