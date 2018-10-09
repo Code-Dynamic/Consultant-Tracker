@@ -152,6 +152,25 @@ sap.ui.define([
 		    onFeedbackPress: function(){
                 this.getRouter().navTo("Feedback");
 	        },
+	        onSearchProject: function(oEvent) {
+	    		
+	            var searchString = this.getView().byId("projectSearchField").getValue();
+	            this.searchProjects_CView(searchString);
+	            
+	      	},
+	      	onOpenPopover: function (oEvent) {
+
+				// create popover
+				if (!this._oPopover) {
+					/*this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.Popover",this);
+					this._oDialog.open();*/
+					this._oPopover = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.popoverMenu_CView", this);
+//					this._oPopover.open();
+					this.getView().addDependent(this._oPopover);
+				}
+
+				this._oPopover.openBy(oEvent.getSource());
+			},
 	
 		/**
 		 * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered

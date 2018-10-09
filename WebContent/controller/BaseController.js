@@ -624,6 +624,49 @@ sap.ui.define([
 				this.goToConsultants();
 			}
 		},
+		searchProjects_CView : function(oEvt) {
+			var thisDomObj = this;
+			var oModel = this.getOwnerComponent().getModel("oModel");
+			var searchString = arguments[0];
+			var assignmentsModel = new sap.ui.model.json.JSONModel();
+
+			oModel.read("/Assignments", {
+				urlParameters: {
+		            "$expand" : "ConsultantDetails,ProjectDetails"
+		        },
+				filters: [ new sap.ui.model.Filter({
+			          path: "ConsultantDetails/Consultant_ID",
+			          operator: sap.ui.model.FilterOperator.EQ,
+
+			          value1: thisDomObj.getConsultantID()
+			     }),
+			     new sap.ui.model.Filter({
+						path : "ProjectDetails/Project_Name",
+						operator : sap.ui.model.FilterOperator.Contains,
+						value1 : searchString
+				})],
+				async:false,
+				success: function(data){
+					// console.log(data);
+					assignmentsModel.setData(data);
+					thisDomObj.getView().setModel(assignmentsModel,"assignmentsModel");
+					if (data.results.length == 0) {
+						// console.log("List
+						// empty");
+						thisDomObj.getView().byId("listId")
+							.setNoDataText("No projects with the phrase \""
+												+ searchString
+												+ "\"");
+
+					}
+				  },
+				 error: function(oError) {
+					  console.log("Error");
+					  console.log(oError);
+				 	}
+				});
+
+		},
 		searchProjects : function(oEvt) {
 			var thisDomObj = this;
 			var projectsModel = new sap.ui.model.json.JSONModel();
@@ -781,15 +824,23 @@ sap.ui.define([
 				recognition.stop();
 				reset();
 		} else {
-			var btn = sap.ui.getCore().byId("__component0---MasterAdmin--microphoneButton-img");
-			btn.setProperty("color","#ef6161");
+			var btn1 = sap.ui.getCore().byId("__component0---MasterAdmin--microphoneButton-img");
+			var btn2 = sap.ui.getCore().byId("__component0---MasterConsultant--microphoneButton-img");
+			if(btn1!=null)
+				btn1.setProperty("color","#ef6161");
+			if(btn2!=null)
+				btn2.setProperty("color","#ef6161");
 			console.log("starting");
 			recognition.start();
 			recognizing = true;
 		}
 		function reset() {
-			var btn = sap.ui.getCore().byId("__component0---MasterAdmin--microphoneButton-img");
-			btn.setProperty("color","##cae4fb");
+			var btn1 = sap.ui.getCore().byId("__component0---MasterAdmin--microphoneButton-img");
+			var btn2 = sap.ui.getCore().byId("__component0---MasterConsultant--microphoneButton-img");
+			if(btn1!=null)
+				btn1.setProperty("color","##cae4fb");
+			if(btn2!=null)
+				btn2.setProperty("color","##cae4fb");
 			console.log("Resetting");
 			recognizing = false;
 		}

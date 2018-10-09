@@ -12,55 +12,69 @@
 	
 		<semantic:content>
 					
-		<IconTabBar 	id="iconTabBar" 
-						class="sapUiResponsiveContentPadding" 
-						expandable="false"
-						width="100%">
-						
+			<IconTabBar 	
+				id="iconTabBar" 
+				class="sapUiResponsiveContentPadding" 
+				expandable="false"
+				width="100%">
+							
 				<items>
 					<IconTabSeparator icon="sap-icon://vertical-grip"/>
-					
-					<IconTabSeparator icon="sap-icon://vertical-grip"/>
-										
+					<IconTabSeparator icon="sap-icon://vertical-grip"/>								
 					<IconTabFilter id="iconTabBarFilter2" 
 								icon="sap-icon://folder" 
 								tooltip="List of all projects" 
 								text="Projects">
-					<content>				
-						
-<List id="listId"
-		items="{assignmentsModel>/results/}">
-		
-		<items>
-		
-			<ObjectListItem
-				title="{assignmentsModel>ProjectDetails/Project_Name}"
-				type="Active"
-				press="onListItemPress">
-				
-				<firstStatus>
-				
-					<ObjectStatus
-						text="In Progress" />
-						
-				</firstStatus>
-				
-				<attributes>
-					<ObjectAttribute text="Date " />
-					
-				</attributes>
-				
-			</ObjectListItem>
-		</items>
-
-	</List>							
-
-			</content>
+						<content>				
+							<Bar id="headerBar">
+							
+								<contentMiddle>
+									
+									<SearchField 
+									id="projectSearchField"
+									tooltip="{i18n>masterSearchTooltip}" 
+									width="100%"
+									search="onSearchProject" 
+									liveChange="onSearchProject">
+									
+									</SearchField>
+									
+								</contentMiddle>
+								
+							</Bar>
+										
+							<List id="listId"
+									items="{assignmentsModel>/results/}">
+									
+									<items>
+									
+										<ObjectListItem
+											title="{assignmentsModel>ProjectDetails/Project_Name}"
+											type="Active"
+											press="onListItemPress">
+											
+											<firstStatus>
+											
+												<ObjectStatus
+													text="In Progress" />
+													
+											</firstStatus>
+											
+											<attributes>
+												<ObjectAttribute text="Date " />
+												
+											</attributes>
+											
+										</ObjectListItem>
+									</items>
+							
+								</List>							
+	
+						</content>
 			
 					</IconTabFilter>
 					
 					<IconTabSeparator icon="sap-icon://vertical-grip"/>
-					
 					<IconTabSeparator icon="sap-icon://vertical-grip"/>
 				</items>		
 			</IconTabBar>
@@ -69,7 +83,21 @@
 		</semantic:content>
 		
  		<semantic:customFooterContent>
-			<Button press="TestMicrophone" icon="sap-icon://microphone"/>
+ 			<Button 
+			id="microphoneButton"
+			press="TestMicrophone"
+			icon="sap-icon://microphone"/>
+			
+			<la:VerticalLayout>
+				<la:content>
+					<Button
+						id="popover_buttonId"
+						text="Action Menu"
+						press="onOpenPopover" />
+				</la:content>
+			</la:VerticalLayout>
+			
+			<!-- <Button press="TestMicrophone" icon="sap-icon://microphone"/>
 			<MenuButton 
 			text="Action Menu"
 			useDefaultActionOnly="true">
@@ -95,7 +123,7 @@
 					</items>
 				</Menu>
 			</menu>
-		</MenuButton>
+			</MenuButton> -->
 		
 				 
 		</semantic:customFooterContent>		
