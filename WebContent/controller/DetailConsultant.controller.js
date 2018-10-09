@@ -209,7 +209,7 @@ sap.ui.define([
 								   countMembers = data.results.length;
 							  },
 							  error: function(oError) {
-								  conosle.log("error");
+								  console.log("error");
 								 }
 							});
 //						set the project detail model

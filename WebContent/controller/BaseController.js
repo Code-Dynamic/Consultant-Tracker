@@ -22,6 +22,7 @@ sap.ui.define([
 		var RatingIndicatorArr;
 		var RatingResults;
 		var RatingsErrTxt;
+		var view;
 
 		return Controller.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.BaseController",{
 		formatter : formatter,
@@ -370,10 +371,17 @@ sap.ui.define([
 		},
 		selectProjectByID : function(projectID, projectCompleted) {
 			var consultantID = this.getConsultantID();
-			this.getRouter().navTo(
+//			if(view == "Admin"){
+				this.getRouter().navTo(
 					"DetailAdmin", {
 						projectId : projectID
 					});
+			/*}else if(view == "Consultant"){
+				this.getRouter().navTo(
+						"DetailConsultant", {
+							projectId : projectID
+						});
+			}*/
 			// RATINGS CODE
 			var thisObj = this;
 			var oModel = this.getOwnerComponent().getModel("oModel");
@@ -624,84 +632,86 @@ sap.ui.define([
 				this.goToConsultants();
 			}
 		},
-		searchProjects_CView : function(oEvt) {
-			var thisDomObj = this;
-			var oModel = this.getOwnerComponent().getModel("oModel");
-			var searchString = arguments[0];
-			var assignmentsModel = new sap.ui.model.json.JSONModel();
-
-			oModel.read("/Assignments", {
-				urlParameters: {
-		            "$expand" : "ConsultantDetails,ProjectDetails"
-		        },
-				filters: [ new sap.ui.model.Filter({
-			          path: "ConsultantDetails/Consultant_ID",
-			          operator: sap.ui.model.FilterOperator.EQ,
-
-			          value1: thisDomObj.getConsultantID()
-			     }),
-			     new sap.ui.model.Filter({
-						path : "ProjectDetails/Project_Name",
-						operator : sap.ui.model.FilterOperator.Contains,
-						value1 : searchString
-				})],
-				async:false,
-				success: function(data){
-					// console.log(data);
-					assignmentsModel.setData(data);
-					thisDomObj.getView().setModel(assignmentsModel,"assignmentsModel");
-					if (data.results.length == 0) {
-						// console.log("List
-						// empty");
-						thisDomObj.getView().byId("listId")
-							.setNoDataText("No projects with the phrase \""
-												+ searchString
-												+ "\"");
-
-					}
-				  },
-				 error: function(oError) {
-					  console.log("Error");
-					  console.log(oError);
-				 	}
-				});
-
-		},
 		searchProjects : function(oEvt) {
 			var thisDomObj = this;
-			var projectsModel = new sap.ui.model.json.JSONModel();
 			var oModel = this.getOwnerComponent().getModel("oModel");
+			var projectsModel = new sap.ui.model.json.JSONModel();
+			var assignmentsModel = new sap.ui.model.json.JSONModel();
 			var searchString = arguments[0];
-			// read projects
-			oModel.read("/Projects", {
-				filters : [ new sap.ui.model.Filter(
-				{
-					path : "Project_Name",
-					operator : sap.ui.model.FilterOperator.Contains,
-					value1 : searchString
-				})],
-				success : function(data) {
-					// console.log(data);
-					projectsModel.setData(data);
-					thisDomObj.getView().setModel(projectsModel,"projectsModel");
-					if (data.results.length == 0) {
-						// console.log("List empty");
-						thisDomObj.getView().byId("projectsList").setNoDataText("No projects with the phrase \"" + searchString + "\"");
-					} else if (data.results.length > 0) {
-						// saved projectID in m
-						// thisDomObj.selectProjectByID(firstItem.getNumber());
-						if(!thisDomObj.isDeviceMobile()){
-							var oData = thisDomObj.getView().getModel("projectsModel").getProperty("/results/0");
-							var projectID = oData.Project_ID;
-							var projectCompleted = oData.Project_Completed;
-							thisDomObj.selectProjectByID(projectID,projectCompleted);
+			view = arguments[1];
+			
+			if(view == "Admin"){
+				// read projects
+				oModel.read("/Projects", {
+					filters : [ new sap.ui.model.Filter(
+					{
+						path : "Project_Name",
+						operator : sap.ui.model.FilterOperator.Contains,
+						value1 : searchString
+					})],
+					success : function(data) {
+						// console.log(data);
+						projectsModel.setData(data);
+						thisDomObj.getView().setModel(projectsModel,"projectsModel");
+						if (data.results.length == 0) {
+							// console.log("List empty");
+							thisDomObj.getView().byId("projectsList").setNoDataText("No projects with the phrase \"" + searchString + "\"");
+						} else if (data.results.length > 0) {
+							// saved projectID in m
+							// thisDomObj.selectProjectByID(firstItem.getNumber());
+							if(!thisDomObj.isDeviceMobile()){
+								var oData = thisDomObj.getView().getModel("projectsModel").getProperty("/results/0");
+								var projectID = oData.Project_ID;
+								var projectCompleted = oData.Project_Completed;
+								thisDomObj.selectProjectByID(projectID,projectCompleted);
+							}
 						}
+					},
+					error : function() {
+						// console.log("Error");
 					}
-				},
-				error : function() {
-					// console.log("Error");
-				}
-			});
+				});
+			}else if(view == "Consultant"){
+				oModel.read("/Assignments", {
+					urlParameters: {
+			            "$expand" : "ConsultantDetails,ProjectDetails"
+			        },
+					filters: [ new sap.ui.model.Filter({
+				          path: "ConsultantDetails/Consultant_ID",
+				          operator: sap.ui.model.FilterOperator.EQ,
+
+				          value1: thisDomObj.getConsultantID()
+				     }),
+				     new sap.ui.model.Filter({
+							path : "ProjectDetails/Project_Name",
+							operator : sap.ui.model.FilterOperator.Contains,
+							value1 : searchString
+					})],
+					async:false,
+					success: function(data){
+						// console.log(data);
+						assignmentsModel.setData(data);
+						thisDomObj.getView().setModel(assignmentsModel,"assignmentsModel");
+						if (data.results.length == 0) {
+							// console.log("List empty");
+							thisDomObj.getView().byId("listId").setNoDataText("No projects with the phrase \""+ searchString+ "\"");
+						} else if (data.results.length > 0) {
+							// saved projectID in m
+							// thisDomObj.selectProjectByID(firstItem.getNumber());
+							if(!thisDomObj.isDeviceMobile()){
+								var oData = thisDomObj.getView().getModel("assignmentsModel").getProperty("/results/0");
+								var projectID = oData.Project_ID;
+								var projectCompleted = oData.Project_Completed;
+								thisDomObj.selectProjectByID(projectID,projectCompleted);
+							}
+						}
+					  },
+					 error: function(oError) {
+						  console.log("Error");
+						  console.log(oError);
+					 	}
+				});
+			}
 		},
 		searchConsultants : function(oEvt) {
 			var thisDomObj = this;
@@ -875,7 +885,7 @@ sap.ui.define([
 				this.getView().byId("iconTabBar").setSelectedKey("projectsSelect");
 				
 				this.getView().byId("projectSearchField").setValue(textArray);
-				this.searchProjects(textArray);
+				this.searchProjects(textArray, view);
 				
 			}else if(whoToSearch =='c'){
 				

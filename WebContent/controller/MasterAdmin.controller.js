@@ -78,7 +78,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	onSearchProject: function(oEvent) {
 		
       var searchString = this.getView().byId("projectSearchField").getValue();
-      this.searchProjects(searchString);
+      this.searchProjects(searchString, "Admin");
       
 	},
 	onSearchConsultant: function(oEvent) {

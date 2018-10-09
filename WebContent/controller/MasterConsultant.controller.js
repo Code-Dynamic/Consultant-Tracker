@@ -155,7 +155,7 @@ sap.ui.define([
 	        onSearchProject: function(oEvent) {
 	    		
 	            var searchString = this.getView().byId("projectSearchField").getValue();
-	            this.searchProjects_CView(searchString);
+	            this.searchProjects(searchString, "Consultant");
 	            
 	      	},
 	      	onOpenPopover: function (oEvent) {

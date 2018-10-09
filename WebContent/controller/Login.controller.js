@@ -112,10 +112,14 @@ sap.ui.define([
 								else{
 									//end the loading indicator
 									sap.ui.core.BusyIndicator.hide();
-									if (oConsutlantAdmin == 100 || oConsutlantAdmin == 200)
+									if (oConsutlantAdmin == 100 || oConsutlantAdmin == 200){
 										thisPtr.getRouter().navTo("MasterAdmin", {consultantId: oConsultantId});
-									else
+										thisPtr.view = "Admin";
+									}
+									else{
 										thisPtr.getRouter().navTo("MasterConsultant", {consultantId: oConsultantId});
+										thisPtr.view = "Consultant";
+									}
 								}
 							}
 						});
