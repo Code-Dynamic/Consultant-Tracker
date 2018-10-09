@@ -881,18 +881,19 @@ sap.ui.define([
 			
 			textArray = textArray.join(" ");
 			console.log(textArray);
+			console.log(sessionStorage.ConsultantAdmin == 'true');
 			if(whoToSearch =='p'){
 				
 				this.getView().byId("iconTabBar").setSelectedKey("projectsSelect");
 				
 				this.getView().byId("projectSearchField").setValue(textArray);
-				if(sessionStorage.ConsultantAdmin)
+				if(sessionStorage.ConsultantAdmin == 'true')
 					this.searchProjects(textArray, "Admin");
 				else
 					this.searchProjects(textArray, "Consultant");
 						
 				
-			}else if(whoToSearch =='c'){
+			}else if(whoToSearch =='c' && (sessionStorage.ConsultantAdmin == 'true')){
 				
 				this.getView().byId("iconTabBar").setSelectedKey("consultantsSelect");
 				
@@ -953,11 +954,10 @@ sap.ui.define([
 		var tasksModel =  new sap.ui.model.json.JSONModel();
 		//admin sees all current tasks
 		console.log("Consultant Admin "+sessionStorage.ConsultantAdmin);
-		if(sessionStorage.ConsultantAdmin){
+		if(sessionStorage.ConsultantAdmin == 'true'){
 			var oModel = this.getOwnerComponent().getModel("oModel");
 			this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.showTasks",this);
-			oModel.read("/Tasks", {
-				urlParameters:{"$select": "Due_Date"},		
+			oModel.read("/Tasks", {		
 				filters: [ new sap.ui.model.Filter({
 			          path: "Due_Date",
 			          operator: sap.ui.model.FilterOperator.LE,
