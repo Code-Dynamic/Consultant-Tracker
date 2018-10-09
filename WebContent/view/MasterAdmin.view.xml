@@ -119,7 +119,7 @@
 								
 									<ObjectListItem
 										id="consultantObjectListItem"
-										title="{consultantsModel>Consultant_Name} {consultantsModel>Consultant_Surname}"
+										title="{consultantsModel>Consultant_Name} {consultantsModel>Consultant_Surname} {consultantsModel>ConsultantDetails/Consultant_Name} {consultantsModel>ConsultantDetails/Consultant_Surname}"
 										type="Active"
 										press="onConsultantListItemPress">
 									
