@@ -26,7 +26,12 @@ sap.ui.define([
 			onAfterRendering: function(){
 				//sets utilization selects to current year and month
 				this.setUpUtilizationOptions();
-	
+				
+				//fix size of utilization bar depending on screen size
+				if (this.isDeviceMobile()){
+					var utilizationInput = this.byId("utilizationYearInput");
+					utilizationInput.setWidth("20%");
+				}
 				
 			},
 			setupUtilizationChartContainer: function(){
