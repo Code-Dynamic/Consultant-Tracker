@@ -451,27 +451,23 @@ sap.ui.define([
 		onRateTeam: function(){
 			this._ratingsDialog = this.byId("ratingsDialog");
 			var dialog = this._ratingsDialog;
-			//console.log(dialog);
 			dialog.setEscapeHandler(this.onDialogPressEscape);
 	    	var consultantID = this.getConsultantID();
 	    	var oModel = this.getView().getModel("projectsModel");
 			var projectID = oModel.oData.Project_ID;
-//	    	var query = "/Assignments?$expand=ProjectDetails,ConsultantDetails&$filter=ConsultantDetails/Consultant_ID%20ne%20"+consultantID+"%20and ProjectDetails/Project_ID%20eq%20"+projectID;
-//		     var oModel =  new sap.ui.model.odata.ODataModel(this.getModelAddress());
+			console.log(projectID);
+			var filters = [];
+			filters = [new sap.ui.model.Filter("ProjectDetails/Project_ID", sap.ui.model.FilterOperator.EQ, projectID),
+					   new sap.ui.model.Filter("ConsultantDetails/Consultant_ID", sap.ui.model.FilterOperator.NE, consultantID)];
+			
 			var oModel = this.getOwnerComponent().getModel("oModel");
-			oModel.read("/Ratings_Entrys", {
+			oModel.read("/Assignments", {
 				urlParameters: {
 					"$expand": "ProjectDetails, ConsultantDetails"
 				},
-				filters: [ new sap.ui.model.Filter({
-					path: "ProjectDetails/Project_ID",
-			        operator: sap.ui.model.FilterOperator.EQ,
-			        value1: projectID,
-			        path: "ConsultantDetails/Consultant_ID",
-			        operator: sap.ui.model.FilterOperator.EQ,
-			        value1: consultantID
-			     })],
-			     success: function(oData){ 
+				filters: [ new sap.ui.model.Filter(filters,true)],
+			     success: function(oData){
+			    	 console.log(oData);
 			    	 addMembers(oData) 
 		 		 },
 		 		 error: function(){
@@ -482,6 +478,7 @@ sap.ui.define([
 		 	RatingIndicatorArr = [];	
 		    //return all consultants
 		    function  addMembers(oResults) {
+		    	console.log(oResults);
 		    	RatingResults = oResults;
 		    	var ratingInd ="";
 		        var user = "";
