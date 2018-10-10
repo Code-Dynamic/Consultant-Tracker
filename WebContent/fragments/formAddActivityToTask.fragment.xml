@@ -44,12 +44,13 @@
 						valueFormat="yyyy-MM-dd"/>
 						
 					<Label text="Allocate hours to activity"></Label>
-					<TimePicker
+					<!-- <TimePicker
 						id="allocatedHours"
 						value="00"
 						valueFormat="HH"
 						displayFormat="HH"
-						placeholder="allocate hours"/>
+						placeholder="allocate hours"/> -->
+					<Input id="allocatedHours"/>
 						
 					<Label text="Assign consultant to activity"></Label>
 				 	
