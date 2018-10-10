@@ -9,6 +9,7 @@ import java.sql.SQLException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -55,11 +56,18 @@ public class UnassignConsultant extends HttpServlet {
 		Project project = a.getProject();
 		Consultant consultant = a.getConsultant();
 		//consultant rating deleted when a consultant is removed from the project
-		Ratings rateEntry = em.createQuery("SELECT d FROM Ratings d WHERE d.consultant =:consultant AND d.project =:project ",Ratings.class)
+		Ratings rateEntry = null; 
+		try {
+		 rateEntry = em.createQuery("SELECT d FROM Ratings d WHERE d.consultant =:consultant AND d.project =:project ",Ratings.class)
 				.setParameter("consultant", consultant).setParameter("project", project).getSingleResult();
+		}
+		catch(NoResultException e) {
+			
+		}
 		em.getTransaction().begin();
 		em.remove(a);
-		em.remove(rateEntry);
+		if(rateEntry != null)
+			em.remove(rateEntry);
 		em.getTransaction().commit();
 
 	}

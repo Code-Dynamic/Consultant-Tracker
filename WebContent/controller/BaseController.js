@@ -407,7 +407,7 @@ sap.ui.define([
 			     }
 			});
 			// project view
-			$.post('getProjectProgress',{
+			$.post('GetProjectProgress',{
 				Project_Id : projectID
 			},
 			function(responseText) {

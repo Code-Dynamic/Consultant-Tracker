@@ -395,11 +395,6 @@ sap.ui.define([
 					          path: "TaskDetails/Task_ID",
 					          operator: sap.ui.model.FilterOperator.EQ,
 					          value1: taskId
-					     }),
-					     new sap.ui.model.Filter({
-					          path: "ConsultantDetails/Consultant_ID",
-					          operator: sap.ui.model.FilterOperator.EQ,
-					          value1: consultantId
 					     })],
 						  success: function(data){
 
@@ -786,7 +781,7 @@ sap.ui.define([
 			    	var _cell = rows[i].split(",")[3];
 			    	var _admin = "0";
 			    	
-			    	$.post('createConsultant', { 
+			    	$.post('CreateConsultant', { 
 						name: _name,
 						surname: _surname,
 						email: _email,
@@ -817,7 +812,7 @@ sap.ui.define([
 				var arrConsultants;
 				//getConsultants
 				//return all consultants
-		         $.post('getProjectConsultants',function(responseText){
+		         $.post('GetProjectConsultants',function(responseText){
 						console.log("servlet getProjectConsultants responded");
 //						console.log(responseText);
 						arrConsultants = {Consultants:[]};
@@ -1160,7 +1155,7 @@ sap.ui.define([
 	    	
 	    	console.log(_Name+" "+_Description+" "+_DueDate+" "+_projectID);
 	    	
-	    	$.post('createTask',{description: _Description,dueDate: _DueDate,name:_Name, projectID: _projectID},function(responseText){
+	    	$.post('CreateTask',{description: _Description,dueDate: _DueDate,name:_Name, projectID: _projectID},function(responseText){
 	    		  console.log("Creating task completed");
 	    		  thisView.updateTasksList(_projectID);
 			});
@@ -1204,7 +1199,7 @@ sap.ui.define([
 	    	console.log("_AssignedHours "+_AssignedHours);
 	    	console.log("_Description "+_Description);
 	    	console.log("_DueDate "+_DueDate);*/
-			$.post('assignConsultantToTask', { 
+			$.post('AssignConsultantToTask', { 
 				dateAssigned:_DateAssigned, 
 				dueDate:_DueDate, 
 				assignedHours: _AssignedHours, 
@@ -1254,7 +1249,8 @@ sap.ui.define([
                                            })],
                                         success: function(data){
                                             var projectName = data.results[0].Project_Name;
-                                            //console.log(currentUserName);
+                                            console.log(currentUserName);
+                                            
                                             $.post('EmailNotificationAddedToTask',{newTaskMemberName:memberAddedToTask, emailAddress: "johandewaal18@gmail.com", currentUserName: currentUserName, projectName: projectName }, function(response){
                                                 console.log("success");
                                             });
@@ -1652,7 +1648,7 @@ sap.ui.define([
 			deleteTask: function(){
 						var id = sap.ui.getCore().getModel("taskID").getProperty("/id");
 						
-						$.post('removeAssignedTask',{taskID:id},function(responseText){
+						$.post('RemoveAssignedTask',{taskID:id},function(responseText){
 				    		  
 								console.log("Removed task!");
 							});
