@@ -705,8 +705,9 @@ sap.ui.define([
     		function(responseText) {
     		MessageToast.show("Project Edited Succesfully");
     		//ensures that newly created project is selected
-    		var selectFirstProject = false;
-    		thisDomObj.goToProjects(selectFirstProject);    		
+//    		var selectFirstProject = false;
+//    		thisDomObj.goToProjects(selectFirstProject);
+    		thisDomObj.setProjectsModel(projectId, 0);
     	});
     	//close model
 		this.onCancel();

@@ -56,7 +56,7 @@
 			<Button text="Submit" press="onEditProjectSubmit" id="EP_submitProjectButton"/>
 		</beginButton>
 		<endButton>
-			<Button text="Close" press="onClose" id="EP_closeProjectModalButton"/>
+			<Button text="Close" press="onCancel" id="EP_closeProjectModalButton"/>
 
 		</endButton>
 	</Dialog>
