@@ -109,17 +109,11 @@
 					<items>
 						<MenuItem 
 						id="requestUserTimesBtn" 
-						text="time entry" 
+						text="Time entry" 
 						icon="sap-icon://time-entry-request" 
 				 		press="onRequestUserTimes">
 						</MenuItem>
 						
-						<MenuItem
-						id="feedBackBtn"
-						text="communication" 
-				 		icon="sap-icon://notification-2" 
-				 		press="onFeedbackPress">
-						</MenuItem>
 					</items>
 				</Menu>
 			</menu>

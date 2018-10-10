@@ -159,57 +159,6 @@
 						press="onOpenPopover" />
 				</l:content>
 			</l:VerticalLayout>
-			
-			<!-- <MenuButton 
-			text="Action Menu"
-			useDefaultActionOnly="true">
-			
-				<Menu itemSelected="onMenuAction">
-				
-					<MenuItem
-					icon="sap-icon://add" 
-					text="add client" 
-					press="addClient" 
-					id="addClientButton">
-					</MenuItem>
-					
-					<MenuItem 			
-					icon="sap-icon://add" 
-					text="add project" 
-					press="addProject" 
-					id="addProjectButton">
-					</MenuItem>
-					
-					<MenuItem 			
-					icon="sap-icon://add" 
-					text="add consultant" 
-					press="addConsultant" 
-					id="addConsultantButton">
-					</MenuItem>
-					
-					<MenuItem 
-					id="removeProjectButton" 
-					text="remove project" 
-					icon="sap-icon://delete" 
-					press="confirmDeleteProject">			
-					
-					</MenuItem>
-					
-					<MenuItem 
-					id="requestUserTimesBtn" 
-					text="time entry" 
-					icon="sap-icon://time-entry-request" 
-					press="onRequestUserTimes">
-					</MenuItem>
-					
-					<MenuItem
-					text="communication" 
-			 		id="feedBackAdminBtn" 
-					icon="sap-icon://notification-2" 
-					press="onFeedbackPress">
-					</MenuItem>
-				</Menu>
-		</MenuButton> -->	
 				
 		</semantic:customFooterContent>
 		
