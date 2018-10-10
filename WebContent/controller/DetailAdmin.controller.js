@@ -427,11 +427,11 @@ sap.ui.define([
 	
 
 		this.getView().setModel(assignedTasksModel,"assignedTasksModel");
-
+		this.onClose();
 		 //open the dialog
 		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAssignedTasks",this);
 		this._oDialog.setModel(this.getView().getModel("assignedTasksModel"),"assignedTasksModel");
-		this._oDialog.open();	
+		this._oDialog.open();
 	},
 		
 	onChangeCheckbox:function(oEvent){
@@ -636,15 +636,16 @@ sap.ui.define([
 		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddClient",this);
 		this._oDialog.open();		
 	},
-	/*onClose: function () {
+	onClose: function () {
 	
 		console.log("onclose fragment");
 		
 		if (this._oDialog) {
 			console.log("destroy fragment");
 			this._oDialog.destroy();
+			this._oDialog = null;
 		}
-	},*/
+	},
 	// onSubmit event handler of the fragment
     onSubmitProject : function() {
     	var thisDomObj = this;
