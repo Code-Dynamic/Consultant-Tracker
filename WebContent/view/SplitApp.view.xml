@@ -33,11 +33,7 @@ controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.Spli
         backgroundDesign="Transparent">
 
             <layoutData>
-
-                <OverflowToolbarLayoutData 
-                priority="NeverOverflow" 
-                shrinkable="true"/>
-
+                <OverflowToolbarLayoutData priority="NeverOverflow"  shrinkable="true"/>
             </layoutData>
 
         </IconTabHeader>
@@ -45,7 +41,7 @@ controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.Spli
         <ToolbarSpacer>
         
             <layoutData>
-            
+       
                 <OverflowToolbarLayoutData 
                 priority="NeverOverflow"
                 minWidth="16px"/>

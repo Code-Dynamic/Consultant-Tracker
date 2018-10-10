@@ -55,10 +55,6 @@ sap.ui.define([
 		//
 		//	}
 		
-		//Go to Register page
-		onCreateAccountClick: function(){
-				this.getRouter().navTo("register");
-		},
 		//Log user into account
 		onLoginClick: function(){
 			var email = this.getView().byId("username-email").getValue();
@@ -112,14 +108,13 @@ sap.ui.define([
 								else{
 									//end the loading indicator
 									sap.ui.core.BusyIndicator.hide();
-									if (oConsutlantAdmin == 100 || oConsutlantAdmin == 200){
+									sessionStorage.ConsultantID = oConsultantId;
+									if (!data.results[0].Completed)
+										thisPtr.getRouter().navTo("register");
+									else if (oConsutlantAdmin == 100 || oConsutlantAdmin == 200)
 										thisPtr.getRouter().navTo("MasterAdmin", {consultantId: oConsultantId});
-//										thisPtr.view = "Admin";
-									}
-									else{
+									else
 										thisPtr.getRouter().navTo("MasterConsultant", {consultantId: oConsultantId});
-//										thisPtr.view = "Consultant";
-									}
 								}
 							}
 						});
@@ -135,6 +130,71 @@ sap.ui.define([
 				 }
 			});
 	},
+	onForgotPasswordClick: function(){
+		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.ResetPassword",this);
+		this._oDialog.open();
+	},
+	
+	onSubmitEmail: function(){
+		var email = sap.ui.getCore().byId("c_Email").getValue();
+		var oModel = this.getOwnerComponent().getModel("oModel");
+		var userModel =  new sap.ui.model.json.JSONModel();
+		var thisObj = this;
+		oModel.read("/Users", {
+			urlParameters: {
+				"$expand": "ConsultantDetails"
+			},
+			filters: [ new sap.ui.model.Filter({
+		          path: "ConsultantDetails/Consultant_Email",
+		          operator: sap.ui.model.FilterOperator.EQ,
+		          value1: email
+		    })],
+		    success: function(data){
+		    	if(data.results.length > 0 ){
+		    		thisObj._oDialog.destroy();
+		    		userModel.setData(data.results[0]);
+		    		thisObj.getView().setModel(userModel, "userModel");
+		    		thisObj._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.SecurityQuestion",thisObj);
+		    		thisObj._oDialog.setModel(userModel, "userModel");
+		    		thisObj._oDialog.open();
+		    	}else 
+		    		sap.m.MessageToast.show("Email does not exist");
+		    }
+		})
+	},
+	onClose: function () {
+		if (this._oDialog) {
+			this._oDialog.destroy();
+		}
+	},
+	onSubmitResponse: function () {
+		var response = sap.ui.getCore().byId("c_Answer").getValue();
+		if (response == "")
+			sap.m.MessageToast.show("Incorrect response");
+		else if (response == this.getView().getModel("userModel").oData.Security_Answer){
+			this._oDialog.destroy();
+			this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.PasswordFragment",this);
+    		this._oDialog.open();
+		}
+	},
+	onSubmitPassword: function(){
+		var passw1 = sap.ui.getCore().byId("firstPassword").getValue();
+		var passw2 = sap.ui.getCore().byId("secPassword").getValue();
+		var thisObj = this;
+		if (passw1 == passw2 && passw1 != "" && passw2 != ""){
+			$.post('CreateUser', {
+				conID:this.getView().getModel("userModel").oData.Consultant_ID,
+				passw: passw1,
+				resetpassword: "true"
+			},
+			function(response){
+				sap.m.MessageToast.show("Password successfully changed");
+				thisObj._oDialog.destroy();
+			});
+		}else{
+			sap.m.MessageToast.show("Fill in all tables");
+		}
+	}
 });
 
 });

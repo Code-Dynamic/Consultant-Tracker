@@ -28,7 +28,7 @@ public class CreateConsultant extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("in here");
+		String conID = request.getParameter("conID");
 		String name = request.getParameter("name");
 		String surname = request.getParameter("surname");
 		String email = request.getParameter("email");
@@ -38,7 +38,11 @@ public class CreateConsultant extends HttpServlet {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
 		EntityManager em = emf.createEntityManager();
 		
-		Consultant c = new Consultant();
+		Consultant c;
+		if (conID == null)
+			c = new Consultant();
+		else
+			c  = em.find(Consultant.class, Integer.parseInt(conID)); 
 		c.setConsultant_Name(name);
 		c.setConsultant_Surname(surname);
 		c.setConsultant_Email(email);
@@ -46,7 +50,6 @@ public class CreateConsultant extends HttpServlet {
 //		Consultant c = em.find(Consultant.class, Integer.parseInt(consultant));
 		User_Type usrType = em.find(User_Type.class, adminPriv);
 		if (usrType != null) {
-			System.out.println("Admin: " + adminPriv);
 			c.setConsultant_Priviledge(usrType);
 			em.getTransaction().begin();
 			em.persist(c);

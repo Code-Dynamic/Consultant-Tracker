@@ -27,6 +27,8 @@ public class User implements Serializable {
 
 	private String password;
 	private boolean completed;
+	private String security_Question;
+	private String security_Answer;
 	
 	public User() {
 	}
@@ -74,5 +76,21 @@ public class User implements Serializable {
 
 	public void setCompleted(boolean completed) {
 		this.completed = completed;
+	}
+
+	public String getSecurity_Question() {
+		return security_Question;
+	}
+
+	public void setSecurity_Question(String security_Question) {
+		this.security_Question = security_Question;
+	}
+
+	public String getSecurity_Answer() {
+		return security_Answer;
+	}
+
+	public void setSecurity_Answer(String security_Answer) {
+		this.security_Answer = security_Answer;
 	}
 }

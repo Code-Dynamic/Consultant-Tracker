@@ -18,7 +18,7 @@
 								<Label xmlns="sap.m" text="Password"/>
 								<Input xmlns="sap.m" id="password" value="" type="Password"/>
 								<Button xmlns="sap.m" width="8rem" text="Login" type="Emphasized" press="onLoginClick" id="loginButton"/>
-								<Link xmlns="sap.m" text="Create Account" id="__link0" press="onCreateAccountClick"/>
+								<Link text="Forgot Password" press="onForgotPasswordClick"/>
 							</form:content>
 						</form:SimpleForm>
 				</items>

@@ -59,6 +59,10 @@ sap.ui.define([
 					this.getRouter().navTo("login");
 				}
 			},
+			
+			employeeProfile: function(){
+				this.getRouter().navTo("register");
+			}
 		/**
 		 * Called when the Controller is destroyed. Use this one to free resources and finalize activities.
 		 * @memberOf consultanttracker.Consultant-Tracker_Prototype-1.view.SplitApp

@@ -12,8 +12,7 @@ xmlns:form="sap.ui.layout.form">
 	title="" 
 	id="RegisterView">
 	
-		<l:VerticalLayout 
-		id="containerLayout_register" 
+		<l:VerticalLayout id="containerLayout_register" 
 		width="100%">
 		
 			<VBox 
@@ -22,11 +21,7 @@ xmlns:form="sap.ui.layout.form">
 			alignItems="Center" 
 			alignContent="SpaceAround"
 			direction="Column">
-			
-				<Text 
-				xmlns="sap.m" 
-				text="Create your own profile today!"/>
-				
+		
 				<VBox 
 				xmlns="sap.m" 
 				justifyContent="Center" 
@@ -58,43 +53,25 @@ xmlns:form="sap.ui.layout.form">
 						backgroundDesign="Solid">
 						
 							<form:content>
-							
-								<Label text="UserName"/>
+								<Label text="Name" />
+								<Input id="EditC_Name" value="{consultantModel>/Consultant_Name}"/>
 								
-								<Input 
-								id="register_userName" 
-								value=""/>
+								<Label text="Surname" />
+								<Input id="EditC_Surname" value="{consultantModel>/Consultant_Surname}"/>
 								
-								<Label text="Email"/>
+								<Label text="Email address" />
+								<Input id="EditC_Email" value="{consultantModel>/Consultant_Email}"/>
 								
-								<Input value=""/>
-								
-								<Label text="Password"/>
-
-								<Input 
-								value="" 
-								type ="Password"/>
-								
-								<Label text="Repeat Password"/>
-								
-								<Input 
-								value="" 
-								type ="Password"/>
+								<Label text="Cell Number" />
+								<Input id="EditC_Number" value="{consultantModel>/Consultant_Cell}"/>
 
 								<Button 
 								width="12rem" 
 								text="Create Account" 
 								type="Emphasized" 
-								press="onRegisterClick"/>
-							
-							</form:content>
-							
+								press="onUpdateClick"/>
+							</form:content>		
 						</form:SimpleForm>
-						
-							<Link 
-							text="Login" 
-							id="__link0" 
-							press="goToLoginClick"/>
 					</VBox>
 					
 				</VBox>
