@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ConsultantTracker.model.Assigned_Task;
+import com.ConsultantTracker.model.Assignment;
+import com.ConsultantTracker.model.Consultant;
 import com.ConsultantTracker.model.Task;
 
 /**
@@ -35,9 +38,20 @@ public class RemoveTask extends HttpServlet {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
 		EntityManager em = emf.createEntityManager();
 		
-		Task p= em.find(Task.class, taskID);
+		Task task= em.find(Task.class, taskID);
+		java.util.List<Assigned_Task> listOfAssignedTasks = em.createQuery("SELECT a FROM Assigned_Task a WHERE a.task = :taskId",Assigned_Task.class)
+                .setParameter("taskId", task).getResultList();
+		
+		for(int i=0;i<listOfAssignedTasks.size();i++) {
+			Assigned_Task assignedTask = listOfAssignedTasks.get(i);
+			em.getTransaction().begin();
+			em.remove(assignedTask);
+			em.getTransaction().commit();
+		}
+		
+		
 		em.getTransaction().begin();
-		em.remove(p);
+		em.remove(task);
 		em.getTransaction().commit();
 	}
 

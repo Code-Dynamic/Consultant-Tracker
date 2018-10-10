@@ -76,8 +76,7 @@ sap.ui.define([
 		
 		OModel.read("/Assignments", {
 			urlParameters: {
-				"$expand" : "ProjectDetails",
-				"$expand" : "ConsultantDetails"
+				"$expand" : "ProjectDetails,ConsultantDetails"
 	        },
 			filters: [ new sap.ui.model.Filter({
 		          path: "ProjectDetails/Project_ID",
@@ -396,11 +395,6 @@ sap.ui.define([
 					          path: "TaskDetails/Task_ID",
 					          operator: sap.ui.model.FilterOperator.EQ,
 					          value1: taskId
-					     }),
-					     new sap.ui.model.Filter({
-					          path: "ConsultantDetails/Consultant_ID",
-					          operator: sap.ui.model.FilterOperator.EQ,
-					          value1: consultantId
 					     })],
 						  success: function(data){
 
@@ -1107,7 +1101,7 @@ sap.ui.define([
 //			console.log(aContexts);
 			
 			if (aContexts && aContexts.length) {
-				MessageToast.show("You have chosen " + aContexts.map(function(oContext) {
+				console.log("You have chosen " + aContexts.map(function(oContext) {
 					console.log("test: "+JSON.stringify(oContext.getObject()));
 					var taskID=oContext.getObject().Task_ID;
 					
