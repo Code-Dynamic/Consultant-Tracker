@@ -6,10 +6,10 @@
 			<VBox xmlns="sap.m" justifyContent="Center" alignItems="Center" alignContent="SpaceAround" direction="Column" height="30%">	 
 				<VBox xmlns="sap.m" justifyContent="Center" alignItems="Center" alignContent="Center" direction="Column" displayInline="true" fitContainer="true">
 				
-					<VBox class="sapUiSmallMargin" backgroundDesign="Solid">
-					 <Image class="logo" src="https://i.imgur.com/aWyoWOr.jpg" id="image0"/>
+					
+					 <Image class="logo" src="model/logo-min.png" id="image0"/>
 						
-					</VBox>
+					
 				<items>
 				    <form:SimpleForm height="500px" class=" loginForm sapUiLargePadding" id="login_SimpleFormDisplay" editable="false" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false">
 							<form:content>

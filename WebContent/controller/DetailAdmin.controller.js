@@ -1253,7 +1253,7 @@ sap.ui.define([
                                             var projectName = data.results[0].Project_Name;
                                             console.log(currentUserName);
                                             
-                                            $.post('EmailNotificationAddedToTask',{newTaskMemberName:memberAddedToTask, emailAddress: "johandewaal18@gmail.com", currentUserName: currentUserName, projectName: projectName }, function(response){
+                                            $.post('EmailNotificationAddedToTask',{taskDescription: _Description,dueDate: _DueDate,dateAssigned: _DateAssigned,assignedHours: _AssignedHours,newTaskMemberName:memberAddedToTask, emailAddress: "johandewaal18@gmail.com", currentUserName: currentUserName, projectName: projectName }, function(response){
                                                 console.log("success");
                                             });
                                           },
