@@ -330,15 +330,7 @@
 				hAlign="Center">
 				<Text text="status" />
 			</Column>
-			
-			<Column
-				minScreenWidth="Desktop"
-				demandPopin="true"
-				hAlign="Center">
-				<Text text="actions" />
-			</Column>
 
-			
 		</columns>
 		
 		
@@ -364,36 +356,6 @@
 				displayOnly="true" />
 						
 				<Text text="Inprogress" />
-								
-			<MenuButton 
-			text="action" 
-			buttonMode="Split" 
-			useDefaultActionOnly="true">
-			
-			<menu>
-			
-				<Menu itemSelected="onMenuAction">
-				
-					<items>
-						
-						<MenuItem 
-						id="requestUserTimesBtn" 
-						text="time entry" 
-						icon="sap-icon://time-entry-request" 
-				 		press="handleTimeEntry">
-						</MenuItem>
-						
-						<MenuItem
-						id="feedBackBtn"
-						text="communication" 
-				 		icon="sap-icon://notification-2" 
-				 		press="onFeedbackPress">
-						</MenuItem>
-					</items>
-				</Menu>
-			</menu>
-			
-			</MenuButton>	
 
 				</cells>
 				

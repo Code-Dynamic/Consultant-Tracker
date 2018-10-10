@@ -10,7 +10,7 @@
 			<Button
 			width="100%"
 			icon="sap-icon://business-card" 
-			text="add client" 
+			text="Add Client" 
 			press="addClient" 
 			id="addClientButton">
 			</Button>
@@ -20,7 +20,7 @@
 			<Button 		
 			width="100%"	
 			icon="sap-icon://folder" 
-			text="add project" 
+			text="Add Project" 
 			press="addProject" 
 			id="addProjectButton">
 			</Button>
@@ -30,7 +30,7 @@
 			<Button 
 			width="100%"			
 			icon="sap-icon://employee" 
-			text="add consultant" 
+			text="Add Consultant" 
 			press="addConsultant" 
 			id="addConsultantButton">
 			</Button>
@@ -40,7 +40,7 @@
 			<Button
 			width="100%" 
 			id="removeProjectButton" 
-			text="remove project" 
+			text="Remove Project" 
 			icon="sap-icon://folder" 
 			press="removeProject">			
 			</Button>
@@ -50,20 +50,11 @@
 			<Button 
 			width="100%"
 			id="requestUserTimesBtn" 
-			text="time entry" 
+			text="Time Entry" 
 			icon="sap-icon://time-entry-request" 
 			press="onRequestUserTimes">
 			</Button>
 		</Toolbar>
 		
-		<Toolbar>
-			<Button
-			width="100%"
-			text="communication" 
-	 		id="feedBackAdminBtn" 
-			icon="sap-icon://notification-2" 
-			press="onFeedbackPress">
-			</Button>
-		</Toolbar>
 	</Popover>
 </core:FragmentDefinition>

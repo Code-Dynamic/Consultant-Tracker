@@ -10,20 +10,11 @@
 			<Button 
 			width="100%"
 			id="requestUserTimesBtn" 
-			text="time entry" 
+			text="Time entry" 
 			icon="sap-icon://time-entry-request" 
 			press="onRequestUserTimes">
 			</Button>
 		</Toolbar>
 		
-		<Toolbar>
-			<Button
-			width="100%"
-			text="communication" 
-	 		id="feedBackAdminBtn" 
-			icon="sap-icon://notification-2" 
-			press="onFeedbackPress">
-			</Button>
-		</Toolbar>
 	</Popover>
 </core:FragmentDefinition>
