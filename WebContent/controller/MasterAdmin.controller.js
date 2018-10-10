@@ -16,6 +16,7 @@ var RatingIndicatorArr;
 var RatingResults;
 var RatingsErrTxt;
 var consultantId;
+var OModel;
 return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.MasterAdmin", {
 
 	/**
@@ -28,6 +29,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		var oRouter = this.getRouter();
 		oRouter.getRoute("MasterAdmin").attachMatched(this.onRouteMatched, this);
 		this.checkDeviceTypeAndDisplayProjects();
+		OModel = this.getOwnerComponent().getModel("oModel");
 	},
 	checkDeviceTypeAndDisplayProjects: function(){
 		var selectFirstProject = true;
@@ -65,7 +67,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	    	 		var consultantModel = new sap.ui.model.json.JSONModel();
 	    	 		consultantModel.setData(data);
 	    	 		thisObj._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.updateUserDetails",thisObj);
-	    	 		thisObj._oDialog.setModel(consultantModel,"consultantModel");
+	    	 		thisObj._Dialog.setModel(consultantModel,"consultantModel");
 	    	 		console.log(consultantModel);
 	    	 		thisObj._Dialog.open();
 	    	 	}
@@ -396,7 +398,27 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddConsultant",this);
 		this._Dialog.open();
    },
+   setClientsModel: function(){
+		var clientDetailModel = new JSONModel();
+		OModel.read("/Clients", {
+			  success: function(data){
+				 var result = JSON.stringify(data);
+				 clientDetailModel.setData(data);
+//				 console.log(result);
+				// console.log("clientsModel##");
+//				 console.log(data);
+				 sap.ui.getCore().setModel(clientDetailModel,"clientList");
+//					console.log("Cli##");
+//					console.log(clientDetailModel.oData.results);
+			  },
+			  error: function(oError) {
+//				  console.log("error");
+				  console.log("Error");
+				 }
+		});
+	},
 	onSubmitClient: function(){
+		var thisObj = this;
     	var _Name = sap.ui.getCore().byId("c_Name").getValue();
     	var _EmailAddress = sap.ui.getCore().byId("c_Email").getValue();
     	var _PhysicalAddress = sap.ui.getCore().byId("c_Address").getValue();
@@ -406,6 +428,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
         		function(responseText) {  
       				MessageToast.show("client submitted Succesfully");
     				console.log(responseText);
+    				thisObj.setClientsModel(PROJECT_ID);
         		}
     	);
     	
