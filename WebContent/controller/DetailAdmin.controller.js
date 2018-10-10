@@ -616,9 +616,7 @@ sap.ui.define([
 		this.oProjectId = oId.oData.Project_ID;
 		oEntry.Project_ID =oProjectId;
 		
-		if (this._oDialog) {
-			this._oDialog.destroy();
-		}
+		this.onCancel();
 		
 	},
 	openOverviewCalender: function(evt){
@@ -644,7 +642,7 @@ sap.ui.define([
 		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddClient",this);
 		this._oDialog.open();		
 	},
-	onClose: function () {
+	/*onClose: function () {
 	
 		console.log("onclose fragment");
 		
@@ -652,7 +650,7 @@ sap.ui.define([
 			console.log("destroy fragment");
 			this._oDialog.destroy();
 		}
-	},
+	},*/
 	// onSubmit event handler of the fragment
     onSubmitProject : function() {
     	var thisDomObj = this;
@@ -678,11 +676,12 @@ sap.ui.define([
     		thisDomObj.goToProjects(selectFirstProject);    		
     	});
     	//close model
-		this.onClose();
+		this.onCancel();
     	
     },
   //edit project details
 	editProjectDetails: function(){
+		this.onCancel();
 		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.editProjectDetails",this);
 		this._oDialog.setModel(this.getView().getModel("projectsModel"),"projectsModel");
 		this._oDialog.open();		
@@ -716,7 +715,7 @@ sap.ui.define([
     		thisDomObj.goToProjects(selectFirstProject);    		
     	});
     	//close model
-		this.onClose();
+		this.onCancel();
     	
     },
     onSubmitClient: function(){
@@ -732,7 +731,7 @@ sap.ui.define([
     	);
     	
     	//close model
-    	this.onClose();
+    	this.onCancel();
     },
 	onDelete: function(){
 		var _projectID = sap.ui.getCore().getModel("selModel").getProperty("/Project_ID");
@@ -1127,8 +1126,10 @@ sap.ui.define([
 			
 		},
 		onAddTask: function(){
+			
+			this.onCancel();
 			this._DialogAddTask = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddTaskToProject", this);
-			 this._DialogAddTask.open();
+			this._DialogAddTask.open();
 		},
 		onAddActivity: function(oEvent){
 			var sPath = oEvent.getSource().getBindingContext("tasksModel").getObject();
@@ -1318,6 +1319,10 @@ sap.ui.define([
             if(this._DialogAddActivity){
             	this._DialogAddActivity.destroy();
             }
+            
+            if (this._oDialog) {
+    			this._oDialog.destroy();
+    		}
 		 },
 		 onRemove: function(oEvent){
 			var _projectID = sap.ui.getCore().getModel("groupMember").getProperty("/Consultants");

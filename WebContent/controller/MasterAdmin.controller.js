@@ -369,11 +369,12 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
         this.getRouter().navTo("Feedback");
     },
 	addProject: function(){
+		this.onClose();
 		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddProject",this);
 		this._oDialog.open();		
 	},
 	removeProject: function(oEvent){
-
+		this.onClose();
 		var projectModel = this.getView().getModel("projectsModel");
 		
 		this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formRemoveProject",this);
@@ -391,10 +392,12 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 
 	},
 	addClient: function(){
+		this.onClose();
 		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddClient",this);
 		this._oDialog.open();		
 	},
 	addConsultant: function(){
+		this.onClose();
 		this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddConsultant",this);
 		this._Dialog.open();
    },
