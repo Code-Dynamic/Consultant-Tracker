@@ -948,7 +948,7 @@ sap.ui.define([
 								function(data) {  
 								var array = data.split(';');
 //								console.log(data);
-								thisView.updateMembersList(projectID);
+								thisView.setMembersModel(projectID);
 							});
 							return oContext.getObject().Assignment_ID; 
 						}
