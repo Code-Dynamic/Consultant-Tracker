@@ -10,7 +10,7 @@
 			<Button 
 			width="100%"
 			id="requestUserTimesBtn" 
-			text="Time entry" 
+			text="Time Entry" 
 			icon="sap-icon://time-entry-request" 
 			press="onRequestUserTimes">
 			</Button>
