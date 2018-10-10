@@ -67,7 +67,7 @@ xmlns:form="sap.ui.layout.form">
 
 								<Button 
 								width="12rem" 
-								text="Create Account" 
+								text="Update and continue" 
 								type="Emphasized" 
 								press="onUpdateClick"/>
 							</form:content>		

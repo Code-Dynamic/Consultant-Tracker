@@ -629,7 +629,7 @@
 							
 							<QuickViewGroupElement
 									label="Company Name "
-									value="{projectsModel>/ClientDetails/Company_name}"
+									value="{projectsModel>/ClientDetails/Company_Name}"
 									url="url"
 									type="elementType"
 									pageLinkId="pageLinkId"
@@ -639,7 +639,7 @@
 							
 							<QuickViewGroupElement
 									label="Phone "
-									value="{projectsModel>/ClientDetails/Company_phone}"
+									value="{projectsModel>/ClientDetails/Company_Phone}"
 									url="url"
 									type="elementType"
 									pageLinkId="pageLinkId"
