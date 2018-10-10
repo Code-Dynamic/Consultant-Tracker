@@ -81,7 +81,7 @@ sap.ui.define([
 				
 				//Generate map when correct tab selected
 			
-				if(!(oEvent.getParameters().selectedKey == "key5" || oEvent.getParameter("id")=="__component0---DetailAdmin--7")){
+				if(!(oEvent.getParameters().selectedKey == "key5" || oEvent.getParameter("id")=="__component0---DetailConsultant--7")){
 					return;
 				}
 				var viewDivId = sap.ui.getCore().byId(this.createId("map_canvas"));

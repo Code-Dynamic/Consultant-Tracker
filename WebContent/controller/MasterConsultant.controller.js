@@ -132,8 +132,9 @@ sap.ui.define([
 				var thisObj = this;
 				var oModel = this.getOwnerComponent().getModel("oModel");
 				var filters = [];
-				filters = [new sap.ui.model.Filter("ProjectDetails/Project_ID", sap.ui.model.FilterOperator.Contains, searchString),
-						   new sap.ui.model.Filter("ConsultantDetails/Consultant_ID", sap.ui.model.FilterOperator.Contains, searchString)];
+
+				filters = [new sap.ui.model.Filter("ProjectDetails/Project_ID", sap.ui.model.FilterOperator.EQ, projectID),
+						   new sap.ui.model.Filter("ConsultantDetails/Consultant_ID", sap.ui.model.FilterOperator.EQ, consultantID)];
 				oModel.read( "/Ratings_Entrys", {
 					urlParameters:{
 						"$expand": "ProjectDetails,ConsultantDetails"
@@ -141,7 +142,7 @@ sap.ui.define([
 					filters: [new sap.ui.model.Filter(filters, false)],
 			    	async:false,
 			    	success: function(oCreatedEn){
-			    		ratingsBtnConfig(oCreatedEn) 
+			    		thisObj.ratingsBtnConfig(oCreatedEn) 
 			    	},
 			    	error: function(error){
 			    		console.log(error);
