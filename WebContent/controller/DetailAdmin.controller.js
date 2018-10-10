@@ -50,22 +50,22 @@ sap.ui.define([
 		console.log("onRouteMahed project id: "+projectId)
 		//variables for counting members and tasks on a project
 		
-		var countTasks;
+		/*var countTasks;
 		var progressArray = [];
 		var assignedHoursArray = [];
-		var workedHoursArray = [];
+		var workedHoursArray = [];*/
 		
-		this.setMembersModel(projectId);
-		this.setAssignedTaskModel(projectId, progressArray, assignedHoursArray, workedHoursArray);
-		this.setTaskModel(projectId, countTasks, progressArray, assignedHoursArray, workedHoursArray);
-		this.setProjectsModel(projectId, countTasks);
-		this.setConsultantsModel(projectId);
-		this.setClientsModel(projectId);
+		this.setMembersModel();
+		this.setAssignedTaskModel();
+//		this.setTaskModel(countTasks, progressArray, assignedHoursArray, workedHoursArray);
+		this.setProjectsModel();
+		this.setConsultantsModel();
+		this.setClientsModel();
 		
 		sap.ui.core.BusyIndicator.hide();
 	},
 	
-	setMembersModel: function(projectId){
+	setMembersModel: function(){
 		var membersDetailModel = new JSONModel();
 		var consultantsID = [];
 		
@@ -118,10 +118,10 @@ sap.ui.define([
 //				set the project detail model
 			this.getView().setModel(membersDetailModel,"membersModel"); 
 	},
-	setAssignedTaskModel: function(projectId, progressArray, assignedHoursArray, workedHoursArray){
-//		var progressArray = [];
-//		var assignedHoursArray = [];
-//		var workedHoursArray = [];
+	setAssignedTaskModel: function(){
+		var progressArray = [];
+		var assignedHoursArray = [];
+		var workedHoursArray = [];
 		
 		//6
 		//get the progress % of the tasks and put the results in an array
@@ -132,6 +132,7 @@ sap.ui.define([
 		var totalWorkedHours =0;
 		var projectProgress;
 		var progress;
+		var thisObj = this;
 		
 		for(var p=0; p<100; p++){
 			progressArray[p] = 0;
@@ -248,7 +249,7 @@ sap.ui.define([
 						
 					}
 					////////////////////////////////////////////end else
-			 
+					thisObj.setTaskModel(assignedHoursArray, workedHoursArray);
 			  }	
 			
 			,
@@ -262,7 +263,7 @@ sap.ui.define([
 		this.getView().setModel(tileProjectProgressModel,"tileProjectProgressModel");
 		this.getView().setModel(titleAssignedTasksModel,"tileAssignedTasksModel");
 	},
-	setTaskModel: function(projectId, countTasks, progressArray, assignedHoursArray, workedHoursArray){
+	setTaskModel: function(assignedHoursArray, workedHoursArray){
 		var tasksDetailModel = new JSONModel();
 		var countTasksModel = new JSONModel();
 		OModel.read("/Tasks", {
@@ -274,7 +275,7 @@ sap.ui.define([
 		     })],
 			 success: function(data){	
 				 
-				  countTasks = data.results.length;
+				  var countTasks = data.results.length;
 				  data.countTasks = countTasks;
 				  console.log("countTasks: "+countTasks);
 				  tasksDetailModel.setData(data);
@@ -299,7 +300,7 @@ sap.ui.define([
 		this.getView().setModel(tasksDetailModel,"tasksModel");
 		this.getView().setModel(countTasksModel,"countTaskModel"); 
 	},
-	setProjectsModel: function(projectId, countTasks){
+	setProjectsModel: function(){
 		var projectsDetailModel = new JSONModel();
 		OModel.read("/Projects("+projectId+")", {
 			urlParameters: {
@@ -307,7 +308,7 @@ sap.ui.define([
 	        },
 			  success: function(data){
 //				  data.countMembers = countMembers;
-				  data.countTasks = countTasks;
+//				  data.countTasks = countTasks;
 				  projectsDetailModel.setData(data);
 //					var results = JSON.stringify(data);
 //					console.log(results);
@@ -708,7 +709,7 @@ sap.ui.define([
     		//ensures that newly created project is selected
 //    		var selectFirstProject = false;
 //    		thisDomObj.goToProjects(selectFirstProject);
-    		thisDomObj.setProjectsModel(projectId, 0);
+    		thisDomObj.setProjectsModel();
     	});
     	//close model
 		this.onCancel();
@@ -944,7 +945,7 @@ sap.ui.define([
 								function(data) {  
 								var array = data.split(';');
 //								console.log(data);
-								thisView.setMembersModel(projectID);
+								thisView.setMembersModel();
 							});
 							return oContext.getObject().Assignment_ID; 
 						}
@@ -1041,7 +1042,7 @@ sap.ui.define([
 								var array = data.split(';');
 								console.log("In handleCloseAddConsultantToProject: "+data);
 //								thisView.updateMembersList(projectID);
-								thisView.setMembersModel(projectID);
+								thisView.setMembersModel();
 							}
 						);
 						return oContext.getObject().Consultant_Name;
