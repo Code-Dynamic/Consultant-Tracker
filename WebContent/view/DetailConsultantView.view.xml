@@ -58,7 +58,7 @@
 				
 			<ObjectAttribute
 				title="Email"
-				text="{consultantsModel>/Consultant_email}"/>
+				text="{consultantsModel>/Consultant_Email}"/>
 				
 		</attributes>
 		

@@ -150,24 +150,6 @@
 		
 			</GenericTile>
 			
-			<GenericTile 
-			id="5"
-			class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
-			header="Notifications" 
-			subheader="new" 
-			press="press">
-			
-			<TileContent 
-			unit="100" 
-			footer="Total messages">
-			
-			<NumericContent 
-			value="3" 
-			icon="sap-icon://notification-2"/>
-			
-			</TileContent>
-		
-			</GenericTile>
 			
 			<GenericTile 
 			id="6"
@@ -189,12 +171,13 @@
 			<GenericTile 
 			id="7"
 			class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
-			header="show route to" 
-			subheader="{projectsModel>/Project_Name}" 
+			header="Show Route to" 
+			subheader="{projectsModel>/ClientDetails/Client_Name}" 
 			press="onSelectTab" >
 			
 			<TileContent>
-			
+				<NumericContent 
+			icon="sap-icon://map"/>
 			</TileContent>
 		
 			</GenericTile>
@@ -428,7 +411,80 @@
 					icon="sap-icon://business-card"
 					tooltip="Client details" 
 					text="Client">
-
+						<content id='contentDiv'>
+						
+						<QuickViewPage>
+						<QuickViewGroup heading="Contact Person">
+							
+							<QuickViewGroupElement
+									label="Name "
+									value="{projectsModel>/ClientDetails/Client_Name}"
+									url="url"
+									type="elementType"
+									pageLinkId="pageLinkId"
+									emailSubject="emailSubject"
+									target="target">
+							</QuickViewGroupElement>
+									
+							<QuickViewGroupElement
+									label="Email "
+									value="{projectsModel>/ClientDetails/Client_EMail}"
+									url="url"
+									type="elementType"
+									pageLinkId="pageLinkId"
+									emailSubject="emailSubject"
+									target="target">
+							</QuickViewGroupElement>
+							
+							<QuickViewGroupElement
+									label="Mobile "
+									value="{projectsModel>/ClientDetails/Client_PhoneNum}"
+									url="url"
+									type="elementType"
+									pageLinkId="pageLinkId"
+									emailSubject="emailSubject"
+									target="target">
+							</QuickViewGroupElement>
+														
+							</QuickViewGroup>
+							<QuickViewGroup heading="Company Details">
+							
+							<QuickViewGroupElement
+									label="Company Name "
+									value="{projectsModel>/ClientDetails/Company_name}"
+									url="url"
+									type="elementType"
+									pageLinkId="pageLinkId"
+									emailSubject="emailSubject"
+									target="target">
+							</QuickViewGroupElement>
+							
+							<QuickViewGroupElement
+									label="Phone "
+									value="{projectsModel>/ClientDetails/Company_phone}"
+									url="url"
+									type="elementType"
+									pageLinkId="pageLinkId"
+									emailSubject="emailSubject"
+									target="target">
+							</QuickViewGroupElement>
+									
+							<QuickViewGroupElement
+									label="Address "
+									value="{projectsModel>/ClientDetails/Client_Address}"
+									url="url"
+									type="elementType"
+									pageLinkId="pageLinkId"
+									emailSubject="emailSubject"
+									target="target">
+							</QuickViewGroupElement>
+														
+							</QuickViewGroup>
+							
+							
+							
+							</QuickViewPage>
+							</content>
 
 					</IconTabFilter>
 					

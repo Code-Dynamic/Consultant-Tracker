@@ -142,24 +142,6 @@
 		
 			</GenericTile>
 			
-			<GenericTile 
-			id="5"
-			class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
-			header="Notifications" 
-			subheader="new" 
-			press="press">
-			
-			<TileContent 
-			unit="100" 
-			footer="Total messages">
-			
-			<NumericContent 
-			value="3" 
-			icon="sap-icon://notification-2"/>
-			
-			</TileContent>
-		
-			</GenericTile>
 			
 			<GenericTile 
 			id="6"
@@ -181,13 +163,13 @@
 			<GenericTile 
 			id="7"
 			class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
-			header="location to" 
-			subheader="{projectsModel>/ClientDetails/Company_name}" 
+			header="Show Route to" 
+			subheader="{projectsModel>/ClientDetails/Client_Name}" 
 			press="onSelectTab" >
 			
 			<TileContent>
 			<NumericContent 
-			icon="sap-icon://map-2"/>
+			icon="sap-icon://map"/>
 			</TileContent>
 		
 			</GenericTile>
@@ -601,31 +583,6 @@
 						
 					</IconTabFilter> -->
 					<IconTabFilter 
-							id="iconTabBarFilter5" 
-							key="key5"
-							icon="sap-icon://map"
-							tooltip="Map" 
-							text="Map"
-							>
-	
-							<content id='contentDiv'>
-							
-	
-							 <HBox>
-								 <Button 
-								 id="show_hide_route_button"
-								 press="ShowHide"
-								 text="Show/Hide Route"/>
-							</HBox>
-							 <Text text="Distance:" id="Distance" />
-								
-							<HBox id="map_canvas" fitContainer="true" justifyContent="Center" alignItems="Center"   />
-	                             
-							</content>
-	
-						</IconTabFilter>
-						
-						<IconTabFilter 
 							id="iconTabBarFilter6" 
 							key="key6"
 							icon="sap-icon://business-card"
@@ -634,43 +591,8 @@
 	
 						<content id='contentDiv'>
 						
-						<QuickViewPage>
-							<QuickViewGroup heading="Contact Details">
-							
-							<QuickViewGroupElement
-									label="Company Name "
-									value="{projectsModel>/ClientDetails/Company_name}"
-									url="url"
-									type="elementType"
-									pageLinkId="pageLinkId"
-									emailSubject="emailSubject"
-									target="target">
-							</QuickViewGroupElement>
-							
-							<QuickViewGroupElement
-									label="Phone "
-									value="{projectsModel>/ClientDetails/Company_phone}"
-									url="url"
-									type="elementType"
-									pageLinkId="pageLinkId"
-									emailSubject="emailSubject"
-									target="target">
-							</QuickViewGroupElement>
-									
-							<QuickViewGroupElement
-									label="Address "
-									value="{projectsModel>/ClientDetails/Client_Address}"
-									url="url"
-									type="elementType"
-									pageLinkId="pageLinkId"
-									emailSubject="emailSubject"
-									target="target">
-							</QuickViewGroupElement>
-														
-							</QuickViewGroup>
-							
-							
-							<QuickViewGroup heading="Main contact person">
+<QuickViewPage>
+						<QuickViewGroup heading="Contact Person">
 							
 							<QuickViewGroupElement
 									label="Name "
@@ -703,10 +625,70 @@
 							</QuickViewGroupElement>
 														
 							</QuickViewGroup>
+							<QuickViewGroup heading="Company Details">
+							
+							<QuickViewGroupElement
+									label="Company Name "
+									value="{projectsModel>/ClientDetails/Company_name}"
+									url="url"
+									type="elementType"
+									pageLinkId="pageLinkId"
+									emailSubject="emailSubject"
+									target="target">
+							</QuickViewGroupElement>
+							
+							<QuickViewGroupElement
+									label="Phone "
+									value="{projectsModel>/ClientDetails/Company_phone}"
+									url="url"
+									type="elementType"
+									pageLinkId="pageLinkId"
+									emailSubject="emailSubject"
+									target="target">
+							</QuickViewGroupElement>
+									
+							<QuickViewGroupElement
+									label="Address "
+									value="{projectsModel>/ClientDetails/Client_Address}"
+									url="url"
+									type="elementType"
+									pageLinkId="pageLinkId"
+									emailSubject="emailSubject"
+									target="target">
+							</QuickViewGroupElement>
+														
+							</QuickViewGroup>
+
 							</QuickViewPage>
 							</content>
 	
 						</IconTabFilter>
+					<IconTabFilter 
+							id="iconTabBarFilter5" 
+							key="key5"
+							icon="sap-icon://map"
+							tooltip="Map" 
+							text="Map"
+							>
+	
+							<content id='contentDiv'>
+							
+	
+							 <HBox>
+								 <Button 
+								 id="show_hide_route_button"
+								 press="ShowHide"
+								 text="Show/Hide Route"/>
+							</HBox>
+							 <Text text="Distance:" id="Distance" />
+								
+							<HBox id="map_canvas" fitContainer="true" justifyContent="Center" alignItems="Center"   />
+	                             
+							</content>
+	
+						</IconTabFilter>
+						
+						
 				</items>
 				
 			</IconTabBar>

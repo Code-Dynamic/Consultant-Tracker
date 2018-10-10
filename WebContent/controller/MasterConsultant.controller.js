@@ -66,7 +66,8 @@ sap.ui.define([
 				//set model for master
 				var oModel = this.getOwnerComponent().getModel("oModel");
 				var assignmentsModel = new JSONModel();
-
+				var consId = this.getConsultantID();
+				console.log(consId);
 				oModel.read("/Assignments", {
 					urlParameters: {
 			            "$expand" : "ConsultantDetails,ProjectDetails"
@@ -74,8 +75,7 @@ sap.ui.define([
 					filters: [ new sap.ui.model.Filter({
 				          path: "ConsultantDetails/Consultant_ID",
 				          operator: sap.ui.model.FilterOperator.EQ,
-
-				          value1: thisObj.getConsultantID()
+				          value1: consId
 				     })],
 					async:false,
 					success: function(data){
