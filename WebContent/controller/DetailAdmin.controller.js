@@ -21,6 +21,7 @@ sap.ui.define([
 	var countMembers;
 	var countTasks;
 	var countAssignedTasks;
+	var distance;
 	return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.DetailAdmin", {
 
 /**
@@ -75,7 +76,8 @@ sap.ui.define([
 		
 		OModel.read("/Assignments", {
 			urlParameters: {
-				"$expand" : "ProjectDetails,ConsultantDetails"
+				"$expand" : "ProjectDetails",
+				"$expand" : "ConsultantDetails"
 	        },
 			filters: [ new sap.ui.model.Filter({
 		          path: "ProjectDetails/Project_ID",
@@ -145,7 +147,6 @@ sap.ui.define([
 		var consultantId = this.getConsultantID();
 		console.log("consultant id: "+consultantId);
 		console.log("project id: "+projectId);
-
 		//2
 		OModel.read("/Assigned_Tasks", {
 		
@@ -395,6 +396,11 @@ sap.ui.define([
 					          path: "TaskDetails/Task_ID",
 					          operator: sap.ui.model.FilterOperator.EQ,
 					          value1: taskId
+					     }),
+					     new sap.ui.model.Filter({
+					          path: "ConsultantDetails/Consultant_ID",
+					          operator: sap.ui.model.FilterOperator.EQ,
+					          value1: consultantId
 					     })],
 						  success: function(data){
 
@@ -584,7 +590,7 @@ sap.ui.define([
 		var thisPtr =this;
 			directionsService.route(req, function(response, status) {
 				if (status === 'OK') {
-					console.log(response.routes[0].legs[0].distance.text);
+					console.log("dist: "+response.routes[0].legs[0].distance.text);
 					directionsRenderer.setDirections(response);
 					var distElement = sap.ui.getCore().byId(thisPtr.createId("Distance"));
 					console.log(distElement);

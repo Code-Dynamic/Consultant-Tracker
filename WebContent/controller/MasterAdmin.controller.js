@@ -370,9 +370,21 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddProject",this);
 		this._oDialog.open();		
 	},
-	confirmDeleteProject: function(){
-//		console.log("removing projects");
-		this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.confirmDelete",this);
+	removeProject: function(oEvent){
+
+		var projectModel = this.getView().getModel("projectsModel");
+		
+		this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formRemoveProject",this);
+		this._Dialog.setModel(projectModel,"projectsModel");		
+		
+		// Multi-select if required
+		var bMultiSelect = !!oEvent.getSource().data("multi");
+		this._Dialog.setMultiSelect(bMultiSelect);
+		
+		// Remember selections if required
+		var bRemember = !!oEvent.getSource().data("remember");
+		this._Dialog.setRememberSelections(bRemember);
+
 		this._Dialog.open();
 
 	},
@@ -726,7 +738,34 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 			}
 
 			this._oPopover.openBy(oEvent.getSource());
+		},
+		handleCloseRemoveProject: function(oEvent){
+			
+			var oModel = this.getView().getModel("projectsModel");
+	    	var _projectID = oModel.oData.Project_ID;
+			var aContexts = oEvent.getParameter("selectedContexts");
+//			console.log(aContexts);
+			
+			if (aContexts && aContexts.length) {
+				MessageToast.show("You have selected " + aContexts.map(function(oContext) {
+					console.log("test data: "+JSON.stringify(oContext.getObject()));
+					var projectID=oContext.getObject().Project_ID;
+					
+					$.post('RemoveProject', {project: projectID},
+						function(data) {  
+						var array = data.split(';');
+						console.log("Remove project: "+data);
+						thisView.updateTasksList(_projectID);
+					});
+					return oContext.getObject().Project_ID; 
+				}).join(", "));
+			} else {
+				MessageToast.show("No new item lected.");
+			}
+			oEvent.getSource().getBinding("items").filter([]);
+			
 		}
+		
 	
 	/**
 	 * Called when the Controller is destroyed. Use this one to free resources and finalize activities.
