@@ -88,24 +88,24 @@
 							<columns>
 							
 								<Column width="12em" >
-									<Text text="name"/>
+									<Text text="Name"/>
 								</Column>
 								
 								<Column 
 								minScreenWidth="Tablet" 
 								demandPopin="true">
 								
-									<Text text="description"/>
+									<Text text="Description"/>
 									
 								</Column>
 								
-								<Column 
+								<!-- <Column
 								minScreenWidth="Tablet"
 								demandPopin="true">
 										
 									<Text text="progress"/>
 									
-								</Column>
+								</Column> -->
 																
 							</columns>
 							
@@ -119,14 +119,14 @@
 										
 										<Text text="{consultantProjectsModel>ProjectDetails/Project_Description}"/>
 										
-										<ProgressIndicator
+										<!-- <ProgressIndicator
 										id="progressBar"
 										class="sapUiSmallMarginBottom"
 										percentValue="0"
 										displayValue="0%"
 										showValue="true"
 										state="Warning"
-										displayOnly="true"/>
+										displayOnly="true"/> -->
 										
 									</cells>
 							
