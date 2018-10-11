@@ -66,7 +66,8 @@ sap.ui.define([
 				//set model for master
 				var oModel = this.getOwnerComponent().getModel("oModel");
 				var assignmentsModel = new JSONModel();
-
+				var consId = this.getConsultantID();
+				console.log(consId);
 				oModel.read("/Assignments", {
 					urlParameters: {
 			            "$expand" : "ConsultantDetails,ProjectDetails"
@@ -74,8 +75,7 @@ sap.ui.define([
 					filters: [ new sap.ui.model.Filter({
 				          path: "ConsultantDetails/Consultant_ID",
 				          operator: sap.ui.model.FilterOperator.EQ,
-
-				          value1: thisObj.getConsultantID()
+				          value1: consId
 				     })],
 					async:false,
 					success: function(data){
@@ -127,21 +127,52 @@ sap.ui.define([
 				//TODO Ngoni: consult Mamba, save project ID in model instead of using global
 				PROJECT_ID = projectID;
 				var consultantID = this.getConsultantID();
-				this.getRouter()
-					.navTo("DetailConsultant", 
-						{listId:projectID,
-						consultantId:consultantID});
+//				console.log("List ID "+projectID);
+				this.getRouter().navTo("DetailConsultant",{listId:projectID,consultantId:consultantID});
 				var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
 				var thisObj = this;
-				//console.log(projectCompleted);
-				attachModel.read(
-						"/Ratings_Entrys?$expand=ProjectDetails,ConsultantDetails&$filter=ProjectDetails/Project_ID%20eq%20"+projectID+"%20and%20ConsultantDetails/Consultant_ID%20eq%20"+consultantID,{async:false,success: function(oCreatedEn){ thisObj.ratingsBtnConfig(oCreatedEn,projectCompleted) }, error: function(e){console.log(e);}}		
-						);								
+				var oModel = this.getOwnerComponent().getModel("oModel");
+				var filters = [];
+
+				filters = [new sap.ui.model.Filter("ProjectDetails/Project_ID", sap.ui.model.FilterOperator.EQ, projectID),
+						   new sap.ui.model.Filter("ConsultantDetails/Consultant_ID", sap.ui.model.FilterOperator.EQ, consultantID)];
+				oModel.read( "/Ratings_Entrys", {
+					urlParameters:{
+						"$expand": "ProjectDetails,ConsultantDetails"
+					},
+					filters: [new sap.ui.model.Filter(filters, false)],
+			    	async:false,
+			    	success: function(oCreatedEn){
+			    		thisObj.ratingsBtnConfig(oCreatedEn) 
+			    	},
+			    	error: function(error){
+			    		console.log(error);
+			    	}
+			 	});								
 			},
 
 		    onFeedbackPress: function(){
                 this.getRouter().navTo("Feedback");
 	        },
+	        onSearchProject: function(oEvent) {
+	    		
+	            var searchString = this.getView().byId("projectSearchField").getValue();
+	            this.searchProjects(searchString, "Consultant");
+	            
+	      	},
+	      	onOpenPopover: function (oEvent) {
+
+				// create popover
+				if (!this._oPopover) {
+					/*this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.Popover",this);
+					this._oDialog.open();*/
+					this._oPopover = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.popoverMenu_CView", this);
+//					this._oPopover.open();
+					this.getView().addDependent(this._oPopover);
+				}
+
+				this._oPopover.openBy(oEvent.getSource());
+			},
 	
 		/**
 		 * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered
@@ -169,9 +200,7 @@ sap.ui.define([
 		//
 		//	}
 		goToDetail: function(){
-				this.getRouter()
-					.navTo("DetailConsultant",
-							{listId:2});
+				this.getRouter().navTo("DetailConsultant",{listId:2});
 		}
 
 	});

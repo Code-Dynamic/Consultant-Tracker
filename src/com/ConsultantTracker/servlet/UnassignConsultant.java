@@ -9,6 +9,7 @@ import java.sql.SQLException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,6 +19,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ConsultantTracker.model.Assignment;
+import com.ConsultantTracker.model.Consultant;
+import com.ConsultantTracker.model.Daily_Times;
+import com.ConsultantTracker.model.Project;
+import com.ConsultantTracker.model.Ratings;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -48,8 +53,21 @@ public class UnassignConsultant extends HttpServlet {
 		EntityManager em = emf.createEntityManager();
 		
 		Assignment a =  em.find(Assignment.class, assignmentID);
+		Project project = a.getProject();
+		Consultant consultant = a.getConsultant();
+		//consultant rating deleted when a consultant is removed from the project
+		Ratings rateEntry = null; 
+		try {
+		 rateEntry = em.createQuery("SELECT d FROM Ratings d WHERE d.consultant =:consultant AND d.project =:project ",Ratings.class)
+				.setParameter("consultant", consultant).setParameter("project", project).getSingleResult();
+		}
+		catch(NoResultException e) {
+			
+		}
 		em.getTransaction().begin();
 		em.remove(a);
+		if(rateEntry != null)
+			em.remove(rateEntry);
 		em.getTransaction().commit();
 
 	}

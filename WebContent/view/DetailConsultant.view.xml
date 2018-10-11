@@ -49,17 +49,17 @@
 		backgroundDesign="Transparent">
 
 		<attributes>
-		
-			<ObjectAttribute
-				title="ProjectID"
-				text="{projectsModel>/Project_ID}"/>
-				
+
+			
 			<ObjectAttribute
 				title="Due"
-				text="{projectsModel>/Project_Deadline}"/>
-				
-				
-				
+				text="{ path: 
+							'projectsModel>/Project_Deadline',
+							formatter: '.formatter.date'}"/>
+					
+			<!-- <ObjectAttribute
+				title="Client Name: "
+				text="{projectsModel>/ClientDetails/Client_Name}"/> -->
 				
 		</attributes>
 
@@ -91,7 +91,7 @@
 			
 			<TileContent >
 
-						<mc:RadialMicroChart percentage="57" />	
+						<mc:RadialMicroChart percentage="{projectsModel>/projectProgress}" />	
 			
 			</TileContent>
 		
@@ -107,7 +107,7 @@
 			<TileContent >
 			
 			<NumericContent 
-			value="{projectsModel>/countMembers}" 
+			value="{membersModel>/countMembers}" 
 			icon="sap-icon://employee" />
 			
 			</TileContent>
@@ -139,35 +139,17 @@
 			subheader="current" >
 			
 			<TileContent 
-			unit="70" 
+			unit="{projectsModel>/countExpectedHours}" 
 			footer="Expected hours">
 			
 			<NumericContent 
-			value="40" 
+			value="{projectsModel>/countHoursWorked}" 
 			icon="sap-icon://present"/>
 			
 			</TileContent>
 		
 			</GenericTile>
 			
-			<GenericTile 
-			id="5"
-			class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
-			header="Notifications" 
-			subheader="new" 
-			press="press">
-			
-			<TileContent 
-			unit="100" 
-			footer="Total messages">
-			
-			<NumericContent 
-			value="3" 
-			icon="sap-icon://notification-2"/>
-			
-			</TileContent>
-		
-			</GenericTile>
 			
 			<GenericTile 
 			id="6"
@@ -189,12 +171,13 @@
 			<GenericTile 
 			id="7"
 			class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
-			header="show route to" 
-			subheader="{projectsModel>/Project_Name}" 
+			header="Show Route to" 
+			subheader="{projectsModel>/ClientDetails/Client_Name}" 
 			press="onSelectTab" >
 			
 			<TileContent>
-			
+				<NumericContent 
+			icon="sap-icon://map"/>
 			</TileContent>
 		
 			</GenericTile>
@@ -302,6 +285,8 @@
 
 		<Table id="idProductsTable"
 		inset="false"
+		selectionChange = "rowSelect"
+		mode= "SingleSelectMaster"
 		items="{tasksModel>/results}">
 		
 		<headerToolbar>
@@ -325,37 +310,29 @@
 		
 			<Column
 				width="12em">
-				<Text text="name"/>
+				<Text text="Name"/>
 			</Column>
 			
 			<Column
 				minScreenWidth="Tablet"
 				demandPopin="true">
-				<Text text="due date" />
+				<Text text="Due date" />
 			</Column>
 			
 			<Column
 				minScreenWidth="Desktop"
 				demandPopin="true"
 				hAlign="End">
-				<Text text="progress" />
+				<Text text="Progress" />
 			</Column>
 			
 			<Column
 				minScreenWidth="Desktop"
 				demandPopin="true"
 				hAlign="Center">
-				<Text text="status" />
-			</Column>
-			
-			<Column
-				minScreenWidth="Desktop"
-				demandPopin="true"
-				hAlign="Center">
-				<Text text="actions" />
+				<Text text="Status" />
 			</Column>
 
-			
 		</columns>
 		
 		
@@ -366,10 +343,12 @@
 				<cells>
 				
 				<ObjectIdentifier
-				title="{tasksModel>TaskDetails/Name}"/>
+				title="{tasksModel>Name}"/>
 						
 				<Text
-				text="{tasksModel>TaskDetails/Due_Date}" />
+				text="{ path: 
+					 			'tasksModel>Due_Date',
+								formatter: '.formatter.date'}" />
 						
 
 				<ProgressIndicator
@@ -377,40 +356,10 @@
 				percentValue="{tasksModel>progress}"
 				displayValue="{tasksModel>progress} %"
 				showValue="true"
-				state="Warning"
-				displayOnly="true" />
+				state="None"
+				displayOnly="false" />
 						
-				<Text text="Inprogress" />
-								
-			<MenuButton 
-			text="action" 
-			buttonMode="Split" 
-			useDefaultActionOnly="true">
-			
-			<menu>
-			
-				<Menu itemSelected="onMenuAction">
-				
-					<items>
-						
-						<MenuItem 
-						id="requestUserTimesBtn" 
-						text="time entry" 
-						icon="sap-icon://time-entry-request" 
-				 		press="handleTimeEntry">
-						</MenuItem>
-						
-						<MenuItem
-						id="feedBackBtn"
-						text="communication" 
-				 		icon="sap-icon://notification-2" 
-				 		press="onFeedbackPress">
-						</MenuItem>
-					</items>
-				</Menu>
-			</menu>
-			
-			</MenuButton>	
+				<Text text="{tasksModel>status}" />
 
 				</cells>
 				
@@ -428,7 +377,80 @@
 					icon="sap-icon://business-card"
 					tooltip="Client details" 
 					text="Client">
-
+						<content id='contentDiv'>
+						
+						<QuickViewPage>
+						<QuickViewGroup heading="Contact Person">
+							
+							<QuickViewGroupElement
+									label="Name "
+									value="{projectsModel>/ClientDetails/Client_Name}"
+									url="url"
+									type="elementType"
+									pageLinkId="pageLinkId"
+									emailSubject="emailSubject"
+									target="target">
+							</QuickViewGroupElement>
+									
+							<QuickViewGroupElement
+									label="Email "
+									value="{projectsModel>/ClientDetails/Client_EMail}"
+									url="url"
+									type="elementType"
+									pageLinkId="pageLinkId"
+									emailSubject="emailSubject"
+									target="target">
+							</QuickViewGroupElement>
+							
+							<QuickViewGroupElement
+									label="Mobile "
+									value="{projectsModel>/ClientDetails/Client_PhoneNum}"
+									url="url"
+									type="elementType"
+									pageLinkId="pageLinkId"
+									emailSubject="emailSubject"
+									target="target">
+							</QuickViewGroupElement>
+														
+							</QuickViewGroup>
+							<QuickViewGroup heading="Company Details">
+							
+							<QuickViewGroupElement
+									label="Company Name "
+									value="{projectsModel>/ClientDetails/Company_name}"
+									url="url"
+									type="elementType"
+									pageLinkId="pageLinkId"
+									emailSubject="emailSubject"
+									target="target">
+							</QuickViewGroupElement>
+							
+							<QuickViewGroupElement
+									label="Phone "
+									value="{projectsModel>/ClientDetails/Company_phone}"
+									url="url"
+									type="elementType"
+									pageLinkId="pageLinkId"
+									emailSubject="emailSubject"
+									target="target">
+							</QuickViewGroupElement>
+									
+							<QuickViewGroupElement
+									label="Address "
+									value="{projectsModel>/ClientDetails/Client_Address}"
+									url="url"
+									type="elementType"
+									pageLinkId="pageLinkId"
+									emailSubject="emailSubject"
+									target="target">
+							</QuickViewGroupElement>
+														
+							</QuickViewGroup>
+							
+							
+							
+							</QuickViewPage>
+							</content>
 
 					</IconTabFilter>
 					

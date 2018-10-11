@@ -13,41 +13,31 @@ import javax.persistence.*;
 public class Team implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	//Sequence generator is found in the project.java model
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="primaryKeyGenerator")
 	private int team_ID;
 
-	private String team_Description;
 
-	//bi-directional many-to-one association to Consultant
-	
-	private Consultant consultant;
+	@JoinColumn(name = "TEAM_LEADER")
+	private Consultant team_Leader;
 
 	public Team() {
 	}
 
 	public int getTeam_ID() {
-		return this.team_ID;
+		return team_ID;
 	}
 
 	public void setTeam_ID(int team_ID) {
 		this.team_ID = team_ID;
 	}
 
-	public String getTeam_Description() {
-		return this.team_Description;
+	public Consultant getTeam_Leader() {
+		return team_Leader;
 	}
 
-	public void setTeam_Description(String team_Description) {
-		this.team_Description = team_Description;
+	public void setTeam_Leader(Consultant team_Leader) {
+		this.team_Leader = team_Leader;
 	}
-
-	public Consultant getConsultant() {
-		return this.consultant;
-	}
-
-	public void setConsultant(Consultant consultant) {
-		this.consultant = consultant;
-	}
-
 }

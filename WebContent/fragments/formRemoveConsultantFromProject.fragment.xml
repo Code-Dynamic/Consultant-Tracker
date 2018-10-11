@@ -8,7 +8,7 @@
 	
 		<SelectDialog
 		noDataText="No Consultants Found"
-		title="Select Consultants"
+		title="Remove Consultants"
 		search="handleSearch"
 		confirm="handleCloseRemoveConsultantFromProject"
 		cancel="onCancel"

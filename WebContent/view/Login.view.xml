@@ -1,81 +1,31 @@
-<mvc:View 
-xmlns:core="sap.ui.core" 
-xmlns:mvc="sap.ui.core.mvc" 
-xmlns="sap.m" 
-xmlns:semantic="sap.m.semantic" 
-xmlns:html="http://www.w3.org/1999/xhtml" 
-xmlns:l="sap.ui.layout" 
-xmlns:form="sap.ui.layout.form" 
-controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.Login">
-	<semantic:FullscreenPage title="" id="LoginView">
-		<semantic:customHeaderContent>
-			<Button text="Sign Up" press="onCreateAccountClick" icon = "sap-icon://person-placeholder"/>
-    	</semantic:customHeaderContent>
-		<l:VerticalLayout id="containerLayout_register" width="100%" >
-			<VBox 
-				xmlns="sap.m" 
-				justifyContent="Center" 
-				alignItems="Center" 
-				alignContent="SpaceAround" 
-				direction="Column"
-			>	 
-				<VBox 
-					xmlns="sap.m" 
-					justifyContent="Center" 
-					alignItems="Center" 
-					alignContent="Center" 
-					direction="Column" 
-					displayInline="true" 
-					fitContainer="true"
-				>
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:semantic="sap.m.semantic" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:l="sap.ui.layout" xmlns:form="sap.ui.layout.form" class="element" controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.Login">
+	<semantic:FullscreenPage id="LoginView" showFooter="false" showSubHeader="false" class="mainImg">
+	<semantic:content>
+	   
+	    	<l:VerticalLayout id="containerLayout_register" width="100%">
+			<VBox xmlns="sap.m" justifyContent="Center" alignItems="Center" alignContent="SpaceAround" direction="Column" height="30%">	 
+				<VBox xmlns="sap.m" justifyContent="Center" alignItems="Center" alignContent="Center" direction="Column" displayInline="true" fitContainer="true">
 				
-					<VBox class="sapUiSmallMargin">
-						<form:SimpleForm 
-							id="login_SimpleFormDisplay" 
-							editable="false" 
-							layout="ResponsiveGridLayout" 
-							labelSpanXL="3" 
-							labelSpanL="3" 
-							labelSpanM="3" 
-							labelSpanS="12" 
-							adjustLabelSpan="false" 
-							emptySpanXL="4" 
-							emptySpanL="4" 
-							emptySpanM="4" 
-							emptySpanS="0" 
-							columnsXL="1" 
-							columnsL="1" 
-							columnsM="1" 
-							singleContainerFullSize="false" 
-							backgroundDesign="Solid"
-						>
+					
+					 <Image class="logo" src="model/logo-min.png" id="image0"/>
+						
+					
+				<items>
+				    <form:SimpleForm height="500px" class=" loginForm sapUiLargePadding" id="login_SimpleFormDisplay" editable="false" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false">
 							<form:content>
-								<Label text="UserName/email"/>
-								<Input 
-									id="username-email" 
-									value=""
-								/>
-								<Label text="Password"/>
-								<Input 
-									id="password" 
-									value="" 
-									type ="Password"
-								/>
-								<Button 
-									width="12rem" 
-									text="Login" 
-									type="Emphasized" 
-									press="onLoginClick" id="loginButton"
-								/>
+								<Label xmlns="sap.m" text="Email" required="true" id="username-emailLabel"/>
+								<Input xmlns="sap.m" liveChange="onEmailEntered" id="username-email" value=""/>
+								<Label xmlns="sap.m" text="Password" required="true" id="passwordLabel"/>
+								<Input xmlns="sap.m" id="password" value="" type="Password"/>
+								<Button xmlns="sap.m" width="8rem" text="Login" type="Emphasized" press="onLoginClick" id="loginButton"/>
+								<Link text="Forgot Password" press="onForgotPasswordClick"/>
 							</form:content>
 						</form:SimpleForm>
-						<Link 
-						text="Create Account" 
-						id="__link0" 
-						press="onCreateAccountClick"/>
-					</VBox>
+				</items>
 				</VBox>
 			</VBox>
 		</l:VerticalLayout>
+		
+	</semantic:content>
 	</semantic:FullscreenPage>
 </mvc:View>

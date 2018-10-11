@@ -1,0 +1,20 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<Popover
+		title="Action Menu"
+		showHeader="false"
+		placement="Top" >
+		
+		<Toolbar>	
+			<Button 
+			width="100%"
+			id="requestUserTimesBtn" 
+			text="Time Entry" 
+			icon="sap-icon://time-entry-request" 
+			press="onRequestUserTimes">
+			</Button>
+		</Toolbar>
+		
+	</Popover>
+</core:FragmentDefinition>

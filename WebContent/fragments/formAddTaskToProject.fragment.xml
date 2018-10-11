@@ -27,20 +27,22 @@
 			id="SimpleFormAddTask">
 				<f:content>
 					<Label 
-						text="Task Name"/>
+						text="Task Name" required="true" id="t_NameLabel"/>
 					<Input 
-						id="t_Name"/>
+						id="t_Name" liveChange="handleUserInput" value="" />
 					<Label 
-						text="Description"/>
+						text="Description" required="true" id="t_DescriptionLabel"/>
 					<TextArea 
-						id="t_Description"/>
+						id="t_Description" liveChange="handleUserInput" value=""/>
 					<Label 
-						text="Deadline"/>
+						text="Deadline" required="true" id="t_DeadlineLabel"/>
 					<DatePicker 
 						id="t_Deadline" 
+						change = "onDatePickerChange"
 						width="100%" 
 						displayFormat="long" 
-						valueFormat="yyyy-MM-dd"/>
+						valueFormat="yyyy-MM-dd"/>					
+						
 						
 					<Label text="Is Billable?"/>
 					<CheckBox id="t_Billable"/>

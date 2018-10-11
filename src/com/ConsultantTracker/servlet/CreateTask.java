@@ -1,9 +1,13 @@
 package com.ConsultantTracker.servlet;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -14,51 +18,57 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ConsultantTracker.model.Assigned_Task;
-import com.ConsultantTracker.model.Daily_Times;
+import com.ConsultantTracker.model.Project;
 import com.ConsultantTracker.model.Task;
-import com.mysql.jdbc.Connection;
 
 /**
- * Servlet implementation class removeTask
+ * Servlet implementation class CreateTask
  */
-@WebServlet("/removeAssignedTask")
-public class removeAssignedTask extends HttpServlet {
+@WebServlet("/CreateTask")
+public class CreateTask extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public removeAssignedTask() {
+    public CreateTask() {
         super();
-        
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String taskID = request.getParameter("taskID");
-		
+		String description= request.getParameter("description");
+		String dueDate = request.getParameter("dueDate");
+		String name = request.getParameter("name");
+		Boolean billable = Boolean.parseBoolean(request.getParameter("billable"));
+		System.out.println(request.getParameter("projectID"));
+		int projectID = Integer.parseInt(request.getParameter("projectID"));
+	
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
 		EntityManager em = emf.createEntityManager();
 		
-		Task t =em.find(Task.class, Integer.parseInt(taskID));
-		java.util.List<Assigned_Task> listOfAssignedTasks = em.createQuery("SELECT * FROM assigned_task WHERE task_task_ID = ?",Assigned_Task.class)
-                .setParameter(1, t).getResultList();
+		Task t = new Task();
+		Project p = em.find(Project.class, projectID);
 		
-		for(int i=0;i<listOfAssignedTasks.size();i++) {
-			Assigned_Task a = listOfAssignedTasks.get(i);
-			em.getTransaction().begin();
-			em.remove(a);
-			em.getTransaction().commit();
+		t.setDescription(description);
+		t.setName(name);
+		t.setBillable(billable);
+		
+		SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd");
+		Date dDate = new Date();
+		try {
+			dDate = sdf.parse(dueDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
-		t = em.find(Task.class,Integer.parseInt(taskID));
+		t.setDue_Date(dDate);
+		t.setProject(p);
+		
 		em.getTransaction().begin();
-		em.remove(t);
+		em.persist(t);
 		em.getTransaction().commit();
-			
-
+		
 	}
 
 	/**

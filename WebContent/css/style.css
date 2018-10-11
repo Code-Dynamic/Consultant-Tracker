@@ -3,3 +3,69 @@
 	min-height: 50vh;
 	padding: 50px;
 }
+
+/* Enter your custom styles here */
+html {
+  background-image: url("consultanttracker/Consultant-Tracker_Prototype-1/model/confectionary.png");
+  background-repeat: repeat-x; 
+}
+
+.logo{
+	height: 167px;
+    max-width: 100%;
+	
+}
+.element {
+	
+    background-image: url(https://i.imgur.com/hkKDO7Y.png);
+    background-repeat: repeat-x;
+    background-repeat: round;
+   
+
+}
+
+.lines{
+	background: repeating-linear-gradient(
+  45deg,
+  #606dbc,
+  #606dbc 10px,
+  #465298 10px,
+  #465298 20px
+);
+}
+.roundCorners{
+	   
+	
+}
+
+.loginForm{
+	padding: 5% 4rem;
+	background-color : #fff;
+}
+
+.loginForm .sapMInputBaseInner{
+	border-width : 0px 0px 1px 0px;
+}
+.loginForm .sapMBtnInner:hover{
+	background-color : #629af5;
+}
+.loginForm .sapMBtnInner{
+    background: #2672ec;
+    color: white;
+}
+.loginForm .loginButton{
+	margin-top : 1rem;
+}
+.loginForm .titleText{
+	margin-bottom : 7rem;
+	font-size: 30px;
+}
+.loginForm .noteText{
+	font-size: 11.5px;
+	color : grey;
+	margin-top : 200px;
+}
+.loginForm  .copyright{
+	font-size: 11.5px;
+	color : grey;
+}

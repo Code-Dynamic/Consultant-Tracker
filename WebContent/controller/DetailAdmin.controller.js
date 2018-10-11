@@ -17,6 +17,15 @@ sap.ui.define([
 	var thisView;
 	var taskId;
 	var projectId;
+	var consultantId;
+	var countMembers;
+	var countHoursWorked;
+	var countExpectedHours;
+	var countTasks;
+	var countAssignedTasks;
+	var distance;
+	var tasksProgress = [];
+	var tasksProgressID = [];
 	return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.DetailAdmin", {
 
 /**
@@ -39,247 +48,402 @@ sap.ui.define([
 		
 		var oArgs, oView;
 		oArgs = oEvent.getParameter("arguments");
+		consultantId = oArgs.consultantId;
+		projectId = oArgs.projectId;
 		
-		///
-		projectId = oArgs.projectId
+		this.setMembersModel();
+		this.setTaskModel();
+//		this.setAssignedTaskModel();
+//		this.setProjectsModel();
+		this.setConsultantsModel();
+		this.setClientsModel();
 		
-		//variables for counting members and tasks on a project
-		var countMembers;
-		var countTasks;
-		console.log("Console log test1");
-			//2
-			//get Team members for the selected Project (from master)
-			var membersDetailModel = new JSONModel();	
-			OModel.read("/Assignments", {
-				urlParameters: {
-					"$expand" : "ProjectDetails",
-					"$expand" : "ConsultantDetails"
-		        },
-				filters: [ new sap.ui.model.Filter({
-			          path: "ProjectDetails/Project_ID",
-			          operator: sap.ui.model.FilterOperator.EQ,
-			          value1: oArgs.projectId
-			     })],
-					  success: function(data){
-						   membersDetailModel.setData(data);
-							var results = JSON.stringify(data);
-//							console.log(results);
-//							alert(results);
-							countMembers = data.results.length;
-							sap.ui.getCore().setModel(membersDetailModel,"membersModel");
-					  },
-					  error: function(oError) {
-						  alert("error");
-						 }
-					});
-			
-//				set the project detail model
-				this.getView().setModel(membersDetailModel,"membersModel"); 
-				
-				var progressArray = [];
-				var assignedHoursArray = [];
-				var workedHoursArray = [];
-				
-				//6
-				//get the progress % of the tasks and put the results in an array
-				//and get the expected hours worked and current
-				var expectedHours =0;
-				var currentHours=0;
-				var totalHours =0;
-				var totalWorkedHours =0;
-				var projectProgress;
-				var progress;
-				
-				for(var p=0; p<100; p++){
-					progressArray[p] = 0;
-					assignedHoursArray[p] =0;
-					workedHoursArray[p] =0;
-				}
-				
-				var tileHoursModel = new JSONModel();	
-				var tileProjectProgressModel = new JSONModel();
-				
+		sap.ui.core.BusyIndicator.hide();
+	},
+	
+	setMembersModel: function(){
+		var thisObj = this;
+		var membersDetailModel = new JSONModel();
+		var consultantsID = [];
+		
+		OModel.read("/Assignments", {
+			urlParameters: {
+				"$expand" : "ProjectDetails,ConsultantDetails"
+	        },
+			filters: [ new sap.ui.model.Filter({
+		          path: "ProjectDetails/Project_ID",
+		          operator: sap.ui.model.FilterOperator.EQ,
+		          value1: projectId
+		     })],
+			  success: function(data){
+				   membersDetailModel.setData(data);
+//				   console.log("members");
+//				   console.log(data);
+				   var filters = [];
+				   data.memberSize = data.results.length;
+					countMembers = data.results.length;
+					data.countMembers = data.results.length;
+					sap.ui.getCore().setModel(membersDetailModel,"membersModel");
 
-				OModel.read("/Assigned_Tasks", {
+					for(var i=0; i<countMembers;i++){
+						consultantsID[i] = data.results[i].ConsultantDetails.Consultant_ID;
+//							console.log("Value: "+consultantsID[i]);
+						filters[i] = new sap.ui.model.Filter("Consultant_ID", sap.ui.model.FilterOperator.NE, consultantsID[i]);
+					}
+//						console.log("Consultants: "+consultantsID);
+//						console.log(filters);
+					//7
+					var unassignedConsultantsModel = new JSONModel();	
+					OModel.read("/Consultants", {
+						filters: [new sap.ui.model.Filter(filters, true)],
+						success: function(data){
+							unassignedConsultantsModel.setData(data);
+							sap.ui.getCore().setModel(unassignedConsultantsModel,"unassignedConsultantsModel");
+						  },
+						  error: function(oError) {
+							  console.log("error");
+						  }
+					});
 					
-					urlParameters: {
-						"$expand" : "TaskDetails",
-						"$expand" : "TaskDetails/ProjectDetails"
-					},
-					filters: [ new sap.ui.model.Filter({
-				          path: "TaskDetails/ProjectDetails/Project_ID",
-				          operator: sap.ui.model.FilterOperator.EQ,
-				          value1: oArgs.projectId
-				     })],
-						  success: function(data){
-							  console.log("Test 1::::");
-								var results = JSON.stringify(data);
-								if(data.results == null){
+					thisObj.getView().setModel(membersDetailModel,"membersModel");
+			  },
+			  error: function(oError) {
+				  console.log("error");
+				 }
+			});
+		
+//				set the project detail model
+//			this.getView().setModel(membersDetailModel,"membersModel");
+	},
+	setAssignedTaskModel: function(){
+		var progressArray = [];
+		var assignedHoursArray = [];
+		var workedHoursArray = [];
+		
+		//6
+		//get the progress % of the tasks and put the results in an array
+		//and get the expected hours worked and current
+		var expectedHours =0;
+		var currentHours=0;
+		var totalHours =0;
+		var totalWorkedHours =0;
+		var projectProgress;
+		var progress;
+		var thisObj = this;
+		
+		for(var p=0; p<100; p++){
+			progressArray[p] = 0;
+			assignedHoursArray[p] =0;
+			workedHoursArray[p] =0;
+		}
+		
+		var tileHoursModel = new JSONModel();	
+		var tileProjectProgressModel = new JSONModel();
+		var titleAssignedTasksModel = new JSONModel();
+		var tileTasksModel = new JSONModel();	
+		var consultantId = this.getConsultantID();
+//		console.log("consultant id: "+consultantId);
+//		console.log("project id: "+projectId);
+		//2
+		OModel.read("/Assigned_Tasks", {
+		
+			urlParameters: {
+				"$expand" : "TaskDetails,TaskDetails/ProjectDetails,ConsultantDetails"
+					
+			},
+			filters: [ new sap.ui.model.Filter({
+		          path: "TaskDetails/ProjectDetails/Project_ID",
+		          operator: sap.ui.model.FilterOperator.EQ,
+		          value1: projectId
+		     })],
+			success: function(data){
+				console.log(data);
+				
+				
+				
+				
+				
+				
+//				  console.log("Test 1::::");
+					/*var results = JSON.stringify(data);
+					if(data.results == null){
+						
+					}else{
+//						TODO IS TIME ENTERED ON TASK OR ASSIGNED TASK  j 
+//						console.log("TaskDetail 1: "+results);
+//						console.log("TaskDetail 2: "+data.results);
+						var i = data.results.length;
+//						countTasks = data.results.length;
+						countAssignedTasks = data.results.length;
+						console.log("length: "+i);
+						if(i != 0){
+							var k = 0;
+							var j =0; 
+							var cur = data.results[0].TaskDetails.Task_ID;
+							var prev = cur;
+							
+							for(var x=0; x < i; x++){
+
+								cur = data.results[x].TaskDetails.Task_ID;
+//								console.log("Task ID: "+cur);
+//									console.log("cur : prev "+cur+" : "+prev);
+									if(prev == cur){
+
+									expectedHours += parseInt(data.results[x].Assigned_Hours, 10) ;
+									currentHours +=  parseInt(data.results[x].Hours_Worked, 10);
+//									console.log("ASSIGN : Worked "+expectedHours+" : "+currentHours);
+									assignedHoursArray[j] = expectedHours;
+									workedHoursArray[j] =currentHours;
+									
+									progress = ((data.results[x].Hours_Worked)/(data.results[x].Assigned_Hours) )* 100;
+
+									totalHours += expectedHours;
+									totalWorkedHours += currentHours;
 									
 								}else{
-//									TODO IS TIME ENTERED ON TASK OR ASSIGNED TASK  j 
-									console.log("TaskDetail 1: "+results);
-									console.log("TaskDetail 2: "+data.results);
-									var i = data.results.length;
-									var k = 0;
-									var j =0; 
-									var cur = data.results[0].TaskDetails.Task_ID;
-									var prev = cur;
-									
-									for(var x=0; x < i; x++){
-	 
-										cur = data.results[x].TaskDetails.Task_ID;
-											console.log("cur : prev "+cur+" : "+prev);
-											if(prev == cur){
+									prev = cur;
+//									console.log("2Task ID: "+cur);
+									j++;
+									expectedHours += parseInt(data.results[x].Assigned_Hours, 10) ;
+									currentHours +=  parseInt(data.results[x].Hours_Worked, 10);
 
-											expectedHours += parseInt(data.results[x].Assigned_Hours, 10) ;
-											currentHours +=  parseInt(data.results[x].Hours_Worked, 10);
-											console.log("ASSIGN : Worked "+expectedHours+" : "+currentHours);
-											assignedHoursArray[j] = assignedHoursArray[j]+expectedHours;
-											workedHoursArray[j] = workedHoursArray[j]+currentHours;
-											
-											progress = ((data.results[x].Hours_Worked)/(data.results[x].Assigned_Hours) )* 100;
+									assignedHoursArray[j] = parseInt(data.results[x].Assigned_Hours, 10);
+									workedHoursArray[j] = parseInt(data.results[x].Hours_Worked, 10);
+									
+									progress = ((data.results[x].Hours_Worked)/(data.results[x].Assigned_Hours) )* 100;
 
-											totalHours += expectedHours;
-											totalWorkedHours += currentHours;
-											
-										}else{
-											prev = cur;
-											j++;
-											expectedHours += parseInt(data.results[x].Assigned_Hours, 10) ;
-											currentHours +=  parseInt(data.results[x].Hours_Worked, 10);
-
-											assignedHoursArray[j] = assignedHoursArray[j]+parseInt(data.results[x].Assigned_Hours, 10);
-											workedHoursArray[j] = workedHoursArray[j]+parseInt(data.results[x].Hours_Worked, 10);
-											
-											progress = ((data.results[x].Hours_Worked)/(data.results[x].Assigned_Hours) )* 100;
-
-											totalHours += expectedHours;
-											totalWorkedHours += currentHours;
-										}
-										
-									}
-									
-									
-									data.expected = expectedHours;
-									data.current = currentHours;
-									
-									//getting overall progress of the project
-									projectProgress = ((totalWorkedHours/totalHours)*100).toFixed(0);
-									var a = parseFloat(projectProgress);
-									data.projectProgress = a;
-									
-									tileHoursModel.setData(data);
-									tileProjectProgressModel.setData(data);
+									totalHours += expectedHours;
+									totalWorkedHours += currentHours;
 								}
-								////////////////////////////////////////////end else
-						 
-						  },
-						  error: function(oError) {
-							  alert(oError.error);
-							  alert("error");
-							 }
-						});
-				console.log("Console log test2");
-				this.getView().setModel(tileHoursModel,"tileHoursModel");
-				this.getView().setModel(tileProjectProgressModel,"tileProjectProgressModel");
-
-			//3
-			//get all tasks that a client is assigned to for the selected Project (from master)
-						
-				//get consultant_ID, tasks that the consultant is 
-				//assigned to
-				var tasksDetailModel = new JSONModel();
-				OModel.read("/Tasks", {
-					filters: [ 
-						new sap.ui.model.Filter({
-				          path: "ProjectDetails/Project_ID",
-				          operator: sap.ui.model.FilterOperator.EQ,
-				          value1: oArgs.projectId
-				     })],
-					  success: function(data){
-						
-							 var result = JSON.stringify(data);
-							 tasksDetailModel.setData(data);
-							 countTasks = data.results.length;
-							 
-							 for(var x=0; x<countTasks; x++){
-								 progressArray[x] = ((workedHoursArray[x]/assignedHoursArray[x])*100);
-								 data.results[x].progress = parseInt(progressArray[x]);
+								
 							}
-							 
-							 tasksDetailModel.setData(data);
-					  },
-					  error: function(oError) {
-						  alert("error");
-						 }
-					});
+							
+							
+							data.expected = expectedHours;
+							data.current = currentHours;
+							data.countAssignedTasks = countAssignedTasks;
+							
+							//getting overall progress of the project
+							projectProgress = ((totalWorkedHours/totalHours)*100).toFixed(0);
+							var a = parseFloat(projectProgress);
+							console.log("what is a: "+a);
+							if( a <= 100){
+								data.projectProgress = a;
+									
+							}else{
+								data.projectProgress = 100;
+								
+							}
+							
+							tileHoursModel.setData(data);
+							tileProjectProgressModel.setData(data);
+							titleAssignedTasksModel.setData(data);
+						}else{
+							
+							console.log("what is a:2 "+a);
+							data.projectProgress = 0;
+							tileProjectProgressModel.setData(data);										
+						}
+						
+						
+					}
+					////////////////////////////////////////////end else
+					thisObj.setTaskModel(assignedHoursArray, workedHoursArray);*/
+				
+					
+			  }	
 			
-				this.getView().setModel(tasksDetailModel,"tasksModel");
+			,
+		     error: function(oError) {
+				  console.log(oError.error);
+				  console.log("error");
+			 }
+		});
+		//console.log("Console log test2");
+		/*this.getView().setModel(tileHoursModel,"tileHoursModel");
+		this.getView().setModel(tileProjectProgressModel,"tileProjectProgressModel");
+		this.getView().setModel(titleAssignedTasksModel,"tileAssignedTasksModel");*/
+	},
+	computeTaskProgress : function(taskID, size){
+		countHoursWorked = 0;
+		countExpectedHours = 0;
+		var thisObj = this;
+		
+		OModel.read("/Assigned_Tasks", {
+			
+			urlParameters: {
+				"$expand" : "TaskDetails,TaskDetails/ProjectDetails,ConsultantDetails"
+			},
+			filters: [ new sap.ui.model.Filter({
+		          path: "TaskDetails/Task_ID",
+		          operator: sap.ui.model.FilterOperator.EQ,
+		          value1: taskID
+		     })],
+			success: function(data){
+				//For each assigned task that belongs to task_ID
 				
-				//1
-				//read the Project table based on id
-					OModel.read("/Projects("+oArgs.projectId+")", {
-						urlParameters: {
-				            "$expand" : "ClientDetails"
-				        },
-						  success: function(data){
-							  data.countMembers = countMembers;
-							  data.countTasks = countTasks;
-							  projectsDetailModel.setData(data);
-//								var results = JSON.stringify(data);
-//								console.log(results);
-//								alert(results);
-						  },
-						  error: function(oError) {
-							  alert("error");
-							 }
-						});
-					//set the project detail model
-					this.getView().setModel(projectsDetailModel,"projectsModel"); 
-//					
-					
-				//4
-				//get Team members for the selected Project (from master)
-				var consultantsDetailModel = new JSONModel();	
-				OModel.read("/Consultants", {
-						  success: function(data){
-							  consultantsDetailModel.setData(data);
-								var results = JSON.stringify(data);
-								//console.log(results);
-								//console.log(data);
-//								alert(results);
-						  },
-						  error: function(oError) {
-							  alert("error");
-							 }
-						});
-//					set the project detail model
-					this.getView().setModel(consultantsDetailModel,"consultants");
-					
+				var sum = 0, expected = 0;
+				for(var i = 0; i < data.results.length;i++){
+					countHoursWorked += parseFloat(data.results[i].Hours_Worked);
+					countExpectedHours += parseFloat(data.results[i].Assigned_Hours);
+					var activityProgress = (data.results[i].Hours_Worked/data.results[i].Assigned_Hours)*100;
+					sum += activityProgress;
+				}
+//				console.log("Expected: "+expected);
+				var taskProgress;
 				
-				//5
-				//
+				if(data.results.length == 0)
+					taskProgress = 0;
+				else if(sum/data.results.length>100)
+					taskProgress=100;
+				else
+					taskProgress= sum/data.results.length;
+				
+				taskProgress= Math.round(taskProgress);
+				tasksProgress.push(taskProgress);
+				thisObj.taskCallBack(taskID, taskProgress, size, expected);
+			}
+		});
+	},
+	taskCallBack: function(taskID, progress, size, expected){
+		if(tasksProgress.length<size)
+			return;
+//		countExpectedHours=expected;
+		
+		var thisObj = this;
+		var tasksDetailModel = new JSONModel();
+		OModel.read("/Tasks", {
+			filters: [ 
+				new sap.ui.model.Filter({
+		          path: "ProjectDetails/Project_ID",
+		          operator: sap.ui.model.FilterOperator.EQ,
+		          value1: projectId
+		     })],
+			 success: function(data){
+//				 console.log(""+tasksDetailModel);
+				 for(var i = 0; i < data.results.length; i++){
+					 data.results[i].progress = tasksProgress[i];
+					 
+					 if(data.results[i].progress == 0)
+						 data.results[i].status = "Not Started";
+					 else if(data.results[i].progress < 95)
+						 data.results[i].status = "In Progress";
+					 else if(data.results[i].progress < 100)
+						 data.results[i].status = "Almost Completed";
+					 else
+						 data.results[i].status = "Completed";
+				 }
+//				 if(tas)
+//				 thisObj.tasksProgress=[];
+				 
+				 tasksDetailModel.setData(data);
+//				 console.log("tas"+tasksDetailModel.getJSON());
+				 thisObj.getView().setModel(tasksDetailModel,"tasksModel");
+				 thisObj.setProjectsModel();
+			 }
+		});
+	},
+	setTaskModel: function(){
+		countHoursWorked = 0;
+		countExpectedHours = 0;
+		
+		tasksProgress=[];
+//		console.log("CAlled");
+		var thisObj = this;
+		var tasksDetailModel = new JSONModel();
+		var countTasksModel = new JSONModel();
+		OModel.read("/Tasks", {
+			urlParameters: {
+				"$expand" : "ProjectDetails"
+			},
+			filters: [ 
+				new sap.ui.model.Filter({
+		          path: "ProjectDetails/Project_ID",
+		          operator: sap.ui.model.FilterOperator.EQ,
+		          value1: projectId
+		     })],
+			 success: function(data){
+				 countTasks = data.results.length;
+				 for(var i = 0; i < data.results.length; i++){
+//					countHoursWorked = 0;
+//					countExpectedHours = 0;
+					thisObj.computeTaskProgress(data.results[i].Task_ID, data.results.length);
+				 }
+				 
+				 if(data.results.length == 0){
+					 tasksDetailModel.setData(data);
+					 thisObj.getView().setModel(tasksDetailModel,"tasksModel");
+					 thisObj.setProjectsModel();
+				 }
+			 },
+			 error: function(oError) {
+				  console.log("error");
+			 }
+		});
+	},
+	setProjectsModel: function(){
+		var projectsDetailModel = new JSONModel();
+		OModel.read("/Projects("+projectId+")", {
+			urlParameters: {
+	            "$expand" : "ClientDetails"
+	        },
+			  success: function(data){
+				  data.countMembers = countMembers;
+				  data.countTasks = countTasks;
+				  data.countHoursWorked = countHoursWorked;
+				  data.countExpectedHours = countExpectedHours;
+				  if(countExpectedHours==0)
+					  data.projectProgress = 0;
+				  else
+					  data.projectProgress = Math.round(countHoursWorked/countExpectedHours*100);
+				  projectsDetailModel.setData(data);
+//					var results = JSON.stringify(data);
+//					console.log(results);
+//					console.log(results);
+			  },
+			  error: function(oError) {
+				  console.log("error");
+				 }
+			});
+		//set the project detail model
+		this.getView().setModel(projectsDetailModel,"projectsModel"); 
+	},
+	setConsultantsModel: function(){
+		var consultantsDetailModel = new JSONModel();	
+		OModel.read("/Consultants", {
+			  success: function(data){
+				  consultantsDetailModel.setData(data);
+//					var results = JSON.stringify(data);
+//					console.log("All Consultants");
+//					console.log(data);
 					
-				var clientDetailModel = new JSONModel();
-				OModel.read("/Clients", {
-					  success: function(data){
-						 var result = JSON.stringify(data);
-						 clientDetailModel.setData(data);
-//						 alert(result);
-						// console.log("clientsModel##");
-//						 console.log(data);
-						 sap.ui.getCore().setModel(clientDetailModel,"clientList");
-//							console.log("Cli##");
-//							console.log(clientDetailModel.oData.results);
-					  },
-					  error: function(oError) {
-						  alert("error");
-						 }
-				});
-
-					//end the loading indicator
-					sap.ui.core.BusyIndicator.hide();
+//						console.log(results);
+			  },
+			  error: function(oError) {
+				  console.log("error");
+				 }
+			});
+//			set the project detail model
+		this.getView().setModel(consultantsDetailModel,"consultants");
+	},
+	setClientsModel: function(){
+		var clientDetailModel = new JSONModel();
+		OModel.read("/Clients", {
+			  success: function(data){
+				 var result = JSON.stringify(data);
+				 clientDetailModel.setData(data);
+//				 console.log(result);
+				// console.log("clientsModel##");
+//				 console.log(data);
+				 sap.ui.getCore().setModel(clientDetailModel,"clientList");
+//					console.log("Cli##");
+//					console.log(clientDetailModel.oData.results);
+			  },
+			  error: function(oError) {
+//				  console.log("error");
+				  console.log("Error");
+				 }
+		});
 	},
 	setRatingsBtnRef : function(){
 		RatingsBtn = this.getView().byId("rateTeamBtn");
@@ -287,9 +451,9 @@ sap.ui.define([
 	rowSelect: function(oEvent){
 
 		var oSelectedItem = oEvent.getParameter("listItem").getId();
-		console.log("selected item: "+oSelectedItem);
+//		console.log("selected item: "+oSelectedItem);
 		var tableId = oSelectedItem[oSelectedItem.length-1];
-		console.log("id: "+tableId);
+//		console.log("project id: "+projectId);
 		
 		OModel.read("/Tasks", {
 			urlParameters: {
@@ -299,7 +463,7 @@ sap.ui.define([
 				new sap.ui.model.Filter({
 		          path: "ProjectDetails/Project_ID",
 		          operator: sap.ui.model.FilterOperator.EQ,
-		          value1: projectId
+		          value1: parseInt(projectId)
 		     })],
 			  success: function(data){
 
@@ -312,7 +476,7 @@ sap.ui.define([
 					//put the query inside because could not access taskID
 					OModel.read("/Assigned_Tasks", {
 						urlParameters: {
-							"$expand" : "TaskDetails"
+							"$expand" : "TaskDetails,ConsultantDetails"
 				        },
 						filters: [ 
 							new sap.ui.model.Filter({
@@ -325,7 +489,10 @@ sap.ui.define([
 //							loop to find the corresponding task as selected by the checkbox
 //							loop to the corresponding task from the table
 							var countAssignedTasks = data.results.length;
-
+							if(data.results.length > 0)
+								data.taskName = data.results[0].TaskDetails.Name;
+							else
+								data.taskName = "Not Found";
 							//calculating each assigned task progress//not stored in the database
 							for(var q=0; q<countAssignedTasks; q++){
 								
@@ -337,13 +504,13 @@ sap.ui.define([
 							assignedTasksModel.setData(data);
 						  },
 						  error: function(oError) {
-							  alert("Error");
+							  console.log("Error");
 							 }
 						});
 
 			  },
 			  error: function(oError) {
-				  alert("Error");
+				  console.log("Error");
 				 }
 			});
 
@@ -351,10 +518,11 @@ sap.ui.define([
 	
 
 		this.getView().setModel(assignedTasksModel,"assignedTasksModel");
+		this.onClose();
 		 //open the dialog
 		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAssignedTasks",this);
 		this._oDialog.setModel(this.getView().getModel("assignedTasksModel"),"assignedTasksModel");
-		this._oDialog.open();	
+		this._oDialog.open();
 	},
 		
 	onChangeCheckbox:function(oEvent){
@@ -389,7 +557,7 @@ sap.ui.define([
 
 			  },
 			  error: function(oError) {
-				  alert("Error");
+				  console.log("Error");
 				 }
 			});
         //----------------------------//
@@ -401,11 +569,11 @@ sap.ui.define([
 		
 		this.pKey = oEvent.getParameter("id");
 		
-		console.log("dashboard select :"+this.pKey);
+//		console.log("dashboard select :"+this.pKey);
 		if(this.pKey ==  1){
 			
 		}else if (this.pKey == "__component0---DetailAdmin--2"){
-			
+	 		
 			this.getView().byId("iconTabBar").setSelectedKey("key2");
 			
 		}else if (this.pKey == "__component0---DetailAdmin--3"){
@@ -507,7 +675,7 @@ sap.ui.define([
 		var thisPtr =this;
 			directionsService.route(req, function(response, status) {
 				if (status === 'OK') {
-					console.log(response.routes[0].legs[0].distance.text);
+					console.log("dist: "+response.routes[0].legs[0].distance.text);
 					directionsRenderer.setDirections(response);
 					var distElement = sap.ui.getCore().byId(thisPtr.createId("Distance"));
 					console.log(distElement);
@@ -533,9 +701,7 @@ sap.ui.define([
 		this.oProjectId = oId.oData.Project_ID;
 		oEntry.Project_ID =oProjectId;
 		
-		if (this._oDialog) {
-			this._oDialog.destroy();
-		}
+		this.onCancel();
 		
 	},
 	openOverviewCalender: function(evt){
@@ -562,8 +728,13 @@ sap.ui.define([
 		this._oDialog.open();		
 	},
 	onClose: function () {
+	
+//		console.log("onclose fragment");
+		
 		if (this._oDialog) {
+//			console.log("destroy fragment");
 			this._oDialog.destroy();
+			this._oDialog = null;
 		}
 	},
 	// onSubmit event handler of the fragment
@@ -591,11 +762,12 @@ sap.ui.define([
     		thisDomObj.goToProjects(selectFirstProject);    		
     	});
     	//close model
-		this.onClose();
+		this.onCancel();
     	
     },
   //edit project details
 	editProjectDetails: function(){
+		this.onCancel();
 		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.editProjectDetails",this);
 		this._oDialog.setModel(this.getView().getModel("projectsModel"),"projectsModel");
 		this._oDialog.open();		
@@ -625,11 +797,12 @@ sap.ui.define([
     		function(responseText) {
     		MessageToast.show("Project Edited Succesfully");
     		//ensures that newly created project is selected
-    		var selectFirstProject = false;
-    		thisDomObj.goToProjects(selectFirstProject);    		
+//    		var selectFirstProject = false;
+//    		thisDomObj.goToProjects(selectFirstProject);
+    		thisDomObj.setProjectsModel();
     	});
     	//close model
-		this.onClose();
+		this.onCancel();
     	
     },
     onSubmitClient: function(){
@@ -645,11 +818,11 @@ sap.ui.define([
     	);
     	
     	//close model
-    	this.onClose();
+    	this.onCancel();
     },
 	onDelete: function(){
 		var _projectID = sap.ui.getCore().getModel("selModel").getProperty("/Project_ID");
-		console.log(_projectID);
+//		console.log(_projectID);
 		$.post('DeleteProject', { projectID: _projectID},function(responseText) {  
 			    	 // var array = responseText.split(';');
 			    	console.log(responseText);
@@ -700,7 +873,7 @@ sap.ui.define([
 			    	var _cell = rows[i].split(",")[3];
 			    	var _admin = "0";
 			    	
-			    	$.post('createConsultant', { 
+			    	$.post('CreateConsultant', { 
 						name: _name,
 						surname: _surname,
 						email: _email,
@@ -731,7 +904,7 @@ sap.ui.define([
 				var arrConsultants;
 				//getConsultants
 				//return all consultants
-		         $.post('getProjectConsultants',function(responseText){
+		         $.post('GetProjectConsultants',function(responseText){
 						console.log("servlet getProjectConsultants responded");
 //						console.log(responseText);
 						arrConsultants = {Consultants:[]};
@@ -784,17 +957,85 @@ sap.ui.define([
 			var oModel = this.getView().getModel("projectsModel");
 			var projectID = oModel.oData.Project_ID;
 			var aContexts = oEvent.getParameter("selectedContexts");
+			var thisObj = this;
 			if (aContexts && aContexts.length) {
 				this.oUnassign = aContexts.map(
 						function(oContext) {
 							var assignmentID=oContext.getObject().Assignment_ID;
-							
+							var consultantID = oContext.getObject().Consultant_ID;
 							$.post('UnassignConsultant', { 
-								assignment: assignmentID},
+								assignment: assignmentID
+								 /*succes:function(data){
+                                
+                                
+                                var removedMemberName;
+                                var currentUserName;
+                                var removedMemberEmail;
+                                
+                                
+                                //var newMemberFilterID = new sap.ui.model.Filter("Consultant_ID", sap.ui.model.FilterOperator.EQ, consultantID);
+                                //var currentUserFilterID = new sap.ui.model.Filter("Consultant_ID", sap.ui.model.FilterOperator.EQ, thisObj.getConsultantID());
+                                
+                                OModel.read("/Consultants", {
+                                    filters: [
+                                          new sap.ui.model.Filter({
+                                            path: "Consultant_ID",
+                                            operator: sap.ui.model.FilterOperator.EQ,
+                                            value1: consultantID
+                                       })],
+                                    success: function(data){
+                                        removedMemberName = data.results[0].Consultant_Name;
+                                        //console.log( newMemberName);
+                                        
+                                        OModel.read("/Consultants", {
+                                            filters: [
+                                                  new sap.ui.model.Filter({
+                                                    path: "Consultant_ID",
+                                                    operator: sap.ui.model.FilterOperator.EQ,
+                                                    value1: thisObj.getConsultantID()
+                                               })],
+                                            success: function(data){
+                                                currentUserName = data.results[0].Consultant_Name;
+                                                //console.log( currentUserName);
+                                                OModel.read("/Projects", {
+                                                    filters: [
+                                                          new sap.ui.model.Filter({
+                                                            path: "Project_ID",
+                                                            operator: sap.ui.model.FilterOperator.EQ,
+                                                            value1: projectID
+                                                       })],
+                                                    success: function(data){
+                                                        var projectName = data.results[0].Project_Name;
+                                                        //console.log(currentUserName);
+                                                        $.post('EmailNotificationAddedToTeam',{newTeamMemberName:removedMemberName, emailAddress: "u16024479@tuks.co.za", currentUserName: currentUserName, projectName: projectName }, function(response){
+                                                            console.log("success");
+                                                        });
+                                                      },
+                                                      error: function(oError) {
+                                                          console.log("couldnt get consultant");
+                                                      }
+                                                });
+                                              },
+                                              error: function(oError) {
+                                                  console.log("couldnt get consultant");
+                                              }
+                                        });
+                                      },
+                                      error: function(oError) {
+                                          console.log("couldnt get consultant");
+                                      }
+                                });
+                                
+                                
+                                
+                                
+                                
+                            }*/
+							},
 								function(data) {  
 								var array = data.split(';');
 //								console.log(data);
-								thisView.updateMembersList(projectID);
+								thisView.setMembersModel();
 							});
 							return oContext.getObject().Assignment_ID; 
 						}
@@ -809,6 +1050,8 @@ sap.ui.define([
 		handleCloseAddConsultantToProject: function(oEvent) {
 			var aContexts = oEvent.getParameter("selectedContexts");
 			var oModel = this.getView().getModel("projectsModel");
+			var thisObj = this;
+			
 			
 			if (aContexts && aContexts.length) {
 				aContexts.map(
@@ -818,11 +1061,78 @@ sap.ui.define([
 						
 						$.post('AssignConsultants', { 
 							project: projectID,
-							consultant: consultantID
+							consultant: consultantID,
+							succes:function(data){
+                                
+                                
+                                var newMemberName;
+                                var currentUserName;
+                                var newMemberEmail;
+                                
+                                
+                                //var newMemberFilterID = new sap.ui.model.Filter("Consultant_ID", sap.ui.model.FilterOperator.EQ, consultantID);
+                                //var currentUserFilterID = new sap.ui.model.Filter("Consultant_ID", sap.ui.model.FilterOperator.EQ, thisObj.getConsultantID());
+                                
+                                OModel.read("/Consultants", {
+                                    filters: [
+                                          new sap.ui.model.Filter({
+                                            path: "Consultant_ID",
+                                            operator: sap.ui.model.FilterOperator.EQ,
+                                            value1: consultantID
+                                       })],
+                                    success: function(data){
+                                        newMemberName = data.results[0].Consultant_Name;
+                                        //console.log( newMemberName);
+                                        
+                                        OModel.read("/Consultants", {
+                                            filters: [
+                                                  new sap.ui.model.Filter({
+                                                    path: "Consultant_ID",
+                                                    operator: sap.ui.model.FilterOperator.EQ,
+                                                    value1: thisObj.getConsultantID()
+                                               })],
+                                            success: function(data){
+                                                currentUserName = data.results[0].Consultant_Name;
+                                                //console.log( currentUserName);
+                                                OModel.read("/Projects", {
+                                                    filters: [
+                                                          new sap.ui.model.Filter({
+                                                            path: "Project_ID",
+                                                            operator: sap.ui.model.FilterOperator.EQ,
+                                                            value1: projectID
+                                                       })],
+                                                    success: function(data){
+                                                        var projectName = data.results[0].Project_Name;
+                                                        //console.log(currentUserName);
+                                                        $.post('EmailNotificationAddedToTeam',{newTeamMemberName:newMemberName, emailAddress: "johandewaal18@gmail.com", currentUserName: currentUserName, projectName: projectName }, function(response){
+                                                            console.log("success");
+                                                        });
+                                                      },
+                                                      error: function(oError) {
+                                                          console.log("couldnt get consultant");
+                                                      }
+                                                });
+                                              },
+                                              error: function(oError) {
+                                                  console.log("couldnt get consultant");
+                                              }
+                                        });
+                                      },
+                                      error: function(oError) {
+                                          console.log("couldnt get consultant");
+                                      }
+                                });
+                                
+                                
+                                
+                                
+                                
+                            }
 							}, function(data) {  
 								var array = data.split(';');
 								console.log("In handleCloseAddConsultantToProject: "+data);
-								thisView.updateMembersList(projectID);
+//								thisView.updateMembersList(projectID);
+								thisView.setMembersModel();
 							}
 						);
 						return oContext.getObject().Consultant_Name;
@@ -836,8 +1146,7 @@ sap.ui.define([
 			var membersDetailModel = new JSONModel();	
 			OModel.read("/Assignments", {
 				urlParameters: {
-					"$expand" : "ProjectDetails",
-					"$expand" : "ConsultantDetails"
+					"$expand" : "ProjectDetails, ConsultantDetails"
 		        },
 				filters: [ new sap.ui.model.Filter({
 			          path: "ProjectDetails/Project_ID",
@@ -849,7 +1158,7 @@ sap.ui.define([
 							var results = JSON.stringify(data);
 					  },
 					  error: function(oError) {
-						  alert("error");
+						  console.log("error");
 						 }
 					});
 			thisView.getView().setModel(membersDetailModel,"membersModel"); 
@@ -885,7 +1194,7 @@ sap.ui.define([
 //			console.log(aContexts);
 			
 			if (aContexts && aContexts.length) {
-				MessageToast.show("You have chosen " + aContexts.map(function(oContext) {
+				console.log("You have chosen " + aContexts.map(function(oContext) {
 					console.log("test: "+JSON.stringify(oContext.getObject()));
 					var taskID=oContext.getObject().Task_ID;
 					
@@ -893,7 +1202,8 @@ sap.ui.define([
 						function(data) {  
 						var array = data.split(';');
 						console.log(data);
-						thisView.updateTasksList(_projectID);
+//						thisView.updateTasksList(_projectID);
+						thisView.setTaskModel();
 					});
 					return oContext.getObject().Task_ID; 
 				}).join(", "));
@@ -904,8 +1214,10 @@ sap.ui.define([
 			
 		},
 		onAddTask: function(){
+			
+			this.onCancel();
 			this._DialogAddTask = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddTaskToProject", this);
-			 this._DialogAddTask.open();
+			this._DialogAddTask.open();
 		},
 		onAddActivity: function(oEvent){
 			var sPath = oEvent.getSource().getBindingContext("tasksModel").getObject();
@@ -929,21 +1241,35 @@ sap.ui.define([
 		},
 		handleCloseAddTask: function(oEvent){
 //			console.log("Start creating task");
-			
+			var check = 0;
 	    	var _Name = sap.ui.getCore().byId("t_Name").getValue();
+	    	if(this.checkValueEntered(_Name,"t_Name")){
+	    		check++;
+	    	}
 	    	var _Description = sap.ui.getCore().byId("t_Description").getValue();
+	    	if(this.checkValueEntered(_Description,"t_Description")){
+	    		check++;
+	    	}
 	    	var _DueDate = sap.ui.getCore().byId("t_Deadline").getValue();
-	    	var oModel = this.getView().getModel("projectsModel");
-	    	var _projectID = oModel.oData.Project_ID;
-	    	
-	    	console.log(_Name+" "+_Description+" "+_DueDate+" "+_projectID);
-	    	
-	    	$.post('createTask',{description: _Description,dueDate: _DueDate,name:_Name, projectID: _projectID},function(responseText){
-	    		  console.log("Creating task completed");
-	    		  thisView.updateTasksList(_projectID);
-			});
-	    	  
-			this._DialogAddTask.destroy();		
+	    	if(this.checkValueEntered(_DueDate,"t_Deadline")){
+	    		check++;
+	    	}
+	    	var numSuccesfulTests = 3;
+	    	if(check === numSuccesfulTests){
+		    	var oModel = this.getView().getModel("projectsModel");
+		    	var _projectID = oModel.oData.Project_ID;
+		    	
+		    	console.log(_Name+" "+_Description+" "+_DueDate+" "+_projectID);
+		    	
+		    	$.post('CreateTask',{description: _Description,dueDate: _DueDate,name:_Name, projectID: _projectID},function(responseText){
+		    		  console.log("Creating task completed");
+		    		  sap.m.MessageToast.show("Task Added Succesfully");
+//		    		  thisView.updateTasksList(_projectID);
+		    		  thisView.setTaskModel();
+				});
+		    	  
+				this._DialogAddTask.destroy();	    		
+	    	}		
 		},
 		updateTasksList: function(){
 			var tasksDetailModel = new JSONModel();
@@ -961,40 +1287,121 @@ sap.ui.define([
 //  					 console.log("tasksModel##task" +result);
   				  },
   				  error: function(oError) {
-  					  alert("error");
+  					  console.log("error");
   					 }
   				});
   		
   			thisView.getView().setModel(tasksDetailModel,"tasksModel");
 		},
 		handleCloseAddActivity: function(){
+			var check = 0;
 			var Consultant_ID = sap.ui.getCore().byId("consultantSelected").getSelectedKey();
+	    	if(this.checkValueEntered(Consultant_ID,"consultantSelected")){
+	    		check++;
+	    	}
 			var _AssignedHours = sap.ui.getCore().byId("allocatedHours").getValue();
+	    	if(this.checkNumericValueEntered(_AssignedHours,"allocatedHours")){
+	    		check++;
+	    	}
 			var _DateAssigned = sap.ui.getCore().byId("AT_dateAssigned").getValue();
+	    	if(this.checkValueEntered(_DateAssigned,"AT_dateAssigned")){
+	    		check++;
+	    	}
 			var _DueDate = sap.ui.getCore().byId("AT_Deadline").getValue();
+	    	if(this.checkValueEntered(_DueDate,"AT_Deadline")){
+	    		check++;
+	    	}
 	    	var _Description = sap.ui.getCore().byId("AT_Description").getValue();
-	    	
-//	    	console.log("Adding activity: "+_AssignedHours);
-			//var dueDate = sap.ui.getCore().byId("consultantSelected").getSelectedKey();
-//			console.log("add Assigned Task ID = "+ this.taskIDSelected);
-	    	/*console.log("Consultant_ID "+Consultant_ID);
-	    	console.log("_AssignedHours "+_AssignedHours);
-	    	console.log("_Description "+_Description);
-	    	console.log("_DueDate "+_DueDate);*/
-			$.post('assignConsultantToTask', { 
-				dateAssigned:_DateAssigned, 
-				dueDate:_DueDate, 
-				assignedHours: _AssignedHours, 
-				hoursWorked:0, 
-				consultantID:Consultant_ID, 
-				taskID:this.taskIDSelected, 
-				description:_Description},function(responseText) {
-				// var array = responseText.split(';');
-				console.log("Added activity: "+_AssignedHours);
-//				console.log("Returned from assign consultants");
-//				console.log(responseText);		
-			});
-			this._DialogAddActivity.destroy();
+	    	if(this.checkValueEntered(_Description,"AT_Description")){
+	    		check++;
+	    	}
+	    	var thisObj = this;
+	    	var numSuccesfulTests = 5;
+	    	if(check === numSuccesfulTests){
+				$.post('AssignConsultantToTask', { 
+					dateAssigned:_DateAssigned, 
+					dueDate:_DueDate, 
+					assignedHours: _AssignedHours, 
+					hoursWorked:0, 
+					consultantID:Consultant_ID, 
+					taskID:this.taskIDSelected, 
+					description:_Description,
+					succes:function(data){
+	                    
+						var oModel = thisObj.getView().getModel("projectsModel");
+						var projectID = oModel.oData.Project_ID;
+	                    var memberAddedToTask;
+	                    var currentUserName;
+	                    var newMemberEmail;
+	                    
+	                    
+	                    //var newMemberFilterID = new sap.ui.model.Filter("Consultant_ID", sap.ui.model.FilterOperator.EQ, consultantID);
+	                    //var currentUserFilterID = new sap.ui.model.Filter("Consultant_ID", sap.ui.model.FilterOperator.EQ, thisObj.getConsultantID());
+	                    
+	                    OModel.read("/Consultants", {
+	                        filters: [
+	                              new sap.ui.model.Filter({
+	                                path: "Consultant_ID",
+	                                operator: sap.ui.model.FilterOperator.EQ,
+	                                value1: Consultant_ID
+	                           })],
+	                        success: function(data){
+	                            memberAddedToTask = data.results[0].Consultant_Name;
+	                            //console.log( newMemberName);
+	                            
+	                            OModel.read("/Consultants", {
+	                                filters: [
+	                                      new sap.ui.model.Filter({
+	                                        path: "Consultant_ID",
+	                                        operator: sap.ui.model.FilterOperator.EQ,
+	                                        value1: thisObj.getConsultantID()
+	                                   })],
+	                                success: function(data){
+	                                    currentUserName = data.results[0].Consultant_Name;
+	                                    //console.log( currentUserName);
+	                                    OModel.read("/Projects", {
+	                                        filters: [
+	                                              new sap.ui.model.Filter({
+	                                                path: "Project_ID",
+	                                                operator: sap.ui.model.FilterOperator.EQ,
+	                                                value1: projectID
+	                                           })],
+	                                        success: function(data){
+	                                            var projectName = data.results[0].Project_Name;
+	                                            console.log(currentUserName);
+	                                            
+	                                            $.post('EmailNotificationAddedToTask',{newTaskMemberName:memberAddedToTask, emailAddress: "johandewaal18@gmail.com", currentUserName: currentUserName, projectName: projectName }, function(response){
+	                                                console.log("success");
+	                                            });
+	                                          },
+	                                          error: function(oError) {
+	                                              console.log("couldnt get consultant");
+	                                          }
+	                                    });
+	                                  },
+	                                  error: function(oError) {
+	                                      console.log("couldnt get consultant");
+	                                  }
+	                            });
+	                          },
+	                          error: function(oError) {
+	                              console.log("couldnt get consultant");
+	                          }
+	                    });
+	                   
+	                }
+				
+				},function(responseText) {
+					// var array = responseText.split(';');
+					console.log("Added activity: "+_AssignedHours);
+					 sap.m.MessageToast.show("Activity Added Succesfully");
+//					console.log("Returned from assign consultants");
+//					console.log(responseText);		
+				});
+				this._DialogAddActivity.destroy();	    		
+	    		
+	    	}
+
 		},
 		//Task tabs functions ends here
 		//*********************************************************************//
@@ -1024,6 +1431,10 @@ sap.ui.define([
             if(this._DialogAddActivity){
             	this._DialogAddActivity.destroy();
             }
+            
+            if (this._oDialog) {
+    			this._oDialog.destroy();
+    		}
 		 },
 		 onRemove: function(oEvent){
 			var _projectID = sap.ui.getCore().getModel("groupMember").getProperty("/Consultants");
@@ -1040,13 +1451,29 @@ sap.ui.define([
 		refreshData : function(oEvent){
 	    	//Begin Refresh PRojects
 	    	var oModel = new sap.ui.model.json.JSONModel();
-			var oDataProjects =  new sap.ui.model.odata.ODataModel(this.getModelAddress()); 
+//			var oDataProjects =  new sap.ui.model.odata.ODataModel(this.getModelAddress()); 
 			var arrProjects = {Projects:[]};
 			var arrConsultants = {Consultants:[]};
-			oDataProjects.read(
-					"/Projects?$expand=ClientDetails&$filter=Project_Deleted%20eq%20false",{success: function(oCreatedEn){ GotProjects(oCreatedEn) }, error: function(){console.log("Error");}}		
-			);
-			
+//			oDataProjects.read(
+//					"/Projects?$expand=ClientDetails&$filter=Project_Deleted%20eq%20false",{success: function(oCreatedEn){ GotProjects(oCreatedEn) }, error: function(){console.log("Error");}}		
+//			);
+			var model = this.getOwnerComponent().getModel("oModel");
+			model.read( "/Projects", {
+				filters: [ new sap.ui.model.Filter({
+					urlparameters:{
+						"$expand": "ClientDetails"
+					},
+			          path: "Project_Deleted",
+			          operator: sap.ui.model.FilterOperator.EQ,
+			          value1: "false"
+			     })],			
+					success: function(oCreatedEn){
+						GotProjects(oCreatedEn) 
+					}, 
+					error: function(){
+						console.log("Error");
+					}
+			});
 //				$.post('getProjects',function(responseText){
 //					console.log("servlet responded");
 			function GotProjects(oCreatedEn){
@@ -1062,15 +1489,36 @@ sap.ui.define([
 	    	//End Refresh PRojects
 
 	    	//BEgin refresh get members
-	    	var oDataProjects =  new sap.ui.model.odata.ODataModel(this.getModelAddress()); 
+//	    	var oDataProjects =  new sap.ui.model.odata.ODataModel(this.getModelAddress()); 
 			//get selected project id
 			var sOrderId = sap.ui.getCore().getModel("selModel").getProperty("/Project_ID");
 			//get model
 			var oData = sap.ui.getCore().getModel().getProperty("/results");
 			
-			oDataProjects.read(
-					"/Assignments?$expand=ConsultantDetails,ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ GotMembers(oCreatedEn) }, error: function(){console.log("Error");}}		
-					);
+//			oDataProjects.read(
+//					"/Assignments?$expand=ConsultantDetails,ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ GotMembers(oCreatedEn) }, error: function(){console.log("Error");}}		
+//					);
+			model = this.getOwnerComponent().getModel("oModel");
+			model.read( "/Assignments", {
+				filters: [ new sap.ui.model.Filter({
+					urlParameters:{
+						"$expand": "ConsultantDetails, ProjectDetails"
+					},
+			          path: "ProjectDetails/Project_ID",
+			          operator: sap.ui.model.FilterOperator.EQ,
+			          value1: sOrderId
+			     })],
+				async:false,
+				success: function(oCreatedEn){
+					GotMembers(oCreatedEn) 
+				}, 
+				error: function(){
+					sap.m.MessageToast.show('Failed to extract project details', {
+						duration: 5000,
+						autoClose: true
+					 });
+				}
+			});		
 	    	function GotMembers(Members){
 				console.log(Members);
 				var oModel = new sap.ui.model.json.JSONModel();
@@ -1082,11 +1530,31 @@ sap.ui.define([
 	    	//END refresh get members
 	    	
 	    	//Begin Refresh Members
-	    	var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
-			attachModel.read(
-					"/Tasks?$expand=ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
-					);
-			
+//	    	var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
+//			attachModel.read(
+//					"/Tasks?$expand=ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
+//					);
+			var oModel = this.getOwnerComponent().getModel("oModel");
+			oModel.read( "/Assignments", {
+				filters: [ new sap.ui.model.Filter({
+					urlParameters:{
+						"$expand": "ConsultantDetails, ProjectDetails"
+					},
+			          path: "ProjectDetails/Project_ID",
+			          operator: sap.ui.model.FilterOperator.EQ,
+			          value1: sOrderId
+			     })],
+				async:false,
+				success: function(oCreatedEn){
+					gotTasks(oCreatedEn) 
+				}, 
+				error: function(){
+					sap.m.MessageToast.show('Failed to extract project details', {
+						duration: 5000,
+						autoClose: true
+					 });
+				}
+			});		
 			function gotTasks(tasks){
 				console.log(tasks);
 				var oModel = new sap.ui.model.json.JSONModel();
@@ -1154,10 +1622,32 @@ sap.ui.define([
 					 console.log(oItem);
 //					console.log("TaskID");
 //					console.log(taskID);
-					var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
-					attachModel.read(
-							"/Feedbacks?$expand=TaskDetails&$filter=TaskDetails/Task_ID%20eq%201",{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
-							);
+//					var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
+//					attachModel.read(
+//							"/Feedbacks?$expand=TaskDetails&$filter=TaskDetails/Task_ID%20eq%201",{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
+//							);
+					 var oModel = this.getOwnerComponent().getModel("oModel");
+					 oModel.read("/Feedbacks", {
+							urlParameters: {
+								"$expand" : "TaskDetails"
+					        },
+			  				filters: [new sap.ui.model.Filter({
+			  			          path: "TaskDetails/Task_ID",
+			  			          operator: sap.ui.model.FilterOperator.EQ,
+			  			          value1: 1
+			  			    })],
+			  			    async:false,
+			  			     
+			  				success: function(oCreatedEn){
+			  					 gotTasks(oCreatedEn) 	
+			  				  },
+			  				error: function(oError) {
+			  					sap.m.MessageToast.show("Error in getting attachments", {
+									duration: 5000,
+									autoClose: true
+								 });
+			  				}
+			  			});
 					
 					function gotTasks(tasks){
 						console.log(tasks);
@@ -1196,10 +1686,31 @@ sap.ui.define([
 		          TaskIDModel.setData(taskID);
 		          sap.ui.getCore().setModel(TaskIDModel,"taskID");
 		          var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
-					attachModel.read(
-							"/Feedbacks?$expand=TaskDetails&$filter=TaskDetails/Task_ID%20eq%20"+oModel.Task_ID,{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
-							);
-					
+//					attachModel.read(
+//							"/Feedbacks?$expand=TaskDetails&$filter=TaskDetails/Task_ID%20eq%20"+oModel.Task_ID,{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
+//							);
+		          var oModel = this.getOwnerComponent().getModel("oModel");
+		          oModel.read("/Feedbacks", {
+					urlParameters: {
+						"$expand" : "TaskDetails"
+			        },
+	  				filters: [ 
+	  					new sap.ui.model.Filter({
+	  			          path: "TaskDetails/Task_ID",
+	  			          operator: sap.ui.model.FilterOperator.EQ,
+	  			          value1: oModel.Task_ID
+	  			     })],
+	  			     async:false,
+	  			     success: function(oCreatedEn){
+	  			    	 gotTasks(oCreatedEn) 
+	  			     }, 
+	  			     error: function(){
+	  			    	 sap.m.MessageToast.show("Error in getting attachments", {
+	  			    		 duration: 5000,
+	  			    		 autoClose: true
+						 });
+	  			     }
+		          });
 					function gotTasks(tasks){
 						console.log(tasks);
 						var oModel = new sap.ui.model.json.JSONModel();
@@ -1209,25 +1720,9 @@ sap.ui.define([
 						app.to("detailPage");
 					}
 		        },
-		        getFeedback: function(oEvent){
-				 //console.log("Oevent");
-//				var myE = oEvent;
-//				var myE2 = oEvent.getSource().getParent();
-//				var myE3 = oEvent.getSource().getParent().getParent();
-//				console.log(myE);
-//				console.log(myE2);
-//				console.log(myE3);
-				 //console.log(oEvent.getSource().getParent().getParent());
-//				//Get feed back 
-//				 var oSelectedItem = oEvent.getSource().getParent().getParent().getParameter("listItem");
-//		         var oModel = oSelectedItem.getBindingContext("tasks").getObject();
-//		         console.log(oModel.Task_ID);
-		         
-				
-				
-				
-				 this._Dialog = sap.ui.xmlfragment("consultant-tracker.fragments.feedback", this);
-				 this._Dialog.open();
+		    getFeedback: function(oEvent){
+		    	this._Dialog = sap.ui.xmlfragment("consultant-tracker.fragments.feedback", this);
+				this._Dialog.open();
 			},
 			onFeedback : function(){
 				
@@ -1262,10 +1757,11 @@ sap.ui.define([
 				//console.log(oModel);
 
 				//get Project_ID to pass to the calender view
+				console.log("toCalender CID: "+consultantId);
 				var oListId = oModel.oData.Project_ID;
 				this.getRouter()
 					.navTo("Calender", 
-						{listId:oListId, projectId:oListId});
+						{listId:oListId, projectId:oListId, consultantId:consultantId});
 
 			},
 			handleUploadPress: function(oEvent) {
@@ -1275,7 +1771,7 @@ sap.ui.define([
 			deleteTask: function(){
 						var id = sap.ui.getCore().getModel("taskID").getProperty("/id");
 						
-						$.post('removeAssignedTask',{taskID:id},function(responseText){
+						$.post('RemoveAssignedTask',{taskID:id},function(responseText){
 				    		  
 								console.log("Removed task!");
 							});
@@ -1290,8 +1786,8 @@ sap.ui.define([
 				//Start---Mobile view code
                 onNavBack: function(oEvent){
                     
-                    //alert("Detail admin ");
-                    //alert(this.getConsultantID());
+                    //console.log("Detail admin ");
+                    //console.log(this.getConsultantID());
                     this.getRouter().navTo("MasterAdmin",{consultantId:this.getConsultantID()});
                 },
                 //End---Mobile view code

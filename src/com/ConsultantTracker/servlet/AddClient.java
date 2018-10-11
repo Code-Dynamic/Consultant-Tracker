@@ -32,21 +32,26 @@ public class AddClient extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
 		EntityManager em = emf.createEntityManager();
-		
 			
-		String client_name = request.getParameter("Name");	
-		String client_email = request.getParameter("EmailAddress");
-		String client_address = request.getParameter("PhysicalAddress");
-		String clent_number = request.getParameter("Number");
+		String client_name = request.getParameter("ClientName");	
+		String client_address = request.getParameter("ClientPhysicalAddress");
+		String client_number = request.getParameter("ClientNumber");
+		
+		String contact_email = request.getParameter("ContactEmailAddress");
+		String contact_phone = request.getParameter("ContactNumber");
+		String contact_name = request.getParameter("ContactName");
+		
 		double client_latitude = Double.parseDouble(request.getParameter("Latitude"));
 		double client_longitude = Double.parseDouble(request.getParameter("Longitude"));
 		
 		Client c = new Client();
-		c.setClient_Name(client_name);
-		c.setClient_EMail(client_email);
+		c.setClient_Name(contact_name);
+		c.setClient_EMail(contact_email);
 		c.setClient_Address(client_address);
-		c.setClient_PhoneNum(clent_number);
+		c.setClient_PhoneNum(contact_phone);
 		c.setClient_Latitude(client_latitude);
+		c.setCompany_Name(client_name);
+		c.setCompany_Phone(client_number);
 		c.setClient_Longitude(client_longitude);
 		
 		em.getTransaction().begin();

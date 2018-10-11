@@ -16,7 +16,6 @@
 		
 		<StandardListItem
 			title="{tasksModel>Name}"
-			description="{tasksModel>Due_Date}"
 			iconDensityAware="false"
 			iconInset="false"
 			type="Active" />

@@ -12,8 +12,6 @@
 		<class>com.ConsultantTracker.model.Project</class>
 		<class>com.ConsultantTracker.model.Team</class>
 		<class>com.ConsultantTracker.model.User</class>
-		<class>org.persistence.Entity1</class>
-		<class>org.persistence.Entity2</class>
 		<class>com.ConsultantTracker.model.Task</class>
 		<class>com.ConsultantTracker.model.Assigned_Task</class>
 		<class>com.ConsultantTracker.model.Feedback</class>
@@ -22,6 +20,8 @@
 		<class>com.ConsultantTracker.model.Daily_Times</class>
 		<class>com.ConsultantTracker.model.Ratings</class>
 		<class>com.ConsultantTracker.model.Ratings_Entry</class>
+		<class>com.ConsultantTracker.model.User_Type</class>
+		<class>com.ConsultantTracker.model.Team_Entity</class>
 		<properties>
 			<property name="eclipselink.ddl-generation" value="create-tables" />
 			<property name="eclipselink.cache.shared.default" value="false" />
