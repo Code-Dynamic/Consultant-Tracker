@@ -332,6 +332,8 @@ sap.ui.define([
 			var numArguments = arguments.length;
 			var thisDomObj = this;
 			var projectsModel = new sap.ui.model.json.JSONModel();
+			var dialog = new sap.m.BusyDialog();
+			dialog.open();	
 			var oModel = this.getOwnerComponent().getModel("oModel");
 			// read projects
 			oModel.read("/Projects?$filter=Project_Deleted%20eq%20false",{
@@ -360,13 +362,16 @@ sap.ui.define([
 							var projectID = oData.Project_ID;
 							var projectCompleted = oData.Project_Completed;
 							thisDomObj.selectProjectByID(projectID,projectCompleted);	
+							dialog.close();
 						} else {
-							sap.ui.core.BusyIndicator.hide();
+							dialog.close();
 						}
 					}
 				},
 				error : function() {
 				// console.log("Error");
+
+		    		dialog.close();
 				}
 			});
 		},
