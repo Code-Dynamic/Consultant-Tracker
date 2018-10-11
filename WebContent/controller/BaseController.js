@@ -473,7 +473,6 @@ sap.ui.define([
 				},
 				filters: [ new sap.ui.model.Filter(filters,true)],
 			     success: function(oData){
-			    	 console.log(oData);
 			    	 addMembers(oData) 
 		 		 },
 		 		 error: function(){
@@ -484,7 +483,6 @@ sap.ui.define([
 		 	RatingIndicatorArr = [];	
 		    //return all consultants
 		    function  addMembers(oResults) {
-		    	console.log(oResults);
 		    	RatingResults = oResults;
 		    	var ratingInd ="";
 		        var user = "";
@@ -1061,6 +1059,9 @@ sap.ui.define([
 				return true;
 			}else{
 		   		var input = sap.ui.getCore().byId(inputID);
+		   		if(input == undefined){
+		   			input = this.getView().byId(inputID);
+		   		}
 		   		input.setValueState(sap.ui.core.ValueState.Error);
 				return false;
 			}
@@ -1070,6 +1071,21 @@ sap.ui.define([
 				return true;
 			}else{
 		   		var input = sap.ui.getCore().byId(inputID);
+		   		if(input == undefined){
+		   			input = this.getView().byId(inputID);
+		   		}
+		   		input.setValueState(sap.ui.core.ValueState.Error);
+				return false;
+			}
+		},
+		checkEmailValueEntered : function (val,inputID){
+			if(val.length > 0 && this.validateEmail(val)){
+				return true;
+			}else{
+		   		var input = sap.ui.getCore().byId(inputID);
+		   		if(input == undefined){
+		   			input = this.getView().byId(inputID);
+		   		}
 		   		input.setValueState(sap.ui.core.ValueState.Error);
 				return false;
 			}
