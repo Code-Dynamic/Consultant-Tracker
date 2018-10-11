@@ -1245,21 +1245,34 @@ sap.ui.define([
 		},
 		handleCloseAddTask: function(oEvent){
 //			console.log("Start creating task");
-			
+			var check = 0;
 	    	var _Name = sap.ui.getCore().byId("t_Name").getValue();
+	    	if(this.checkValueEntered(_Name,"t_Name")){
+	    		check++;
+	    	}
 	    	var _Description = sap.ui.getCore().byId("t_Description").getValue();
+	    	if(this.checkValueEntered(_Description,"t_Description")){
+	    		check++;
+	    	}
 	    	var _DueDate = sap.ui.getCore().byId("t_Deadline").getValue();
-	    	var oModel = this.getView().getModel("projectsModel");
-	    	var _projectID = oModel.oData.Project_ID;
-	    	
-	    	console.log(_Name+" "+_Description+" "+_DueDate+" "+_projectID);
-	    	
-	    	$.post('CreateTask',{description: _Description,dueDate: _DueDate,name:_Name, projectID: _projectID},function(responseText){
-	    		  console.log("Creating task completed");
-	    		  thisView.updateTasksList(_projectID);
-			});
-	    	  
-			this._DialogAddTask.destroy();		
+	    	if(this.checkValueEntered(_DueDate,"t_Deadline")){
+	    		check++;
+	    	}
+	    	var numSuccesfulTests = 3;
+	    	if(check === numSuccesfulTests){
+		    	var oModel = this.getView().getModel("projectsModel");
+		    	var _projectID = oModel.oData.Project_ID;
+		    	
+		    	console.log(_Name+" "+_Description+" "+_DueDate+" "+_projectID);
+		    	
+		    	$.post('CreateTask',{description: _Description,dueDate: _DueDate,name:_Name, projectID: _projectID},function(responseText){
+		    		  console.log("Creating task completed");
+		    		  sap.m.MessageToast.show("Task Added Succesfully");
+		    		  thisView.updateTasksList(_projectID);
+				});
+		    	  
+				this._DialogAddTask.destroy();	    		
+	    	}		
 		},
 		updateTasksList: function(){
 			var tasksDetailModel = new JSONModel();
@@ -1284,104 +1297,114 @@ sap.ui.define([
   			thisView.getView().setModel(tasksDetailModel,"tasksModel");
 		},
 		handleCloseAddActivity: function(){
+			var check = 0;
 			var Consultant_ID = sap.ui.getCore().byId("consultantSelected").getSelectedKey();
+	    	if(this.checkValueEntered(Consultant_ID,"consultantSelected")){
+	    		check++;
+	    	}
 			var _AssignedHours = sap.ui.getCore().byId("allocatedHours").getValue();
+	    	if(this.checkNumericValueEntered(_AssignedHours,"allocatedHours")){
+	    		check++;
+	    	}
 			var _DateAssigned = sap.ui.getCore().byId("AT_dateAssigned").getValue();
+	    	if(this.checkValueEntered(_DateAssigned,"AT_dateAssigned")){
+	    		check++;
+	    	}
 			var _DueDate = sap.ui.getCore().byId("AT_Deadline").getValue();
+	    	if(this.checkValueEntered(_DueDate,"AT_Deadline")){
+	    		check++;
+	    	}
 	    	var _Description = sap.ui.getCore().byId("AT_Description").getValue();
+	    	if(this.checkValueEntered(_Description,"AT_Description")){
+	    		check++;
+	    	}
 	    	var thisObj = this;
-	    	
-//	    	console.log("Adding activity: "+_AssignedHours);
-			//var dueDate = sap.ui.getCore().byId("consultantSelected").getSelectedKey();
-//			console.log("add Assigned Task ID = "+ this.taskIDSelected);
-	    	/*console.log("Consultant_ID "+Consultant_ID);
-	    	console.log("_AssignedHours "+_AssignedHours);
-	    	console.log("_Description "+_Description);
-	    	console.log("_DueDate "+_DueDate);*/
-			$.post('AssignConsultantToTask', { 
-				dateAssigned:_DateAssigned, 
-				dueDate:_DueDate, 
-				assignedHours: _AssignedHours, 
-				hoursWorked:0, 
-				consultantID:Consultant_ID, 
-				taskID:this.taskIDSelected, 
-				description:_Description,
-				succes:function(data){
-                    
-					var oModel = thisObj.getView().getModel("projectsModel");
-					var projectID = oModel.oData.Project_ID;
-                    var memberAddedToTask;
-                    var currentUserName;
-                    var newMemberEmail;
-                    
-                    
-                    //var newMemberFilterID = new sap.ui.model.Filter("Consultant_ID", sap.ui.model.FilterOperator.EQ, consultantID);
-                    //var currentUserFilterID = new sap.ui.model.Filter("Consultant_ID", sap.ui.model.FilterOperator.EQ, thisObj.getConsultantID());
-                    
-                    OModel.read("/Consultants", {
-                        filters: [
-                              new sap.ui.model.Filter({
-                                path: "Consultant_ID",
-                                operator: sap.ui.model.FilterOperator.EQ,
-                                value1: Consultant_ID
-                           })],
-                        success: function(data){
-                            memberAddedToTask = data.results[0].Consultant_Name;
-                            //console.log( newMemberName);
-                            
-                            OModel.read("/Consultants", {
-                                filters: [
-                                      new sap.ui.model.Filter({
-                                        path: "Consultant_ID",
-                                        operator: sap.ui.model.FilterOperator.EQ,
-                                        value1: thisObj.getConsultantID()
-                                   })],
-                                success: function(data){
-                                    currentUserName = data.results[0].Consultant_Name;
-                                    //console.log( currentUserName);
-                                    OModel.read("/Projects", {
-                                        filters: [
-                                              new sap.ui.model.Filter({
-                                                path: "Project_ID",
-                                                operator: sap.ui.model.FilterOperator.EQ,
-                                                value1: projectID
-                                           })],
-                                        success: function(data){
-                                            var projectName = data.results[0].Project_Name;
-                                            console.log(currentUserName);
-                                            
-                                            $.post('EmailNotificationAddedToTask',{taskDescription: _Description,dueDate: _DueDate,dateAssigned: _DateAssigned,assignedHours: _AssignedHours,newTaskMemberName:memberAddedToTask, emailAddress: "johandewaal18@gmail.com", currentUserName: currentUserName, projectName: projectName }, function(response){
-                                                console.log("success");
-                                            });
-                                          },
-                                          error: function(oError) {
-                                              console.log("couldnt get consultant");
-                                          }
-                                    });
-                                  },
-                                  error: function(oError) {
-                                      console.log("couldnt get consultant");
-                                  }
-                            });
-                          },
-                          error: function(oError) {
-                              console.log("couldnt get consultant");
-                          }
-                    });
-                    
-                    
-                    
-                    
-                    
-                }
-			
-			},function(responseText) {
-				// var array = responseText.split(';');
-				console.log("Added activity: "+_AssignedHours);
-//				console.log("Returned from assign consultants");
-//				console.log(responseText);		
-			});
-			this._DialogAddActivity.destroy();
+	    	var numSuccesfulTests = 5;
+	    	if(check === numSuccesfulTests){
+				$.post('AssignConsultantToTask', { 
+					dateAssigned:_DateAssigned, 
+					dueDate:_DueDate, 
+					assignedHours: _AssignedHours, 
+					hoursWorked:0, 
+					consultantID:Consultant_ID, 
+					taskID:this.taskIDSelected, 
+					description:_Description,
+					succes:function(data){
+	                    
+						var oModel = thisObj.getView().getModel("projectsModel");
+						var projectID = oModel.oData.Project_ID;
+	                    var memberAddedToTask;
+	                    var currentUserName;
+	                    var newMemberEmail;
+	                    
+	                    
+	                    //var newMemberFilterID = new sap.ui.model.Filter("Consultant_ID", sap.ui.model.FilterOperator.EQ, consultantID);
+	                    //var currentUserFilterID = new sap.ui.model.Filter("Consultant_ID", sap.ui.model.FilterOperator.EQ, thisObj.getConsultantID());
+	                    
+	                    OModel.read("/Consultants", {
+	                        filters: [
+	                              new sap.ui.model.Filter({
+	                                path: "Consultant_ID",
+	                                operator: sap.ui.model.FilterOperator.EQ,
+	                                value1: Consultant_ID
+	                           })],
+	                        success: function(data){
+	                            memberAddedToTask = data.results[0].Consultant_Name;
+	                            //console.log( newMemberName);
+	                            
+	                            OModel.read("/Consultants", {
+	                                filters: [
+	                                      new sap.ui.model.Filter({
+	                                        path: "Consultant_ID",
+	                                        operator: sap.ui.model.FilterOperator.EQ,
+	                                        value1: thisObj.getConsultantID()
+	                                   })],
+	                                success: function(data){
+	                                    currentUserName = data.results[0].Consultant_Name;
+	                                    //console.log( currentUserName);
+	                                    OModel.read("/Projects", {
+	                                        filters: [
+	                                              new sap.ui.model.Filter({
+	                                                path: "Project_ID",
+	                                                operator: sap.ui.model.FilterOperator.EQ,
+	                                                value1: projectID
+	                                           })],
+	                                        success: function(data){
+	                                            var projectName = data.results[0].Project_Name;
+	                                            console.log(currentUserName);
+	                                            
+	                                            $.post('EmailNotificationAddedToTask',{newTaskMemberName:memberAddedToTask, emailAddress: "johandewaal18@gmail.com", currentUserName: currentUserName, projectName: projectName }, function(response){
+	                                                console.log("success");
+	                                            });
+	                                          },
+	                                          error: function(oError) {
+	                                              console.log("couldnt get consultant");
+	                                          }
+	                                    });
+	                                  },
+	                                  error: function(oError) {
+	                                      console.log("couldnt get consultant");
+	                                  }
+	                            });
+	                          },
+	                          error: function(oError) {
+	                              console.log("couldnt get consultant");
+	                          }
+	                    });
+	                   
+	                }
+				
+				},function(responseText) {
+					// var array = responseText.split(';');
+					console.log("Added activity: "+_AssignedHours);
+					 sap.m.MessageToast.show("Activity Added Succesfully");
+//					console.log("Returned from assign consultants");
+//					console.log(responseText);		
+				});
+				this._DialogAddActivity.destroy();	    		
+	    		
+	    	}
+
 		},
 		//Task tabs functions ends here
 		//*********************************************************************//

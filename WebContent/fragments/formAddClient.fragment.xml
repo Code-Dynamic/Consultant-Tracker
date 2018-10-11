@@ -27,15 +27,21 @@
 			columnsM="1"
 			singleContainerFullSize="false" >
 			<f:content>
-				<Label text="Name"/>
-				<Input id="c_Name"/>
-				<Label text="Email Address"/>
-				<Input id="c_Email"/>
-				<Label text="Physical Address"/>
-				<TextArea id="c_Address"/>
-				<Label text="Phone Number"/>
-				<Input id="c_Number"/>
-				
+			
+				<Label text="Client Name" required="true" id="c_NameLabel"/>	
+				<Input id="c_Name" liveChange="handleUserInput" value="" />
+				<Label text="Client Phone Number" required="true" id="c_NumberLabel"/>
+				<Input id="c_Number" liveChange="handleUserInput" value=""/>	
+				<Label text="Client Physical Address" required="true" id="c_AddressLabel"/>
+				<TextArea id="c_Address" liveChange="handleUserInput" value=""/>			
+
+				<Label text="Contact Person Name"/>
+				<Input id="c_ContactPersonName" value=""/>		
+				<Label text="Contact Cell"/>
+				<Input id="c_ContactPersonCell" value=""/>
+				<Label text="Contact Email"/>
+				<Input id="c_ContactPersonEmail" value=""/>
+					
 				<Label text="Use a CSV file instead"/>
 				<l:VerticalLayout>
 					<u:FileUploader 

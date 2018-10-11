@@ -26,35 +26,31 @@
 			editable="true" 
 			id="SimpleFormAddTask">
 				<f:content>
-					<Label text="Activity description"/>
-					<TextArea id="AT_Description"/>
+					<Label text="Activity description" required="true" id="AT_DescriptionLabel"/>
+					<TextArea id="AT_Description" liveChange="handleUserInput" value=""/>
 					
-					<Label text="Activity startdate"/>
+					<Label text="Activity startdate" required="true" id="AT_dateAssignedLabel"/>
 					<DatePicker 
 						id="AT_dateAssigned" 
+						change = "onDatePickerChange"
 						width="100%" 
 						displayFormat="long" 
 						valueFormat="yyyy-MM-dd"/>
 					
-					<Label text="Activity deadline"></Label>
+					<Label text="Activity deadline" required="true" id="AT_DeadlineLabel"/>
 					<DatePicker 
 						id="AT_Deadline" 
+						change = "onDatePickerChange"
 						width="100%" 
 						displayFormat="long" 
 						valueFormat="yyyy-MM-dd"/>
 						
-					<Label text="Allocate hours to activity"></Label>
-					<!-- <TimePicker
-						id="allocatedHours"
-						value="00"
-						valueFormat="HH"
-						displayFormat="HH"
-						placeholder="allocate hours"/> -->
-					<Input id="allocatedHours"/>
+					<Label text="Allocate hours to activity" required="true" id="allocatedHoursLabel"/>
+					<Input id="allocatedHours" liveChange="handleUserNumericInput" value=""/>
 						
-					<Label text="Assign consultant to activity"></Label>
-				 	
+					<Label text="Assign consultant to activity"  required="true" id="consultantSelectedLabel"/>
 				 	<Select id="consultantSelected"
+				 		change = "onDatePickerChange"
 						forceSelection="false"
 						items="{membersModel>/results}">
 	

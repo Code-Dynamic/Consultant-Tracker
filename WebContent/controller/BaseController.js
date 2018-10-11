@@ -1003,14 +1003,85 @@ sap.ui.define([
 					console.log("Error reading model for Tasks");
 				}
 			});	
+			}
+		  }
 		}
-	  }
-	}
-},
+	},
 		handleCloseShowTasks: function(oEvent){
 //				console.log("Close show tasks");
 //				console.log(oEvent);
 				this._Dialog.destroy();	
 		},
+	    handleUserInput: function(oEvent){
+	   		var sUserInput = oEvent.getParameter("value");
+	   		var inputLabelID = oEvent.getParameter("id") + "Label";
+	   		var inputLabel = sap.ui.getCore().byId(inputLabelID);
+	   		var oInputControl= oEvent.getSource();
+	   		if(sUserInput){
+	    		oInputControl.setValueState(sap.ui.core.ValueState.Success);
+	    		inputLabel.setProperty("required",false);
+	    	}else{
+	    		oInputControl.setValueState(sap.ui.core.ValueState.Error);
+	    		inputLabel.setProperty("required",true);
+	    	}
+	    },
+	    handleUserNumericInput: function(oEvent){
+	   		var sUserInput = oEvent.getParameter("value");
+	   		var inputLabelID = oEvent.getParameter("id") + "Label";
+	   		var inputLabel = sap.ui.getCore().byId(inputLabelID);
+	   		var oInputControl= oEvent.getSource();
+	   		if(sUserInput && this.isNumeric(sUserInput)){
+	    		oInputControl.setValueState(sap.ui.core.ValueState.Success);
+	    		inputLabel.setProperty("required",false);
+	    	}else{
+	    		oInputControl.setValueState(sap.ui.core.ValueState.Error);
+	    		inputLabel.setProperty("required",true);
+	    	}
+	    },
+	    onDatePickerChange: function(oEvent){
+	   		var oInputControl= oEvent.getSource();
+	   		oInputControl.setValueState(sap.ui.core.ValueState.Success);
+	   		var inputLabelID = oEvent.getParameter("id") + "Label";
+	   		var inputLabel = sap.ui.getCore().byId(inputLabelID);
+	    	inputLabel.setProperty("required",false);
+	    },
+	    onEmailEntered: function(oEvent){
+	   		var sUserInput = oEvent.getParameter("value");
+	   		var inputLabelID = oEvent.getParameter("id") + "Label";
+	   		var inputLabel = sap.ui.getCore().byId(inputLabelID);
+	   		var oInputControl= oEvent.getSource();
+	   		if(sUserInput && this.validateEmail(sUserInput)){
+	    		oInputControl.setValueState(sap.ui.core.ValueState.Success);
+	    		inputLabel.setProperty("required",false);
+	    	}else{
+	    		oInputControl.setValueState(sap.ui.core.ValueState.Error);
+	    		inputLabel.setProperty("required",true);
+	    	}
+	    },
+	    validateEmail: function(email) {
+	        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	        return re.test(String(email).toLowerCase());
+	    },
+	    checkValueEntered : function (val,inputID){
+			if(val.length > 0){
+				return true;
+			}else{
+		   		var input = sap.ui.getCore().byId(inputID);
+		   		input.setValueState(sap.ui.core.ValueState.Error);
+				return false;
+			}
+		},
+	    checkNumericValueEntered : function (val,inputID){
+			if(val.length > 0 && this.isNumeric(val)){
+				return true;
+			}else{
+		   		var input = sap.ui.getCore().byId(inputID);
+		   		input.setValueState(sap.ui.core.ValueState.Error);
+				return false;
+			}
+		},
+		isNumeric: function(n) {
+			  return !isNaN(parseFloat(n)) && isFinite(n);
+		}
 	});
 });

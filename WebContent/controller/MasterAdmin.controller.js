@@ -422,30 +422,59 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	},
 	onSubmitClient: function(){
 		var thisObj = this;
-    	var _Name = sap.ui.getCore().byId("c_Name").getValue();
-    	var _EmailAddress = sap.ui.getCore().byId("c_Email").getValue();
-    	var _PhysicalAddress = sap.ui.getCore().byId("c_Address").getValue();
-    	var _Number = sap.ui.getCore().byId("c_Number").getValue();
-    	
-    	$.post('AddClient', { Name: _Name ,EmailAddress: _EmailAddress,PhysicalAddress: _PhysicalAddress, Number: _Number, Latitude:-25.780221, Longitude: 28.277232},
-        		function(responseText) {  
-      				MessageToast.show("client submitted Succesfully");
-    				console.log(responseText);
-    				thisObj.setClientsModel(PROJECT_ID);
-        		}
-    	);
-    	
-    	//close model
-    	this.onClose();
+		var check = 0;
+    	var _ClientName = sap.ui.getCore().byId("c_Name").getValue();
+    	if(this.checkValueEntered(_ClientName,"c_Name")){
+    		check++;
+    	}
+    	var _ClientPhysicalAddress = sap.ui.getCore().byId("c_Address").getValue();
+    	if(this.checkValueEntered(_ClientPhysicalAddress,"c_Address")){
+    		check++;
+    	}
+    	var _ClientNumber = sap.ui.getCore().byId("c_Number").getValue();
+    	if(this.checkValueEntered(_ClientNumber,"c_Number")){
+    		check++;
+    	}
+    	var numSuccesfulTests = 3;
+    	if(check === numSuccesfulTests){
+        	var _ContactName = sap.ui.getCore().byId("c_ContactPersonName").getValue();
+        	var _ContactNumber = sap.ui.getCore().byId("c_ContactPersonCell").getValue();
+        	var _ContactEmailAddress = sap.ui.getCore().byId("c_ContactPersonEmail").getValue();
+        	$.post('AddClient', { ClientName: _ClientName, ClientPhysicalAddress: _ClientPhysicalAddress, ClientNumber: _ClientNumber,ContactName: _ContactName, ContactNumber: _ContactNumber, ContactEmailAddress: _ContactEmailAddress, Latitude: 0, Longitude: 0},
+            		function(responseText) {  
+          				MessageToast.show("Client Submitted Succesfully");
+        				console.log(responseText);
+        				thisObj.setClientsModel(PROJECT_ID);
+            		}
+        	);
+        	//close model
+        	this.onClose();   		
+    	}
+
     },
-	 onSubmitProject : function() {
+	 onSubmitProject: function() {
 	    	var thisDomObj = this;
-	    	
+	    	var check = 0;
 	    	var _Name = sap.ui.getCore().byId("p_Name").getValue();
+	    	if(this.checkValueEntered(_Name,"p_Name")){
+	    		check++;
+	    	}
 	    	var _Description = sap.ui.getCore().byId("p_Description").getValue();
+	    	if(this.checkValueEntered(_Description,"p_Description")){
+	    		check++;
+	    	}
 	    	var _Deadline = sap.ui.getCore().byId("p_Deadline").getValue();
+	    	if(this.checkValueEntered(_Deadline,"p_Deadline")){
+	    		check++;
+	    	}	    	
 	    	var _StartDate = sap.ui.getCore().byId("p_StartDate").getValue();
+	    	if(this.checkValueEntered(_StartDate,"p_StartDate")){
+	    		check++;
+	    	}	
 	    	var _cilentID = sap.ui.getCore().byId("idSelected").getSelectedKey();
+	    	if(this.checkValueEntered(_cilentID,"idSelected")){
+	    		check++;
+	    	}	
 	    	var b_OnSite = sap.ui.getCore().byId("p_OnSite").getSelected();;
 	    	var _OnSite;
 	    	if(b_OnSite){
@@ -453,19 +482,21 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	    	}else{
 	    		_OnSite = 0;
 	    	}
-
-	    	$.post('CreateProject', { Name: _Name ,ClientID: _cilentID,Desc: _Description, Deadl: _Deadline,StartDate: _StartDate,OnSite:  _OnSite, Project_Creator: this.getConsultantID()},
-	    	function(responseText) {
-	    		MessageToast.show("project submitted Succesfully");
-	    		//ensures that newly created project is selected
-	    		var selectFirstProject = false;
-	    		thisDomObj.goToProjects(selectFirstProject);    		
-	    	});
-	    	//close model
-			this.onClose();
+	    	if(check === 5){
+	   	    	$.post('CreateProject', { Name: _Name ,ClientID: _cilentID,Desc: _Description, Deadl: _Deadline,StartDate: _StartDate,OnSite:  _OnSite, Project_Creator: this.getConsultantID()},
+		    	function(responseText) {
+		    		MessageToast.show("Project Submitted Succesfully");
+		    		//ensures that newly created project is selected
+		    		var selectFirstProject = false;
+		    		thisDomObj.goToProjects(selectFirstProject);    		
+		    	});
+		    	//close model
+				this.onClose();	    		
+	    	}
 	    },
 	    onSubmitConsultant : function() {
 	    	var thisDomObj = this;
+	    	var check = 0;
 	    	var oConsultant = {
 					 Consultant_Name : "none",
 					 Consultant_Surname : "none",
@@ -474,81 +505,99 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 				};
 	    	
 	    	var _Name = sap.ui.getCore().byId("c_Name").getValue();
+	    	if(this.checkValueEntered(_Name,"c_Name")){
+	    		check++;
+	    	}
+	    	var _Surname = sap.ui.getCore().byId("c_Surname").getValue();
+	    	if(this.checkValueEntered(_Surname,"c_Surname")){
+	    		check++;
+	    	}
 	    	var _Email = sap.ui.getCore().byId("c_email").getValue();
-	    	var t = this;
-	    	var oModel = this.getOwnerComponent().getModel("oModel");
-	    	var _Privilege;
-	    	var _teamID;
-	    	
-	    	oModel.read( "/Consultants", {
-				urlParameters: {
-					"$expand" : "User_TypeDetails"
-				},
-				filters: [ new sap.ui.model.Filter({
-			          path: "Consultant_ID",
-			          operator: sap.ui.model.FilterOperator.EQ,
-			          value1: thisDomObj.getConsultantID()
-			     })],
-		    	success: function(oData){
-		    	 	if(oData.results.length > 0){
-		    	 		if (oData.results[0].User_TypeDetails.User_Type_Id == 100)
-		    	 			_Privilege = 200;
-		    	 		else if (oData.results[0].User_TypeDetails.User_Type_Id == 200)
-		    	 			_Privilege = 300;
-		    	 		//create a team of consultants with the group leader
-	    	    		oModel.read ("/Teams",{
-	    		    		urlParameters: {
-	    						"$expand" : "ConsultantDetails"
-	    					},
-	    					filters: [ new sap.ui.model.Filter({
-	    				          path: "ConsultantDetails/Consultant_ID",
-	    				          operator: sap.ui.model.FilterOperator.EQ,
-	    				          value1: thisDomObj.getConsultantID()
-	    				     })],
-	    				     success:function(data){
-	    				    	if (data.results.length == 0){
-	    				    		$.post('CreateTeam',
-	    				    			{leaderID: thisDomObj.getConsultantID()},
-	    				    			function(response){
-	    				    				_teamID = response;
-	    				    				console.log("team after creation: " + _teamID);
-	    				    			}
-	    				    		);
-	    				    	}
-	    				    	else{
-	    				    		_teamID = data.results[0].Team_ID;
-	    				    	}
-	    				    	//create consultant
-	    				    	$.post('CreateConsultant', { 
-									name: _Name,
-									email: _Email,
-									admin: _Privilege
-									}, 
-	    		    				function(responseText) {
-										console.log(_teamID);
-	    		    					$.post('AssignConsultantToTeam',{consultantID:responseText, teamID: _teamID});
-	    		    					$.post('CreateUser', {conID:responseText},
-	    		    						function(response){
-	    		    							thisDomObj.goToConsultants();
-	    		    							$.post('MailingServlet',{name:_Name, emailAddress: _Email, password: response }, function(){
-	    		    								MessageToast.show("Consultant succesfully added.");
-	    		    							}); 
-	    		    					});
-								});
-	    				     },
-	    					error: function(){
-	    						 MessageToast.show("Failed to extract team details");
-	    					}
-	    		    	});
-		    	 	}
-		    	},
-		    	error: function(){
-		    		 MessageToast.show("Failed to extract consultant details");
-		    	}
-	    	});
-	    	//close model
-	    	this.onClose();
-
+	    	if(this.checkValueEntered(_Email,"c_email") && this.validateEmail(_Email)){
+	    		check++;
+	    	}
+	    	var _Cell = sap.ui.getCore().byId("c_Cell").getValue();
+if(this.checkValueEntered(_Cell,"c_Cell")){
+	    		check++;
+	    	}
+	    	var numSuccesfulTests = 4 ;
+	    	if(check === numSuccesfulTests){
+		    	var t = this;
+		    	var oModel = this.getOwnerComponent().getModel("oModel");
+		    	var _Privilege;
+		    	var _teamID;
+		    	
+		    	oModel.read( "/Consultants", {
+					urlParameters: {
+						"$expand" : "User_TypeDetails"
+					},
+					filters: [ new sap.ui.model.Filter({
+				          path: "Consultant_ID",
+				          operator: sap.ui.model.FilterOperator.EQ,
+				          value1: thisDomObj.getConsultantID()
+				     })],
+			    	success: function(oData){
+			    	 	if(oData.results.length > 0){
+			    	 		if (oData.results[0].User_TypeDetails.User_Type_Id == 100)
+			    	 			_Privilege = 200;
+			    	 		else if (oData.results[0].User_TypeDetails.User_Type_Id == 200)
+			    	 			_Privilege = 300;
+			    	 		//create a team of consultants with the group leader
+		    	    		oModel.read ("/Teams",{
+		    		    		urlParameters: {
+		    						"$expand" : "ConsultantDetails"
+		    					},
+		    					filters: [ new sap.ui.model.Filter({
+		    				          path: "ConsultantDetails/Consultant_ID",
+		    				          operator: sap.ui.model.FilterOperator.EQ,
+		    				          value1: thisDomObj.getConsultantID()
+		    				     })],
+		    				     success:function(data){
+		    				    	if (data.results.length == 0){
+		    				    		$.post('CreateTeam',
+		    				    			{leaderID: thisDomObj.getConsultantID()},
+		    				    			function(response){
+		    				    				_teamID = response;
+		    				    			}
+		    				    		);
+		    				    	}
+		    				    	else{
+		    				    		_teamID = data.results[0].Team_ID;
+		    				    	}
+		    				    	console.log(_teamID);
+		    				    	//create consultant
+		    				    	$.post('CreateConsultant', { 
+										name: _Name,
+										surname: _Surname,
+										email: _Email,
+										cell: _Cell,
+										admin: _Privilege}, 
+		    		    				function(responseText) {
+		    		    					$.post('AssignConsultantToTeam',{consultantID:responseText, teamID: _teamID});
+//			    		    					console.log("At adding User Equivalent: "+responseText);
+		    		    					$.post('CreateUser', {conID:responseText},
+		    		    						function(response){
+		    		    							thisDomObj.goToConsultants();
+		    		    							$.post('MailingServlet',{name:_Name, emailAddress: _Email }, function(response){
+		    	    		    						console.log("success");
+		    	    		    					});
+		    		    							 MessageToast.show("Consultant succesfully added.");
+		    		    					});
+									});
+		    				     },
+		    					error: function(){
+		    						 MessageToast.show("Failed to extract team details");
+		    					}
+		    		    	});
+			    	 	}
+			    	},
+			    	error: function(){
+			    		 MessageToast.show("Failed to extract consultant details");
+			    	}
+		    	});
+		    	//close model
+		    	this.onClose();	
+	    	}
 	    },
 	    addConsultantsViaCSV : function(){
 			var fU = sap.ui.getCore().byId("csvUploader");
