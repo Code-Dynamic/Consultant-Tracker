@@ -127,6 +127,7 @@ sap.ui.define([
 				//TODO Ngoni: consult Mamba, save project ID in model instead of using global
 				PROJECT_ID = projectID;
 				var consultantID = this.getConsultantID();
+//				console.log("List ID "+projectID);
 				this.getRouter().navTo("DetailConsultant",{listId:projectID,consultantId:consultantID});
 				var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
 				var thisObj = this;
