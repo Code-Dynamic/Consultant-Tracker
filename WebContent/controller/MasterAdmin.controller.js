@@ -802,7 +802,6 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 			var oModel = this.getView().getModel("projectsModel");
 	    	var _projectID = oModel.oData.Project_ID;
 			var aContexts = oEvent.getParameter("selectedContexts");
-//			console.log(aContexts);
 			
 			if (aContexts && aContexts.length) {
 				MessageToast.show("You have selected " + aContexts.map(function(oContext) {
