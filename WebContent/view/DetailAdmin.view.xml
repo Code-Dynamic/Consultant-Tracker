@@ -83,7 +83,7 @@
 			
 			<TileContent >
 
-			<mc:RadialMicroChart percentage="{tileProjectProgressModel>/projectProgress}" />	
+			<mc:RadialMicroChart percentage="{projectsModel>/projectProgress}" />	
 			
 			</TileContent>
 		
@@ -99,7 +99,7 @@
 			<TileContent >
 			
 			<NumericContent 
-			value="{projectsModel>/countMembers}" 
+			value="{membersModel>/countMembers}" 
 			icon="sap-icon://employee" />
 			
 			</TileContent>
@@ -131,7 +131,7 @@
 			subheader="current" >
 			
 			<TileContent 
-			unit="{tileHoursModel>/expected}" 
+			unit="{projectsModel>/countExpectedHours}" 
 			footer="Expected hours">
 			
 			<NumericContent 

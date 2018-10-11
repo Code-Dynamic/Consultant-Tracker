@@ -54,7 +54,7 @@ sap.ui.define([
 		this.setMembersModel();
 		this.setTaskModel();
 //		this.setAssignedTaskModel();
-		this.setProjectsModel();
+//		this.setProjectsModel();
 		this.setConsultantsModel();
 		this.setClientsModel();
 		
@@ -82,6 +82,7 @@ sap.ui.define([
 				   var filters = [];
 				   data.memberSize = data.results.length;
 					countMembers = data.results.length;
+					data.countMembers = data.results.length;
 					sap.ui.getCore().setModel(membersDetailModel,"membersModel");
 
 					for(var i=0; i<countMembers;i++){
@@ -89,7 +90,6 @@ sap.ui.define([
 //							console.log("Value: "+consultantsID[i]);
 						filters[i] = new sap.ui.model.Filter("Consultant_ID", sap.ui.model.FilterOperator.NE, consultantsID[i]);
 					}
-					
 //						console.log("Consultants: "+consultantsID);
 //						console.log(filters);
 					//7
@@ -264,7 +264,9 @@ sap.ui.define([
 		this.getView().setModel(tileProjectProgressModel,"tileProjectProgressModel");
 		this.getView().setModel(titleAssignedTasksModel,"tileAssignedTasksModel");*/
 	},
-	computeTaskProgress : function(taskID, i, size){
+	computeTaskProgress : function(taskID, size){
+		countHoursWorked = 0;
+		countExpectedHours = 0;
 		var thisObj = this;
 		
 		OModel.read("/Assigned_Tasks", {
@@ -279,14 +281,15 @@ sap.ui.define([
 		     })],
 			success: function(data){
 				//For each assigned task that belongs to task_ID
-				var sum = 0;
+				
+				var sum = 0, expected = 0;
 				for(var i = 0; i < data.results.length;i++){
-//					countHoursWorked+=data.results[i].Hours_Worked;
-//					countExpectedHours+=data.results[i].Assigned_Hours;
+					countHoursWorked += parseFloat(data.results[i].Hours_Worked);
+					countExpectedHours += parseFloat(data.results[i].Assigned_Hours);
 					var activityProgress = (data.results[i].Hours_Worked/data.results[i].Assigned_Hours)*100;
 					sum += activityProgress;
 				}
-				
+				console.log("Expected: "+expected);
 				var taskProgress;
 				
 				if(data.results.length == 0)
@@ -298,13 +301,14 @@ sap.ui.define([
 				
 				taskProgress= Math.round(taskProgress);
 				tasksProgress.push(taskProgress);
-				thisObj.taskCallBack(taskID, taskProgress, i, size);
+				thisObj.taskCallBack(taskID, taskProgress, size, expected);
 			}
 		});
 	},
-	taskCallBack: function(taskID, progress, i, size){
+	taskCallBack: function(taskID, progress, size, expected){
 		if(tasksProgress.length<size)
 			return;
+//		countExpectedHours=expected;
 		
 		var thisObj = this;
 		var tasksDetailModel = new JSONModel();
@@ -335,12 +339,13 @@ sap.ui.define([
 				 tasksDetailModel.setData(data);
 //				 console.log("tas"+tasksDetailModel.getJSON());
 				 thisObj.getView().setModel(tasksDetailModel,"tasksModel");
-//				 thisObj.setProjectsModel();
+				 thisObj.setProjectsModel();
 			 }
 		});
 	},
 	setTaskModel: function(){
-//		countHoursWorked=6;
+		countHoursWorked = 0;
+		countExpectedHours = 0;
 		
 		tasksProgress=[];
 //		console.log("CAlled");
@@ -360,38 +365,21 @@ sap.ui.define([
 			 success: function(data){
 				 countTasks = data.results.length;
 				 for(var i = 0; i < data.results.length; i++){
-					 thisObj.computeTaskProgress(data.results[i].Task_ID, i, data.results.length);
+//					countHoursWorked = 0;
+//					countExpectedHours = 0;
+					thisObj.computeTaskProgress(data.results[i].Task_ID, data.results.length);
 				 }
 				 
 				 if(data.results.length == 0){
 					 tasksDetailModel.setData(data);
 					 thisObj.getView().setModel(tasksDetailModel,"tasksModel");
+					 thisObj.setProjectsModel();
 				 }
-//				 thisObj.getView().setModel(tasksDetailModel,"tasksModel");
-				  /*var countTasks = data.results.length;
-				  data.countTasks = countTasks;
-				  console.log("countTasks: "+countTasks);
-				  tasksDetailModel.setData(data);
-				  countTasksModel.setData(data);*/
-				 
-//				var result = JSON.stringify(data);	
-//				tasksDetailModel.setData(data);
-//				countTasks = data.results.length;
-//					 
-//				for(var x=0; x<countTasks; x++){
-//					progressArray[x] = ((workedHoursArray[x]/assignedHoursArray[x])*100);
-//					data.results[x].progress = parseInt(progressArray[x]);
-//				}`
-//					 
-//				tasksDetailModel.setData(data);
 			 },
 			 error: function(oError) {
 				  console.log("error");
 			 }
 		});
-		
-		/*this.getView().setModel(tasksDetailModel,"tasksModel");
-		this.getView().setModel(countTasksModel,"countTaskModel"); */
 	},
 	setProjectsModel: function(){
 		var projectsDetailModel = new JSONModel();
@@ -402,8 +390,12 @@ sap.ui.define([
 			  success: function(data){
 				  data.countMembers = countMembers;
 				  data.countTasks = countTasks;
-//				  data.countHoursWorked = countHoursWorked;
-//				  data.countExpectedHours = countExpectedHours;
+				  data.countHoursWorked = countHoursWorked;
+				  data.countExpectedHours = countExpectedHours;
+				  if(countExpectedHours==0)
+					  data.projectProgress = 0;
+				  else
+					  data.projectProgress = Math.round(countHoursWorked/countExpectedHours*100);
 				  projectsDetailModel.setData(data);
 //					var results = JSON.stringify(data);
 //					console.log(results);
