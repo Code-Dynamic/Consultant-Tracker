@@ -551,30 +551,14 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		    				    			{leaderID: thisDomObj.getConsultantID()},
 		    				    			function(response){
 		    				    				_teamID = response;
+	    				    				createConsultant(_teamID);
 		    				    			}
 		    				    		);
 		    				    	}
 		    				    	else{
 		    				    		_teamID = data.results[0].Team_ID;
+	    				    		createConsultant(_teamID);
 		    				    	}
-		    				    	console.log(_teamID);
-		    				    	//create consultant
-		    				    	$.post('CreateConsultant', { 
-										name: _Name,
-										email: _Email,
-										admin: _Privilege}, 
-		    		    				function(responseText) {
-		    		    					$.post('AssignConsultantToTeam',{consultantID:responseText, teamID: _teamID});
-//			    		    					console.log("At adding User Equivalent: "+responseText);
-		    		    					$.post('CreateUser', {conID:responseText},
-		    		    						function(response){
-		    		    							thisDomObj.goToConsultants();
-		    		    							$.post('MailingServlet',{name:_Name, emailAddress: _Email }, function(response){
-		    	    		    						console.log("success");
-		    	    		    					});
-		    		    							 MessageToast.show("Consultant succesfully added.");
-		    		    					});
-									});
 		    				     },
 		    					error: function(){
 		    						 MessageToast.show("Failed to extract team details");
@@ -588,6 +572,24 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		    	});
 		    	//close model
 		    	this.onClose();	
+		    	
+		    	function createConsultant(_teamID){
+	    		$.post('CreateConsultant', { 
+					name: _Name,
+					email: _Email,
+					admin: _Privilege
+					}, 
+    				function(responseText) {
+						console.log(_teamID);
+    					$.post('AssignConsultantToTeam',{consultantID:responseText, teamID: _teamID});
+    					$.post('CreateUser', {conID:responseText, resetpassword: null},
+    						function(response){
+    							$.post('MailingServlet',{name:_Name, emailAddress: _Email, password: response }, function(){
+    								MessageToast.show("Consultant succesfully added.");
+    							}); 
+    					});
+				});
+	    	}
 	    	}
 	    },
 	    addConsultantsViaCSV : function(){
@@ -663,13 +665,17 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		    									cell: _cell,
 		    									admin: _Privilege}, 
 				    		    				function(responseText) {
-				    		    					$.post('AssignConsultantToTeam',{consultantID:responseText, teamID: _teamID});
-//					    		    					console.log("At adding User Equivalent: "+responseText);
-				    		    					$.post('CreateUser', {conID:responseText},
-				    		    						function(response){
-				    		    						$.post('MailingServlet',{name:_name, emailAddress: _email, password: response });
-				    		    							thisDomObj.goToConsultants();
-				    		    					});
+				    		    					$.post('AssignConsultantToTeam', {
+				    		    						consultantID:responseText,
+				    		    						teamID: _teamID},
+				    		    						function(){
+				    		    							$.post('CreateUser', {conID:responseText},
+							    		    						function(response){	
+					    		    									$.ajaxSetup({async: false});
+								    		    						$.post('MailingServlet',{name:_name, emailAddress: "u16094965@tuks.co.za", password: response}, function(){
+								    		    						});
+							    		    						});
+				    		    							});
 				    		    				});
 		    						    }
 		    				     }

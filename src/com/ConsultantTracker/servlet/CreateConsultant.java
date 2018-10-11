@@ -23,7 +23,7 @@ import com.ConsultantTracker.model.User_Type;
 
 //import org.apache.log4j.Logger;
 
-@WebServlet("/CreateConsultant" )
+@WebServlet("/CreateConsultant")
 public class CreateConsultant extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
