@@ -49,9 +49,8 @@ public class CreateTeam extends HttpServlet {
 		em.persist(newTeam);
 		em.getTransaction().commit();
 		
-		em.refresh(newTeam);
 		PrintWriter out = response.getWriter();
-		out.write(String.valueOf(newTeam.getTeam_Leader()));
+		out.write(String.valueOf(newTeam.getTeam_ID()));
 	}
 
 	/**

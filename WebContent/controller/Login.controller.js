@@ -17,16 +17,11 @@ sap.ui.define([
 				dialog.setText("Initializing");
 				dialog.open();	
 //				$.post('DatabaseSetup');
-				var _timeout = jQuery.sap.delayedCall(1500, this, function () {
+				var _timeout = jQuery.sap.delayedCall(1000, this, function () {
 					sap.ui.core.BusyIndicator.hide();
 					view.setVisible(true);
 					dialog.close();
 				});
-				
-				
-				/*$.post('EmailNotificationAddedToTeam',{newTeamMemberName:"Ben", emailAddress: "johandewaal18@gmail.com", currentUserName: "Johan" }, function(response){
-					console.log("success");
-				});*/
 			},
 
 		/**
@@ -121,7 +116,7 @@ sap.ui.define([
 					}
 				  },
 				 error: function(oError) {
-					 sap.m.MessageToast.show(oError, {
+					 sap.m.MessageToast.show("Failed to extract login details", {
 							duration: 10000,
 						 autoClose: false
 					 });

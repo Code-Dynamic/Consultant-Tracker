@@ -32,20 +32,11 @@
 			<f:content>
 			
 				<Label text="Name" />
-				
 				<Input id="c_Name" />
 				
-				<Label text="Surname" />
-				
-				<Input id="c_Surname" />
-				
 				<Label text="Email" />
-				
 				<Input id="c_email" />
-				
-				<Label text="Phone Number" />
-				
-				<Input id="c_Cell" />
+
 				
 				<Label text="Use a CSV file instead"/>
 				<l:VerticalLayout>

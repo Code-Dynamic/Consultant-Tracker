@@ -77,7 +77,7 @@ public class CreateUser extends HttpServlet {
 		
 		em.refresh(newUser);
 		PrintWriter out = response.getWriter();
-		out.write(String.valueOf(newUser.getPassword()));
+		out.write(String.valueOf(password));
 	}
 
 	/**

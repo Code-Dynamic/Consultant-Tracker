@@ -55,7 +55,6 @@ public class CreateConsultant extends HttpServlet {
 			em.persist(c);
 			em.getTransaction().commit();	
 			
-			em.refresh(c);
 			PrintWriter out = response.getWriter();
 			out.write(String.valueOf(c.getConsultant_ID()));
 		}
