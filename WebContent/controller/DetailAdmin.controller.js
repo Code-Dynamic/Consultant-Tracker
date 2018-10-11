@@ -77,8 +77,8 @@ sap.ui.define([
 		     })],
 			  success: function(data){
 				   membersDetailModel.setData(data);
-				   console.log("members");
-				   console.log(data);
+//				   console.log("members");
+//				   console.log(data);
 				   var filters = [];
 				   data.memberSize = data.results.length;
 					countMembers = data.results.length;
@@ -289,7 +289,7 @@ sap.ui.define([
 					var activityProgress = (data.results[i].Hours_Worked/data.results[i].Assigned_Hours)*100;
 					sum += activityProgress;
 				}
-				console.log("Expected: "+expected);
+//				console.log("Expected: "+expected);
 				var taskProgress;
 				
 				if(data.results.length == 0)
