@@ -116,7 +116,7 @@
 			<TileContent >
 			
 			<NumericContent 
-			value="{countTaskModel>/countTasks}" 
+			value="{projectsModel>/countTasks}" 
 			icon="sap-icon://activities"/>
 	
 			</TileContent>
@@ -135,7 +135,7 @@
 			footer="Expected hours">
 			
 			<NumericContent 
-			value="{tileHoursModel>/current}" 
+			value="{projectsModel>/countHoursWorked}" 
 			icon="sap-icon://present"/>
 			
 			</TileContent>
@@ -447,10 +447,10 @@
 					percentValue="{tasksModel>progress}"
 					displayValue="{tasksModel>progress} %"
 					showValue="true"
-					state="Warning"
-					displayOnly="true" />		
+					state="None"
+					displayOnly="false" />		
 				
-					<Text text="In progress " />
+					<Text text="{tasksModel>status}" />
 					
 					<Button 
 					id="addActivityButton"

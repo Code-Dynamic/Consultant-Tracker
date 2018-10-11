@@ -137,7 +137,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	    		thisObj.ratingsBtnConfig(oCreatedEn,projectCompleted) 
 	    	}, 
 	    	error: function(error){
-	    		console.log(e);
+	    		console.log(error);
 	    	}
 	    });
 		

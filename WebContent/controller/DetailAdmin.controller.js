@@ -19,9 +19,13 @@ sap.ui.define([
 	var projectId;
 	var consultantId;
 	var countMembers;
+	var countHoursWorked;
+	var countExpectedHours;
 	var countTasks;
 	var countAssignedTasks;
 	var distance;
+	var tasksProgress = [];
+	var tasksProgressID = [];
 	return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.DetailAdmin", {
 
 /**
@@ -46,18 +50,10 @@ sap.ui.define([
 		oArgs = oEvent.getParameter("arguments");
 		consultantId = oArgs.consultantId;
 		projectId = oArgs.projectId;
-		console.log("onRouteMahed consultant id: "+consultantId)
-		console.log("onRouteMahed project id: "+projectId)
-		//variables for counting members and tasks on a project
-		
-		/*var countTasks;
-		var progressArray = [];
-		var assignedHoursArray = [];
-		var workedHoursArray = [];*/
 		
 		this.setMembersModel();
-		this.setAssignedTaskModel();
-//		this.setTaskModel(countTasks, progressArray, assignedHoursArray, workedHoursArray);
+		this.setTaskModel();
+//		this.setAssignedTaskModel();
 		this.setProjectsModel();
 		this.setConsultantsModel();
 		this.setClientsModel();
@@ -66,13 +62,9 @@ sap.ui.define([
 	},
 	
 	setMembersModel: function(){
+		var thisObj = this;
 		var membersDetailModel = new JSONModel();
 		var consultantsID = [];
-		
-		
-		console.log("in setMembersModel Cid: "+consultantId)
-		console.log("in setMembersModel Pid: "+projectId)
-		
 		
 		OModel.read("/Assignments", {
 			urlParameters: {
@@ -85,7 +77,10 @@ sap.ui.define([
 		     })],
 			  success: function(data){
 				   membersDetailModel.setData(data);
+				   console.log("members");
+				   console.log(data);
 				   var filters = [];
+				   data.memberSize = data.results.length;
 					countMembers = data.results.length;
 					sap.ui.getCore().setModel(membersDetailModel,"membersModel");
 
@@ -109,6 +104,8 @@ sap.ui.define([
 							  console.log("error");
 						  }
 					});
+					
+					thisObj.getView().setModel(membersDetailModel,"membersModel");
 			  },
 			  error: function(oError) {
 				  console.log("error");
@@ -116,7 +113,7 @@ sap.ui.define([
 			});
 		
 //				set the project detail model
-			this.getView().setModel(membersDetailModel,"membersModel"); 
+//			this.getView().setModel(membersDetailModel,"membersModel");
 	},
 	setAssignedTaskModel: function(){
 		var progressArray = [];
@@ -145,8 +142,8 @@ sap.ui.define([
 		var titleAssignedTasksModel = new JSONModel();
 		var tileTasksModel = new JSONModel();	
 		var consultantId = this.getConsultantID();
-		console.log("consultant id: "+consultantId);
-		console.log("project id: "+projectId);
+//		console.log("consultant id: "+consultantId);
+//		console.log("project id: "+projectId);
 		//2
 		OModel.read("/Assigned_Tasks", {
 		
@@ -158,15 +155,17 @@ sap.ui.define([
 		          path: "TaskDetails/ProjectDetails/Project_ID",
 		          operator: sap.ui.model.FilterOperator.EQ,
 		          value1: projectId
-		     }), 
-		     new sap.ui.model.Filter({
-				path: "ConsultantDetails/Consultant_ID",
-				operator: sap.ui.model.FilterOperator.EQ,
-				value1: consultantId
-			})],
+		     })],
 			success: function(data){
+				console.log(data);
+				
+				
+				
+				
+				
+				
 //				  console.log("Test 1::::");
-					var results = JSON.stringify(data);
+					/*var results = JSON.stringify(data);
 					if(data.results == null){
 						
 					}else{
@@ -249,7 +248,9 @@ sap.ui.define([
 						
 					}
 					////////////////////////////////////////////end else
-					thisObj.setTaskModel(assignedHoursArray, workedHoursArray);
+					thisObj.setTaskModel(assignedHoursArray, workedHoursArray);*/
+				
+					
 			  }	
 			
 			,
@@ -259,13 +260,54 @@ sap.ui.define([
 			 }
 		});
 		//console.log("Console log test2");
-		this.getView().setModel(tileHoursModel,"tileHoursModel");
+		/*this.getView().setModel(tileHoursModel,"tileHoursModel");
 		this.getView().setModel(tileProjectProgressModel,"tileProjectProgressModel");
-		this.getView().setModel(titleAssignedTasksModel,"tileAssignedTasksModel");
+		this.getView().setModel(titleAssignedTasksModel,"tileAssignedTasksModel");*/
 	},
-	setTaskModel: function(assignedHoursArray, workedHoursArray){
+	computeTaskProgress : function(taskID, i, size){
+		var thisObj = this;
+		
+		OModel.read("/Assigned_Tasks", {
+			
+			urlParameters: {
+				"$expand" : "TaskDetails,TaskDetails/ProjectDetails,ConsultantDetails"
+			},
+			filters: [ new sap.ui.model.Filter({
+		          path: "TaskDetails/Task_ID",
+		          operator: sap.ui.model.FilterOperator.EQ,
+		          value1: taskID
+		     })],
+			success: function(data){
+				//For each assigned task that belongs to task_ID
+				var sum = 0;
+				for(var i = 0; i < data.results.length;i++){
+//					countHoursWorked+=data.results[i].Hours_Worked;
+//					countExpectedHours+=data.results[i].Assigned_Hours;
+					var activityProgress = (data.results[i].Hours_Worked/data.results[i].Assigned_Hours)*100;
+					sum += activityProgress;
+				}
+				
+				var taskProgress;
+				
+				if(data.results.length == 0)
+					taskProgress = 0;
+				else if(sum/data.results.length>100)
+					taskProgress=100;
+				else
+					taskProgress= sum/data.results.length;
+				
+				taskProgress= Math.round(taskProgress);
+				tasksProgress.push(taskProgress);
+				thisObj.taskCallBack(taskID, taskProgress, i, size);
+			}
+		});
+	},
+	taskCallBack: function(taskID, progress, i, size){
+		if(tasksProgress.length<size)
+			return;
+		
+		var thisObj = this;
 		var tasksDetailModel = new JSONModel();
-		var countTasksModel = new JSONModel();
 		OModel.read("/Tasks", {
 			filters: [ 
 				new sap.ui.model.Filter({
@@ -273,22 +315,73 @@ sap.ui.define([
 		          operator: sap.ui.model.FilterOperator.EQ,
 		          value1: projectId
 		     })],
-			 success: function(data){	
+			 success: function(data){
+//				 console.log(""+tasksDetailModel);
+				 for(var i = 0; i < data.results.length; i++){
+					 data.results[i].progress = tasksProgress[i];
+					 
+					 if(data.results[i].progress == 0)
+						 data.results[i].status = "Not Started";
+					 else if(data.results[i].progress < 95)
+						 data.results[i].status = "In Progress";
+					 else if(data.results[i].progress < 100)
+						 data.results[i].status = "Almost Completed";
+					 else
+						 data.results[i].status = "Completed";
+				 }
+//				 if(tas)
+//				 thisObj.tasksProgress=[];
 				 
-				  var countTasks = data.results.length;
+				 tasksDetailModel.setData(data);
+//				 console.log("tas"+tasksDetailModel.getJSON());
+				 thisObj.getView().setModel(tasksDetailModel,"tasksModel");
+//				 thisObj.setProjectsModel();
+			 }
+		});
+	},
+	setTaskModel: function(){
+//		countHoursWorked=6;
+		
+		tasksProgress=[];
+//		console.log("CAlled");
+		var thisObj = this;
+		var tasksDetailModel = new JSONModel();
+		var countTasksModel = new JSONModel();
+		OModel.read("/Tasks", {
+			urlParameters: {
+				"$expand" : "ProjectDetails"
+			},
+			filters: [ 
+				new sap.ui.model.Filter({
+		          path: "ProjectDetails/Project_ID",
+		          operator: sap.ui.model.FilterOperator.EQ,
+		          value1: projectId
+		     })],
+			 success: function(data){
+				 countTasks = data.results.length;
+				 for(var i = 0; i < data.results.length; i++){
+					 thisObj.computeTaskProgress(data.results[i].Task_ID, i, data.results.length);
+				 }
+				 
+				 if(data.results.length == 0){
+					 tasksDetailModel.setData(data);
+					 thisObj.getView().setModel(tasksDetailModel,"tasksModel");
+				 }
+//				 thisObj.getView().setModel(tasksDetailModel,"tasksModel");
+				  /*var countTasks = data.results.length;
 				  data.countTasks = countTasks;
 				  console.log("countTasks: "+countTasks);
 				  tasksDetailModel.setData(data);
-				  countTasksModel.setData(data);
+				  countTasksModel.setData(data);*/
 				 
-//				var result = JSON.stringify(data);
+//				var result = JSON.stringify(data);	
 //				tasksDetailModel.setData(data);
 //				countTasks = data.results.length;
 //					 
 //				for(var x=0; x<countTasks; x++){
 //					progressArray[x] = ((workedHoursArray[x]/assignedHoursArray[x])*100);
 //					data.results[x].progress = parseInt(progressArray[x]);
-//				}
+//				}`
 //					 
 //				tasksDetailModel.setData(data);
 			 },
@@ -297,8 +390,8 @@ sap.ui.define([
 			 }
 		});
 		
-		this.getView().setModel(tasksDetailModel,"tasksModel");
-		this.getView().setModel(countTasksModel,"countTaskModel"); 
+		/*this.getView().setModel(tasksDetailModel,"tasksModel");
+		this.getView().setModel(countTasksModel,"countTaskModel"); */
 	},
 	setProjectsModel: function(){
 		var projectsDetailModel = new JSONModel();
@@ -307,8 +400,10 @@ sap.ui.define([
 	            "$expand" : "ClientDetails"
 	        },
 			  success: function(data){
-//				  data.countMembers = countMembers;
-//				  data.countTasks = countTasks;
+				  data.countMembers = countMembers;
+				  data.countTasks = countTasks;
+//				  data.countHoursWorked = countHoursWorked;
+//				  data.countExpectedHours = countExpectedHours;
 				  projectsDetailModel.setData(data);
 //					var results = JSON.stringify(data);
 //					console.log(results);
@@ -366,7 +461,7 @@ sap.ui.define([
 		var oSelectedItem = oEvent.getParameter("listItem").getId();
 //		console.log("selected item: "+oSelectedItem);
 		var tableId = oSelectedItem[oSelectedItem.length-1];
-		console.log("project id: "+projectId);
+//		console.log("project id: "+projectId);
 		
 		OModel.read("/Tasks", {
 			urlParameters: {
@@ -479,7 +574,7 @@ sap.ui.define([
 		
 		this.pKey = oEvent.getParameter("id");
 		
-		console.log("dashboard select :"+this.pKey);
+//		console.log("dashboard select :"+this.pKey);
 		if(this.pKey ==  1){
 			
 		}else if (this.pKey == "__component0---DetailAdmin--2"){
@@ -639,10 +734,10 @@ sap.ui.define([
 	},
 	onClose: function () {
 	
-		console.log("onclose fragment");
+//		console.log("onclose fragment");
 		
 		if (this._oDialog) {
-			console.log("destroy fragment");
+//			console.log("destroy fragment");
 			this._oDialog.destroy();
 			this._oDialog = null;
 		}
@@ -732,7 +827,7 @@ sap.ui.define([
     },
 	onDelete: function(){
 		var _projectID = sap.ui.getCore().getModel("selModel").getProperty("/Project_ID");
-		console.log(_projectID);
+//		console.log(_projectID);
 		$.post('DeleteProject', { projectID: _projectID},function(responseText) {  
 			    	 // var array = responseText.split(';');
 			    	console.log(responseText);
