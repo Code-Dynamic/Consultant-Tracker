@@ -1207,7 +1207,8 @@ sap.ui.define([
 						function(data) {  
 						var array = data.split(';');
 						console.log(data);
-						thisView.updateTasksList(_projectID);
+//						thisView.updateTasksList(_projectID);
+						thisView.setTaskModel();
 					});
 					return oContext.getObject().Task_ID; 
 				}).join(", "));
@@ -1268,7 +1269,8 @@ sap.ui.define([
 		    	$.post('CreateTask',{description: _Description,dueDate: _DueDate,name:_Name, projectID: _projectID},function(responseText){
 		    		  console.log("Creating task completed");
 		    		  sap.m.MessageToast.show("Task Added Succesfully");
-		    		  thisView.updateTasksList(_projectID);
+//		    		  thisView.updateTasksList(_projectID);
+		    		  thisView.setTaskModel();
 				});
 		    	  
 				this._DialogAddTask.destroy();	    		
