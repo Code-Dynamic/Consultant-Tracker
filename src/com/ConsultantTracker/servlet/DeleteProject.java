@@ -43,8 +43,7 @@ public class DeleteProject extends HttpServlet {
 		
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
 		EntityManager em = emf.createEntityManager();
-		
-		Project p= em.find(Project.class, proj_ID);
+		Project p = em.find(Project.class, Integer.parseInt(proj_ID));
 		p.setProject_Deleted(true);
 		
 		em.getTransaction().begin();

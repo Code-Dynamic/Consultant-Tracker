@@ -21,19 +21,19 @@ import com.ConsultantTracker.model.Client;
 import com.ConsultantTracker.model.Daily_Times;
 
 /**
- * Servlet implementation class getClients
+ * Servlet implementation class GetClients
  * 
  * returns string "Client_Name","Client_EMail","Client_PhoneNum","Client_Address"
  */
 //Replaced with Odata Service
-@WebServlet("/getClients")
-public class getClients extends HttpServlet {
+@WebServlet("/GetClients")
+public class GetClients extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public getClients() {
+    public GetClients() {
         super();
         
     }

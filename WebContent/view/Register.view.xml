@@ -12,8 +12,7 @@ xmlns:form="sap.ui.layout.form">
 	title="" 
 	id="RegisterView">
 	
-		<l:VerticalLayout 
-		id="containerLayout_register" 
+		<l:VerticalLayout id="containerLayout_register" 
 		width="100%">
 		
 			<VBox 
@@ -22,11 +21,7 @@ xmlns:form="sap.ui.layout.form">
 			alignItems="Center" 
 			alignContent="SpaceAround"
 			direction="Column">
-			
-				<Text 
-				xmlns="sap.m" 
-				text="Create your own profile today!"/>
-				
+		
 				<VBox 
 				xmlns="sap.m" 
 				justifyContent="Center" 
@@ -58,43 +53,25 @@ xmlns:form="sap.ui.layout.form">
 						backgroundDesign="Solid">
 						
 							<form:content>
-							
-								<Label text="UserName"/>
+								<Label text="Name" required="false" id="EditC_NameLabel"/>
+								<Input id="EditC_Name" value="{consultantModel>/Consultant_Name}" liveChange="handleUserInput"/>
 								
-								<Input 
-								id="register_userName" 
-								value=""/>
+								<Label text="Surname" required="true" id="EditC_SurnameLabel"/>
+								<Input id="EditC_Surname" value="{consultantModel>/Consultant_Surname}" liveChange="handleUserInput"/>
 								
-								<Label text="Email"/>
+								<Label text="Email address" required="false" id="EditC_EmailLabel"/>
+								<Input id="EditC_Email" value="{consultantModel>/Consultant_Email}" liveChange="onEmailEntered"/>
 								
-								<Input value=""/>
+								<Label text="Cell Number" required="true" id="EditC_NumberLabel"/>
+								<Input id="EditC_Number" value="{consultantModel>/Consultant_Cell}" liveChange="handleUserInput"/>
 								
-								<Label text="Password"/>
-
-								<Input 
-								value="" 
-								type ="Password"/>
-								
-								<Label text="Repeat Password"/>
-								
-								<Input 
-								value="" 
-								type ="Password"/>
-
 								<Button 
 								width="12rem" 
-								text="Create Account" 
+								text="Update and continue" 
 								type="Emphasized" 
-								press="onRegisterClick"/>
-							
-							</form:content>
-							
+								press="onUpdateClick"/>
+							</form:content>		
 						</form:SimpleForm>
-						
-							<Link 
-							text="Login" 
-							id="__link0" 
-							press="goToLoginClick"/>
 					</VBox>
 					
 				</VBox>

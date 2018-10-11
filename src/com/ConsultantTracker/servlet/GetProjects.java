@@ -24,19 +24,19 @@ import com.ConsultantTracker.model.Project;
 
 
 /**
- * Servlet implementation class getProjects
+ * Servlet implementation class GetProjects
  * 
  * returns string in the form 'Project_Name','Project_Description','Client_Name','Project_Deadline,'Project_OnSite'
  */
 //Replaced with Odata Service
-@WebServlet("/getProjects")
-public class getProjects extends HttpServlet {
+@WebServlet("/GetProjects")
+public class GetProjects extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public getProjects() {
+    public GetProjects() {
         super();
     }
 

@@ -138,6 +138,12 @@
 					"target": [
 						"register"
 					]
+				},{
+					"pattern": "PasswordControl",
+					"name": "PasswordControl",
+					"target": [
+						"PasswordControl"
+					]
 				},
 				{
 					"pattern": "DetailAdmin/{projectId},:consultantId:",
@@ -173,7 +179,7 @@
 				},
 				{
 					"name": "Calender",
-					"pattern": "DetailAdmin/{listId}/Calender/{projectId}",
+					"pattern": "DetailAdmin/{listId}/Calender/{projectId},:consultantId:",
 					"target": [
 						"MasterAdmin","Calender"
 					]
@@ -297,6 +303,11 @@
 					"viewName": "Register",
 					"viewId": "RegisterView"
 				},
+				"PasswordControl": {
+					"viewName": "PasswordControl",
+					"viewId": "PasswordControl"
+				},
+				
 				"splitview": {
 					"viewName": "SplitApp"
 				},

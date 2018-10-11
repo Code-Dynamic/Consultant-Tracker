@@ -45,7 +45,7 @@ sap.ui.define([
 						  taskDetailModel.setData(data);
 					  },
 					  error: function(oError) {
-						  alert("error");
+						  console.log("error");
 						 }
 					});
         		thisObj.getView().setModel(taskDetailModel);
@@ -77,7 +77,7 @@ sap.ui.define([
 						  taskDetailModel.setData(data);
 					  },
 					  error: function(oError) {
-						  alert("error");
+						  console.log("error");
 						 }
 					});
 				this.getView().setModel(taskDetailModel);

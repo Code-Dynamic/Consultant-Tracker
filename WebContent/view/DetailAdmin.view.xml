@@ -50,9 +50,6 @@
 									'projectsModel>/Project_Deadline',
 									formatter: '.formatter.date'}"/>
 						
-					<ObjectAttribute
-						title="Client Name"
-						text="{projectsModel>/ClientDetails/Client_Name}"/>
 					
 					</attributes>
 					
@@ -86,7 +83,7 @@
 			
 			<TileContent >
 
-			<mc:RadialMicroChart percentage="{tileProjectProgressModel>/projectProgress}" />	
+			<mc:RadialMicroChart percentage="{projectsModel>/projectProgress}" />	
 			
 			</TileContent>
 		
@@ -102,7 +99,7 @@
 			<TileContent >
 			
 			<NumericContent 
-			value="{projectsModel>/countMembers}" 
+			value="{membersModel>/countMembers}" 
 			icon="sap-icon://employee" />
 			
 			</TileContent>
@@ -134,35 +131,17 @@
 			subheader="current" >
 			
 			<TileContent 
-			unit="{tileHoursModel>/expected}" 
+			unit="{projectsModel>/countExpectedHours}" 
 			footer="Expected hours">
 			
 			<NumericContent 
-			value="{tileHoursModel>/current}" 
+			value="{projectsModel>/countHoursWorked}" 
 			icon="sap-icon://present"/>
 			
 			</TileContent>
 		
 			</GenericTile>
 			
-			<GenericTile 
-			id="5"
-			class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
-			header="Notifications" 
-			subheader="new" 
-			press="press">
-			
-			<TileContent 
-			unit="100" 
-			footer="Total messages">
-			
-			<NumericContent 
-			value="3" 
-			icon="sap-icon://notification-2"/>
-			
-			</TileContent>
-		
-			</GenericTile>
 			
 			<GenericTile 
 			id="6"
@@ -174,7 +153,7 @@
 			<TileContent>
 			
 			<NumericContent 
-			value="{projectsModel>/countTasks}" 
+			value="{tileAssignedTasksModel>/countAssignedTasks}" 
 			icon="sap-icon://accelerated"/>
 			
 			</TileContent>
@@ -184,12 +163,13 @@
 			<GenericTile 
 			id="7"
 			class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" 
-			header="location to" 
+			header="Show Route to" 
 			subheader="{projectsModel>/ClientDetails/Client_Name}" 
 			press="onSelectTab" >
 			
 			<TileContent>
-			
+			<NumericContent 
+			icon="sap-icon://map"/>
 			</TileContent>
 		
 			</GenericTile>
@@ -467,10 +447,10 @@
 					percentValue="{tasksModel>progress}"
 					displayValue="{tasksModel>progress} %"
 					showValue="true"
-					state="Warning"
-					displayOnly="true" />		
+					state="None"
+					displayOnly="false" />		
 				
-					<Text text="In progress " />
+					<Text text="{tasksModel>status}" />
 					
 					<Button 
 					id="addActivityButton"
@@ -603,6 +583,87 @@
 						
 					</IconTabFilter> -->
 					<IconTabFilter 
+							id="iconTabBarFilter6" 
+							key="key6"
+							icon="sap-icon://business-card"
+							tooltip="Client" 
+							text="Client">
+	
+						<content id='contentDiv'>
+						
+<QuickViewPage>
+						<QuickViewGroup heading="Contact Person">
+							
+							<QuickViewGroupElement
+									label="Name "
+									value="{projectsModel>/ClientDetails/Client_Name}"
+									url="url"
+									type="elementType"
+									pageLinkId="pageLinkId"
+									emailSubject="emailSubject"
+									target="target">
+							</QuickViewGroupElement>
+									
+							<QuickViewGroupElement
+									label="Email "
+									value="{projectsModel>/ClientDetails/Client_EMail}"
+									url="url"
+									type="elementType"
+									pageLinkId="pageLinkId"
+									emailSubject="emailSubject"
+									target="target">
+							</QuickViewGroupElement>
+							
+							<QuickViewGroupElement
+									label="Mobile "
+									value="{projectsModel>/ClientDetails/Client_PhoneNum}"
+									url="url"
+									type="elementType"
+									pageLinkId="pageLinkId"
+									emailSubject="emailSubject"
+									target="target">
+							</QuickViewGroupElement>
+														
+							</QuickViewGroup>
+							<QuickViewGroup heading="Company Details">
+							
+							<QuickViewGroupElement
+									label="Company Name "
+									value="{projectsModel>/ClientDetails/Company_Name}"
+									url="url"
+									type="elementType"
+									pageLinkId="pageLinkId"
+									emailSubject="emailSubject"
+									target="target">
+							</QuickViewGroupElement>
+							
+							<QuickViewGroupElement
+									label="Phone "
+									value="{projectsModel>/ClientDetails/Company_Phone}"
+									url="url"
+									type="elementType"
+									pageLinkId="pageLinkId"
+									emailSubject="emailSubject"
+									target="target">
+							</QuickViewGroupElement>
+									
+							<QuickViewGroupElement
+									label="Address "
+									value="{projectsModel>/ClientDetails/Client_Address}"
+									url="url"
+									type="elementType"
+									pageLinkId="pageLinkId"
+									emailSubject="emailSubject"
+									target="target">
+							</QuickViewGroupElement>
+														
+							</QuickViewGroup>
+
+							</QuickViewPage>
+							</content>
+	
+						</IconTabFilter>
+					<IconTabFilter 
 							id="iconTabBarFilter5" 
 							key="key5"
 							icon="sap-icon://map"
@@ -626,6 +687,8 @@
 							</content>
 	
 						</IconTabFilter>
+						
+						
 				</items>
 				
 			</IconTabBar>
@@ -636,14 +699,14 @@
 				  <HBox>
 						<Button						
 						id="rateTeamBtn" 
- 						text="Team Member Rating" 
+ 						text="Team Ratings" 
  						icon="sap-icon://favorite" 
  						press="onRateTeam" 
  						enabled="false" 
  						visible="false" />
 				 </HBox>					
 				 <HBox>
-						<Button press="editProjectDetails"  text="Edit project" icon="sap-icon://edit"/>
+						<Button press="editProjectDetails"  text="Edit Project" icon="sap-icon://edit"/>
 				</HBox>
 		</semantic:customFooterContent>
 		

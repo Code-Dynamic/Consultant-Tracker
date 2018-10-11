@@ -22,6 +22,10 @@ public class Ratings implements Serializable {
 	private int num_Votes;
 	private int year;
 	
+	public Ratings() {
+		num_Votes = 0;
+	}
+	
 	public int getRate_ID() {
 		return rate_ID;
 	}

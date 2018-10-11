@@ -31,21 +31,13 @@
 			
 			<f:content>
 			
-				<Label text="Name" />
+				<Label text="Name" required="true" id="c_NameLabel"/>
 				
-				<Input id="c_Name" />
+				<Input id="c_Name" liveChange="handleUserInput" value="" />
 				
-				<Label text="Surname" />
+				<Label text="Email" required="true" id="c_emailLabel"/>
 				
-				<Input id="c_Surname" />
-				
-				<Label text="Email" />
-				
-				<Input id="c_email" />
-				
-				<Label text="Phone Number" />
-				
-				<Input id="c_Cell" />
+				<Input id="c_email" liveChange="onEmailEntered" value=""/>
 				
 				<Label text="Use a CSV file instead"/>
 				<l:VerticalLayout>

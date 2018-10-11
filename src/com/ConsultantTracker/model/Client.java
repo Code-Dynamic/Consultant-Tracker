@@ -27,6 +27,8 @@ public class Client implements Serializable {
 	private String client_PhoneNum;
 	private double client_Latitude;
 	private double client_Longitude;
+	private String company_Phone;
+	private String company_Name;
 
 	public Client() {
 	}
@@ -87,7 +89,20 @@ public class Client implements Serializable {
 		this.client_PhoneNum = client_PhoneNum;
 	}
 
+	public String getCompany_Name() {
+		return company_Name;
+	}
+
+	public void setCompany_Name(String company_name) {
+		this.company_Name = company_name;
+	}
 	
-	
+	public String getCompany_Phone() {
+		return company_Phone;
+	}
+
+	public void setCompany_Phone(String company_Phone) {
+		this.company_Phone = company_Phone;
+	}
 
 }

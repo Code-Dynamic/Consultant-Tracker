@@ -97,10 +97,7 @@ public class EnterConsultantRatings extends HttpServlet {
 			em.getTransaction().begin();
 			em.persist(r);
 			em.getTransaction().commit();
-
-
 		}
-
 
 		Ratings_Entry re = new Ratings_Entry();
 		Project p = em.find(Project.class, projectID);
@@ -111,6 +108,13 @@ public class EnterConsultantRatings extends HttpServlet {
 		em.getTransaction().begin();
 		em.persist(re);
 		em.getTransaction().commit();
+		
+		//possibly update with other error messages
+		String responseMsg = "Ratings Entered Succesfully";
+		PrintWriter out = response.getWriter();
+
+		response.setContentType("text/plain");
+		out.write(responseMsg);	// return response	
 
 	}
 

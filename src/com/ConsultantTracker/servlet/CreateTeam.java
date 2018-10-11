@@ -1,57 +1,61 @@
 package com.ConsultantTracker.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ConsultantTracker.model.Task;
+import com.ConsultantTracker.model.Consultant;
+import com.ConsultantTracker.model.Team;
 
 /**
- * Servlet implementation class updateTaskCompleted
+ * Servlet implementation class CreateTeam
  */
-@WebServlet("/updateTaskCompleted")
-public class updateTaskCompleted extends HttpServlet {
+public class CreateTeam extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public updateTaskCompleted() {
+    public CreateTeam() {
         super();
+        // TODO Auto-generated constructor stub
     }
 
-
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		String taskIDString = request.getParameter("TaskID");	
-		String isCompleted = request.getParameter("IsComplete");
-		
-		boolean isTaskCompleted = Boolean.parseBoolean(isCompleted);
-		int taskID = Integer.parseInt(taskIDString);
-		
+		// TODO Auto-generated method stubString 
+		String consultantID = request.getParameter("leaderID");
+
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
 		EntityManager em = emf.createEntityManager();
 		
-		Task taskToUpdate = em.find(Task.class, taskID);
+		Team newTeam = new Team();
+		Consultant consultant = em.find(Consultant.class, Integer.parseInt(consultantID));
+		if (consultant != null)
+			newTeam.setTeam_Leader(consultant);
+		else
+			throw new ServletException("Couldn't find the consultant ID");
 		
-		System.out.println(taskToUpdate.getTask_ID());
-		System.out.println(taskToUpdate.isCompleted());
-		
-		taskToUpdate.setCompleted(isTaskCompleted);
-		System.out.println(taskToUpdate.isCompleted());
 		em.getTransaction().begin();
-		em.persist(taskToUpdate);
+		em.persist(newTeam);
 		em.getTransaction().commit();
+		
+		PrintWriter out = response.getWriter();
+		out.write(String.valueOf(newTeam.getTeam_ID()));
 	}
 
-
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);

@@ -1,15 +1,21 @@
 package com.ConsultantTracker.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.seleniumhq.jetty9.server.ResponseWriter;
+
 import java.io.IOException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ConsultantTracker.model.Consultant;
 import com.ConsultantTracker.model.User;
+import com.ConsultantTracker.util.GeneratePassword;
 
 /**
  * Servlet implementation class CreateUser
@@ -37,24 +44,45 @@ public class CreateUser extends HttpServlet {
 	 */
     //for creating a new user based on the consultant details
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("Entered create user servlet");
-		String password = request.getParameter("password");
+		GeneratePassword generatePassword = new GeneratePassword();
+		String password = request.getParameter("passw");
 		String consultantID = request.getParameter("conID");
+		String securityQ = request.getParameter("question");
+		String answer = request.getParameter("answer");
+		String resetPassword = request.getParameter("resetpassword");
+		boolean completed = false;
+		TypedQuery<User> userQuery;
 
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
 		EntityManager em = emf.createEntityManager();
-		
-		User newUser = new User();
+		User newUser;
 		Consultant consultant = em.find(Consultant.class, Integer.parseInt(consultantID));
+		try {
+			userQuery = em.createQuery("SELECT e FROM User e WHERE e.consultant_ID =:consultant_ID", User.class).setParameter("consultant_ID", consultant);
+			newUser= userQuery.getSingleResult();
+		}
+		catch (NoResultException e) {
+			newUser = new User();
+			password = generatePassword.generatePassword(5);
+		}
+
+		if (resetPassword == null) {
+			completed = true;
+			newUser.setCompleted(completed);
+			newUser.setSecurity_Answer(answer);
+			newUser.setSecurity_Question(securityQ);	
+		}
 		if (consultant != null)
-			newUser.setConsultantID(consultant);
-		else
-			System.out.println("COuldn't find the consultant ID");
+			newUser.setConsultant_ID(consultant);
 		newUser.setPassword(password);
 		
 		em.getTransaction().begin();
 		em.persist(newUser);
 		em.getTransaction().commit();
+		
+		em.refresh(newUser);
+		PrintWriter out = response.getWriter();
+		out.write(String.valueOf(password));
 	}
 
 	/**

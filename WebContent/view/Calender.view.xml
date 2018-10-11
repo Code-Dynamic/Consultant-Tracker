@@ -39,7 +39,8 @@
 			<rows>
 				<PlanningCalendarRow
 					icon="sap-icon://task"
-					title="{TaskDetails/Name}">
+					title="{TaskDetails/Name}"
+					noDataText="No activity to view">
 					
 							<appointments>
 							
@@ -47,8 +48,8 @@
 							startDate="{Date_Assigned}"
 							endDate="{Due_Date}"
 							icon="{pic}"
-							title="Desc: {TaskDetails/Description}"
-							text="Assigned Hours: {Assigned_Hours}"
+							title="{Description}"
+							text="Due: {Due_Date}"
 							type="{type}"
 							tentative="{tentative}">
 							

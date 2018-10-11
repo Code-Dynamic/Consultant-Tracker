@@ -26,16 +26,16 @@ import com.ConsultantTracker.model.Consultant;
 import com.ConsultantTracker.model.Task;
 
 /**
- * Servlet implementation class assignConsultantToTask
+ * Servlet implementation class AssignConsultantToTask
  */
-@WebServlet("/assignConsultantToTask")
-public class assignConsultantToTask extends HttpServlet {
+@WebServlet("/AssignConsultantToTask")
+public class AssignConsultantToTask extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public assignConsultantToTask() {
+    public AssignConsultantToTask() {
         super();
     }
 

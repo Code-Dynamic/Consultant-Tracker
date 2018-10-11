@@ -22,16 +22,16 @@ import com.ConsultantTracker.model.Daily_Times;
 import com.ConsultantTracker.model.Project;
 
 /**
- * Servlet implementation class getProjectProgress
+ * Servlet implementation class GetProjectProgress
  */
-@WebServlet("/getProjectProgress")
-public class getProjectProgress extends HttpServlet {
+@WebServlet("/GetProjectProgress")
+public class GetProjectProgress extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public getProjectProgress() {
+	public GetProjectProgress() {
 		super();
 	}
 
