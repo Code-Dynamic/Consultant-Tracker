@@ -509,7 +509,10 @@ sap.ui.define([
 //									loop to find the corresponding task as selected by the checkbox
 //									loop to the corresponding task from the table
 									var countAssignedTasks = data.results.length;
-
+									if(data.results.length > 0)
+										data.taskName = data.results[0].TaskDetails.Name;
+									else
+										data.taskName = "Not Found";
 									//calculating each assigned task progress//not stored in the database
 									for(var q=0; q<countAssignedTasks; q++){
 										
