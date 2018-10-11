@@ -745,7 +745,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 			    	MessageToast.show("Error! The CSV File is empty");
 			    	return;
 			    }
-			    else if(rows[0].split(",").length != 6){
+			    else if(rows[0].split(",").length != 8){
 			    	MessageToast.show("Error! The CSV File has a wrong format");
 			    	return;
 			    }
@@ -759,8 +759,10 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 			    	var _Address = (rows[i].split(",")[3]).trim();
 			    	var _Latitude = (rows[i].split(",")[4]).trim();
 			    	var _Longitude = (rows[i].split(",")[5]).trim();
+			    	var _ContactName = (rows[i].split(",")[6]).trim();
+			    	var _ContactNumber = (rows[i].split(",")[7]).trim();
 			    	
-			    	$.post('AddClient', { Name: _Name ,EmailAddress: _Email,PhysicalAddress: _Address, Number: _Cell, Latitude:_Latitude, Longitude:_Longitude},
+			    	$.post('AddClient', { ClientName: _Name, ClientPhysicalAddress: _Address, ClientNumber: _Cell, ContactName: _ContactName, ContactNumber: _ContactNumber, ContactEmailAddress: _Email, Latitude: 0, Longitude: 0},
 			        		function(responseText) {  
 //			      				MessageToast.show("client submitted Succesfully");
 //			    				console.log(responseText);
