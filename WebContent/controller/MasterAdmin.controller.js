@@ -508,19 +508,12 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	    	if(this.checkValueEntered(_Name,"c_Name")){
 	    		check++;
 	    	}
-	    	var _Surname = sap.ui.getCore().byId("c_Surname").getValue();
-	    	if(this.checkValueEntered(_Surname,"c_Surname")){
-	    		check++;
-	    	}
 	    	var _Email = sap.ui.getCore().byId("c_email").getValue();
 	    	if(this.checkValueEntered(_Email,"c_email") && this.validateEmail(_Email)){
 	    		check++;
 	    	}
-	    	var _Cell = sap.ui.getCore().byId("c_Cell").getValue();
-if(this.checkValueEntered(_Cell,"c_Cell")){
-	    		check++;
-	    	}
-	    	var numSuccesfulTests = 4 ;
+	    	
+	    	var numSuccesfulTests = 2 ;
 	    	if(check === numSuccesfulTests){
 		    	var t = this;
 		    	var oModel = this.getOwnerComponent().getModel("oModel");
@@ -568,9 +561,7 @@ if(this.checkValueEntered(_Cell,"c_Cell")){
 		    				    	//create consultant
 		    				    	$.post('CreateConsultant', { 
 										name: _Name,
-										surname: _Surname,
 										email: _Email,
-										cell: _Cell,
 										admin: _Privilege}, 
 		    		    				function(responseText) {
 		    		    					$.post('AssignConsultantToTeam',{consultantID:responseText, teamID: _teamID});
