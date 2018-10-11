@@ -337,7 +337,12 @@ sap.ui.define([
 			dialog.open();	
 			var oModel = this.getOwnerComponent().getModel("oModel");
 			// read projects
-			oModel.read("/Projects?$filter=Project_Deleted%20eq%20false",{
+			oModel.read("/Projects",{
+				filters: [ new sap.ui.model.Filter({
+			          path: "Project_Deleted",
+			          operator: sap.ui.model.FilterOperator.EQ,
+			          value1: false
+			    })],
 				success : function(data) {
 					for (var i = 0; i < data.results.length; i++) {
 						if (data.results[i].Project_Completed) {
@@ -371,8 +376,6 @@ sap.ui.define([
 					}
 				},
 				error : function() {
-				// console.log("Error");
-
 		    		dialog.close();
 				}
 			});
@@ -393,18 +396,15 @@ sap.ui.define([
 			// RATINGS CODE
 			var thisObj = this;
 			var oModel = this.getOwnerComponent().getModel("oModel");
+			var filters = [];
+			filters = [new sap.ui.model.Filter("ProjectDetails/Project_ID", sap.ui.model.FilterOperator.EQ, projectID),
+				   new sap.ui.model.Filter("ConsultantDetails/Consultant_ID", sap.ui.model.FilterOperator.NE, consultantID)];
+		
 			oModel.read("/Ratings_Entrys", {
 				urlParameters: {
 					"$expand": "ProjectDetails, ConsultantDetails"
 				},
-				filters: [ new sap.ui.model.Filter({
-			          path: "ProjectDetails/Project_ID",
-			          operator: sap.ui.model.FilterOperator.EQ,
-			          value1: projectID,
-			          path: "ConsultantDetails/Consultant_ID",
-			          operator: sap.ui.model.FilterOperator.EQ,
-			          value1: consultantID
-			     })],
+				filters: [ new sap.ui.model.Filter(filters,true)],
 			     async:false,
 			     success: function(oCreatedEn){
 			    	 thisObj.ratingsBtnConfig(oCreatedEn,projectCompleted)
@@ -462,7 +462,6 @@ sap.ui.define([
 	    	var consultantID = this.getConsultantID();
 	    	var oModel = this.getView().getModel("projectsModel");
 			var projectID = oModel.oData.Project_ID;
-			console.log(projectID);
 			var filters = [];
 			filters = [new sap.ui.model.Filter("ProjectDetails/Project_ID", sap.ui.model.FilterOperator.EQ, projectID),
 					   new sap.ui.model.Filter("ConsultantDetails/Consultant_ID", sap.ui.model.FilterOperator.NE, consultantID)];
@@ -560,7 +559,6 @@ sap.ui.define([
 			        value1:consultantID  
 				})],
 				success: function(odata){
-					console.log(odata.results);
 					if (odata.results[0].User_TypeDetails.User_Type_Id == 100){
 						oModel.read( "/Consultants", {
 							urlParameters: {
@@ -677,21 +675,15 @@ sap.ui.define([
 					}
 				});
 			}else if(view == "Consultant"){
+				var filters = [];
+				filters = [new sap.ui.model.Filter("ProjectDetails/Project_Name", sap.ui.model.FilterOperator.Contains, searchString),
+					   new sap.ui.model.Filter("ConsultantDetails/Consultant_ID", sap.ui.model.FilterOperator.NE, consultantID)];
 				oModel.read("/Assignments", {
 					urlParameters: {
 			            "$expand" : "ConsultantDetails,ProjectDetails"
 			        },
-					filters: [ new sap.ui.model.Filter({
-				          path: "ConsultantDetails/Consultant_ID",
-				          operator: sap.ui.model.FilterOperator.EQ,
 
-				          value1: thisDomObj.getConsultantID()
-				     }),
-				     new sap.ui.model.Filter({
-							path : "ProjectDetails/Project_Name",
-							operator : sap.ui.model.FilterOperator.Contains,
-							value1 : searchString
-					})],
+					filters: [ new sap.ui.model.Filter(filters,false)],
 					async:false,
 					success: function(data){
 						// console.log(data);

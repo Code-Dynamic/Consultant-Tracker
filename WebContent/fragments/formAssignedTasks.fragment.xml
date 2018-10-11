@@ -7,7 +7,7 @@
 	xmlns:semantic="sap.m.semantic">
 	
 	
-	<Dialog title="{assignedTasksModel/results[0]/TaskDetails/Name}">
+	<Dialog title="{assignedTasksModel>/taskName}">
 	
 		<content>
 	<Table 
@@ -16,7 +16,7 @@
 			mode= "SingleSelectMaster"
 			noDataText="No activities are assigned to the selected task.">
 			
-		<headerToolbar>
+		<!-- <headerToolbar>
 		
 			<Toolbar>
 			
@@ -26,16 +26,16 @@
 					
 					<ToolbarSpacer/>
 						
-<!-- 					<Button 
+					<Button 
 					icon="sap-icon://add-activity"  
 					press="onAddActivity">
-					</Button>	 -->
+					</Button>	
 								
 				</content>
 				
 			</Toolbar>
 			
-		</headerToolbar>
+		</headerToolbar> -->
 		
 		<columns>
 			<Column
@@ -114,7 +114,7 @@
 			<Button 
 			id="closeAssignedTasks"
 			text="Close" 
-			press="onClose"/>
+			press="onCancel"/>
 			
 		</endButton>
 		

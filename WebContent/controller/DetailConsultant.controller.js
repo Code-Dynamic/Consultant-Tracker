@@ -13,7 +13,11 @@ sap.ui.define([
 
 	], function(BaseController,JSONModel,Controller,jQuery,Fragment) {
 	"use strict";
-
+	var projectId;
+	var OModel;
+	var countHoursWorked;
+	var countExpectedHours;
+	var tasksProgress = [];
 	return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.DetailConsultant", {
 
 		/**
@@ -22,10 +26,12 @@ sap.ui.define([
 		 * @memberOf consultanttracker.Consultant-Tracker_Prototype-1.view.DetailConsultant
 		 */
 			onInit: function() {
+//				console.log("projectId "+PROJECT_ID);
 				
 				//geting id from the URL
 				var oRouter = this.getRouter();
 				oRouter.getRoute("DetailConsultant").attachMatched(this.onRouteMatched, this);
+				OModel = this.getOwnerComponent().getModel("oModel");
 				
 				//for timepicker
 				// for the data binding example do not use the change event for check but the data binding parsing events
@@ -184,13 +190,15 @@ sap.ui.define([
 				
 				var oArgs, oView;
 				oArgs = oEvent.getParameter("arguments");
+				projectId = oArgs.listId;
 				
+//				console.log("projectId "+projectId);
 				//variables for counting members and tasks on a project
-				var countMembers;
-				var countTasks;
+//				var countMembers;
+//				var countTasks;
 				
 
-					//2
+					/*//2
 					//get Team members for the selected Project (from master)
 					var membersDetailModel = new JSONModel();	
 					oModel.read("/Assignments", {
@@ -268,10 +276,332 @@ sap.ui.define([
 									 }
 								});
 							//set the project detail model
-							this.getView().setModel(projectsDetailModel,"projectsModel"); 
-							
-							
+							this.getView().setModel(projectsDetailModel,"projectsModel"); */
+				
+				this.setMembersModel();
+//				this.setProjectsModel();
+				this.setTaskModel();
+//				this.setConsultantsModel();
+//				this.setClientsModel();
 			},
+			setMembersModel: function(){
+				var thisObj = this;
+				var membersDetailModel = new JSONModel();
+				var consultantsID = [];
+				
+				OModel.read("/Assignments", {
+					urlParameters: {
+						"$expand" : "ProjectDetails,ConsultantDetails"
+			        },
+					filters: [ new sap.ui.model.Filter({
+				          path: "ProjectDetails/Project_ID",
+				          operator: sap.ui.model.FilterOperator.EQ,
+				          value1: projectId
+				     })],
+					  success: function(data){
+						   membersDetailModel.setData(data);
+//						   console.log("members");
+//						   console.log(data);
+						   var filters = [];
+						   data.memberSize = data.results.length;
+							var countMembers = data.results.length;
+//							data.countMembers = data.results.length;
+							sap.ui.getCore().setModel(membersDetailModel,"membersModel");
+
+							for(var i=0; i<countMembers;i++){
+								consultantsID[i] = data.results[i].ConsultantDetails.Consultant_ID;
+//									console.log("Value: "+consultantsID[i]);
+								filters[i] = new sap.ui.model.Filter("Consultant_ID", sap.ui.model.FilterOperator.NE, consultantsID[i]);
+							}
+							
+							thisObj.getView().setModel(membersDetailModel,"membersModel");
+					  },
+					  error: function(oError) {
+						  console.log("error");
+						 }
+					});
+				
+//						set the project detail model
+//					this.getView().setModel(membersDetailModel,"membersModel");
+			},
+			computeTaskProgress : function(taskID, size){
+				countHoursWorked = 0;
+				countExpectedHours = 0;
+				var thisObj = this;
+				
+				OModel.read("/Assigned_Tasks", {
+					
+					urlParameters: {
+						"$expand" : "TaskDetails,TaskDetails/ProjectDetails,ConsultantDetails"
+					},
+					filters: [ new sap.ui.model.Filter({
+				          path: "TaskDetails/Task_ID",
+				          operator: sap.ui.model.FilterOperator.EQ,
+				          value1: taskID
+				     })],
+					success: function(data){
+						//For each assigned task that belongs to task_ID
+						
+						var sum = 0, expected = 0;
+						for(var i = 0; i < data.results.length;i++){
+							countHoursWorked += parseFloat(data.results[i].Hours_Worked);
+							countExpectedHours += parseFloat(data.results[i].Assigned_Hours);
+							var activityProgress = (data.results[i].Hours_Worked/data.results[i].Assigned_Hours)*100;
+							sum += activityProgress;
+						}
+//						console.log("Expected: "+expected);
+						var taskProgress;
+						
+						if(data.results.length == 0)
+							taskProgress = 0;
+						else if(sum/data.results.length>100)
+							taskProgress=100;
+						else
+							taskProgress= sum/data.results.length;
+						
+						taskProgress= Math.round(taskProgress);
+						tasksProgress.push(taskProgress);
+						thisObj.taskCallBack(taskID, taskProgress, size, expected);
+					}
+				});
+			},
+			taskCallBack: function(taskID, progress, size, expected){
+				if(tasksProgress.length<size)
+					return;
+//				countExpectedHours=expected;
+				
+				var thisObj = this;
+				var tasksDetailModel = new JSONModel();
+				OModel.read("/Tasks", {
+					filters: [ 
+						new sap.ui.model.Filter({
+				          path: "ProjectDetails/Project_ID",
+				          operator: sap.ui.model.FilterOperator.EQ,
+				          value1: projectId
+				     })],
+					 success: function(data){
+//						 console.log(""+tasksDetailModel);
+						 for(var i = 0; i < data.results.length; i++){
+							 data.results[i].progress = tasksProgress[i];
+							 
+							 if(data.results[i].progress == 0)
+								 data.results[i].status = "Not Started";
+							 else if(data.results[i].progress < 95)
+								 data.results[i].status = "In Progress";
+							 else if(data.results[i].progress < 100)
+								 data.results[i].status = "Almost Completed";
+							 else
+								 data.results[i].status = "Completed";
+						 }
+//						 if(tas)
+//						 thisObj.tasksProgress=[];
+						 
+						 tasksDetailModel.setData(data);
+//						 console.log("tas"+tasksDetailModel.getJSON());
+						 thisObj.getView().setModel(tasksDetailModel,"tasksModel");
+						 thisObj.setProjectsModel();
+					 }
+				});
+			},
+			setTaskModel: function(){
+				countHoursWorked = 0;
+				countExpectedHours = 0;
+				
+				tasksProgress=[];
+//				console.log("CAlled");
+				var thisObj = this;
+				var tasksDetailModel = new JSONModel();
+				var countTasksModel = new JSONModel();
+				OModel.read("/Tasks", {
+					urlParameters: {
+						"$expand" : "ProjectDetails"
+					},
+					filters: [ 
+						new sap.ui.model.Filter({
+				          path: "ProjectDetails/Project_ID",
+				          operator: sap.ui.model.FilterOperator.EQ,
+				          value1: projectId
+				     })],
+					 success: function(data){
+//						 varcountTasks = data.results.length;
+						 for(var i = 0; i < data.results.length; i++){
+//							countHoursWorked = 0;
+//							countExpectedHours = 0;
+							thisObj.computeTaskProgress(data.results[i].Task_ID, data.results.length);
+						 }
+						 
+						 if(data.results.length == 0){
+							 tasksDetailModel.setData(data);
+							 thisObj.getView().setModel(tasksDetailModel,"tasksModel");
+							 thisObj.setProjectsModel();
+						 }
+					 },
+					 error: function(oError) {
+						  console.log("error");
+					 }
+				});
+			},
+			setProjectsModel: function(){
+				var projectsDetailModel = new JSONModel();
+				OModel.read("/Projects("+projectId+")", {
+					urlParameters: {
+			            "$expand" : "ClientDetails"
+			        },
+					  success: function(data){
+//						  data.countMembers = countMembers;
+//						  data.countTasks = countTasks;
+						  data.countHoursWorked = countHoursWorked;
+						  data.countExpectedHours = countExpectedHours;
+						  if(countExpectedHours==0)
+							  data.projectProgress = 0;
+						  else
+							  data.projectProgress = Math.round(countHoursWorked/countExpectedHours*100);
+						  projectsDetailModel.setData(data);
+//							var results = JSON.stringify(data);
+//							console.log(results);
+//							console.log(results);
+					  },
+					  error: function(oError) {
+						  console.log("error");
+						 }
+					});
+				//set the project detail model
+				this.getView().setModel(projectsDetailModel,"projectsModel"); 
+			},
+			rowSelect: function(oEvent){
+
+				var oSelectedItem = oEvent.getParameter("listItem").getId();
+//				console.log("selected item: "+oSelectedItem);
+				var tableId = oSelectedItem[oSelectedItem.length-1];
+//				console.log("project id: "+projectId);
+				
+				OModel.read("/Tasks", {
+					urlParameters: {
+			            "$expand" : "ProjectDetails"
+			        },
+					filters: [ 
+						new sap.ui.model.Filter({
+				          path: "ProjectDetails/Project_ID",
+				          operator: sap.ui.model.FilterOperator.EQ,
+				          value1: parseInt(projectId)
+				     })],
+					  success: function(data){
+
+//						loop to find the corresponding task as selected by the checkbox
+//						loop to the corresponding task from the table
+
+							var taskId = parseInt(data.results[tableId].Task_ID);
+
+							//get all substaskes of the selected task.
+							//put the query inside because could not access taskID
+							OModel.read("/Assigned_Tasks", {
+								urlParameters: {
+									"$expand" : "TaskDetails,ConsultantDetails"
+						        },
+								filters: [ 
+									new sap.ui.model.Filter({
+							          path: "TaskDetails/Task_ID",
+							          operator: sap.ui.model.FilterOperator.EQ,
+							          value1: taskId
+							     })],
+								  success: function(data){
+
+//									loop to find the corresponding task as selected by the checkbox
+//									loop to the corresponding task from the table
+									var countAssignedTasks = data.results.length;
+									if(data.results.length > 0)
+										data.taskName = data.results[0].TaskDetails.Name;
+									else
+										data.taskName = "Not Found";
+									//calculating each assigned task progress//not stored in the database
+									for(var q=0; q<countAssignedTasks; q++){
+										
+										var A = parseInt(data.results[q].Hours_Worked);
+										var B = parseInt(data.results[q].Assigned_Hours);
+										
+										data.results[q].progress = parseInt((A/B)*100);
+									}
+									assignedTasksModel.setData(data);
+								  },
+								  error: function(oError) {
+									  console.log("Error");
+									 }
+								});
+
+					  },
+					  error: function(oError) {
+						  console.log("Error");
+						 }
+					});
+
+				var assignedTasksModel = new JSONModel();
+			
+
+				this.getView().setModel(assignedTasksModel,"assignedTasksModel");
+				this.onClose();
+				 //open the dialog
+				this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAssignedTasks",this);
+				this._oDialog.setModel(this.getView().getModel("assignedTasksModel"),"assignedTasksModel");
+				this._oDialog.open();
+			},
+			onCancel : function() {
+				if(this._Dialog){
+			          this._Dialog.destroy();	
+				}
+	            
+	            if(this._Dialog2){
+	                this._Dialog2.destroy(); 	
+	            }
+	            
+	            if(this._DialogAddTask){
+	            	this._DialogAddTask.destroy();
+	            }
+	            
+	            if(this._DialogAddActivity){
+	            	this._DialogAddActivity.destroy();
+	            }
+	            
+	            if (this._oDialog) {
+	    			this._oDialog.destroy();
+	    		}
+			 },
+			/*setConsultantsModel: function(){
+				var consultantsDetailModel = new JSONModel();	
+				OModel.read("/Consultants", {
+					  success: function(data){
+						  consultantsDetailModel.setData(data);
+//							var results = JSON.stringify(data);
+//							console.log("All Consultants");
+//							console.log(data);
+							
+//								console.log(results);
+					  },
+					  error: function(oError) {
+						  console.log("error");
+						 }
+					});
+//					set the project detail model
+				this.getView().setModel(consultantsDetailModel,"consultants");
+			},
+			setClientsModel: function(){
+				var clientDetailModel = new JSONModel();
+				OModel.read("/Clients", {
+					  success: function(data){
+						 var result = JSON.stringify(data);
+						 clientDetailModel.setData(data);
+//						 console.log(result);
+						// console.log("clientsModel##");
+//						 console.log(data);
+						 sap.ui.getCore().setModel(clientDetailModel,"clientList");
+//							console.log("Cli##");
+//							console.log(clientDetailModel.oData.results);
+					  },
+					  error: function(oError) {
+//						  console.log("error");
+						  console.log("Error");
+						 }
+				});
+			},*/
 			setRatingsBtnRef : function(){
 				RatingsBtn = this.getView().byId("rateTeamBtn");
 			},

@@ -57,9 +57,9 @@
 							'projectsModel>/Project_Deadline',
 							formatter: '.formatter.date'}"/>
 					
-			<ObjectAttribute
+			<!-- <ObjectAttribute
 				title="Client Name: "
-				text="{projectsModel>/ClientDetails/Client_Name}"/>
+				text="{projectsModel>/ClientDetails/Client_Name}"/> -->
 				
 		</attributes>
 
@@ -91,7 +91,7 @@
 			
 			<TileContent >
 
-						<mc:RadialMicroChart percentage="57" />	
+						<mc:RadialMicroChart percentage="{projectsModel>/projectProgress}" />	
 			
 			</TileContent>
 		
@@ -107,7 +107,7 @@
 			<TileContent >
 			
 			<NumericContent 
-			value="{projectsModel>/countMembers}" 
+			value="{membersModel>/countMembers}" 
 			icon="sap-icon://employee" />
 			
 			</TileContent>
@@ -139,11 +139,11 @@
 			subheader="current" >
 			
 			<TileContent 
-			unit="70" 
+			unit="{projectsModel>/countExpectedHours}" 
 			footer="Expected hours">
 			
 			<NumericContent 
-			value="40" 
+			value="{projectsModel>/countHoursWorked}" 
 			icon="sap-icon://present"/>
 			
 			</TileContent>
@@ -285,6 +285,8 @@
 
 		<Table id="idProductsTable"
 		inset="false"
+		selectionChange = "rowSelect"
+		mode= "SingleSelectMaster"
 		items="{tasksModel>/results}">
 		
 		<headerToolbar>
@@ -308,27 +310,27 @@
 		
 			<Column
 				width="12em">
-				<Text text="name"/>
+				<Text text="Name"/>
 			</Column>
 			
 			<Column
 				minScreenWidth="Tablet"
 				demandPopin="true">
-				<Text text="due date" />
+				<Text text="Due date" />
 			</Column>
 			
 			<Column
 				minScreenWidth="Desktop"
 				demandPopin="true"
 				hAlign="End">
-				<Text text="progress" />
+				<Text text="Progress" />
 			</Column>
 			
 			<Column
 				minScreenWidth="Desktop"
 				demandPopin="true"
 				hAlign="Center">
-				<Text text="status" />
+				<Text text="Status" />
 			</Column>
 
 		</columns>
@@ -341,10 +343,12 @@
 				<cells>
 				
 				<ObjectIdentifier
-				title="{tasksModel>TaskDetails/Name}"/>
+				title="{tasksModel>Name}"/>
 						
 				<Text
-				text="{tasksModel>TaskDetails/Due_Date}" />
+				text="{ path: 
+					 			'tasksModel>Due_Date',
+								formatter: '.formatter.date'}" />
 						
 
 				<ProgressIndicator
@@ -352,10 +356,10 @@
 				percentValue="{tasksModel>progress}"
 				displayValue="{tasksModel>progress} %"
 				showValue="true"
-				state="Warning"
-				displayOnly="true" />
+				state="None"
+				displayOnly="false" />
 						
-				<Text text="Inprogress" />
+				<Text text="{tasksModel>status}" />
 
 				</cells>
 				
