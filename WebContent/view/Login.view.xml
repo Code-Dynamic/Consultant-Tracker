@@ -13,9 +13,9 @@
 				<items>
 				    <form:SimpleForm height="500px" class=" loginForm sapUiLargePadding" id="login_SimpleFormDisplay" editable="false" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false">
 							<form:content>
-								<Label xmlns="sap.m" text="Email"/>
-								<Input xmlns="sap.m" id="username-email" value=""/>
-								<Label xmlns="sap.m" text="Password"/>
+								<Label xmlns="sap.m" text="Email" required="true" id="username-emailLabel"/>
+								<Input xmlns="sap.m" liveChange="onEmailEntered" id="username-email" value=""/>
+								<Label xmlns="sap.m" text="Password" required="true" id="passwordLabel"/>
 								<Input xmlns="sap.m" id="password" value="" type="Password"/>
 								<Button xmlns="sap.m" width="8rem" text="Login" type="Emphasized" press="onLoginClick" id="loginButton"/>
 								<Link text="Forgot Password" press="onForgotPasswordClick"/>

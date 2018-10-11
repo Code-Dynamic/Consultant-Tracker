@@ -53,18 +53,18 @@ xmlns:form="sap.ui.layout.form">
 						backgroundDesign="Solid">
 						
 							<form:content>
-								<Label text="Name" />
-								<Input id="EditC_Name" value="{consultantModel>/Consultant_Name}"/>
+								<Label text="Name" required="false" id="EditC_NameLabel"/>
+								<Input id="EditC_Name" value="{consultantModel>/Consultant_Name}" liveChange="handleUserInput"/>
 								
-								<Label text="Surname" />
-								<Input id="EditC_Surname" value="{consultantModel>/Consultant_Surname}"/>
+								<Label text="Surname" required="true" id="EditC_SurnameLabel"/>
+								<Input id="EditC_Surname" value="{consultantModel>/Consultant_Surname}" liveChange="handleUserInput"/>
 								
-								<Label text="Email address" />
-								<Input id="EditC_Email" value="{consultantModel>/Consultant_Email}"/>
+								<Label text="Email address" required="false" id="EditC_EmailLabel"/>
+								<Input id="EditC_Email" value="{consultantModel>/Consultant_Email}" liveChange="onEmailEntered"/>
 								
-								<Label text="Cell Number" />
-								<Input id="EditC_Number" value="{consultantModel>/Consultant_Cell}"/>
-
+								<Label text="Cell Number" required="true" id="EditC_NumberLabel"/>
+								<Input id="EditC_Number" value="{consultantModel>/Consultant_Cell}" liveChange="handleUserInput"/>
+								
 								<Button 
 								width="12rem" 
 								text="Update and continue" 

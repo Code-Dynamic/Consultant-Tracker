@@ -76,6 +76,7 @@ sap.ui.define([
 			    })],
 				success: function(data){
 					if (data.results.length == 0){
+						thisPtr.setInputFieldErrorStates();
 						sap.m.MessageToast.show('Invalid user details. Check username and password', {
 							duration: 5000,
 							autoClose: true
@@ -93,6 +94,7 @@ sap.ui.define([
 							filters: [new sap.ui.model.Filter(filters, true)],
 							success: function(data){
 								if (data.results.length == 0){
+									thisPtr.setInputFieldErrorStates();
 									sap.m.MessageToast.show('Invalid user details. Check username and password', {
 										duration: 5000,
 										autoClose: true
@@ -122,8 +124,15 @@ sap.ui.define([
 					 });
 					//end the loading indicator
 					sap.ui.core.BusyIndicator.hide();
+					thisPtr.setInputFieldErrorStates();
 				 }
 			});
+	},
+	setInputFieldErrorStates: function(){
+   		var input = this.getView().byId("password");
+   		input.setValueState(sap.ui.core.ValueState.Error);
+   		input = this.getView().byId("username-email");
+   		input.setValueState(sap.ui.core.ValueState.Error);
 	},
 	onForgotPasswordClick: function(){
 		this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.ResetPassword",this);
@@ -152,8 +161,11 @@ sap.ui.define([
 		    		thisObj._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.SecurityQuestion",thisObj);
 		    		thisObj._oDialog.setModel(userModel, "userModel");
 		    		thisObj._oDialog.open();
-		    	}else 
+		    	}else{
 		    		sap.m.MessageToast.show("Email does not exist");
+		    		thisObj.setFragmentInputState("c_Email");
+		    	} 
+		    		
 		    }
 		})
 	},
@@ -164,12 +176,13 @@ sap.ui.define([
 	},
 	onSubmitResponse: function () {
 		var response = sap.ui.getCore().byId("c_Answer").getValue();
-		if (response == "")
-			sap.m.MessageToast.show("Incorrect response");
-		else if (response == this.getView().getModel("userModel").oData.Security_Answer){
+		if (response == this.getView().getModel("userModel").oData.Security_Answer){
 			this._oDialog.destroy();
 			this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.PasswordFragment",this);
     		this._oDialog.open();
+		}else{
+			sap.m.MessageToast.show("Incorrect response");	
+			this.setFragmentInputState("c_Answer");
 		}
 	},
 	onSubmitPassword: function(){
@@ -187,8 +200,14 @@ sap.ui.define([
 				thisObj._oDialog.destroy();
 			});
 		}else{
-			sap.m.MessageToast.show("Fill in all tables");
+			sap.m.MessageToast.show("Please fill in both input fields with the same password.");
+			this.setFragmentInputState("firstPassword");
+			this.setFragmentInputState("secPassword");
 		}
+	},
+	setFragmentInputState: function(inputID){
+		var input = sap.ui.getCore().byId(inputID);
+		input.setValueState(sap.ui.core.ValueState.Error);
 	}
 });
 

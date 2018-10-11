@@ -38,6 +38,7 @@ public class CreateConsultant extends HttpServlet {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPATest");
 		EntityManager em = emf.createEntityManager();
 		
+		
 		Consultant c;
 		if (conID == null)
 			c = new Consultant();

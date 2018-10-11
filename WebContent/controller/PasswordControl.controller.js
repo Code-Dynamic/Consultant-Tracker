@@ -63,13 +63,29 @@ sap.ui.define([
 //	}
 
 	onUpdateClick: function(){
+		var check = 0;
 		var question = this.getView().byId("securityQuestion").getValue();
+		if(this.checkValueEntered(question,"securityQuestion")){
+			check++;
+		}
 		var answer = this.getView().byId("securityAnswer").getValue();
+		if(this.checkValueEntered(answer,"securityAnswer")){
+			check++;
+		}
 		var firstPassw = this.getView().byId("firstPassword").getValue();
+		if(this.checkValueEntered(firstPassw,"firstPassword")){
+			check++;
+		}
 		var secPassw = this.getView().byId("secPassword").getValue();
+		if(this.checkValueEntered(secPassw,"secPassword")){
+			check++;
+		}
 		var thisObj = this;
-		if (question == "" || answer == "" || firstPassw == "" || secPassw == "" )
+		
+		var numSuccefulTests = 4;		
+		if (check !== numSuccefulTests){
 			sap.m.MessageToast.show("All fields must be filled in");
+		}
 		else if ( firstPassw == secPassw){
 			$.post('CreateUser', {
 				conID:this.getConsultantID(), 
@@ -85,7 +101,12 @@ sap.ui.define([
 						thisObj.getRouter().navTo("MasterConsultant", {consultantId: thisObj.getConsultantID()});
 			});
 		}else{
-			sap.m.MessageToast.show("Passwords do not match");
+   			var input = this.getView().byId("secPassword");
+   			input.setValueState(sap.ui.core.ValueState.Error);
+   			input = this.getView().byId("firstPassword");
+   			input.setValueState(sap.ui.core.ValueState.Error);
+   			sap.m.MessageToast.show("Passwords do not match");
+
 		}
 	}
 	});

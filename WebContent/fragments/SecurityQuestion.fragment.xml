@@ -30,7 +30,7 @@
 				<Label text="Security Question"/>
 				<Input id="c_Question" value = "{userModel>/Security_Question}" enabled = "false"/>
 				
-				<Label text="Security Answer"/>
+				<Label text="Security Answer" required="true" id="c_AnswerLabel"/>
 				<Input id="c_Answer"/>
 					
 			</f:content>

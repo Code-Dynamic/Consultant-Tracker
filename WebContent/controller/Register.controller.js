@@ -61,15 +61,31 @@ sap.ui.define([
 		
 		//Go to login page
 		onUpdateClick: function(){
+			var check = 0;
 			var consultantID = this.getConsultantID();
 			var cName = this.getView().byId("EditC_Name").getValue();
+			if(this.checkValueEntered(cName,"EditC_Name")){
+				check++;
+			}
 			var cSurname = this.getView().byId("EditC_Surname").getValue();
+			if(this.checkValueEntered(cSurname,"EditC_Surname")){
+				check++;
+			}
 			var cEmail = this.getView().byId("EditC_Email").getValue();
+			if(this.checkEmailValueEntered(cEmail,"EditC_Email")){
+				check++;
+			}
 			var cNumber = this.getView().byId("EditC_Number").getValue();
+			if(this.checkValueEntered(cNumber,"EditC_Number")){
+				check++;
+			}
+			
+			var numSuccefulTests = 4;
 			var priv = this.getView().getModel("consultantModel").oData.Consultant_Priviledge
 			var thisPtr = this;
-			if (cName == "" || cSurname == "" || cEmail == "" || cNumber == "")
-				sap.m.MessageToast.show('Fill in all the blanks');
+			if (check !== numSuccefulTests){
+				sap.m.MessageToast.show('Please fill in all the fields with valid data');
+			}
 			else{
 				$.post('CreateConsultant',{
 					conID: consultantID,

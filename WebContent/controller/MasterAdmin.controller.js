@@ -825,6 +825,8 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 			$.post('DeleteProject', { projectID: PROJECT_ID},function(responseText) {  
 				    	 // var array = responseText.split(';');
 				    	console.log(responseText);
+				    	
+				    	
 				   });					
 			
 			var selectFirstProject = true;
