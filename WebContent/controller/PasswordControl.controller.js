@@ -11,6 +11,7 @@ sap.ui.define([
 * @memberOf view.PasswordControl
 */
 	onInit: function() {
+		
 		var oModel = this.getOwnerComponent().getModel("oModel");
 		var consultantID = this.getConsultantID();
 		var thisObj = this;
