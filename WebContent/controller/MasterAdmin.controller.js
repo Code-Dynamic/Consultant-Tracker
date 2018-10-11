@@ -11,7 +11,6 @@ sap.ui.define([
 	
 "use strict";
 //TODO Ngoni change code to prevent use of globals
-var PROJECT_ID;
 var RatingIndicatorArr;
 var RatingResults;
 var RatingsErrTxt;
@@ -377,16 +376,8 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		this.onClose();
 		var projectModel = this.getView().getModel("projectsModel");
 		
-		this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formRemoveProject",this);
+		this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.confirmDeleteProject",this);
 		this._Dialog.setModel(projectModel,"projectsModel");		
-		
-		// Multi-select if required
-		var bMultiSelect = !!oEvent.getSource().data("multi");
-		this._Dialog.setMultiSelect(bMultiSelect);
-		
-		// Remember selections if required
-		var bRemember = !!oEvent.getSource().data("remember");
-		this._Dialog.setRememberSelections(bRemember);
 
 		this._Dialog.open();
 
@@ -828,10 +819,19 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 				MessageToast.show("No new item lected.");
 			}
 			oEvent.getSource().getBinding("items").filter([]);
+		},
+		onDelete: function(){
+			$.post('DeleteProject', { projectID: PROJECT_ID},function(responseText) {  
+				    	 // var array = responseText.split(';');
+				    	console.log(responseText);
+				   });					
 			
+			var selectFirstProject = true;
+			this.goToProjects(selectFirstProject);
+			this._Dialog.destroy();
+					
 		}
 		
-	
 	/**
 	 * Called when the Controller is destroyed. Use this one to free resources and finalize activities.
 	 * @memberOf splitapp.master

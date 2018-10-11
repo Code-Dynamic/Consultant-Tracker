@@ -4,6 +4,7 @@ var recognition;
 var ConsultantAdmin;
 var DeviceIsMobile;
 var RatingsBtn = false;
+var PROJECT_ID;
 sap.ui.define([ 
 	"sap/ui/core/mvc/Controller","sap/ui/core/routing/History", 
 	"sap/m/MessageToast",
@@ -360,6 +361,7 @@ sap.ui.define([
 						if(numArguments > 0){
 							var oData = thisDomObj.getView().getModel("projectsModel").getProperty(resultsLocationStr);
 							var projectID = oData.Project_ID;
+							PROJECT_ID = projectID;
 							var projectCompleted = oData.Project_Completed;
 							thisDomObj.selectProjectByID(projectID,projectCompleted);	
 							dialog.close();
@@ -625,7 +627,7 @@ sap.ui.define([
 			var key = oEvent.getParameters().key;
 			if (key === 'projectsSelect') {
 				if(this.isDeviceMobile()){
-					this.goToProjects
+					this.goToProjects();
 				} else {
 					var firstProjectSelected = true;
 					this.goToProjects(firstProjectSelected);	

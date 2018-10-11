@@ -40,7 +40,7 @@
 			<Button
 			width="100%" 
 			id="removeProjectButton" 
-			text="Remove Project" 
+			text="Delete Project" 
 			icon="sap-icon://folder" 
 			press="removeProject">			
 			</Button>
