@@ -649,7 +649,12 @@ sap.ui.define([
 						path : "Project_Name",
 						operator : sap.ui.model.FilterOperator.Contains,
 						value1 : searchString
-					})],
+					}),
+					new sap.ui.model.Filter({
+				          path: "Project_Deleted",
+				          operator: sap.ui.model.FilterOperator.EQ,
+				          value1: false
+				    })],
 					success : function(data) {
 						// console.log(data);
 						projectsModel.setData(data);
