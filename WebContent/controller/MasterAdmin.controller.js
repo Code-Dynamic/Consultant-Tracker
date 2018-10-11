@@ -610,8 +610,6 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		    				    	else{
 		    				    		_teamID = data.results[0].Team_ID;
 		    				    	}
-		    				    	console.log("What am l: "+_Privilege);
-		    				    	console.log(_teamID);
 		    				    	//create consultant
 		    				    	 for (i = 1; i < rows.length; i++) { 
 		    						    	var _name = (rows[i].split(",")[0]).trim();              
@@ -629,7 +627,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 //					    		    					console.log("At adding User Equivalent: "+responseText);
 				    		    					$.post('CreateUser', {conID:responseText},
 				    		    						function(response){
-				    		    							console.log("password" + response)
+				    		    						$.post('MailingServlet',{name:_name, emailAddress: _email, password: response });
 				    		    							thisDomObj.goToConsultants();
 				    		    					});
 				    		    				});
@@ -714,7 +712,6 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 			    	MessageToast.show("Error! The CSV File has a wrong format");
 			    	return;
 			    }
-			    	
 			    
 			    var oDataProjects =   new sap.ui.model.odata.v2.ODataModel(t.getModelAddress());
 		    	var i;
