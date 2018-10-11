@@ -61,7 +61,7 @@
 											</firstStatus>
 											
 											<attributes>
-												<ObjectAttribute text="Date " />
+												<ObjectAttribute text="{ path: 'assignmentsModel>ProjectDetails/Project_Deadline',formatter: '.formatter.date'} " />
 												
 											</attributes>
 											
