@@ -190,15 +190,23 @@ sap.ui.define([
 		var passw2 = sap.ui.getCore().byId("secPassword").getValue();
 		var thisObj = this;
 		if (passw1 == passw2 && passw1 != "" && passw2 != ""){
-			$.post('CreateUser', {
-				conID:this.getView().getModel("userModel").oData.Consultant_ID,
-				passw: passw1,
-				resetpassword: "true"
-			},
-			function(response){
-				sap.m.MessageToast.show("Password successfully changed");
-				thisObj._oDialog.destroy();
-			});
+			var minPassLen = 7;
+			if(passw1.length < minPassLen){
+				this.setFragmentInputState("firstPassword");
+				this.setFragmentInputState("secPassword");
+	   			sap.m.MessageToast.show("Passwords have to be at least 8 characters in Length");
+			}
+			else{
+				$.post('CreateUser', {
+					conID:this.getView().getModel("userModel").oData.Consultant_ID,
+					passw: passw1,
+					resetpassword: "true"
+				},
+				function(response){
+					sap.m.MessageToast.show("Password successfully changed");
+					thisObj._oDialog.destroy();
+				});
+	   		}
 		}else{
 			sap.m.MessageToast.show("Please fill in both input fields with the same password.");
 			this.setFragmentInputState("firstPassword");

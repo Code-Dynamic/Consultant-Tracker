@@ -822,11 +822,13 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 			oEvent.getSource().getBinding("items").filter([]);
 		},
 		onDelete: function(){
+			var thisObj = this;
 			$.post('DeleteProject', { projectID: PROJECT_ID},function(responseText) {  
+				
 						MessageToast.show("Project Deleted Succesfully.");
 						var selectFirstProject = true;
-						this.goToProjects(selectFirstProject);
-						this._Dialog.destroy();	
+						thisObj.goToProjects(selectFirstProject);
+						thisObj._Dialog.destroy();	
 				   });					
 					
 		}

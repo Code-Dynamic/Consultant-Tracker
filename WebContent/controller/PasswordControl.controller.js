@@ -88,19 +88,30 @@ sap.ui.define([
 			sap.m.MessageToast.show("All fields must be filled in");
 		}
 		else if ( firstPassw == secPassw){
-			$.post('CreateUser', {
-				conID:this.getConsultantID(), 
-				question: question,
-				answer:answer,
-				passw: firstPassw
-				},
-				function(response){
-					sap.m.MessageToast.show("Details Edited Succesfully");
-					if (thisObj.getView().getModel("consultantModel").oData.ConsultantDetails.Consultant_Priviledge == 100 || thisObj.getView().getModel("consultantModel").oData.ConsultantDetails.Consultant_Priviledge == 200)
-						thisObj.getRouter().navTo("MasterAdmin", {consultantId: thisObj.getConsultantID()});
-					else
-						thisObj.getRouter().navTo("MasterConsultant", {consultantId: thisObj.getConsultantID()});
-			});
+			var minPassLen = 7;
+			if(firstPassw.length < minPassLen){
+	   			var input = this.getView().byId("secPassword");
+	   			input.setValueState(sap.ui.core.ValueState.Error);
+	   			input = this.getView().byId("firstPassword");
+	   			input.setValueState(sap.ui.core.ValueState.Error);
+	   			sap.m.MessageToast.show("Passwords have to be at least 8 characters in Length");
+			}
+			else{
+				$.post('CreateUser', {
+					conID:this.getConsultantID(), 
+					question: question,
+					answer:answer,
+					passw: firstPassw
+					},
+					function(response){
+						sap.m.MessageToast.show("Details Edited Succesfully");
+						if (thisObj.getView().getModel("consultantModel").oData.ConsultantDetails.Consultant_Priviledge == 100 || thisObj.getView().getModel("consultantModel").oData.ConsultantDetails.Consultant_Priviledge == 200)
+							thisObj.getRouter().navTo("MasterAdmin", {consultantId: thisObj.getConsultantID()});
+						else
+							thisObj.getRouter().navTo("MasterConsultant", {consultantId: thisObj.getConsultantID()});
+				});
+			}
+
 		}else{
    			var input = this.getView().byId("secPassword");
    			input.setValueState(sap.ui.core.ValueState.Error);
