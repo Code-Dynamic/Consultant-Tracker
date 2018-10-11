@@ -304,9 +304,10 @@ sap.ui.define([
 //						   console.log(data);
 						   var filters = [];
 						   data.memberSize = data.results.length;
+						   console.log("Member size: "+data.memberSize);
 							var countMembers = data.results.length;
 //							data.countMembers = data.results.length;
-							sap.ui.getCore().setModel(membersDetailModel,"membersModel");
+//							sap.ui.getCore().setModel(membersDetailModel,"membersModel");
 
 							for(var i=0; i<countMembers;i++){
 								consultantsID[i] = data.results[i].ConsultantDetails.Consultant_ID;
@@ -314,7 +315,7 @@ sap.ui.define([
 								filters[i] = new sap.ui.model.Filter("Consultant_ID", sap.ui.model.FilterOperator.NE, consultantsID[i]);
 							}
 							
-							thisObj.getView().setModel(membersDetailModel,"membersModel");
+//							thisObj.getView().setModel(membersDetailModel,"membersModel");
 					  },
 					  error: function(oError) {
 						  console.log("error");
@@ -322,7 +323,7 @@ sap.ui.define([
 					});
 				
 //						set the project detail model
-//					this.getView().setModel(membersDetailModel,"membersModel");
+					this.getView().setModel(membersDetailModel,"membersModel");
 			},
 			computeTaskProgress : function(taskID, size){
 				countHoursWorked = 0;
