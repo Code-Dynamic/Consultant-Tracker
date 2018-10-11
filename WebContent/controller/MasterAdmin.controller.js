@@ -474,9 +474,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 				};
 	    	
 	    	var _Name = sap.ui.getCore().byId("c_Name").getValue();
-	    	var _Surname = sap.ui.getCore().byId("c_Surname").getValue();
 	    	var _Email = sap.ui.getCore().byId("c_email").getValue();
-	    	var _Cell = sap.ui.getCore().byId("c_Cell").getValue();
 	    	var t = this;
 	    	var oModel = this.getOwnerComponent().getModel("oModel");
 	    	var _Privilege;
@@ -513,30 +511,28 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	    				    			{leaderID: thisDomObj.getConsultantID()},
 	    				    			function(response){
 	    				    				_teamID = response;
+	    				    				console.log("team after creation: " + _teamID);
 	    				    			}
 	    				    		);
 	    				    	}
 	    				    	else{
 	    				    		_teamID = data.results[0].Team_ID;
 	    				    	}
-	    				    	console.log(_teamID);
 	    				    	//create consultant
 	    				    	$.post('CreateConsultant', { 
 									name: _Name,
-									surname: _Surname,
 									email: _Email,
-									cell: _Cell,
-									admin: _Privilege}, 
+									admin: _Privilege
+									}, 
 	    		    				function(responseText) {
+										console.log(_teamID);
 	    		    					$.post('AssignConsultantToTeam',{consultantID:responseText, teamID: _teamID});
-//		    		    					console.log("At adding User Equivalent: "+responseText);
 	    		    					$.post('CreateUser', {conID:responseText},
 	    		    						function(response){
 	    		    							thisDomObj.goToConsultants();
-	    		    							$.post('MailingServlet',{name:_Name, emailAddress: _Email }, function(response){
-	    	    		    						console.log("success");
-	    	    		    					});
-	    		    							 MessageToast.show("Consultant succesfully added.");
+	    		    							$.post('MailingServlet',{name:_Name, emailAddress: _Email, password: response }, function(){
+	    		    								MessageToast.show("Consultant succesfully added.");
+	    		    							}); 
 	    		    					});
 								});
 	    				     },

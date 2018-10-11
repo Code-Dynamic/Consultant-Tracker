@@ -55,19 +55,19 @@ public class MailingServlet extends HttpServlet {
 			//gather user name, email address and group name that will now contain the new details
 			String name = request.getParameter("name");
 			String emailAddress = request.getParameter("emailAddress");
+			String passwordInput = request.getParameter("password");
 			
-			GeneratePassword generatePassword = new GeneratePassword();
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress("codedynamiccos301@gmail.com"));
 			message.setRecipients(Message.RecipientType.TO,
 				InternetAddress.parse(emailAddress));
 			message.setSubject("Successful registration");
+			if (passwordInput != null)
 			message.setText("Dear " + name +
 					"\n\n You have been successfully registered.\n\n"+
 					"Your username is: " + emailAddress +
-					".\n Your password is: " + generatePassword.generatePassword(5));
+					".\n Your password is: " + passwordInput);
 			Transport.send(message);
-			System.out.println("Email successfully sent to: " + emailAddress);
 
 		} catch (MessagingException e) {
 			throw new RuntimeException(e);
