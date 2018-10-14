@@ -889,7 +889,6 @@ sap.ui.define([
 				this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.formAddConsultanttoProject",this);
 				this._Dialog.setModel(this.getView().getModel("consultants"),"consultants");
 				
-				
 				// Multi-select if required
 				var bMultiSelect = !!oEvent.getSource().data("multi");
 				this._Dialog.setMultiSelect(bMultiSelect);
@@ -898,25 +897,20 @@ sap.ui.define([
 				var bRemember = !!oEvent.getSource().data("remember");
 				this._Dialog.setRememberSelections(bRemember);
 
-				
-				this._Dialog.open(); 
-				
+				this._Dialog.open(); 				
 				var arrConsultants;
 				//getConsultants
 				//return all consultants
 		         $.post('GetProjectConsultants',function(responseText){
 						console.log("servlet getProjectConsultants responded");
-//						console.log(responseText);
+						console.log(responseText);
 						arrConsultants = {Consultants:[]};
 						var array = responseText.split(';');
 						array.forEach(createConsultant);
 						
 						var oModel = new sap.ui.model.json.JSONModel();
 						oModel.setData(JSON.parse(JSON.stringify(arrConsultants)));
-//						console.log(JSON.parse(JSON.stringify(arrConsultants)));
 						sap.ui.getCore().setModel(oModel,"consultants");
-							
-						
 					});
 					
 					function createConsultant(stringVal){
@@ -930,11 +924,7 @@ sap.ui.define([
 						 Consultant_Admin : array[5]
 						};
 						arrConsultants.Consultants.push((Consultant));
-//				    		console.log(arrProjects);
-				    		
 					}
-				
-				
 		},
 		onDeleteConsultantFromProject: function(oEvent){
 //			create model to display list of consultants
