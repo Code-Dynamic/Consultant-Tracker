@@ -21,57 +21,25 @@
 			select = "onMasterIconTabFilterSelect">
 				
 				<items>		
-					<IconTabFilter 
-						id="iconTabBarFilter2" 
-						icon="sap-icon://folder" 
-						tooltip="List of all projects" 
-						text="Projects"
-						key = "projectsSelect"
-						>
-						
+					<IconTabFilter id="iconTabBarFilter2"  icon="sap-icon://folder" tooltip="List of all projects" text="Projects" key = "projectsSelect" >
 						<content>
-						
 							<Bar id="headerBar">
-							
 								<contentMiddle>
-									
-									<SearchField 
-									id="projectSearchField"
-									tooltip="{i18n>masterSearchTooltip}" 
-									width="100%"
-									search="onSearchProject" 
-									liveChange="onSearchProject">
-									
+									<SearchField id="projectSearchField" tooltip="{i18n>masterSearchTooltip}" 
+									width="100%" search="onSearchProject" liveChange="onSearchProject">
 									</SearchField>
-									
 								</contentMiddle>
-								
 							</Bar>
-							
-							<List id="projectsList"
-								items="{projectsModel>/results}">
-								
-								<items
-									id="projectListItems">
-								
-									<ObjectListItem
-										id="projectObjectListItem"
-										title="{projectsModel>Project_Name}"
-										type="Active"
-										press="onProjectListItemPress">
-										
+							<List id="projectsList" items="{projectsModel>/results}">
+								<items id="projectListItems">
+									<ObjectListItem id="projectObjectListItem" title="{projectsModel>Project_Name} {projectsModel>ProjectDetails/Project_Name}" type="Active" press="onProjectListItemPress"> 
 										<firstStatus>
-										
-											<ObjectStatus text="{projectsModel>status}" />
-											
+											<ObjectStatus text="{projectsModel>status} {projectsModel>ProjectDetails/status}" />
 										</firstStatus>
 										
 										<attributes>
-										
-											<ObjectAttribute text="{ path: 'projectsModel>Project_Deadline',formatter: '.formatter.date'}" />
-											
+											<ObjectAttribute text="{ path: 'projectsModel>Project_Deadline',formatter: '.formatter.date'} { path: 'projectsModel>ProjectDetails/Project_Deadline',formatter: '.formatter.date'}" />
 										</attributes>
-										
 									</ObjectListItem>
 									
 								</items>

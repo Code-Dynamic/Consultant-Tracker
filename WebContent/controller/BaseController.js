@@ -332,52 +332,88 @@ sap.ui.define([
 			//if no argument is passed to function, a project is not opened
 			var numArguments = arguments.length;
 			var thisDomObj = this;
+			var consultantID = this.getConsultantID();
 			var projectsModel = new sap.ui.model.json.JSONModel();
 			var dialog = new sap.m.BusyDialog();
-			dialog.open();	
+//			dialog.open();	
 			var oModel = this.getOwnerComponent().getModel("oModel");
 			// read projects
-			oModel.read("/Projects",{
-				filters: [ new sap.ui.model.Filter({
-			          path: "Project_Deleted",
-			          operator: sap.ui.model.FilterOperator.EQ,
-			          value1: false
-			    })],
-				success : function(data) {
-					for (var i = 0; i < data.results.length; i++) {
-						if (data.results[i].Project_Completed) {
-							data.results[i].status = "Completed";
-						} else {
-							data.results[i].status = "In progress";
-						}
-					}
-					
-					projectsModel.setData(data);
-					thisDomObj.getView().setModel(projectsModel,"projectsModel");
-					if (data.results.length > 0) {
-						var resultsLocationStr;
-						if (selectFirstProject) {
-							resultsLocationStr = "/results/0";
-						} else {
-							resultsLocationStr = "/results/" + (data.results.length - 1);
-							// console.log(resultsLocationStr);
-						}
-						//only open project if there is more than 1 argument
-						if(numArguments > 0){
-							var oData = thisDomObj.getView().getModel("projectsModel").getProperty(resultsLocationStr);
-							var projectID = oData.Project_ID;
-							PROJECT_ID = projectID;
-							var projectCompleted = oData.Project_Completed;
-							thisDomObj.selectProjectByID(projectID,projectCompleted);	
-							dialog.close();
-						} else {
-							dialog.close();
-						}
-					}else
-						dialog.close();
+			oModel.read("/Team_Entitys", {
+				urlParameters: {
+					"$expand": "TeamDetails, ConsultantDetails"
 				},
-				error : function() {
-		    		dialog.close();
+				filters: [ new sap.ui.model.Filter({
+			        path: "TeamDetails/Team_Leader",
+			        operator: sap.ui.model.FilterOperator.EQ,
+			        value1:consultantID
+				})],
+				success: function(data){
+					//read the assigned projects and eliminate the projects that haven't been 
+					//assigned to team members of that group
+					oModel.read("/Assignments",{
+						urlParameters: {
+							"$expand": "ConsultantDetails, ProjectDetails"
+						},
+						filters: [ new sap.ui.model.Filter({
+					        path: "ProjectDetails/Project_Completed",
+					        operator: sap.ui.model.FilterOperator.EQ,
+					        value1:false
+						})],
+						success: function(oData){
+							var found = false;
+							//remove projects that are not assigned to any of the team members
+							for (var oDataCount = 0; oDataCount < oData.results.length; oDataCount++){
+								for(var dataCount = 0; dataCount < data.results.length; dataCount++){
+									if(data.results[dataCount].ConsultantDetails.Consultant_ID == oData.results[oDataCount].ConsultantDetails.Consultant_ID){
+										found = true;
+										break;
+									}
+								}
+								if (!found)
+									oData.results.splice(oDataCount,1);	
+								found = false;
+							}
+							//eliminate duplicate projects
+							for (var count = 1; count < oData.results.length; count++){
+								for (var x = 0; x < count; x++){
+									if (oData.results[count].ProjectDetails.Project_ID == oData.results[x].ProjectDetails.Project_ID){
+										oData.results.splice(x,1);
+										count--;
+										break;
+									}
+								}
+							}
+							for (var i = 0; i < oData.results.length; i++) {
+								if (oData.results[i].ProjectDetails.Project_Completed) {
+									oData.results[i].status = "Completed";
+								} else {
+									oData.results[i].status = "In progress";
+								}
+							}
+							projectsModel.setData(oData);
+							thisDomObj.getView().setModel(projectsModel,"projectsModel");
+							if (oData.results.length > 0) {
+								var resultsLocationStr;
+								if (selectFirstProject) {
+									resultsLocationStr = "/results/0";
+								} else {
+									resultsLocationStr = "/results/" + (oData.results.length - 1);
+								}
+								//only open project if there is more than 1 argument
+								if(numArguments > 0){
+									var oDataSelected = thisDomObj.getView().getModel("projectsModel").getProperty(resultsLocationStr);
+									var projectID = oDataSelected.ProjectDetails.Project_ID;
+									PROJECT_ID = projectID;
+									var projectCompleted = oDataSelected.ProjectDetails.Project_Completed;
+									thisDomObj.selectProjectByID(projectID,projectCompleted);	
+									dialog.close();
+								} else {
+									dialog.close();
+								}
+							}else
+								dialog.close();
+						}
+					});
 				}
 			});
 		},
