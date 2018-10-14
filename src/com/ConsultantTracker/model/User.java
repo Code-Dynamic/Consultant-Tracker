@@ -91,6 +91,6 @@ public class User implements Serializable {
 	}
 
 	public void setSecurity_Answer(String security_Answer) {
-		this.security_Answer = security_Answer;
+		this.security_Answer = hashPassword(security_Answer);
 	}
 }

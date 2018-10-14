@@ -373,7 +373,8 @@ sap.ui.define([
 						} else {
 							dialog.close();
 						}
-					}
+					}else
+						dialog.close();
 				},
 				error : function() {
 		    		dialog.close();
