@@ -20,8 +20,7 @@
 		<PlanningCalendar
 			id="PC1"
 			rows="{/results}"
-			
-			builtInViews="Week"
+
 
 			appointmentsVisualization="Filled"
 			appointmentSelect="handleAppointmentSelect"
@@ -38,8 +37,8 @@
 			
 			<rows>
 				<PlanningCalendarRow
-					icon="sap-icon://task"
-					title="{TaskDetails/Name}"
+					icon="sap-icon://employee"
+					title="{ConsultantDetails/Consultant_Name} {ConsultantDetails/Consultant_Surname}"
 					noDataText="No activity to view">
 					
 							<appointments>
@@ -47,8 +46,8 @@
 						<unified:CalendarAppointment
 							startDate="{Date_Assigned}"
 							endDate="{Due_Date}"
-							icon="{pic}"
-							title="{Description}"
+							icon="sap-icon://task"
+							title="{TaskDetails/Name}: {Description}"
 							text="Due: {Due_Date}"
 							type="{type}"
 							tentative="{tentative}">
@@ -62,7 +61,18 @@
 			</rows>
 			
 		</PlanningCalendar>
-		
+				<MultiComboBox
+				selectionFinish="handleSelectionFinish"
+				width="230px"
+				placeholder="Choose built-in views">
+			<items>
+				<core:Item key="Hour" text="Hour" />
+				<core:Item key="Day" text="Day" />
+				<core:Item key="Month" text="Month" />
+				<core:Item key="Week" text="1 week" />
+				<core:Item key="One Month" text="1 month" />
+			</items>
+		</MultiComboBox>
 	</VBox>
 		</semantic:content>
 

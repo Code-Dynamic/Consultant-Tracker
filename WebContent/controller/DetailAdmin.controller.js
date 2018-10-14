@@ -17,13 +17,13 @@ sap.ui.define([
 	var thisView;
 	var taskId;
 	var projectId;
-	var consultantId;
 	var countMembers;
 	var countHoursWorked;
 	var countExpectedHours;
 	var countTasks;
 	var countAssignedTasks;
 	var distance;
+	var consultantId
 	var tasksProgress = [];
 	var tasksProgressID = [];
 	return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.DetailAdmin", {
@@ -141,7 +141,7 @@ sap.ui.define([
 		var tileProjectProgressModel = new JSONModel();
 		var titleAssignedTasksModel = new JSONModel();
 		var tileTasksModel = new JSONModel();	
-		var consultantId = this.getConsultantID();
+		consultantId = this.getConsultantID();
 //		console.log("consultant id: "+consultantId);
 //		console.log("project id: "+projectId);
 		//2
