@@ -342,6 +342,11 @@ sap.ui.define([
 				urlParameters:{
 					"$select": "Consultant_Priviledge"
 				},
+				filters: [ new sap.ui.model.Filter({
+			        path: "Consultant_ID",
+			        operator: sap.ui.model.FilterOperator.EQ,
+			        value1: consultantID
+			    })],
 				success: function(privData){
 					if (privData.results[0].Consultant_Priviledge == 100){
 						oModel.read("/Projects",{
