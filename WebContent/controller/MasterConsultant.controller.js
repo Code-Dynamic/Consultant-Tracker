@@ -124,10 +124,8 @@ sap.ui.define([
 
 			},
 			selectProjectById : function (projectID,projectCompleted){
-				//TODO Ngoni: consult Mamba, save project ID in model instead of using global
 				PROJECT_ID = projectID;
 				var consultantID = this.getConsultantID();
-//				console.log("List ID "+projectID);
 				this.getRouter().navTo("DetailConsultant",{listId:projectID,consultantId:consultantID});
 				var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
 				var thisObj = this;
@@ -135,19 +133,20 @@ sap.ui.define([
 				var filters = [];
 
 				filters = [new sap.ui.model.Filter("ProjectDetails/Project_ID", sap.ui.model.FilterOperator.EQ, projectID),
-						   new sap.ui.model.Filter("ConsultantDetails/Consultant_ID", sap.ui.model.FilterOperator.EQ, consultantID)];
-				oModel.read( "/Ratings_Entrys", {
-					urlParameters:{
-						"$expand": "ProjectDetails,ConsultantDetails"
+					   new sap.ui.model.Filter("ConsultantDetails/Consultant_ID", sap.ui.model.FilterOperator.NE, consultantID)];
+			
+				oModel.read("/Ratings_Entrys", {
+					urlParameters: {
+						"$expand": "ProjectDetails, ConsultantDetails"
 					},
-					filters: [new sap.ui.model.Filter(filters, false)],
-			    	async:false,
-			    	success: function(oCreatedEn){
-			    		thisObj.ratingsBtnConfig(oCreatedEn) 
-			    	},
-			    	error: function(error){
-			    		console.log(error);
-			    	}
+					filters: [ new sap.ui.model.Filter(filters,true)],
+				     async:false,
+				     success: function(oCreatedEn){
+				    	 thisObj.ratingsBtnConfig(oCreatedEn,projectCompleted)
+				     },
+				     error: function(e){
+				    	 console.log(e);
+				     }
 			 	});								
 			},
 
