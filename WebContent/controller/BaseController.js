@@ -13,8 +13,16 @@ sap.ui.define([
 	function(Controller, History, MessageToast, formatter) {
 	"use strict";
 		var AssignedTaskIDArr = [];
-		var recognition = new webkitSpeechRecognition();
-		recognition.lang = 'en-GB';
+		var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+		var recognition;
+		
+		if(isChrome){
+			recognition = new webkitSpeechRecognition();
+			recognition.lang = 'en-GB';
+		}else if($.browser.mozilla){
+//			recognition = new mozSpeechRecognition();
+//			recognition.lang = 'en-GB';
+		}
 		// recognition.interimResults = true;
 		recognizing = false;
 		// console.log("initialised");
