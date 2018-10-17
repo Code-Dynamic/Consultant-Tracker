@@ -485,6 +485,23 @@ sap.ui.define([
 				}
 			});
 		},
+		configProjectCompletionBtn: function(projectCompleted){
+			var projectCompletionBtn = sap.ui.getCore().byId("__component0---DetailAdmin--onMarkProjectCompletedBtn");
+			if(projectCompleted){
+				projectCompletionBtn.setEnabled(false);
+			} else {
+				projectCompletionBtn.setEnabled(true);
+			}
+			
+		},
+		onMarkProjectCompleted: function(){
+			$.post('MarkProjectCompleted', { projectID: PROJECT_ID},function(responseText) {  
+						MessageToast.show("Project Marked As Completed.");
+						var selectFirstProject = true;
+						thisObj.selectProjectByID(PROJECT_ID,true);
+						thisObj._Dialog.destroy();	
+				   });					
+		},
 		selectProjectByID : function(projectID, projectCompleted) {
 			var consultantID = this.getConsultantID();
 			this.getRouter().navTo("DetailAdmin", {projectId : projectID});
@@ -494,7 +511,7 @@ sap.ui.define([
 			var oModel = this.getOwnerComponent().getModel("oModel");
 			var filters = [];
 			filters = [new sap.ui.model.Filter("ProjectDetails/Project_ID", sap.ui.model.FilterOperator.EQ, projectID),
-				   new sap.ui.model.Filter("ConsultantDetails/Consultant_ID", sap.ui.model.FilterOperator.NE, consultantID)];
+				   new sap.ui.model.Filter("ConsultantDetails/Consultant_ID", sap.ui.model.FilterOperator.EQ, consultantID)];
 		
 			oModel.read("/Ratings_Entrys", {
 				urlParameters: {
@@ -524,6 +541,10 @@ sap.ui.define([
 				progressModel.setData(progress);
 				thisObj.getView().setModel(progressModel,"progressModel");
 			});
+
+			if(thisObj.isConsultantAdmin()){
+				thisObj.configProjectCompletionBtn(projectCompleted);
+			}
 		},
 		ratingsBtnConfig : function(oResults,projectCompleted){
 			if(RatingsBtn){

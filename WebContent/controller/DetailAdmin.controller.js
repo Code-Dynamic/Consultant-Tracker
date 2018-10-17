@@ -1758,6 +1758,15 @@ sap.ui.define([
 						var oFileUploader = this.byId("fileUploader");
 						oFileUploader.upload();
 			},
+            onMarkProjectCompleted: function(){
+    			var thisObj = this;
+    			$.post('MarkProjectCompleted', { projectID: PROJECT_ID},function(responseText) {  
+    						MessageToast.show("Project Marked as Completed.");
+    						var projectCompleted = true;
+    						thisObj.setProjectsModel();
+    						thisObj.selectProjectByID(PROJECT_ID, projectCompleted);
+    				   });	
+            },
 			deleteTask: function(){
 						var id = sap.ui.getCore().getModel("taskID").getProperty("/id");
 						
@@ -1779,7 +1788,7 @@ sap.ui.define([
                     //console.log("Detail admin ");
                     //console.log(this.getConsultantID());
                     this.getRouter().navTo("MasterAdmin",{consultantId:this.getConsultantID()});
-                },
+                }
                 //End---Mobile view code
 
 		});

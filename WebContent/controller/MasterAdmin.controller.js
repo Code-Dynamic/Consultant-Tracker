@@ -106,21 +106,19 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		var consultantID = this.getConsultantID();
 		//RATINGS CODE
 		var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
-		var projectCompleted =  oData.Project_Completed;
+		var projectCompleted =  oData.ProjectDetails.Project_Completed;
 		var thisObj = this;
+		thisObj.configProjectCompletionBtn(projectCompleted);
 		var oModel = this.getOwnerComponent().getModel("oModel");
+		var filters = [];
+		filters = [new sap.ui.model.Filter("ProjectDetails/Project_ID", sap.ui.model.FilterOperator.EQ, projectID),
+			   new sap.ui.model.Filter("ConsultantDetails/Consultant_ID", sap.ui.model.FilterOperator.EQ, consultantID)];
+		
 		oModel.read( "/Ratings_Entrys", {
 			urlparameters:{
 				"$expand": "ProjectDetails, ConsultantDetails"
 			},
-			filters: [ new sap.ui.model.Filter({
-		        path: "ProjectDetails/Project_ID",
-		        operator: sap.ui.model.FilterOperator.EQ,
-		        value1: projectID,
-		        path:"ConsultantDetails/Consultant_ID",
-		        operator: sap.ui.model.FilterOperator.EQ,
-		        value1: consultantID
-		     })],
+			filters: [ new sap.ui.model.Filter(filters,true)],
 	    	async:false,
 	    	success: function(oCreatedEn){ 
 	    		thisObj.ratingsBtnConfig(oCreatedEn,projectCompleted) 

@@ -131,9 +131,8 @@ sap.ui.define([
 				var thisObj = this;
 				var oModel = this.getOwnerComponent().getModel("oModel");
 				var filters = [];
-
 				filters = [new sap.ui.model.Filter("ProjectDetails/Project_ID", sap.ui.model.FilterOperator.EQ, projectID),
-					   new sap.ui.model.Filter("ConsultantDetails/Consultant_ID", sap.ui.model.FilterOperator.NE, consultantID)];
+					   new sap.ui.model.Filter("ConsultantDetails/Consultant_ID", sap.ui.model.FilterOperator.EQ, consultantID)];
 			
 				oModel.read("/Ratings_Entrys", {
 					urlParameters: {
