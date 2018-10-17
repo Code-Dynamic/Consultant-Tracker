@@ -56,7 +56,7 @@
 											<firstStatus>
 											
 												<ObjectStatus
-													text="In Progress" />
+													text="{assignmentsModel>ProjectDetails/status}" />
 													
 											</firstStatus>
 											

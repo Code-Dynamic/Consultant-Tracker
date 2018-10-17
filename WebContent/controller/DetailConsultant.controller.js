@@ -17,6 +17,7 @@ sap.ui.define([
 	var OModel;
 	var countHoursWorked;
 	var countExpectedHours;
+	var consultantId;
 	var tasksProgress = [];
 	return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.DetailConsultant", {
 
@@ -191,7 +192,7 @@ sap.ui.define([
 				var oArgs, oView;
 				oArgs = oEvent.getParameter("arguments");
 				projectId = oArgs.listId;
-				
+				consultantId = oArgs.consultantId;
 //				console.log("projectId "+projectId);
 				//variables for counting members and tasks on a project
 //				var countMembers;
@@ -615,7 +616,7 @@ sap.ui.define([
 				var sPath = oEvent.getSource().getBindingContext("membersModel").getPath();
 				var oData = this.getView().getModel("membersModel").getProperty(sPath);
 				
-				var consultantId = oData.ConsultantDetails.Consultant_ID;
+//				consultantId = oData.ConsultantDetails.Consultant_ID;
 				
 				
 				//
@@ -659,8 +660,8 @@ sap.ui.define([
 				//get Project_ID to pass to the calender view
 				var oListId = oModel.oData.Project_ID;
 				this.getRouter()
-					.navTo("Calender", 
-						{listId:oListId, projectId:oListId});
+					.navTo("CalenderConsultant", 
+						{listId:oListId, projectId:oListId, consultantId:consultantId});
 
 			},
 			

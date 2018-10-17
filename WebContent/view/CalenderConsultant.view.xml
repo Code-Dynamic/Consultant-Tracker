@@ -1,0 +1,69 @@
+<mvc:View	xmlns:core="sap.ui.core" 
+			xmlns:mvc="sap.ui.core.mvc" 
+			xmlns="sap.m" 
+			xmlns:unified="sap.ui.unified"
+			xmlns:semantic="sap.m.semantic" 
+			xmlns:html="http://www.w3.org/1999/xhtml" 
+			controllerName="consultanttracker.Consultant-Tracker_Prototype-1.controller.CalenderConsultant">
+			 
+	<semantic:MasterPage 
+	id="CalenderConsultant" 
+	title="Planning Calender" 
+	navButtonPress="onNavBack" 
+	showNavButton="true">
+
+				 
+		<semantic:content>
+		
+	<VBox class="sapUiSmallMargin">
+	
+		<PlanningCalendar
+			id="PC1"
+			rows="{/results}"
+
+
+			appointmentsVisualization="Filled"
+			appointmentSelect="handleAppointmentSelect"
+			showEmptyIntervalHeaders="false"
+			showWeekNumbers="true">
+			
+			<toolbarContent>
+			
+				<Title 
+				text="{TaskDetails/ProjectDetails/Project_Name} individual calander view" 
+				titleStyle="H4"/>
+				
+			</toolbarContent>
+			
+			<rows>
+				<PlanningCalendarRow
+					icon="sap-icon://employee"
+					title="{ConsultantDetails/Consultant_Name} {ConsultantDetails/Consultant_Surname}"
+					noDataText="No activity to view">
+					
+							<appointments>
+							
+						<unified:CalendarAppointment
+							startDate="{Date_Assigned}"
+							endDate="{Due_Date}"
+							icon="sap-icon://task"
+							title="{TaskDetails/Name}: {Description}"
+							text="Due: {Due_Date}"
+							type="{type}"
+							tentative="{tentative}">
+							
+						</unified:CalendarAppointment>
+						
+					</appointments>
+					
+				</PlanningCalendarRow>
+				
+			</rows>
+			
+		</PlanningCalendar>
+
+	</VBox>
+		</semantic:content>
+
+	</semantic:MasterPage>
+</mvc:View>

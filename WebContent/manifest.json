@@ -6,7 +6,7 @@
 		"i18n": "i18n/i18n.properties",
 		"applicationVersion": {
 			"version": "1.0.0"
-		},
+		}, 
 		"title": "{{appTitle}}",
 		"description": "{{appDescription}}",
 		"sourceTemplate": {
@@ -29,7 +29,7 @@
 			"phone@2": "",
 			"tablet": "",
 			"tablet@2": ""
-		},
+		}, 
 		"deviceTypes": {
 			"desktop": true,
 			"tablet": true,
@@ -170,11 +170,12 @@
 
 					]
 				},
+
 				{
-					"name": "Calender",
-					"pattern": "DetailConsultant/{listId}/Calender/{projectId}",
+					"name": "CalenderConsultant",
+					"pattern": "DetailConsultant/{listId}/CalenderConsultant/{projectId},:consultantId:",
 					"target": [
-						"MasterConsultant","Calender"
+						"MasterConsultant","CalenderConsultant"
 					]
 				},
 				{
@@ -280,6 +281,15 @@
 				"Calender": {
 					"viewName": "Calender",
 					"viewId": "Calender",
+					"viewLevel": 3,
+					"controlId": "idSplitAppControl",
+					"controlAggregation": "detailPages",
+					"parent": "splitview",
+					"transition": "flip"
+				},
+				"CalenderConsultant": {
+					"viewName": "CalenderConsultant",
+					"viewId": "CalenderConsultant",
 					"viewLevel": 3,
 					"controlId": "idSplitAppControl",
 					"controlAggregation": "detailPages",

@@ -80,6 +80,14 @@ sap.ui.define([
 					async:false,
 					success: function(data){
 						 var oData = JSON.stringify(data);
+						 for(var i =0; i<data.results.length; i++){
+							 
+								if (data.results[i].ProjectDetails.Project_Completed) {
+									data.results[i].ProjectDetails.status = "Completed";
+								} else {
+									data.results[i].ProjectDetails.status = "In progress";
+								}
+						 }
 						 assignmentsModel.setData(data);
 						 //console.log(data);
 						 if(!thisObj.isDeviceMobile()){
