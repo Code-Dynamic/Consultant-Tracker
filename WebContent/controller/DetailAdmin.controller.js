@@ -1072,6 +1072,7 @@ sap.ui.define([
                                        })],
                                     success: function(data){
                                         newMemberName = data.results[0].Consultant_Name;
+                                        newMemberEmail = data.results[0].Consultant_Email;
                                         //console.log( newMemberName);
                                         
                                         OModel.read("/Consultants", {
@@ -1094,7 +1095,7 @@ sap.ui.define([
                                                     success: function(data){
                                                         var projectName = data.results[0].Project_Name;
                                                         //console.log(currentUserName);
-                                                        $.post('EmailNotificationAddedToTeam',{newTeamMemberName:newMemberName, emailAddress: "johandewaal18@gmail.com", currentUserName: currentUserName, projectName: projectName }, function(response){
+                                                        $.post('EmailNotificationAddedToTeam',{newTeamMemberName:newMemberName, emailAddress: newMemberEmail, currentUserName: currentUserName, projectName: projectName }, function(response){
                                                             console.log("success");
                                                         });
                                                       },
@@ -1360,7 +1361,9 @@ sap.ui.define([
 	                                            var projectName = data.results[0].Project_Name;
 	                                            console.log(currentUserName);
 	                                            
-	                                            $.post('EmailNotificationAddedToTask',{newTaskMemberName:memberAddedToTask, emailAddress: "johandewaal18@gmail.com", currentUserName: currentUserName, projectName: projectName }, function(response){
+	                                            $.post('EmailNotificationAddedToTask',{newTaskMemberName:memberAddedToTask, emailAddress: newMemberEmail, 
+	                                            	currentUserName: currentUserName, projectName: projectName,taskDescription:_Description,
+	                                            	dueDate:_DueDate,dateAssigned:_DateAssigned, assignedHours:_AssignedHours}, function(response){
 	                                                console.log("success");
 	                                            });
 	                                          },
