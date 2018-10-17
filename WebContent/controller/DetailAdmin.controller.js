@@ -383,6 +383,7 @@ sap.ui.define([
 	},
 	setProjectsModel: function(){
 		var projectsDetailModel = new JSONModel();
+		var thisObj = this;
 		OModel.read("/Projects("+projectId+")", {
 			urlParameters: {
 	            "$expand" : "ClientDetails"
@@ -397,6 +398,8 @@ sap.ui.define([
 				  else
 					  data.projectProgress = Math.round(countHoursWorked/countExpectedHours*100);
 				  projectsDetailModel.setData(data);
+				  
+					thisObj.getView().setModel(projectsDetailModel,"projectsModel"); 
 //					var results = JSON.stringify(data);
 //					console.log(results);
 //					console.log(results);
@@ -406,7 +409,7 @@ sap.ui.define([
 				 }
 			});
 		//set the project detail model
-		this.getView().setModel(projectsDetailModel,"projectsModel"); 
+		//thisObj.getView().setModel(projectsDetailModel,"projectsModel"); 
 	},
 	setConsultantsModel: function(){
 		var consultantsDetailModel = new JSONModel();	
