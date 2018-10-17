@@ -2,7 +2,7 @@
 var recognizing;
 var recognition;
 var ConsultantAdmin;
-var DeviceIsMobile;
+var DeviceIsMobile; 
 var RatingsBtn = false;
 var PROJECT_ID;
 sap.ui.define([ 
