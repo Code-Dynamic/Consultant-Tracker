@@ -22,6 +22,7 @@ import com.ConsultantTracker.model.Project;
 /**
  * Servlet implementation class MarkProjectCompleted
  */
+@WebServlet("/MarkProjectCompleted")
 public class MarkProjectCompleted extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
