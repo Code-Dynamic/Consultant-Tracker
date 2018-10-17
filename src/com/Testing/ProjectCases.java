@@ -16,75 +16,14 @@ public class ProjectCases {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		Actions action = new Actions(driver);
 		
-		//Show Map Of Client
-//		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--iconTabBarFilter5"))).click();
-		
-		/*//Add Clients Via CSV
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--popover_buttonId"))).click();
-		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("addClientButton"))).click();
-		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("csvUploader-fu"))).sendKeys("C:\\Users\\hulis\\Desktop\\clients.csv");
-		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("clientUploadButton"))).click();
-		
-		
-		//Add Consultants Via CSV
-		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--popover_buttonId"))).click();
-		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("addConsultantButton"))).click();
-		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("csvUploader-fu"))).sendKeys("C:\\Users\\hulis\\Desktop\\consultants.csv");
-		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("consultantUploadButton"))).click();
-		
-		
-		
-		//Add Projects Via CSV
-		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--popover_buttonId"))).click();
-		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("addProjectButton"))).click();
-		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("csvUploader-fu"))).sendKeys("C:\\Users\\hulis\\Desktop\\projects.csv");
-		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("projectUploadButton"))).click();
-		Thread.sleep(500);
-		driver.navigate().refresh();
-		*/
-		
-		// Project Test Case 1: Create Project
-		/*wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--iconTabBarFilter2"))).click();
-		js.executeScript("alert('Project Test Case 1: Creating Project')");
 		Thread.sleep(1500);
-		driver.switchTo().alert().dismiss();
-		//driver.findElement(By.id("__component0---MasterAdmin--iconTabBarFilter2")).click();
-		Thread.sleep(500);
-		
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--addProjectButton"))).click();
-		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("p_Name-inner"))).sendKeys("Selenium Testing Project");
-		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("p_Description-inner"))).sendKeys("Selenium Testing Project is a dummy project");
-		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("p_StartDate-inner"))).sendKeys("2018-07-20");
-		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("p_Deadline-inner"))).sendKeys("2018-07-30");
-		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("p_OnSite-CbBg"))).click();
-		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("submitProjectButton"))).click();
-		
-		Thread.sleep(1500);
-		driver.navigate().refresh();*/
-		
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--iconTabBarFilter3"))).click();
+		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--iconTabBarFilter2"))).click();
 		
 		//Select 2nd Project
 		Thread.sleep(1000);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--projectObjectListItem-__component0---MasterAdmin--projectsList-1-content"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--projectObjectListItem-__component0---MasterAdmin--projectsList-2-content"))).click();
 		Thread.sleep(800);
 		//Select Dashboard
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--iconTabBarFilter1"))).click();
@@ -96,9 +35,11 @@ public class ProjectCases {
 		//Select Add Team Member and add 2nd and 4th consultant
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--add_team_member"))).click();
 		Thread.sleep(1000);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__item5-__clone1-selectMulti-CbBg"))).click();
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__item5-__clone4-selectMulti-CbBg"))).click();
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__dialog0-cancel"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("list_item-__clone12-selectMulti-CbBg"))).click();
+		Thread.sleep(1000);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("list_item-__clone17-selectMulti-CbBg"))).click();
+		Thread.sleep(1000);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("list-cancel"))).click();
 		Thread.sleep(1500);
 		
 		//Select Tasks
@@ -107,24 +48,45 @@ public class ProjectCases {
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--addActivityButton-__component0---DetailAdmin--idTasksTable-0"))).click();
 		Thread.sleep(1500);
 		//Fill add activity to task
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("AT_Description-inner"))).sendKeys("Pay the person for food ");
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("AT_Description-inner"))).sendKeys("Alpha testing the User Interface");
 		Thread.sleep(1000);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("AT_dateAssigned-inner"))).sendKeys("2018-07-20");
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("AT_dateAssigned-inner"))).sendKeys("2018-09-05");
 		Thread.sleep(1000);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("AT_Deadline-inner"))).sendKeys("2018-07-20");
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("AT_Deadline-inner"))).sendKeys("2018-09-20");
 		Thread.sleep(1000);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("allocatedHours-inner"))).sendKeys("03");
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("allocatedHours-inner"))).sendKeys("150");
 		Thread.sleep(1000);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeActivityFrag"))).sendKeys("03");
-		Thread.sleep(800);	
-		action.sendKeys(Keys.ESCAPE).perform();
-//		__item1-__component0---DetailAdmin--idTasksTable-0-sub
-		/*Thread.sleep(1000);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__item1-__component0---DetailAdmin--idTasksTable-0-sub"))).click();
-		Thread.sleep(800);
-//		closeAssignedTasks
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeActivityFrag"))).click();
 		Thread.sleep(1000);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("closeAssignedTasks"))).click();
-		Thread.sleep(800);*/
+//		action.sendKeys(Keys.ESCAPE).perform();
+		
+		//Client Tab
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--iconTabBarFilter6"))).click();
+		Thread.sleep(2500);
+		
+		//Map Tab
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--iconTabBarFilter5"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--show_hide_route_button"))).click();
+		Thread.sleep(500);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--show_hide_route_button"))).click();
+		Thread.sleep(500);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--show_hide_route_button"))).click();
+		Thread.sleep(2500);
+		
+		//Mark Project as Done
+//		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--onMarkProjectCompletedBtn"))).click();
+		
+		//Edit Project Details
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailAdmin--editProject"))).click();
+		Thread.sleep(1000);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("EditP_Description-inner"))).sendKeys("Empoloyee times system for the volkswagen time system industry. Which enhances proper things.");
+		Thread.sleep(2000);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("EP_closeProjectModalButton"))).click();
+		Thread.sleep(2000);
+		
+		//Search Project
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--projectSearchField-I"))).sendKeys("inv");
+		Thread.sleep(1000);
+
 	}
 }

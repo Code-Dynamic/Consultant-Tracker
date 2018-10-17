@@ -603,7 +603,7 @@
  						visible="false" />
 				 </HBox>					
 				 <HBox>
-						<Button press="editProjectDetails"  text="Edit Project" icon="sap-icon://edit"/>
+						<Button press="editProjectDetails" id="editProject" text="Edit Project" icon="sap-icon://edit"/>
 				</HBox>
 		</semantic:customFooterContent>
 		
