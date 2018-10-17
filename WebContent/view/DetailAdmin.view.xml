@@ -307,9 +307,12 @@
 			
 				<cells>
 				
+
 					<Text
-						text="{membersModel>ConsultantDetails/Consultant_Name} {membersModel>ConsultantDetails/Consultant_Surname}" />
+						text="{membersModel>ConsultantDetails/Consultant_Name}  {membersModel>ConsultantDetails/Consultant_Surname}" />
 						
+					<Text
+						text="{membersModel>ConsultantDetails/Consultant_Email}" />
 						
 					<Text
 						text="Programmer" />

@@ -94,10 +94,15 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		
 		//NB as a manager you can view all projects under you
 		var projectID;
-		if (oData.ProjectDetails != null)
+		var projectCompleted;
+		if (oData.ProjectDetails != null){
 			projectID = oData.ProjectDetails.Project_ID;
-		else
+			projectCompleted =  oData.ProjectDetails.Project_Completed;
+		}
+		else{
 			projectID = oData.Project_ID;
+			projectCompleted =  oData.Project_Completed;
+		}
 			
 		var consultantId = this.getConsultantID();
 		this.getRouter().navTo("DetailAdmin", {projectId:projectID,consultantId: consultantId});
@@ -106,7 +111,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		var consultantID = this.getConsultantID();
 		//RATINGS CODE
 		var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
-		var projectCompleted =  oData.ProjectDetails.Project_Completed;
+		
 		var thisObj = this;
 		thisObj.configProjectCompletionBtn(projectCompleted);
 		var oModel = this.getOwnerComponent().getModel("oModel");

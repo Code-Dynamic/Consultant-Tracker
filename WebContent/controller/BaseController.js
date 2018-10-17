@@ -416,7 +416,7 @@ sap.ui.define([
 										"$expand": "ConsultantDetails, ProjectDetails"
 									},
 									filters: [ new sap.ui.model.Filter({
-								        path: "ProjectDetails/Project_Completed",
+								        path: "ProjectDetails/Project_Deleted",
 								        operator: sap.ui.model.FilterOperator.EQ,
 								        value1:false
 									})],
