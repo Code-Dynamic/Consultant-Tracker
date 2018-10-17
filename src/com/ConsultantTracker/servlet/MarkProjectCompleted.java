@@ -44,7 +44,6 @@ public class MarkProjectCompleted extends HttpServlet {
 		EntityManager em = emf.createEntityManager();
 		Project p = em.find(Project.class, Integer.parseInt(proj_ID));
 		p.setProject_Completed(true);
-		//saving the data to the database
 		em.getTransaction().begin();
 		em.persist(p);
 		em.getTransaction().commit();
