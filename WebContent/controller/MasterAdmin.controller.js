@@ -100,6 +100,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 			projectCompleted =  oData.ProjectDetails.Project_Completed;
 		}
 		else{
+			
 			projectID = oData.Project_ID;
 			projectCompleted =  oData.Project_Completed;
 		}
