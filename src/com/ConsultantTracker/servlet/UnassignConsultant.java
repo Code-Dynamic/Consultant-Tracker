@@ -55,7 +55,7 @@ public class UnassignConsultant extends HttpServlet {
 		Assignment a =  em.find(Assignment.class, assignmentID);
 		Project project = a.getProject();
 		Consultant consultant = a.getConsultant();
-		//consultant rating deleted when a consultant is removed from the project
+
 		Ratings rateEntry = null; 
 		try {
 		 rateEntry = em.createQuery("SELECT d FROM Ratings d WHERE d.consultant =:consultant AND d.project =:project ",Ratings.class)

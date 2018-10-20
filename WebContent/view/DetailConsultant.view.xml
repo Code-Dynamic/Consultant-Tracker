@@ -56,10 +56,6 @@
 				text="{ path: 
 							'projectsModel>/Project_Deadline',
 							formatter: '.formatter.date'}"/>
-					
-			<!-- <ObjectAttribute
-				title="Client Name: "
-				text="{projectsModel>/ClientDetails/Client_Name}"/> -->
 				
 		</attributes>
 

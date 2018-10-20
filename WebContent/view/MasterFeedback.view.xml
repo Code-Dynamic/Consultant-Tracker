@@ -7,22 +7,8 @@
             	<contentMiddle>
                     <Text text="Task" id="text4"/>
                 </contentMiddle>
-                <!-- <contentLeft>
-                    <Button text="Tasks" width="100px" id="taskB" press="getTasks"/>
-                </contentLeft>
-               <contentMiddle>
-                    <Button text="Consultants" width="100px" id="consultantB" press="getConsultants"/>
-                </contentMiddle>
-                <contentRight>
-                    <Button text="Projects" width="100px" id="projectsB" press="getProjects"/>
-                </contentRight>-->
             </Bar>
-            <!--<List showSeparators="Inner" items="{/ProductCollection}">-->
-            <!--    <items>-->
-            <!--        <StandardListItem title="{Name}" description=""/>-->
-            <!--    </items>-->
-            <!--</List>
-            <List id="listFeedback" mode="SingleSelectMaster" selectionChange="onSelect"/>-->
+            
             <List id="listFeedback"
 				items="{/results/}">
 				<items>

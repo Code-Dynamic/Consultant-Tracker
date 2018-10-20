@@ -238,31 +238,6 @@
 							</customData>
 							
 						</Button>
-												
-						<!-- <la:HorizontalLayout>
-							<u:FileUploader id="csvUploader" 
-							name="myFileUpload" 
-							uploadUrl="AddFolder" 
-							tooltip="Upload your csv file to the local server" 
-							uploadComplete="addConsultantsViaCSV" 
-							change="handleValueChange" 
-							typeMissmatch="handleTypeMissmatch" 
-							style="Emphasized" 
-							fileType="csv" 
-							placeholder="Choose a csv file ..."
-							uploadOnChange="true">
-								<u:parameters>
-									<u:FileUploaderParameter name="param1" value="Foo"/>
-									<u:FileUploaderParameter name="param2" value="bar"/>
-								</u:parameters>
-								<u:headerParameters>
-									<u:FileUploaderParameter name="headerParam1" value="Foo"/>
-									<u:FileUploaderParameter name="headerParam2" value="bar"/>
-								</u:headerParameters>
-							</u:FileUploader>
-							
-							<Button text="Upload File" press="handleUploadPress"/>
-						</la:HorizontalLayout> -->
 									
 				</content>
 				

@@ -15,27 +15,6 @@
 			items="{assignedTasksModel>/results}"
 			mode= "SingleSelectMaster"
 			noDataText="No activities are assigned to the selected task.">
-			
-		<!-- <headerToolbar>
-		
-			<Toolbar>
-			
-				<content>
-						
-					<ToolbarSpacer/>
-					
-					<ToolbarSpacer/>
-						
-					<Button 
-					icon="sap-icon://add-activity"  
-					press="onAddActivity">
-					</Button>	
-								
-				</content>
-				
-			</Toolbar>
-			
-		</headerToolbar> -->
 		
 		<columns>
 			<Column

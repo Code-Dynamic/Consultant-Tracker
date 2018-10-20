@@ -33,24 +33,24 @@ public class AssignConsultantToTeam extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-				int consultantID = Integer.parseInt(request.getParameter("consultantID"));
-				int teamID = Integer.parseInt(request.getParameter("teamID"));
+		int consultantID = Integer.parseInt(request.getParameter("consultantID"));
+		int teamID = Integer.parseInt(request.getParameter("teamID"));
 
-				EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("JPATest");
-				EntityManager eManager = entityManagerFactory.createEntityManager();
+		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("JPATest");
+		EntityManager eManager = entityManagerFactory.createEntityManager();
 
-				Consultant consultant = eManager.find(Consultant.class, consultantID);
-				Team team = eManager.find(Team.class, teamID);
-				Team_Entity team_Entity = new Team_Entity();
-				
-				if (team != null) {
-					team_Entity.setTeam_ID(team);
-					team_Entity.setTeam_Member(consultant);
-				}
-				else throw new ServletException("Unable to find team"); 
-				eManager.getTransaction().begin();
-				eManager.persist(team_Entity);
-				eManager.getTransaction().commit();
+		Consultant consultant = eManager.find(Consultant.class, consultantID);
+		Team team = eManager.find(Team.class, teamID);
+		Team_Entity team_Entity = new Team_Entity();
+		
+		if (team != null) {
+			team_Entity.setTeam_ID(team);
+			team_Entity.setTeam_Member(consultant);
+		}
+		else throw new ServletException("Unable to find team"); 
+		eManager.getTransaction().begin();
+		eManager.persist(team_Entity);
+		eManager.getTransaction().commit();
 	}
 
 	/**

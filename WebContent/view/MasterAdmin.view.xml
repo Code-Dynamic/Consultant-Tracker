@@ -132,7 +132,6 @@
 		
 	</semantic:MasterPage>
  	
- 	<!--Dialog for user to add times	 -->		
  	 <Dialog 
  	 title="Task Times" 
  	 id="timesDialog">

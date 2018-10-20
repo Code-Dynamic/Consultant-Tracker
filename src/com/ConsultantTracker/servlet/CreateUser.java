@@ -42,7 +42,7 @@ public class CreateUser extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-    //for creating a new user based on the consultant details
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		GeneratePassword generatePassword = new GeneratePassword();
 		String password = request.getParameter("passw");

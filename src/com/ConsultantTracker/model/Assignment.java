@@ -25,13 +25,8 @@ public class Assignment implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="primaryKeyGenerator")
 	private int assignment_ID;
-
 	private Consultant consultant;
-
-
 	private Project project;
-
-	//bi-directional one-to-one association to Consultant
 
 
 	public Assignment() {

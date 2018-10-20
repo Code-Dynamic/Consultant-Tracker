@@ -48,7 +48,7 @@ public class CreateConsultant extends HttpServlet {
 		c.setConsultant_Surname(surname);
 		c.setConsultant_Email(email);
 		c.setConsultant_Cell(cell);
-//		Consultant c = em.find(Consultant.class, Integer.parseInt(consultant));
+
 		User_Type usrType = em.find(User_Type.class, adminPriv);
 		if (usrType != null) {
 			c.setConsultant_Priviledge(usrType);

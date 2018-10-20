@@ -74,7 +74,7 @@ public class GetProjectProgress extends HttpServlet {
 		}else{
 			RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
 			PrintWriter out= response.getWriter();
-			//logger.error("User not found with email="+email);
+
 			out.write("SQL Query Failed for DeleteProject.");
 			rd.include(request, response);
 		}

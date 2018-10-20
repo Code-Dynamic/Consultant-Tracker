@@ -63,7 +63,6 @@ public class EmailNotificationAddedToTeam  extends HttpServlet{
 					"\n\n You have been added to Project '"+projectName+"' team by "+ currentUserName +".\n\n");
 					
 			Transport.send(message);
-			System.out.println("Email successfully sent to: " + emailAddress);
 
 		} catch (MessagingException e) {
 			throw new RuntimeException(e);

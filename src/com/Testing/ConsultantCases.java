@@ -24,6 +24,7 @@ public class ConsultantCases {
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailConsultantView--utilizationMonthSelect-label"))).click();
 		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailConsultantView--month8"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailConsultantView--month9"))).click();
 		Thread.sleep(1000);
 		//Sandy
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---MasterAdmin--consultantObjectListItem-__component0---MasterAdmin--consultants-1-content"))).click();
@@ -34,7 +35,7 @@ public class ConsultantCases {
 		Thread.sleep(500);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailConsultantView--utilizationMonthSelect-label"))).click();
 		Thread.sleep(1000);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailConsultantView--month9"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---DetailConsultantView--month8"))).click();
 		Thread.sleep(1000);
 		
 		//Rate
