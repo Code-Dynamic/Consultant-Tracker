@@ -22,11 +22,6 @@ sap.ui.define([
 		 * @memberOf consultanttracker.Consultant-Tracker_Prototype-1.view.MasterManager
 		 */
 			onInit: function() {
-//				http://localhost:8080/Consultant-Tracker/emplist.svc/Assigned_Tasks?$expand=ConsultantDetails,TaskDetails,TaskDetails/ProjectDetails&$filter=ConsultantDetails/Consultant_ID%20eq%202
-
-				//getting id from the URL
-				//console.log("function called");
-				//this.printOnPage();
 				this.setDeviceType();
 				if(sessionStorage){
 					if (sessionStorage.getItem("ConsultantID") !== null) {
@@ -39,10 +34,7 @@ sap.ui.define([
 				}else{
 					var oRouter = this.getRouter();
 					oRouter.getRoute("MasterConsultant").attachMatched(this._onRouteMatched, this);
-				}	
-				
-				//console.log(oRouter);
-				//TODO Ngoni discuss with Mamba:_onRouteMatched f() not called when reloading
+				}
 			},
 			_onRouteMatched: function(oEvent){
 				sessionStorage.ConsultantAdmin = false;
@@ -89,7 +81,6 @@ sap.ui.define([
 								}
 						 }
 						 assignmentsModel.setData(data);
-						 //console.log(data);
 						 if(!thisObj.isDeviceMobile()){
 							 console.log("device is not Mobile");
 							 if(data.results.length > 0){
@@ -102,8 +93,6 @@ sap.ui.define([
 						  console.log(oError);
 					 	}
 					});
-				
-
 				this.getView().setModel(assignmentsModel,"assignmentsModel");					
 			},
 			setConsultantID: function(idFromRoute){
@@ -121,15 +110,11 @@ sap.ui.define([
 				}				
 			},
 			onListItemPress: function (evt) {
-				/*/results/0*/
 				var sPath = evt.getSource().getBindingContext("assignmentsModel").getPath();
-				//console.log(sPath);
 				var oData = this.getView().getModel("assignmentsModel").getProperty(sPath);
-
 				var projectID = oData.ProjectDetails.Project_ID;				
 				var projectCompleted = oData.ProjectDetails.Project_Completed;
 				this.selectProjectById(projectID,projectCompleted);
-
 			},
 			selectProjectById : function (projectID,projectCompleted){
 				PROJECT_ID = projectID;
@@ -141,7 +126,6 @@ sap.ui.define([
 				var filters = [];
 				filters = [new sap.ui.model.Filter("ProjectDetails/Project_ID", sap.ui.model.FilterOperator.EQ, projectID),
 					   new sap.ui.model.Filter("ConsultantDetails/Consultant_ID", sap.ui.model.FilterOperator.EQ, consultantID)];
-			
 				oModel.read("/Ratings_Entrys", {
 					urlParameters: {
 						"$expand": "ProjectDetails, ConsultantDetails"
@@ -156,7 +140,6 @@ sap.ui.define([
 				     }
 			 	});								
 			},
-
 		    onFeedbackPress: function(){
                 this.getRouter().navTo("Feedback");
 	        },
@@ -167,13 +150,9 @@ sap.ui.define([
 	            
 	      	},
 	      	onOpenPopover: function (oEvent) {
-
 				// create popover
 				if (!this._oPopover) {
-					/*this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.Popover",this);
-					this._oDialog.open();*/
 					this._oPopover = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.popoverMenu_CView", this);
-//					this._oPopover.open();
 					this.getView().addDependent(this._oPopover);
 				}
 

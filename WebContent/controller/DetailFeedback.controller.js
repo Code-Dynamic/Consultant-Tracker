@@ -14,9 +14,7 @@ sap.ui.define([
             // set mock model
         	var oRouter = this.getRouter();
 			oRouter.getRoute("DetailFeedback").attachMatched(this._onRouteMatched, this);
-            
         },
-
         onPost: function(oEvent) {
             var oFormat = DateFormat.getDateTimeInstance({ style: "long" });
             var oDate = new Date();
@@ -24,14 +22,12 @@ sap.ui.define([
             // create new entry
             var consultantID = this.getConsultantID();
             var oArgs = oEvent.getParameter("arguments");
-            
             var sValue = oEvent.getParameter("value");
             var oModel = this.getOwnerComponent().getModel("oModel");
             var taskDetailModel = new JSONModel();
             var thisObj = this;
             $.post('CreateFeedback', {msg: sValue, consultant:consultantID, project: 1, task:this.passedTaskID },function(responseText) {  
         		var array = responseText.split(';');
-        		//console.log(array);
         		oModel.read("/Feedbacks", {
 					urlParameters: {
 						"$expand" : "TaskDetails,ConsultantDetails"
@@ -52,16 +48,12 @@ sap.ui.define([
         	});
             
         },
-        
         _onRouteMatched: function(oEvent) {
-			
-//			///set model for detail page
+			//set model for detail page
 			var oArgs, oView;
 			oArgs = oEvent.getParameter("arguments");
-			
 			var oModel = this.getOwnerComponent().getModel("oModel");
         	var taskDetailModel = new JSONModel();
-			
         	this.passedTaskID = oArgs.taskID;
 			//read the Project table based on id
 				oModel.read("/Feedbacks", {
@@ -81,21 +73,15 @@ sap.ui.define([
 						 }
 					});
 				this.getView().setModel(taskDetailModel);
-				console.log(taskDetailModel)
-				
 		},
-
         onSenderPress: function(oEvent) {
             MessageToast.show("Clicked on Link: " + oEvent.getSource().getSender());
         },
-
         onIconPress: function(oEvent) {
             MessageToast.show("Clicked on Image: " + oEvent.getSource().getSender());
         },
 		//Start---Mobile view code
         onNavBack: function(oEvent){
-            
-        	  
         	if(this.isConsultantAdmin()){
                 this.getRouter().navTo("MasterAdmin",{consultantId:this.getConsultantID()});
         	}else{

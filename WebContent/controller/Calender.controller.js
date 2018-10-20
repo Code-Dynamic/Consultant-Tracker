@@ -20,8 +20,6 @@ sap.ui.define([
 				//getting id from the URL
 				var oRouter = this.getRouter();
 				oRouter.getRoute("Calender").attachMatched(this.onRouteMatched, this);
-
-
 			},
 
 			onRouteMatched: function(oEvent) {
@@ -33,7 +31,6 @@ sap.ui.define([
 				
 				var oModel = this.getOwnerComponent().getModel("oModel");
 				var tasksModel = new JSONModel();
-				console.log("in Calender: "+oArgs.consultantId);
 				//get consultant_ID, tasks that the consultant is 
 				//assigned to
 				oModel.read("/Assigned_Tasks", {
@@ -52,14 +49,11 @@ sap.ui.define([
 					  success: function(data){
 						 var result = JSON.stringify(data);
 						 tasksModel.setData(data);
-						 console.log("results: "+result);
 					  },
 					  error: function(oError) {
 						  console.log("error");
 						 }
 					});
-				
-//				console.log(projectsModel);
 				this.getView().setModel(tasksModel);	
 			},	
 			handleAppointmentSelect: function (oEvent) {

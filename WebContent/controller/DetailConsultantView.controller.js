@@ -16,7 +16,6 @@ sap.ui.define([
 		 * @memberOf consultanttracker.Consultant-Tracker_Prototype-1.view.DetailConsultant
 		 */
 			onInit: function() {
-				
 				//geting id from the URL
 				var oRouter = this.getRouter();
 				oRouter.getRoute("DetailConsultantView").attachMatched(this._onRouteMatched, this);		
@@ -26,13 +25,11 @@ sap.ui.define([
 			onAfterRendering: function(){
 				//sets utilization selects to current year and month
 				this.setUpUtilizationOptions();
-				
 				//fix size of utilization bar depending on screen size
 				if (this.isDeviceMobile()){
 					var utilizationInput = this.byId("utilizationYearInput");
 					utilizationInput.setWidth("20%");
 				}
-				
 			},
 			setupUtilizationChartContainer: function(){
 	            jQuery.sap.require("sap/suite/ui/commons/ChartContainer");
@@ -56,20 +53,16 @@ sap.ui.define([
 				var monthNum = date.getMonth();
 				var month = this.getMonthStr(monthNum);
 				this.byId("utilizationYearInput").setValue(year);
-				//TODO display previous month utilization
 				var selectedItemID = "month" + monthNum;
-				//console.log(selectedItemID);
 				this.byId("utilizationMonthSelect").setSelectedItem( this.byId(selectedItemID));				
 			},
 			_onRouteMatched: function(oEvent) {
-				
-//				///set model for detail page
+				//set model for detail page
 				var oModel = this.getOwnerComponent().getModel("oModel");
 				var projectsDetailModel = new JSONModel();
 				var consultantsDetailModel = new JSONModel();
 				var oArgs, oView;
 				oArgs = oEvent.getParameter("arguments");
-				//1
 				//read the Project table based on id
 					oModel.read("/Consultants("+oArgs.consultantId+")", {
 						  success: function(data){
@@ -81,8 +74,6 @@ sap.ui.define([
 					});
 					//set the project detail model
 					this.getView().setModel(consultantsDetailModel,"consultantsModel"); 
-					
-					//2
 					//getting projects that the selected consultant is working on
 					var consultantProjectsModel = new JSONModel();
 					oModel.read("/Assignments", {
@@ -103,16 +94,12 @@ sap.ui.define([
 						 	}
 					});
 					this.getView().setModel(consultantProjectsModel,"consultantProjectsModel");
-					
-					//UTILIZATION CODE
 					var date = new Date();
 					var year = date.getFullYear();
 					var monthNum = date.getMonth();
 					var month = this.getMonthStr(monthNum);
 					this.getUtilization(oArgs.consultantId,month,year,this);		
-					//RATINGS CODE
-					this.setUpRating(oArgs.consultantId,this);					
-					
+					this.setUpRating(oArgs.consultantId,this);							
 			},
 			getMonthStr: function(num){
 				var month = new Array();
@@ -157,7 +144,6 @@ sap.ui.define([
 				});			
 			},
 			setUpRating: function(userID,thisObj){
-				//console.log(userID);	
 				var oModel = this.getOwnerComponent().getModel("oModel");
 				 oModel.read( "/Ratingss", {
 					 urlParameters:{
@@ -259,7 +245,6 @@ sap.ui.define([
 	    	var oDataProjects =   new sap.ui.model.odata.v2.ODataModel(this.getModelAddress()); 
 	    	var x=	oDataProjects.createEntry('/Consultants',{
 				properties:{
-					//Client_Details:{},
 					Consultant_Admin:0,
 					Consultant_Cell: _Cell,
 					Consultant_Name: _Name,
@@ -274,7 +259,6 @@ sap.ui.define([
 				sucesss: function(){ console.log(("posting Project(sucess) It Worked!!")); }
 				, error:function(){console.log("Error in posting Project");}
 	    	});
-	    	
 	    	//close model
 			this.onClose();
 	    },

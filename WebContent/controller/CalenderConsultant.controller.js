@@ -58,8 +58,6 @@ sap.ui.define([
 						  console.log("error");
 						 }
 					});
-				
-//				console.log(projectsModel);
 				this.getView().setModel(tasksModel);	
 			},	
 			handleAppointmentSelect: function (oEvent) {
@@ -79,8 +77,7 @@ sap.ui.define([
 			},
 			onNavBack: function(evt){
 
-				var oModel = this.getView().getModel();
-//				
+				var oModel = this.getView().getModel();			
 				var projectId = oModel.oData.results[0].TaskDetails.ProjectDetails.Project_ID;
 				//make provision for when there is no data
 				this.getRouter()
