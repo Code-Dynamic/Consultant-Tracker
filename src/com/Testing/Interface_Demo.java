@@ -28,6 +28,5 @@ public class Interface_Demo {
 		
 		Thread.sleep(3000);
 		driver.close();
-		
 	}
 }
