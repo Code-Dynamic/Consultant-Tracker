@@ -27,7 +27,6 @@ public class Interface_Demo {
 		ConsultantCases.testCases(driver);
 		
 		Thread.sleep(3000);
-
 		driver.close();
 		
 	}
