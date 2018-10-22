@@ -72,12 +72,12 @@ public class LoginCases {
 //		Thread.sleep(1500);
 //		driver.switchTo().alert().dismiss();
 		
-		Thread.sleep(4000);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---LoginView--username-email-inner"))).sendKeys("Superuser");
-		Thread.sleep(500);
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---LoginView--password-inner"))).sendKeys("CodeDynamicTesting");
-		Thread.sleep(500);
+		Thread.sleep(2000);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---LoginView--username-email-inner"))).sendKeys("Hulisani@gmail.com");
+		Thread.sleep(1000);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---LoginView--password-inner"))).sendKeys("huli");
+		Thread.sleep(1000);
 		wait.until(ExpectedConditions.elementToBeClickable(By.id("__component0---LoginView--loginButton"))).click();
-		Thread.sleep(500);
+		Thread.sleep(2000);
 	}
 }

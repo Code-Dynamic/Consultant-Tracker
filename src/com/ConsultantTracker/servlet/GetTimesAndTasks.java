@@ -44,7 +44,7 @@ public class GetTimesAndTasks extends HttpServlet {
 		Consultant c = em.find(Consultant.class, consultant_ID);
 		List<Daily_Times> dailyTimes = em.createQuery("SELECT d FROM Daily_Times d WHERE d.consultant = :cons AND d.date = :date",Daily_Times.class)
                 .setParameter("cons", c).setParameter("date", sqlDate).getResultList();
-		//get tasks assigned to consultant that had been assigned to consultant at a specific date, that are either not completed, or had not been completed yet at a specific date
+
 		List<Assigned_Task> assignedTasks = em.createQuery("SELECT at FROM Assigned_Task at WHERE at.consultant =:cons AND at.date_Assigned <= :dateAssigned AND (at.task_Completed = :taskStatus OR at.date_Completed >=:dateCompleted)",Assigned_Task.class)
                 .setParameter("cons", c).setParameter("dateAssigned", sqlDate).setParameter("taskStatus", taskStatus).setParameter("dateCompleted", sqlDate).getResultList();
 		String resultsStr = "";
@@ -56,7 +56,7 @@ public class GetTimesAndTasks extends HttpServlet {
 			at = assignedTasks.get(i);
 			resultsStr +=  at.getTask().getName() +":" + checkDailyTimePresent(at.getAssigned_Task_ID(), dailyTimes) + ":"+ at.getAssigned_Task_ID();
 		}
-		//if general time exists (assigned_Task will be null) 
+
 		if(dailyTimes.size() > 0 ) {
 				if(resultsStr.length() > 0) {
 					resultsStr += ",";
@@ -71,7 +71,6 @@ public class GetTimesAndTasks extends HttpServlet {
 			}
 		
 		PrintWriter out = response.getWriter();
-		//returns string of format TaskName: TaskTime : TaskID ,
 		out.write(resultsStr);
 				
 	}

@@ -44,7 +44,7 @@ public class CreateFeedback extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//String date = request.getParameter("date");	//set project Name from request
+
 		String msg = request.getParameter("msg");
 		int consultant = Integer.parseInt(request.getParameter("consultant"));
 		int project = Integer.parseInt(request.getParameter("project"));
@@ -65,7 +65,7 @@ public class CreateFeedback extends HttpServlet {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Date = " +dateSent);
+
 		f.setDate(dateSent);
 		f.setMessage(msg);
 		f.setConsultant_ID(c);

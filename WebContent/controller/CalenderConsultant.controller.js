@@ -5,11 +5,11 @@ sap.ui.define([
 	'jquery.sap.global',
 	'sap/ui/core/mvc/Controller',
 	
-	
+	 
 ], function(BaseController,MessageToast,JSONModel,jQuery,Controller) {
 	"use strict";
 
-	return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.Calender", {
+	return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.CalenderConsultant", {
 
 		/**
 		 * Called when a controller is instantiated and its View controls (if available) are already created.
@@ -19,7 +19,9 @@ sap.ui.define([
 			onInit: function() {
 				//getting id from the URL
 				var oRouter = this.getRouter();
-				oRouter.getRoute("Calender").attachMatched(this.onRouteMatched, this);
+				oRouter.getRoute("CalenderConsultant").attachMatched(this.onRouteMatched, this);
+
+ 
 			},
 
 			onRouteMatched: function(oEvent) {
@@ -31,6 +33,7 @@ sap.ui.define([
 				
 				var oModel = this.getOwnerComponent().getModel("oModel");
 				var tasksModel = new JSONModel();
+				console.log("in Calender: "+oArgs.consultantId);
 				//get consultant_ID, tasks that the consultant is 
 				//assigned to
 				oModel.read("/Assigned_Tasks", {
@@ -49,6 +52,7 @@ sap.ui.define([
 					  success: function(data){
 						 var result = JSON.stringify(data);
 						 tasksModel.setData(data);
+						 console.log("results: "+result);
 					  },
 					  error: function(oError) {
 						  console.log("error");
@@ -73,8 +77,7 @@ sap.ui.define([
 			},
 			onNavBack: function(evt){
 
-				var oModel = this.getView().getModel();
-//				
+				var oModel = this.getView().getModel();			
 				var projectId = oModel.oData.results[0].TaskDetails.ProjectDetails.Project_ID;
 				//make provision for when there is no data
 				this.getRouter()

@@ -6,6 +6,7 @@
 	xmlns:semantic="sap.m.semantic">
 	
 		<SelectDialog
+		id="list"
 		noDataText="No Consultants Found"
 		title="Select Consultants"
 		search="handleSearch"
@@ -14,6 +15,7 @@
 		items="{unassignedConsultantsModel>/results}" >
 		
 			<StandardListItem
+				id="list_item"
 				title="{unassignedConsultantsModel>Consultant_Name} {unassignedConsultantsModel>Consultant_Surname}"
 				description="{Role}"
 				iconDensityAware="false"

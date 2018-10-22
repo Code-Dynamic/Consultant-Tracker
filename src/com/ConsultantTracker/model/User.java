@@ -60,7 +60,6 @@ public class User implements Serializable {
 	protected String hashPassword(String password) {
 		try {
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
-			System.out.println(password);
 			digest.update(password.getBytes());
 			return new sun.misc.BASE64Encoder().encode(digest.digest());
 		} 
@@ -91,6 +90,6 @@ public class User implements Serializable {
 	}
 
 	public void setSecurity_Answer(String security_Answer) {
-		this.security_Answer = security_Answer;
+		this.security_Answer = hashPassword(security_Answer);
 	}
 }

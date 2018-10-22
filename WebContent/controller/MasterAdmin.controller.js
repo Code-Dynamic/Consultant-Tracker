@@ -5,25 +5,19 @@ sap.ui.define([
 	"sap/ui/model/json/JSONModel",
 	'jquery.sap.global',
 	'sap/ui/core/mvc/Controller',
-	
-	
 ], function(BaseController,MessageToast,JSONModel,jQuery,Controller){
-	
 "use strict";
-//TODO Ngoni change code to prevent use of globals
 var RatingIndicatorArr;
 var RatingResults;
 var RatingsErrTxt;
 var consultantId;
 var OModel;
 return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.controller.MasterAdmin", {
-
 	/**
 	 * Called when a controller is instantiated and its View controls (if available) are already created.
 	 * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
 	 * @memberOf splitapp.master
 	 */
-	
 	onInit: function() {
 		var oRouter = this.getRouter();
 		oRouter.getRoute("MasterAdmin").attachMatched(this.onRouteMatched, this);
@@ -91,46 +85,36 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	onProjectListItemPress: function(evt){
 		var sPath = evt.getSource().getBindingContext("projectsModel").getPath();
 		var oData = this.getView().getModel("projectsModel").getProperty(sPath);
-		
 		//NB as a manager you can view all projects under you
-		console.log(oData);
 		var projectID;
-		if (oData.ProjectDetails != null)
+		var projectCompleted;
+		if (oData.ProjectDetails != null){
 			projectID = oData.ProjectDetails.Project_ID;
-		else
+			projectCompleted =  oData.ProjectDetails.Project_Completed;
+		}
+		else{
 			projectID = oData.Project_ID;
-			
+			projectCompleted =  oData.Project_Completed;
+		}
 		var consultantId = this.getConsultantID();
-		console.log("in MasterAdmin ID:" +consultantId);
-
-		
-		this.getRouter().navTo("DetailAdmin", 
-		{projectId:projectID,consultantId: consultantId});
+		this.getRouter().navTo("DetailAdmin", {projectId:projectID,consultantId: consultantId});
 		
 		PROJECT_ID = projectID;
-		var consultantID = this.getConsultantID();		
-		//console.log("Project ID: "+ projectID);
+		var consultantID = this.getConsultantID();
 		//RATINGS CODE
 		var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
-		var projectCompleted =  oData.Project_Completed;
 		var thisObj = this;
-		//console.log(projectCompleted);
-//		attachModel.read(
-//				"/Ratings_Entrys?$expand=ProjectDetails,ConsultantDetails&$filter=ProjectDetails/Project_ID%20eq%20"+projectID+"%20and%20ConsultantDetails/Consultant_ID%20eq%20"+consultantID,{async:false,success: function(oCreatedEn){ thisObj.ratingsBtnConfig(oCreatedEn,projectCompleted) }, error: function(e){console.log(e);}}		
-//				);					
+		thisObj.configProjectCompletionBtn(projectCompleted);
 		var oModel = this.getOwnerComponent().getModel("oModel");
+		var filters = [];
+		filters = [new sap.ui.model.Filter("ProjectDetails/Project_ID", sap.ui.model.FilterOperator.EQ, projectID),
+			   new sap.ui.model.Filter("ConsultantDetails/Consultant_ID", sap.ui.model.FilterOperator.EQ, consultantID)];
+		
 		oModel.read( "/Ratings_Entrys", {
 			urlparameters:{
 				"$expand": "ProjectDetails, ConsultantDetails"
 			},
-			filters: [ new sap.ui.model.Filter({
-		        path: "ProjectDetails/Project_ID",
-		        operator: sap.ui.model.FilterOperator.EQ,
-		        value1: projectID,
-		        path:"ConsultantDetails/Consultant_ID",
-		        operator: sap.ui.model.FilterOperator.EQ,
-		        value1: consultantID
-		     })],
+			filters: [ new sap.ui.model.Filter(filters,true)],
 	    	async:false,
 	    	success: function(oCreatedEn){ 
 	    		thisObj.ratingsBtnConfig(oCreatedEn,projectCompleted) 
@@ -140,20 +124,16 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	    	}
 	    });
 		
-		//TODO fix project progress
 		$.post('GetProjectProgress',{Project_Id:projectID},function(responseText){
 			var progress = {percVal:0,displayVal:0};
 			progress.percVal = parseFloat(responseText);
 			progress.displayVal = responseText;
 	          var progressModel = new sap.ui.model.json.JSONModel();
 	          progressModel.setData(progress);
-/*	          console.log(progressModel);*/
 	          thisObj.getView().setModel(progressModel,"progressModel");
 		});
 	},
 	 onConsultantListItemPress: function(evt){
-		
-		
 		var sPath = evt.getSource().getBindingContext("consultantsModel").getPath();
 		var oData = this.getView().getModel("consultantsModel").getProperty(sPath);
 		//NB as a manager you can view all projects under you
@@ -164,7 +144,6 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		else
 			oConsultantId = oData.ConsultantDetails.Consultant_ID;
 		thisObj.getRouter().navTo("DetailConsultantView",{consultantId:oConsultantId});
-	/*	MessageToast.show("Pressed : " + evt.getSource().getTitle());*/	
 	},
 	onPressButton: function(evt){	
 	},
@@ -179,56 +158,24 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		this.byId('selectedItem').setText("getSelectedItem(): " +
 		sap.ui.getCore().byId(this.byId('item').getSelectedItem()).getText());
 	},
-	/**
-	 * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered
-	 * (NOT before the first rendering! onInit() is used for that one!).
-	 * @memberOf splitapp.master
-	 */
-//	onBeforeRendering: function() {
-
-//	},
-/*	onAfterRendering: function() {
-
-	},	*/
-
-
 	onSelect: function(oEvent) {
-	
 		if(btnConsultantSelected){
-
 			var sOrderId = oEvent.getSource().getSelectedItem().getBindingContext().getProperty("Consultant_ID");
 			var oData = sap.ui.getCore().getModel().getProperty("/results");
-//			var oDataConsultants =  new sap.ui.model.odata.ODataModel('http://localhost:8080/OdataSap/emplist.svc/'); 
-//			oDataConsultants.read(
-//					"/Consultants?$filter=Consultant_ID%20eq%20"+sOrderId,{success: function(oCreatedEn){ GotConsultants(oCreatedEn) }, error: function(){console.log("Error");}}		
-//			);
-
 			function getCountryByCode(Consultant_ID) {
-				return oData.filter(
-						function(oData) {
-							return oData.Consultant_ID == Consultant_ID
-						}
-				);
+				return oData.filter(function(oData) {
+					return oData.Consultant_ID == Consultant_ID;
+				});
 			}
-
 			var found = getCountryByCode(sOrderId);
-			//console.log(found[0])
-
 			var oSelModel = new sap.ui.model.json.JSONModel(found[0]);			
 			sap.ui.getCore().setModel(oSelModel,"selModel");					
-
-
 		}else{
-			console.log("Project Selected--> on select");
-//			var oDataProjects =  new sap.ui.model.odata.ODataModel(this.getModelAddress()); 
+			console.log("Project Selected--> on select"); 
 			//get selected project id
 			var sOrderId = oEvent.getSource().getSelectedItem().getBindingContext().getProperty("Project_ID");
 			//get model
 			var oData = sap.ui.getCore().getModel().getProperty("/results");
-			
-//			oDataProjects.read(
-//					"/Assignments?$expand=ConsultantDetails,ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ GotMembers(oCreatedEn) }, error: function(){console.log("Error");}}		
-//					);
 			var oModel = this.getOwnerComponent().getModel("oModel");
 			oModel.read( "/Assignments", {
 				urlParameters:{
@@ -247,24 +194,12 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		    		console.log("Error");
 		    	}
 		 	});
-			//get the specific project selected data 
-//			$.post('getProjectConsultants',{ projectID: sOrderId},function(responseText){
-//				console.log("servlet getProjectConsultants responded");
-				//console.log(responseText);
-//				arrConsultants = {Consultants:[]};
-//				var array = responseText.split(';');
-//				array.forEach(createConsultant);
-
 			function GotMembers(Members){
 				console.log(Members);
 				var oModel = new sap.ui.model.json.JSONModel();
-				oModel.setData(Members);
-				//console.log(JSON.parse(JSON.stringify(arrConsultants)));
-				sap.ui.getCore().setModel(oModel,"groupMember");
+				oModel.setData(Members);sap.ui.getCore().setModel(oModel,"groupMember");
 				app.to("detailPage");
 			}
-
-//			});
 
 			function createConsultant(stringVal){
 				var array = stringVal.split(',');
@@ -278,27 +213,17 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 						Assignment_ID: array[6]
 				};
 				arrConsultants.Consultants.push((Consultant));
-				console.log("arrConsultants" + arrConsultants);
-
 			}
 			function getCountryByCode(Project_ID) {
-				return oData.filter(
-						function(oData) {
-							return oData.Project_ID == Project_ID
-						}
-				);
+				return oData.filter(function(oData) {
+					return oData.Project_ID == Project_ID
+				});
 			}
 
 			var found = getCountryByCode(sOrderId);
 			var oSelModel = new sap.ui.model.json.JSONModel(found[0]);			
 			sap.ui.getCore().setModel(oSelModel,"selModel");
-			
-//Start Code to display Attachments
-//			var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
-			console.log("Project Id= "+sOrderId);
-//			attachModel.read(
-//					"/Attachments?$expand=ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ gotAttachments(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
-//					);
+			//Start Code to display attachments
 			var oModel = this.getOwnerComponent().getModel("oModel");
 			oModel.read( "/Attachments", {
 				urlParameters:{
@@ -319,20 +244,13 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		 	});
 			
 			function gotAttachments(attach){
-				console.log(attach);
 				var oModel = new sap.ui.model.json.JSONModel();
 				oModel.setData(attach);
-				//console.log(JSON.parse(JSON.stringify(arrConsultants)));
 				sap.ui.getCore().setModel(oModel,"attachment");
 				app.to("detailPage");
 			}
-			
-//End Code to display Attachments
+			//End Code to display Attachments
 			//Start code diplay task
-//			var attachModel = new sap.ui.model.odata.ODataModel(this.getModelAddress());
-//			attachModel.read(
-//					"/Tasks?$expand=ProjectDetails&$filter=ProjectDetails/Project_ID%20eq%20"+sOrderId,{async:false,success: function(oCreatedEn){ gotTasks(oCreatedEn) }, error: function(){console.log("Error in getting attachments");}}		
-//					);
 			var oModel = this.getOwnerComponent().getModel("oModel");
 			oModel.read( "/Tasks", {
 				urlParameters:{
@@ -353,16 +271,12 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		 	});
 			
 			function gotTasks(tasks){
-				console.log(tasks);
 				var oModel = new sap.ui.model.json.JSONModel();
 				oModel.setData(tasks);
-				
 				sap.ui.getCore().setModel(oModel,"tasks");
 				app.to("detailPage");
 			}
-
 		}
-
 	},
     onFeedbackPress: function(){
         this.getRouter().navTo("Feedback");
@@ -375,12 +289,9 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	removeProject: function(oEvent){
 		this.onClose();
 		var projectModel = this.getView().getModel("projectsModel");
-		
 		this._Dialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.confirmDeleteProject",this);
 		this._Dialog.setModel(projectModel,"projectsModel");		
-
 		this._Dialog.open();
-
 	},
 	addClient: function(){
 		this.onClose();
@@ -395,20 +306,14 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
    setClientsModel: function(){
 		var clientDetailModel = new JSONModel();
 		OModel.read("/Clients", {
-			  success: function(data){
-				 var result = JSON.stringify(data);
-				 clientDetailModel.setData(data);
-//				 console.log(result);
-				// console.log("clientsModel##");
-//				 console.log(data);
-				 sap.ui.getCore().setModel(clientDetailModel,"clientList");
-//					console.log("Cli##");
-//					console.log(clientDetailModel.oData.results);
-			  },
-			  error: function(oError) {
-//				  console.log("error");
-				  console.log("Error");
-				 }
+			success: function(data){
+				var result = JSON.stringify(data);
+				clientDetailModel.setData(data);
+				sap.ui.getCore().setModel(clientDetailModel,"clientList");
+			},
+			error: function(oError) {
+				 console.log("Error");
+			}
 		});
 	},
 	onSubmitClient: function(){
@@ -509,8 +414,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		    	var t = this;
 		    	var oModel = this.getOwnerComponent().getModel("oModel");
 		    	var _Privilege;
-		    	var _teamID;
-		    	
+		    	var _teamID;	
 		    	oModel.read( "/Consultants", {
 					urlParameters: {
 						"$expand" : "User_TypeDetails"
@@ -538,17 +442,15 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		    				     })],
 		    				     success:function(data){
 		    				    	if (data.results.length == 0){
-		    				    		$.post('CreateTeam',
-		    				    			{leaderID: thisDomObj.getConsultantID()},
+		    				    		$.post('CreateTeam', {leaderID: thisDomObj.getConsultantID()},
 		    				    			function(response){
 		    				    				_teamID = response;
-	    				    				createConsultant(_teamID);
-		    				    			}
-		    				    		);
+		    				    				createConsultant(_teamID);
+		    				    		});
 		    				    	}
 		    				    	else{
 		    				    		_teamID = data.results[0].Team_ID;
-	    				    		createConsultant(_teamID);
+		    				    		createConsultant(_teamID);
 		    				    	}
 		    				     },
 		    					error: function(){
@@ -571,7 +473,6 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 					admin: _Privilege
 					}, 
     				function(responseText) {
-						console.log(_teamID);
     					$.post('AssignConsultantToTeam',{consultantID:responseText, teamID: _teamID});
     					$.post('CreateUser', {conID:responseText, resetpassword: null},
     						function(response){
@@ -585,7 +486,6 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 	    },
 	    addConsultantsViaCSV : function(){
 			var fU = sap.ui.getCore().byId("csvUploader");
-//			console.log("csvUploader");
 			var domRef = fU.getFocusDomRef();
 			var file = domRef.files[0];
 			
@@ -601,8 +501,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 			reader.onload = function(e) {
 			    var strCSV = e.target.result;
 			    var rows = strCSV.split("\n");
-
-//			    var oDataProjects =   new sap.ui.model.odata.v2.ODataModel(t.getModelAddress()); 
+ 
 		    	var i;
 		    	var _Privilege;
 		    	var _teamID;
@@ -681,7 +580,6 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		},
 		addProjectsViaCSV : function(){
 			var fU = sap.ui.getCore().byId("csvUploader");
-//			console.log("csvUploader");
 			var domRef = fU.getFocusDomRef();
 			var file = domRef.files[0];
 			
@@ -723,18 +621,15 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		},
 		addClientsViaCSV : function(){
 			var fU = sap.ui.getCore().byId("csvUploader");
-//			console.log("csvUploader");
 			var domRef = fU.getFocusDomRef();
 			var file = domRef.files[0];
 			
 			if (this._oDialog) {
 				this._oDialog.destroy();
 			}
-			
 			// Create a File Reader object
 			var reader = new FileReader();
 			var t = this;
-			
 			reader.onload = function(e) {
 			    var strCSV = e.target.result;
 			    var rows = strCSV.split("\n");
@@ -749,7 +644,6 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 			    	MessageToast.show("Error! The CSV File has a wrong format");
 			    	return;
 			    }
-			    
 			    var oDataProjects =   new sap.ui.model.odata.v2.ODataModel(t.getModelAddress());
 		    	var i;
 			    for (i = 1; i < rows.length; i++) { 
@@ -763,10 +657,7 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 			    	var _ContactNumber = (rows[i].split(",")[7]).trim();
 			    	
 			    	$.post('AddClient', { ClientName: _Name, ClientPhysicalAddress: _Address, ClientNumber: _Cell, ContactName: _ContactName, ContactNumber: _ContactNumber, ContactEmailAddress: _Email, Latitude: 0, Longitude: 0},
-			        		function(responseText) {  
-//			      				MessageToast.show("client submitted Succesfully");
-//			    				console.log(responseText);
-			        		}
+			        		function(responseText) {}
 			    	);
 			    }
 			    MessageToast.show((rows.length-1)+" Clients, succesfully added.");
@@ -774,48 +665,35 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 			reader.readAsBinaryString(file);
 		},
 		onClose: function () {
-//		console.log("on close button");
 		if (this._oDialog) {
 			this._oDialog.destroy();
 		}
-		
 		if(this._Dialog){
 			this._Dialog.destroy();
 		}
-//		this._oDialog.destroy();
 		},
 		onOpenPopover: function (oEvent) {
-
 			// create popover
 			if (!this._oPopover) {
-				/*this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.Popover",this);
-				this._oDialog.open();*/
 				this._oPopover = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.popoverMenu", this);
-//				this._oPopover.open();
 				this.getView().addDependent(this._oPopover);
 			}
-
 			this._oPopover.openBy(oEvent.getSource());
 		},
 		handleCloseRemoveProject: function(oEvent){
-			
 			var oModel = this.getView().getModel("projectsModel");
 	    	var _projectID = oModel.oData.Project_ID;
 			var aContexts = oEvent.getParameter("selectedContexts");
 			
 			if (aContexts && aContexts.length) {
 				MessageToast.show("You have selected " + aContexts.map(function(oContext) {
-					console.log("test data: "+JSON.stringify(oContext.getObject()));
 					var projectID=oContext.getObject().Project_ID;
-					
 					$.post('RemoveProject', {project: projectID},
 						function(data) {  
 						var array = data.split(';');
-						console.log("Remove project: "+data);
 						thisView.updateTasksList(_projectID);
 					});
-					return oContext.getObject().Project_ID; 
-				}).join(", "));
+					return oContext.getObject().Project_ID;}).join(", "));
 			} else {
 				MessageToast.show("No new item lected.");
 			}
@@ -824,13 +702,11 @@ return BaseController.extend("consultanttracker.Consultant-Tracker_Prototype-1.c
 		onDelete: function(){
 			var thisObj = this;
 			$.post('DeleteProject', { projectID: PROJECT_ID},function(responseText) {  
-				
 						MessageToast.show("Project Deleted Succesfully.");
 						var selectFirstProject = true;
 						thisObj.goToProjects(selectFirstProject);
 						thisObj._Dialog.destroy();	
 				   });					
-					
 		}
 		
 	/**

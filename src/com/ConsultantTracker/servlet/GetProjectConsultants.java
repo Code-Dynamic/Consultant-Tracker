@@ -71,8 +71,7 @@ public class GetProjectConsultants extends HttpServlet {
 						 ObjToReturn +=c.getConsultant_ID() +','+c.getConsultant_Name()+','+
 								 c.getConsultant_Surname()+','+c.getConsultant_Email()+','+
 								 c.getConsultant_Cell()+','+c.getConsultant_Priviledge();
-						 
-//					 
+						
 					 if(proj_ID != null)
 						 ObjToReturn +=','+consultantList.get(i).getAssignment_ID();
 				
@@ -83,7 +82,7 @@ public class GetProjectConsultants extends HttpServlet {
 				}else{
 					RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
 					PrintWriter out= response.getWriter();
-					//logger.error("User not found with email="+email);
+
 					out.println("<font color=red>No user found with given email id, please register first.</font>");
 					rd.include(request, response);
 				}

@@ -73,7 +73,6 @@ public class EmailNotificationAddedToTask extends HttpServlet{
 					);
 					
 			Transport.send(message);
-			System.out.println("Email successfully sent to: " + emailAddress);
 
 		} catch (MessagingException e) {
 			throw new RuntimeException(e);

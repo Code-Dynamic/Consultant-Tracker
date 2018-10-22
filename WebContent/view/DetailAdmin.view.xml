@@ -238,31 +238,6 @@
 							</customData>
 							
 						</Button>
-												
-						<!-- <la:HorizontalLayout>
-							<u:FileUploader id="csvUploader" 
-							name="myFileUpload" 
-							uploadUrl="AddFolder" 
-							tooltip="Upload your csv file to the local server" 
-							uploadComplete="addConsultantsViaCSV" 
-							change="handleValueChange" 
-							typeMissmatch="handleTypeMissmatch" 
-							style="Emphasized" 
-							fileType="csv" 
-							placeholder="Choose a csv file ..."
-							uploadOnChange="true">
-								<u:parameters>
-									<u:FileUploaderParameter name="param1" value="Foo"/>
-									<u:FileUploaderParameter name="param2" value="bar"/>
-								</u:parameters>
-								<u:headerParameters>
-									<u:FileUploaderParameter name="headerParam1" value="Foo"/>
-									<u:FileUploaderParameter name="headerParam2" value="bar"/>
-								</u:headerParameters>
-							</u:FileUploader>
-							
-							<Button text="Upload File" press="handleUploadPress"/>
-						</la:HorizontalLayout> -->
 									
 				</content>
 				
@@ -307,11 +282,12 @@
 			
 				<cells>
 				
+
 					<Text
-						text="{membersModel>ConsultantDetails/Consultant_Name}" />
+						text="{membersModel>ConsultantDetails/Consultant_Name}  {membersModel>ConsultantDetails/Consultant_Surname}" />
 						
 					<Text
-						text="{membersModel>ConsultantDetails/Consultant_email}" />
+						text="{membersModel>ConsultantDetails/Consultant_Email}" />
 						
 					<Text
 						text="Programmer" />
@@ -468,120 +444,6 @@
 
 					</IconTabFilter>
 					
-						
-					
-<!-- 					<IconTabFilter
-						 id="iconTabBarFilter4"
-						 key="key4" 
-						 icon="sap-icon://attachment" 
-						 tooltip="Attachments" 
-						 text="Attachments">
-						 
-						<content>
-						
-							<la:VerticalLayout>
-							
-								<u:FileUploader 
-									id="fileUploader" 
-									name="myFileUpload" 
-									uploadUrl="AddFolder" 
-									tooltip="Upload your file to the local server" 
-									uploadComplete="" change="handleValueChange" 
-									typeMissmatch="handleTypeMissmatch" 
-									style="Emphasized" 
-									fileType="txt,jpg" 
-									placeholder="Choose a file for Upload...">
-									
-									<u:parameters>
-									
-										<u:FileUploaderParameter 
-											name="param1" 
-											value="Foo"/>
-											
-										<u:FileUploaderParameter 
-											name="param2" 
-											value="bar"/>
-											
-									</u:parameters>
-									
-									<u:headerParameters>
-									
-										<u:FileUploaderParameter 
-											name="headerParam1" 
-											value="Foo"/>
-											
-										<u:FileUploaderParameter 
-											name="headerParam2" 
-											value="bar"/>
-											
-									</u:headerParameters>
-									
-								</u:FileUploader>
-								
-								<Button 
-									text="Upload File" 
-									press="handleUploadPress"/>
-									
-							</la:VerticalLayout>
-
-							<Table 
-								id="idTable" 
-								items="{attachment>/results}">
-								
-								<items>
-								
-									<ColumnListItem>
-									
-										<cells>
-										
-											<Text 
-											
-												text="{attachment>Attachment_Name}"/>
-												
-											<Text 
-												text="{ path: 
-						 									'attachment>Attachment_Upload_Date',
-															formatter: '.formatter.date'}"/>
-												
-											<Text 
-												text="{attachment>Attachment_Size} B"/>
-												
-										</cells> 
-										
-									</ColumnListItem>
-									
-								</items>
-								
-								<columns>
-								
-									<Column>
-									
-										<Text 
-											text="File Name"/>
-											
-									</Column>
-									
-									<Column>
-									
-										<Text 
-											text="Date Uploaded"/>
-											
-									</Column>
-									
-									<Column>
-									
-										<Text 
-											text="Size"/>
-											
-									</Column>
-									
-								</columns>
-								
-							</Table>
-							
-						</content>
-						
-					</IconTabFilter> -->
 					<IconTabFilter 
 							id="iconTabBarFilter6" 
 							key="key6"
@@ -696,6 +558,16 @@
 		</semantic:content>
 
 		<semantic:customFooterContent>	
+ 				<HBox>
+						<Button
+						 id = "onMarkProjectCompletedBtn"
+						 press="onMarkProjectCompleted"
+						 text="Mark Project Completed"
+						 icon="sap-icon://accept"	
+						 enabled="true" 
+ 						 visible="true"
+						 />
+				</HBox>	
 				  <HBox>
 						<Button						
 						id="rateTeamBtn" 
@@ -706,7 +578,7 @@
  						visible="false" />
 				 </HBox>					
 				 <HBox>
-						<Button press="editProjectDetails"  text="Edit Project" icon="sap-icon://edit"/>
+						<Button press="editProjectDetails" id="editProject" text="Edit Project" icon="sap-icon://edit"/>
 				</HBox>
 		</semantic:customFooterContent>
 		

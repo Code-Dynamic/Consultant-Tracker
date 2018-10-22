@@ -29,7 +29,6 @@ public class UpdateTaskCompleted extends HttpServlet {
 
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		String taskIDString = request.getParameter("TaskID");	
 		String isCompleted = request.getParameter("IsComplete");
 		

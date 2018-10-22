@@ -15,15 +15,13 @@ sap.ui.define([
 				var view = this.getView();
 				view.setVisible(false);
 				dialog.setText("Initializing");
-				dialog.open();	
-//				$.post('DatabaseSetup');
+				dialog.open();
 				var _timeout = jQuery.sap.delayedCall(1000, this, function () {
 					sap.ui.core.BusyIndicator.hide();
 					view.setVisible(true);
 					dialog.close();
 				});
 			},
-
 		/**
 		 * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered
 		 * (NOT before the first rendering! onInit() is used for that one!).
@@ -164,8 +162,7 @@ sap.ui.define([
 		    	}else{
 		    		sap.m.MessageToast.show("Email does not exist");
 		    		thisObj.setFragmentInputState("c_Email");
-		    	} 
-		    		
+		    	}	
 		    }
 		})
 	},
@@ -175,8 +172,12 @@ sap.ui.define([
 		}
 	},
 	onSubmitResponse: function () {
-		var response = sap.ui.getCore().byId("c_Answer").getValue();
-		if (response == this.getView().getModel("userModel").oData.Security_Answer){
+		var answer = sap.ui.getCore().byId("c_Answer").getValue();
+		$.post('GetPasswordHash', {password:answer},
+			function(response){
+				answer = response;
+		});
+		if (answer == this.getView().getModel("userModel").oData.Security_Answer){
 			this._oDialog.destroy();
 			this._oDialog = sap.ui.xmlfragment("consultanttracker.Consultant-Tracker_Prototype-1.fragments.PasswordFragment",this);
     		this._oDialog.open();

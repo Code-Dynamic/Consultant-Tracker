@@ -246,22 +246,7 @@ title="{selModel>/Project_Name}">
 										displayValue="30%" 
 										showValue="true"
 										 state="None"/>
-
-										<!--  <MenuButton text="More" buttonMode="Split"
-											useDefaultActionOnly="true">
-											<menu>
-												<Menu itemSelected="onMenuAction">
-													<items>
-														<MenuItem text="Feedback" id="feedback" />
-														<MenuItem text="Task Detail" />
-														<MenuItem text="Manage Consultant" />
-													</items>
-												</Menu>
-											</menu>
-
-										</MenuButton>
-
-										<Button type="Reject" icon="sap-icon://delete" press="onPress" /> -->
+										 
 										<Link 
 										text="Feedback" 
 										press="getFeedback"/> 
@@ -270,7 +255,6 @@ title="{selModel>/Project_Name}">
 										text="Manage Consultant" 
 										press="openManageConFrag"/>
 										
-										<!--<Link text="Delete" press="handleLinkPress" /> -->
 										<Button 
 										type="Reject" 
 										icon="sap-icon://delete" 
